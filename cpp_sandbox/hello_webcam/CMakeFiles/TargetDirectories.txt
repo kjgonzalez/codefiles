@@ -1,0 +1,3 @@
+/home/kris/Documents/cpp_sandbox/hello_webcam/CMakeFiles/edit_cache.dir
+/home/kris/Documents/cpp_sandbox/hello_webcam/CMakeFiles/rebuild_cache.dir
+/home/kris/Documents/cpp_sandbox/hello_webcam/CMakeFiles/webcam.dir

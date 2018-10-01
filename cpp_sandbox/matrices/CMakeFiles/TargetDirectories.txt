@@ -1,0 +1,3 @@
+/home/kris/Documents/cpp_sandbox/matrices/CMakeFiles/edit_cache.dir
+/home/kris/Documents/cpp_sandbox/matrices/CMakeFiles/rebuild_cache.dir
+/home/kris/Documents/cpp_sandbox/matrices/CMakeFiles/output.dir

@@ -1,0 +1,12 @@
+# Author: Kris Gonzalez
+# DateCreated: 180528
+# Objective: this is a custom config file and filereading program. easy 
+#	to use and familiar style to other config files.
+# NOTE: FUNCTION IS NOT TOLERANT OF CHANGING VALUE ORDERS
+#
+# cone_topic
+sample1
+# odom_topic
+sample2
+# pub_topic
+sample_lala
