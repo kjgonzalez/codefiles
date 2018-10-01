@@ -1,1 +1,3 @@
-# don't want to upload unecessary 
+# don't want to upload unecessary stuff
+catkin_ws/build/
+catkin_ws/devel/
