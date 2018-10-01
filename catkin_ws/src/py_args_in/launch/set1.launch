@@ -1,0 +1,9 @@
+<launch>
+<!-- note on arguments: -->
+<!-- arg1: odom, for example -->
+<!-- arg2: cones -->
+<node name="args_node" pkg="py_args_in" type="code_args_in.py"
+	args = "odom_name cone_name"
+	output="screen">
+</node>
+</launch>

@@ -1,0 +1,9 @@
+<launch>
+<!-- note on arguments: -->
+	<arg name="a1"/>
+	<arg name="a2"/>
+<node name="args_node" pkg="py_args_in" type="code_args_in.py"
+	args = "$(arg a1) $(arg a2)"
+	output="screen">
+</node>
+</launch>

@@ -1,0 +1,48 @@
+1. what's a way to look up all available modules???
+>> maybe just searching through folders? >> ACTUALLY: "help('modules')"
+idea 1: 
+>> help('modules')
+* note: outputs a multi-column list of names. bit of a hassle, but simple and reliable.
+2. 
+
+
+- - - - - - - - - - - - -
+How to use Pip: 
+Basic usage
+The standard packaging tools are all designed to be used from the command line.
+
+The following command will install the latest version of a module and its dependencies from the Python Packaging Index:
+
+python -m pip install SomePackage
+
+- - - - - - - - - - - - -
+List comprehension in python: 
+>>> x=range(1,6)
+>>> x
+[1, 2, 3, 4, 5]
+>>> y=[i**2 for i in x]
+>>> y
+[1, 4, 9, 16, 25]
+
+- - - - - - - - - - - - -
+How Jupyter works
+"web application that allows a user to run live code, embed visualizations, and 
+	provide explantaory text all in one place"
+NOTE: jupyter is another name for ipython notebook
+look like a webpage, but actually 3 components: live code, output results and 
+	visualization, and rich-text formatting & media embedding
+
+in order to run, a command would look like so: 
+	cd DesiredFolder
+	jupyter notebook object_detectiontutorial.ipynb
+you're also able to see an intermediate state of data, meaning you can do a sort
+	of helpful debugging
+
+
+
+
+
+
+
+
+

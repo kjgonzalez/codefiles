@@ -1,0 +1,10 @@
+#!/bin/bash
+#objective: automate the movement of files up to github
+#assumptions: "message" is writen when prompted, currently in project directory
+
+#UPDATE: this code is deemed to be functional
+read -p "Commit Message: " msgvar
+git add -u
+git commit -m "$msgvar"
+git push
+

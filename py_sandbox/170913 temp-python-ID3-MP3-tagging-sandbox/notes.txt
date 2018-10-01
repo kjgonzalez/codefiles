@@ -1,0 +1,34 @@
+KJG170913: using EasyID3 is a good, perhaps even great start, 
+	but in order to access EVERYTHING desired, which even includes 
+	modifying the year, etc.
+NOTE: IF YOU USE THE FOLLOWING:
+	>>> for i in track: print i
+	THEN UNDERSTAND THAT THE ONLY FIELDS SHOWN ARE THOSE THAT ARE 
+	NOT EMPTY!!! THIS MEANS THAT ACTUALLY SOME OF THE FIELDS CAN BE GIVEN
+	INFORMATION, EVEN IF EMPTY!!! ok, super sleepy, need to continue this
+	tomorrow.
+
+------ 170912 (start) ------
+original source help: 
+https://stackoverflow.com/questions/13188043/python-mp3-id3-tag-editor
+
+secondary source help:
+https://mutagen.readthedocs.io/en/latest/user/id3.html
+
+original acquisition of library: 
+python -m pip install mutagen
+
+
+sample usage (kjg-created)
+>>> from mutagen.easyid3 import EasyID3 as mp3
+>>> import os
+>>> track = mp3(os.listdir('.')[0])
+>>> track
+{'album': [u'kjg4'], 'artist': [u'kjg7'], 'title': [u'kjg8'], 'length': [u'kjg5'], 'albumartist': [u'kjg1'], 'composer': [u'kjg2'], 'organization': [u'kjg9'], 'genre': [u'kjg6'], 'tracknumber': [u'kjg3']}
+>>> print track['album']
+[u'kjg4']
+>>> track['album']=u'newName'
+>>> track.save()
+
+------ 180501 --------------
+so: will focus on trying to do something simmilar to the image manipulation module: create a bunch of practical, useful functions to manipulate the data easily.

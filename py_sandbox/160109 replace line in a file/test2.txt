@@ -1,0 +1,5 @@
+one two
+open C:\a\b\c\d\superHot.txt
+one two four
+one two
+saveas C:\a\b\c\d\superHot.txt

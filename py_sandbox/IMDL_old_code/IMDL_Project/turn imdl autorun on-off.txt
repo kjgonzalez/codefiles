@@ -1,0 +1,6 @@
+controlling beaglebone: 
+
+start / stop service: 
+
+"systemctl start/stop imdl"
+

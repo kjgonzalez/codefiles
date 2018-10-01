@@ -1,0 +1,9 @@
+steps to get odometry broadcasted for testing / debugging: 
+
+1. roscore
+2. optional, if using bag with correct odometry already: 
+	roslaunch loam_velodyne loam loam_velodyne_points_raw.launch
+3. rviz
+4. rosbag play bagname.bag
+
+* if using first run, need to run step 2 and then grab odometry /integrated_to_init

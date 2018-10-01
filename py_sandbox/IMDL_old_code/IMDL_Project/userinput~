@@ -1,0 +1,7 @@
+#!/bin/bash
+#objective: figure out how to take input and do stuff with it.
+#   add that to "uploadchanges" file
+
+echo starting
+read -p "message: " msgvar
+echo msgvar

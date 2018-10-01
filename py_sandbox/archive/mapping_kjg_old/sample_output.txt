@@ -1,0 +1,47 @@
+KJG captured output from odometry node "/integrated_to_init" from callback
+
+kjgnote: may be able to transform quaternion values to angles via: 
+help(tf.transformations.euler_from_quaternion)
+
+In [10]: data
+Out[10]: 
+header: 
+  seq: 51
+  stamp: 
+    secs: 1525810211
+    nsecs: 953668000
+  frame_id: "/camera_init"
+child_frame_id: "/camera"
+pose: 
+  pose: 
+    position: 
+      x: 0.00936015602201
+      y: -0.0269415900111
+      z: 0.111069530249
+    orientation: 
+      x: 0.00578562039999
+      y: -0.0052478140326
+      z: -0.0122601895535
+      w: 0.999894331815
+  covariance: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+twist: 
+  twist: 
+    linear: 
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    angular: 
+      x: 0.0
+      y: 0.0
+      z: 0.0
+  covariance: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+In [11]: data.pose.pose
+Out[11]: 
+position: 
+  x: 0.00936015602201
+  y: -0.0269415900111
+  z: 0.111069530249
+orientation: 
+  x: 0.00578562039999
+  y: -0.0052478140326

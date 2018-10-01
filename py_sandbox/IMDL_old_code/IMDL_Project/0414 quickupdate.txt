@@ -1,0 +1,18 @@
+get a moving average/stdev of the camera data, and then use that to make a decision
+
+
+could go one of two ways: 
+1. try fuzzy logic to make movement smoother
+2. could have the camera stop the robot the moment it detects an object, then check to see if the std deviation goes down
+
+
+fix the issue of hitting things, to step backward then fwd
+
+
+now, going to get camera to drive the motors, to turn the robot to the object it wants to face
+
+
+"sudo crontab"
+/etc sudo nano rc.local
+
+
