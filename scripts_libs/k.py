@@ -24,6 +24,24 @@ SAVE IT HERE, COMMENTED OUT.
     headaches across different programs, platforms, etc.
 '''
 
+def listContents(arr,ReturnAsNPArr=False):
+    ''' Take in a string list and return a dict or numpy array of 
+    the unique values and the number of times they appear.
+    '''
+    z=dict()
+    for irow in arr:
+        if(irow in z.keys()):
+            z[irow]+=1 #irow already seen, incremnt counter
+        else:
+            z[irow]=1 # irow never seen, create key and set to 1
+    if(ReturnAsNPArr==False):
+        return z
+    else:
+        import numpy as np
+        names=np.array([list(z.keys())],dtype='object').transpose() 
+        nums=np.array([list(z.values())],dtype='object').transpose() 
+    return np.column_stack((names,nums))
+# def listContents
 def pad(text,strLen,char=' ',side='L'):
     ''' Objective: provide easy, powerful padding tool for 
         text. vars:
