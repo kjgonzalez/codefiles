@@ -1,3 +1,4 @@
 # don't want to upload unecessary stuff
 catkin_ws/build/
 catkin_ws/devel/
+scripts_libs/__pycache__/
