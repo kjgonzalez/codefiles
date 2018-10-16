@@ -7,7 +7,7 @@ THIS IS THE OFFICIAL LOCATION OF ALL PYTHON FUNCTIONS AND CLASSES THAT ARE MADE
     USED HERE. IF A FUNCTION IS NOT USABLE YET, EITHER SAVE IT ELSEWHERE OR
     SAVE IT HERE, COMMENTED OUT.
 
-== CALLING REMOTELY ========================================
+== CALLING THIS MODULE REMOTELY ============================
 In Linux:
 1. open ~/.bashrc
 2. add line (adapting to local computer):
@@ -15,9 +15,12 @@ In Linux:
 3. reload bash or source
 
 In Windows:
-1.
-
-
+1. START > search "path" > "edit the system environment variables"
+2. click "Environment Variables..."
+3. find "PYTHONPATH" in user variables, or create new variable
+4. add new value (adapting to local computer):
+    C:\...\codefiles\scripts_libs
+5. reopen Command Line
 
 == NOTES ===================================================
 * as of 181016, all lines shall be at maximum 80 characters long. if writing
