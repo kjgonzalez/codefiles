@@ -2,3 +2,4 @@
 catkin_ws/build/
 catkin_ws/devel/
 scripts_libs/__pycache__/
+scripts_libs/klib.pyc
