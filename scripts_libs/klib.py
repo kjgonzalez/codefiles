@@ -23,6 +23,8 @@ In Windows:
 5. reopen Command Line
 
 == NOTES ===================================================
+* as of 181016, this module and all contained members will assume python 3.x 
+    environment. functionality may break when used in python 2.x
 * as of 181016, all lines shall be at maximum 80 characters long. if writing
     text, using hanging indent as shown in this sentence
 * create help text for all items written here. this is to facilitate
@@ -74,8 +76,8 @@ def pad(text,strLen,char=' ',side='L'):
 
 def clipin():
     ''' copy text from clipboard to a variable in python'''
-    import Tkinter
-    r=Tkinter.Tk()
+    import tkinter
+    r=tkinter.Tk()
     r.withdraw()
     a=r.clipboard_get()
     r.destroy()
@@ -84,8 +86,8 @@ def clipin():
 
 def clipout(a):
     '''copy text from variable in python to clipboard '''
-    import Tkinter
-    r=Tkinter.Tk()
+    import tkinter
+    r=tkinter.Tk()
     r.withdraw()
     r.clipboard_clear()
     r.clipboard_append(a)
@@ -117,10 +119,9 @@ def InsInFilenames(txt,criterion='',loc=0):
     if(criterion!=''):
         for i in a:
             if(criterion in i):
-                # print     i
                 b.append(i)# filter files
         a=b # if criterion not blank, have new filtered list
-    for i in a: #print i #modifyme
+    for i in a: 
         os.rename(i,i[:loc]+txt+i[loc:])
 #def InsInFilenames
 
