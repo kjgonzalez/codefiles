@@ -4,14 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/kris/Documents/cpp_sandbox/hello_webcam/webcam.cpp" "/home/kris/Documents/cpp_sandbox/hello_webcam/CMakeFiles/webcam.dir/webcam.cpp.o"
+  "/home/iki/codefiles/cpp_sandbox/hello_webcam/webcam.cpp" "/home/iki/codefiles/cpp_sandbox/hello_webcam/CMakeFiles/webcam.dir/webcam.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/opt/ros/kinetic/include/opencv-3.3.1"
-  "/opt/ros/kinetic/include/opencv-3.3.1/opencv"
+  "/usr/local/include/opencv4"
   )
 
 # Targets to which this target links.
