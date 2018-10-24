@@ -23,7 +23,7 @@ In Windows:
 5. reopen Command Line
 
 == NOTES ===================================================
-* as of 181016, this module and all contained members will assume python 3.x 
+* as of 181016, this module and all contained members will assume python 3.x
     environment. functionality may break when used in python 2.x
 * as of 181016, all lines shall be at maximum 80 characters long. if writing
     text, using hanging indent as shown in this sentence
@@ -85,9 +85,11 @@ def clipin():
 #def clipin
 
 def clipout(a):
-    '''copy text from variable in python to clipboard '''
-    import tkinter
-    r=tkinter.Tk()
+    '''copy text from variable in python to clipboard
+    KJGNOTE: not functioning correctly in python3 (ubuntu side)
+    '''
+    import Tkinter
+    r=Tkinter.Tk()
     r.withdraw()
     r.clipboard_clear()
     r.clipboard_append(a)
@@ -104,14 +106,14 @@ def InsStr(main,txt,loc):
 #InsStr
 
 def InsInFilenames(txt,criterion='',loc=0):
-    ''' Insert In Filenames. Insert specific text
-        into files in a folder, an optionally only affect
-        files that have a specific text in them.
-        general steps:
+    ''' Insert In Filenames. Batch string insert into filenames. Insert
+        specific text into filenames of files in a folder, an optionally only
+        affect files that have a specific text in them.
+    General steps:
         1. get list of files in working directory
         2. filter for files listed in criterion
         3. affect files in filtered list
-        4. should be done.
+        4. done.
     '''
     import os
     a=os.listdir(os.curdir)
@@ -121,7 +123,7 @@ def InsInFilenames(txt,criterion='',loc=0):
             if(criterion in i):
                 b.append(i)# filter files
         a=b # if criterion not blank, have new filtered list
-    for i in a: 
+    for i in a:
         os.rename(i,i[:loc]+txt+i[loc:])
 #def InsInFilenames
 
@@ -137,7 +139,7 @@ def ListAllSubfolders():
 #def ListAllSubfolders
 
 def wordCount(arr):
-    ''' Objective: Count number of words in a text array in the clipboard.
+    ''' Objective: Count number of words in a text array.
     Assumptions:
         separate words are separated by spaces, so
             just need to split string by spaces.
