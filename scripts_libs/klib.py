@@ -38,6 +38,27 @@ In Windows:
     headaches across different programs, platforms, etc.
 '''
 
+# check version of python being used
+def __getSysInfo__():
+    ''' Get local computer info. Generally, should keep software OS and version
+        independent, but this may not always be possible. Also, avoiding
+        importing sys or other modules to pylib.
+    Returns:
+        * OSVERSION (linux[0]/win[1]/mac[2]?)
+        * PYVERSION (2/3)
+    '''
+    import sys
+    if('linux' in sys.platform):
+        osver = 0
+    elif('win' in sys.platform):
+        osver = 1
+    else:
+        osver = 2
+    return (osver,sys.version_info.major)
+
+(OSVERSION,PYVERSION) = __getSysInfo__()
+
+
 def listContents(arr,ReturnAsNPArr=False):
     ''' Take in a string list and return a dict or numpy array of
     the unique values and the number of times they appear.
