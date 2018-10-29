@@ -3,13 +3,13 @@ Author: Kristian Gonzalez
 DateCreated: 180321
 Version2Created: 181029
 
-Objective: Want to understand and possibly improve python opencv, to be used 
+Objective: Want to understand and possibly improve python opencv, to be used
 	for batch editing photos, especially those for the database building.
 
 KJGNOTE: Will leave custom functions in-place instead of organizing at top, in
 	order to give context in code.
 
-Some sample operations that need to be understood and shown: 
+Some sample operations that need to be understood and shown:
 
 * load an image
 * flip / rotate an image
@@ -21,9 +21,9 @@ Some sample operations that need to be understood and shown:
 '''
 
 # Initializations ##########################################
-import klib
-if(klib.PYVERSION!=3):
-    raise Exception('must use python3. exiting.')
+# import klib
+# if(klib.PYVERSION!=3):
+#     raise Exception('must use python3. exiting.')
 import cv2
 import numpy as np
 import os
@@ -55,7 +55,7 @@ res_value = cv2.resize(img,(400,400),(0,0)) # resize image by value
 # note that matrix values work in RRCC coordinate system
 crop1 = img[70:200,30:200] # using rc format, [x1:x2,y1:y2]
 
-# will create custom crop function that centers a rectangle about a point and 
+# will create custom crop function that centers a rectangle about a point and
 # 	stays within bounds of original image
 
 def constrain(value,minVal,maxVal):
@@ -68,7 +68,7 @@ def cropCentered(image,centerYX=-1,wide=500,height=500):
 	Objective: get an image and return a cropped rectangle based on a given
 		center, width, and height. Cropped image is bounded by bounds of image,
 		but will try to keep orignal size of bounding box.
-	Assumptions: 
+	Assumptions:
 		- cv2 already imported
 		- numpy as np already imported
 	Arguments:
@@ -77,8 +77,8 @@ def cropCentered(image,centerYX=-1,wide=500,height=500):
 	  wide: desired width of crop rectangle. default=500px
 	  height: desired height of crop rectangle. default=500px
 	'''
-	
-	
+
+
 	# first get image bounds
 	a=image.shape
 	origHt=a[0]
@@ -103,13 +103,14 @@ def cropCentered(image,centerYX=-1,wide=500,height=500):
 crop2 = cropCentered(img,wide=505,height=505)
 
 # save an image back to disk
+qs(res_ratio)
 cv2.imwrite('out.jpg',res_ratio)
 
 # LEARNING ABOUT BLURS #####################################
 # blur helps remove noise
-# it also helps provide artificial variety when training 
+# it also helps provide artificial variety when training
 # 	an algorithm
-# 
+#
 
 # have already imported cv2, np, and os
 
@@ -120,19 +121,3 @@ cv2.imwrite('out.jpg',res_ratio)
 #cv2.boxFilter(src,ddepth,(ksize,ksize)) #hard to visually tell diff from 'blur'
 #cv2.medianBlur(src,ksize) #makes things look more like an oil pastel or so
 #cv2.bilateralFilter(src,d,sigmaColor) # more for offline work, keeps edges
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
