@@ -78,12 +78,16 @@ img2=img.convert('RGB')
 img2d=idr.Draw(img2) # note: create dual image pair, with one being 'canvas' and other being 'composite'
 #img2d.rectangle(((30, 30),(200,200)))
 
-fnt = ImageFont.truetype('Pillow/Tests/fonts/FreeMono.ttf', 20)
+if(klib.OSVERSION==0):
+    fnt = ImageFont.truetype('Pillow/Tests/fonts/FreeMono.ttf', 20)
+elif(klib.OSVERSION==1):
+    fnt = ImageFont.truetype('C:\\Windows\\Fonts\\arial.ttf', 20)
+
 img2d.text((10,10),'hello world',font=fnt,fill=(255,0,0))
 rectangle2(img2d,(70,30,200,200),outline="red",width=5)
+plt.title("Close with 'q' or X out of window")
 plt.imshow(img2)
-plt.show(block=False);time.sleep(2);plt.close()
-
+plt.show()
 
 
 
