@@ -6,8 +6,8 @@ topics:
 
 
 SOURCES:
-Decorators: https://cito.github.io/blog/f-strings/
-F-Strings: https://realpython.com/primer-on-python-decorators/
+Decorators: https://realpython.com/primer-on-python-decorators/
+F-Strings: https://cito.github.io/blog/f-strings/
 Class Iterator: (note, assumes Python2) https://anandology.com/python-practice-book/iterators.html 
 Iterators, pt2: (note, assumes Python2) https://www.programiz.com/python-programming/iterator
 
@@ -141,10 +141,60 @@ print(sum(d)) #sums up from 0 to n-1
 
 
 
+print('''
+################################################################################
+# "property" built-in decorator in a class #####################################
+''')
 
 
+class Rect:
+    def __init__(self,ht=0,wd=0):
+        # pass # optionally, can just leave everything blank, uninitialized, until user sets them
+        self.ht=ht
+        self.wd=wd
+    
+    @property
+    def ht(self):
+        return self._ht
 
+    def check(self,x):
+        if(x<0.0):
+            raise ValueError("Can't have negative value")
+        return x
+        
+    @ht.setter
+    def ht(self,value):
+        self._ht=self.check(value)
+    
+    @property
+    def wd(self):
+        return self._wd
+    @wd.setter
+    def wd(self,value):
+        self._wd=self.check(value)
+    
+    @property
+    def area(self):
+        return self.ht*self.wd
 
+    def perim(self):
+        return 2*(self.ht+self.wd)
+
+a=Rect()
+a.ht=2
+a.wd=3
+try:
+    a.ht=-1
+except ValueError:
+    print("can't set negative height")
+
+try:
+    a.wd=-1
+except ValueError:
+    print("can't set negative width")
+
+print("height:{}, width:{}, area:{}".format(a.ht,a.wd,a.area))
+print("perimeter:",a.perim())
 
 
 
