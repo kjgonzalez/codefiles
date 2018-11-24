@@ -6,4 +6,12 @@ Objective: unify all code in all locations, and enable simple way to have all co
 2. *_sandbox folders for testing assorted programming ideas
 3. scripts folder for running useful, live code 
 
+### establish kjg repo on new computer
+(for all steps, refer to bash_help.txt)
+1. generate ssh key & upload
+2. clone repo
+3. DONE
+
+
+
 #temp
