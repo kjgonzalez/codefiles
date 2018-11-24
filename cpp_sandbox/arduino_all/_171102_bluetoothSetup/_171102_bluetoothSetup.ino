@@ -4,7 +4,7 @@ Create Date: 2017-Nov-02
 Objective: first-time communication with bluetooth, need
 	to come up with way to talk to HC05 via teensy. will use
 	PC-Serial-Teensy-Serial1-Bluetooth communication.
-	General scheme: 
+	General scheme:
 	1. use serial monitor to send data to teensy
 	2. teensy bounces same information to bluetooth
 	3. whenever bluetooth returns info, bounce info to serial
@@ -18,9 +18,7 @@ void setup() {
 	Serial.begin(38400); // pc / usb serial
 	Serial1.begin(38400); // hardware serial (to bluetooth)
 	delay(2000);
-	Serial.println("Hello World");
-	delay(2000);
-	Serial.println("Hello World START");
+	Serial.println("Starting...");
 	// Serial.println(str);
 
 }//setup
@@ -37,17 +35,17 @@ void loop() {
 		Serial.print(ins); //monitor alrdy sending NL + CR
 		Serial1.print(ins);
 	}//if pc data available
-	
+
 	if(Serial1.available()>0){
 		// Serial.print("BT: ");
 		// while(Serial1.available()>0){
 			// inByte=Serial1.read();
 			// Serial.write(inByte);
 		// }//while-available
-		
+
 		// //quick, debugging
 		Serial.write(Serial1.read());
-		
+
 		// //slow, debugging
 		// ins = Serial1.readString();
 		// Serial.print("BT: ");

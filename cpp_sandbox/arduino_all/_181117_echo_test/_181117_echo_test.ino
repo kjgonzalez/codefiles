@@ -28,7 +28,7 @@ PC: q
 */
 
 void setup(){
-  Serial.begin(9600); // slow but easy to remember
+  Serial.begin(115200); // slow but easy to remember
   pinMode(13,OUTPUT); // additional indication that message was received
   Serial.println("starting");
   Serial.setTimeout(10);
