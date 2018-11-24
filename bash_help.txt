@@ -1,0 +1,27 @@
+= Helpful Commands =========================================
+delete folder that still has stuff in it: 
+    rm -r DirName
+find text in set of files: 
+    grep -r 'TextToMatch' Directory/To/Search
+output bash text to both screen and file: 
+    ./somecommand | tee the/output/file.txt
+zip a file:
+    zip -r filename.zip DirectoryName
+unzip a file: 
+    unzip filename.zip
+targz a file: 
+    tar cvzf filename.tar.gz DirectoryName
+untargz a file: 
+    tar xvzf filename.tar.gz
+delete a line in vim:
+    dd (while not in insert mode)
+generate rsa_id properly
+    1. cd ~/.ssh
+    2. ssh-keygen (use current folder, set own password)
+    3. cat id_rsa.pub (copy contents)
+    4. DONE: share where necessary
+clone into repo using ssh (rsa)
+    1. copy in rsa key
+    2. git clone git@github.com:EXAMPLE/REPO.git
+    3. DONE
+# eof

@@ -38,6 +38,31 @@ In Windows:
     headaches across different programs, platforms, etc.
 '''
 
+class Stopwatch:
+    ''' Stopwatch: Basic class that logs a time when it's created. Can also 
+        restart timer with function call "tik", and can get the elapsed time
+        with function "tok". Designed to be a bit similar to matlab functions.
+        Note that all values are in seconds.
+        
+        Example: 
+        >> from klib import Stopwatch as st
+        >> a=st()
+        >> (some code)
+        >> print(a.tok())
+        OUT: 5.2087955
+    '''
+    def tik(self):
+        self.t1=self.time.time()
+    def tok(self):
+        return self.time.time()-self.t1
+    def __init__(self):
+        import time
+        self.time=time
+        self.tik()
+# class Stopwatch
+
+
+
 # check version of python being used
 def __getSysInfo__():
     ''' Get local computer info. Generally, should keep software OS and version
