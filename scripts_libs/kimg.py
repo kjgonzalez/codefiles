@@ -1,167 +1,173 @@
 '''
-OBJECTIVE: quickly / easily rename many image files for 
-	photo archives
-	
+OBJECTIVE: Quickly / easily rename many image files for 
+    photo archives
+
 ASSUMPTIONS: 
-	* user has PIL installed
-		(http://www.pythonware.com/products/pil/#pil117)
-	* user has pyexiv2 installed
-		(http://tilloy.net/dev/pyexiv2/download.html)
-	* images are located in same folder
-	* without user input, shall not overwrite an image when resizing
-	
+    * user has pillow (PIL fork) installed (pip3 intall Pillow)
+    * images are located in same folder where some operations are done
+    * without user input, shall not overwrite an image when resizing
+    * all tabs are soft (use spaces, not \t)
+
+DEPRACATED INFO:
+* assumption:user has pyexiv2 installed (http://tilloy.net/dev/pyexiv2/download.html)
+
+
 KJG171112: BASED ON NEW DEVELOPMENT OF FUNCTION 'RECLIST', NEED TO 
 COMPLETELY RETHINK THE FLOW / STRUCTURE OF YOUR FUNCTIONS. FUCK.
-	
+
+KJG181121: need to overhaul kimg in order to: 
+1. make cross-platform
+2. behave nicely with klib
+3. use PIL
+
+
+
 '''
+
 # INITIALIZE MODULES #######################################
-# from PIL import Image
-# import os
-# import time
-# import pyexiv2
+import klib
+from klib import pad # want direct access w/o module
+import PIL.Image as pil
+import numpy as np
+import os
+# Ensure that using python3. don't want to use py2 anymore
+if(klib.PYVERSION!=3):
+    raise Exception('must use python3. exiting.')
+
+# from PIL import Image - done
+# import os - done
+# import time - ???
+# import pyexiv2 - ???
 
 # INITIALIZE FUNCTIONS #####################################
 
-def pad(text,strLen,char=' ',side='L'):
-	#SPECIAL NOTE: because of possible portability, will ...
-	# copy this function directly from k.py
-	''' Objective: provide easy, powerful padding tool for 
-		text. vars:
-		'text': the text to pad
-		'strLen': maximum length of final string
-		'char': padding character, default ' '
-		'side': side to pad, default left. options: L, R
-	'''
-	if(len(text)<strLen):
-		if(side=='R'):
-			return pad(text+char,strLen,char,side)
-		else:
-			return pad(char+text,strLen,char,side)
-	else:
-		return text
-#
 def gdm(img):
-	# objective: get date modified
-	import os
-	return os.path.getmtime(img)
+    # objective: get date modified
+    # kjg181121: works
+    import os
+    return os.path.getmtime(img)
 #
 def gdc(img):
-	# objective: get date created
-	import os
-	return os.path.getctime(img)
+    # objective: get date created
+    # kjg181121: works
+    import os
+    return os.path.getctime(img)
 #
 def gdt(img):
-	#objective: get date taken (via PIL)
-	# NOTE: THIS FAILS FOR PNG IMGS, perhaps due tag No.
-	from PIL import Image	# compiled module from internet
-	import time
-	try:
-		a= Image.open(img)._getexif()[36867] #gives string
-		b='%Y:%m:%d %H:%M:%S' #string parser
-		c=time.mktime(time.strptime(a,b)) 
-		return c #format: seconds since epoch
-	except KeyError:
-		# reason: latest date will be after to gdm and gdc
-		return time.time() #worst case, return current time
-	except IOError:
-		# reason: attempting to get data on non-JPG file
-		print 'FN ''gdt'' WARNING, NON-JPG FILE:',img
-		return time.time() #user: use at own risk
-	except TypeError:
-		# reason: not entirely sure yet, but seems to be rare error
-		#	ErrTxt: 'NoneType' object has no attribute '__getitem__'
-		#	for now, will simply return current date, and hope that 
-		#	functions 'gdm' or 'gdc' will capture earliest 
-		#	date. (KJG170830)
-		print 'FN ''gdt'' WARNING, missing attribute:',img
-		return time.time()
+    #objective: get date taken (via PIL)
+    # NOTE: THIS FAILS FOR PNG IMGS, perhaps due tag No.
+    # kjg181121: works
+    from PIL import Image	# compiled module from internet
+    import time
+    try:
+        a= Image.open(img)._getexif()[36867] #gives string
+        b='%Y:%m:%d %H:%M:%S' #string parser
+        c=time.mktime(time.strptime(a,b)) 
+        return c #format: seconds since epoch
+    except KeyError:
+        # reason: latest date will be after to gdm and gdc
+        return time.time() #worst case, return current time
+    except IOError:
+        # reason: attempting to get data on non-JPG file
+        print("FN 'gdt' WARNING, NON-JPG FILE:",img)
+        return time.time() #user: use at own risk
+    except TypeError:
+        # reason: not entirely sure yet, but seems to be rare error
+        #    ErrTxt: 'NoneType' object has no attribute '__getitem__'
+        #   for now, will simply return current date, and hope that 
+        #   functions 'gdm' or 'gdc' will capture earliest 
+        #   date. (KJG170830)
+        print("FN 'gdt' WARNING, missing attribute 'date taken':",img)
+        return time.time()
 #
 def imgdate(seconds):
-	import time
-	a=time.localtime(seconds) #get 'time.struct_time' type
-	Y=str(a[0])[2:]				# 2-digit year str
-	M=pad(str(a[1]),2,char='0')	# ... month
-	D=pad(str(a[2]),2,char='0')	# ... day
-	h=pad(str(a[3]),2,'0')		# ... hour
-	m=pad(str(a[4]),2,'0')		# ... minute
-	s=pad(str(a[5]),2,'0')		# ... second
-	return Y+M+D+'_'+h+m+s	#return string
+    # convert float seconds value to formatted string
+    # kjg181121: works
+    import time
+    tstruct=time.localtime(seconds) #get 'time.struct_time' type
+    return time.strftime("%Y%m%d_%H%M%S",tstruct)[2:] # drop 2 digits from year
 #
 def getdate(img):
-	''' Objective: return earliest img file made, in seconds.'''
-	m=gdm(img) #date photo modified
-	c=gdc(img) #date photo created
-	t=gdt(img) #date photo taken (not on all)
-	return min(m,c,t)
+    ''' Objective: return earliest img file made, in seconds.'''
+    # kjg181121: works
+    m=gdm(img) #date photo modified
+    c=gdc(img) #date photo created
+    t=gdt(img) #date photo taken (not always available)
+    return min(m,c,t)
 #
 def getrange(jpgOnly=True,dateOnly=True,sub='.'):
-	''' Objective: return in a string the min and max dates of
-		the files / photos contained in a single folder (no 
-		subfolders)
-		Assumptions: 
-			* can search jpg's only, or all files
-			* EVENTUALLY: recursive search option
-			* return string of format: YYMMDD_HHmmSS-YYMMDD_HHmmSS
-			* if dateOnly=True, then give format YYMMDD-YYMMDD
-	'''
-	import os
-	import time
-	minDate=time.time()	# intitialize high
-	maxDate=0			# initialize low
-	startDir=os.getcwd() # store orig directory for return
-	if(sub!='.'):
-		# change to correct directory
-		# 1. check directory exists
-		# 2. go to directory
-		# 3. begin operations
-		# 4. (later) go back to current directory
-		os.chdir(sub)
-	if(jpgOnly==True):
-		# using list comprehension technique here:
-		mainList=[x for x in os.listdir('.') if (
-		'jpg' in x or 'JPG' in x)]
-	else:
-		mainList=os.listdir('.')
-	for iFile in mainList:
-		a=getdate(iFile)
-		if(a<minDate): minDate = a
-		if(a>maxDate): maxDate = a
-	# once complete, convert to dates and return that
-	if(dateOnly==True): 
-		# if only want dates (YYMMDD), then isolate for that
-		a=imgdate(minDate)
-		a=a[:a.find("_")]
-		b=imgdate(maxDate)
-		b=b[:b.find("_")]
-		rangeStr=a+"-"+b
-	else:
-		rangeStr=imgdate(minDate)+"-"+imgdate(maxDate)
-	os.chdir(startDir) # go back to orig directory (safeguard)
-	return rangeStr
+    ''' Objective: return in a string the min and max dates of
+        the files / photos contained in a single folder (no 
+        subfolders)
+        Assumptions: 
+            * can search jpg's only, or all files
+            * EVENTUALLY: recursive search option
+            * return string of format: YYMMDD_HHmmSS-YYMMDD_HHmmSS
+            * if dateOnly=True, then give format YYMMDD-YYMMDD
+    '''
+    # kjg181121: kinda works, but maybe needs to be optimized
+    import os
+    import time
+    minDate=time.time()	# intitialize high
+    maxDate=0			# initialize low
+    startDir=os.getcwd() # store orig directory for return
+    if(sub!='.'):
+        # change to correct directory
+        # 1. check directory exists
+        # 2. go to directory
+        # 3. begin operations
+        # 4. (later) go back to current directory
+        os.chdir(sub)
+    if(jpgOnly==True):
+        # using list comprehension technique here:
+        mainList=[x for x in os.listdir('.') if (
+        'jpg' in x or 'JPG' in x)]
+    else:
+        mainList=os.listdir('.')
+    for iFile in mainList:
+        a=getdate(iFile)
+        if(a<minDate): minDate = a
+        if(a>maxDate): maxDate = a
+    # once complete, convert to dates and return that
+    if(dateOnly==True): 
+        # if only want dates (YYMMDD), then isolate for that
+        a=imgdate(minDate)
+        a=a[:a.find("_")]
+        b=imgdate(maxDate)
+        b=b[:b.find("_")]
+        rangeStr=a+"-"+b
+    else:
+        rangeStr=imgdate(minDate)+"-"+imgdate(maxDate)
+    os.chdir(startDir) # go back to orig directory (safeguard)
+    return rangeStr
 #
 def getext(img):
-	# objective: return extension (with period) of file
-	return img[img.find('.'):]
+    # objective: return extension (with period) of file
+    # kjg181121: works
+    return img.split('.')[-1]
 #
-def getlist(jpgOnly=True):
-	''' Objective: return list of files desired to be 
-		modified. Can search recursively or only in 
-		the current folder.
-	'''
-	import os
-	os.system('dir /s /b "*.*" >delme') #save all file types
-	f=file('delme')
-	a=[]
-	for i in f:
-		if(jpgOnly==True):
-			if('jpg' in i or 'JPG' in i):
-				a.append(i[:-1])
-		else:
-			a.append(i[:-1])
-	# now have list of files including their filepaths
-	f.close()
-	os.system('del delme')
-	return a
+def getlist(recursive=True,jpgOnly=True):
+    ''' Objective: return list of files desired to be 
+        modified. Can search recursively or only in 
+        the current folder.
+    '''
+    # kjg181121: FIXME!!! kjgnote: here
+    import os
+    import glob
+    [os.getcwd()+y[1:] for x in os.walk('.') for y in glob(os.path.join(x[0], '*.jpg'))]
+    os.system('dir /s /b "*.*" >delme') #save all file types
+    f=open('delme')
+    a=[]
+    for i in f:
+        if(jpgOnly==True):
+            if('jpg' in i or 'JPG' in i):
+                a.append(i[:-1])
+        else:
+            a.append(i[:-1])
+    # now have list of files including their filepaths
+    f.close()
+    os.system('del delme')
+    return a
 #
 def imgrename(img,appendOldName=False):
 	''' objective: handle the messiness of renaming an image
