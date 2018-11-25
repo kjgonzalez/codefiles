@@ -19,6 +19,8 @@ KJG181121: need to overhaul kimg in order to:
 1. make cross-platform
 2. behave nicely with klib
 3. use PIL
+4. ensure all have triple-quote based description
+5. figure out what's meant by kjg171112 statement
 
 
 
@@ -150,7 +152,6 @@ def getlist(types=['jpg'],recursive=True):
         modified. Can search recursively or only in 
         the current folder. can also choose which types of files are returned in list
     '''
-    # kjg181121: FIXME!!! kjgnote: here
     # kjg181125: works
     import os
     from glob import glob
@@ -217,7 +218,8 @@ def imgreduce(imgname,maxsize=2000,overwrite=False):
 		defaults: maxsize = 2000, overwrite=False
 	'''
 	from PIL import Image
-	import pyexiv2
+	import piexif # LEARN HOW TO USE THIS!!!
+    # kjg181125: FIXME!!! here
 	
 	im=Image.open(imgname)	#open image file object
 	# before doing anything else, check if img too small
