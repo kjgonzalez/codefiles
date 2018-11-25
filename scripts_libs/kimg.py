@@ -31,8 +31,7 @@ import PIL.Image as pil
 import numpy as np
 import os
 # Ensure that using python3. don't want to use py2 anymore
-if(klib.PYVERSION!=3):
-    raise Exception('must use python3. exiting.')
+assert klib.PYVERSION==3, "Must use python3. Exiting."
 
 # from PIL import Image - done
 # import os - done
@@ -146,67 +145,70 @@ def getext(img):
     # kjg181121: works
     return img.split('.')[-1]
 #
-def getlist(recursive=True,jpgOnly=True):
+def getlist(types=['jpg'],recursive=True):
     ''' Objective: return list of files desired to be 
         modified. Can search recursively or only in 
-        the current folder.
+        the current folder. can also choose which types of files are returned in list
     '''
     # kjg181121: FIXME!!! kjgnote: here
+    # kjg181125: works
     import os
-    import glob
-    [os.getcwd()+y[1:] for x in os.walk('.') for y in glob(os.path.join(x[0], '*.jpg'))]
-    os.system('dir /s /b "*.*" >delme') #save all file types
-    f=open('delme')
-    a=[]
-    for i in f:
-        if(jpgOnly==True):
-            if('jpg' in i or 'JPG' in i):
-                a.append(i[:-1])
+    from glob import glob
+    # for each type, append to list
+    
+    # ensure types are valid
+    if(type(types)==str): types=[types] # if given as string, correct it
+    
+    items=[]
+    for itype in types: 
+        if(recursive):
+            [items.append(os.getcwd()+y[1:]) for x in os.walk('.') for y in glob(os.path.join(x[0], '*.'+itype))]
+        # for each type, append the list of files that are present with the specified type
         else:
-            a.append(i[:-1])
+            [items.append(os.getcwd()+ifile[1:]) for ifile in glob('./*.jpg')]
     # now have list of files including their filepaths
-    f.close()
-    os.system('del delme')
-    return a
+    return items
 #
 def imgrename(img,appendOldName=False):
-	''' objective: handle the messiness of renaming an image
-		file and ensuring that it doesn't have the same name
-		as an image taken in the same YYMMDD_HHmmSS as
-		another photo. Exif data is preserved. Specific to 
-		calling this function, you can append the old file 
-		name to the new file (imgdate) value that is 
-		generated, such as if wanting to keep a video's 
-		original name.
-	'''
-	import os
-	newname=imgdate(getdate(img))	#get new name for img
-	if(appendOldName==True):
-		# append imgdate value with old 
-		#	filename (except extension)
-		newname = newname + '_'+img[:img.find('.')]
-	#adding in special section in case function being used 
-	#	to modify a file remotely
-	if('\\' in img):
-		#get path to file (using some replace magic)
-		c=img.count('\\')	#want to replace last '\\'
-		path=img.replace('\\','/').replace('/','\\',c-1)
-		path=path.split('/')[0]+'\\' #use '/' as splitter
-		newname=path+newname #prefix filename w/ path
-	
-	ext=getext(img)			#ensure have proper ext
-	i=0	#counter for maximum number of attempts
-	validname=False	#flag for knowing if have valid name
-	while(validname==False and i<100):
-		try:
-			validname=True	# assume attempt will be success
-			if(i==0):		# first attempt
-				os.rename(img,newname+ext)	#simple rename
-			else:			# not first attempt
-				os.rename(img,newname+'_'+str(i)+ext)
-		except WindowsError: # error windows gives if ...
-			validname=False	#  try to name two files same
-			i=i+1	# reset flag and increment counter
+    ''' objective: handle the messiness of renaming an image
+        file and ensuring that it doesn't have the same name
+        as an image taken in the same YYMMDD_HHmmSS as
+        another photo. Exif data is preserved. Specific to 
+        calling this function, you can append the old file 
+        name to the new file (imgdate) value that is 
+        generated, such as if wanting to keep a video's 
+        original name.
+    '''
+    # kjg181125: works, but may ONLY work in windows!!!
+    import os
+    newname=imgdate(getdate(img))	#get new name for img
+    if(appendOldName==True):
+        # append imgdate value with old 
+        #	filename (except extension)
+        newname = newname + '_'+img[:img.find('.')]
+    #adding in special section in case function being used 
+    #	to modify a file remotely
+    if('\\' in img):
+        #get path to file (using some replace magic)
+        c=img.count('\\')	#want to replace last '\\'
+        path=img.replace('\\','/').replace('/','\\',c-1)
+        path=path.split('/')[0]+'\\' #use '/' as splitter
+        newname=path+newname #prefix filename w/ path
+    
+    ext='.'+getext(img)			#ensure have proper ext
+    i=0	#counter for maximum number of attempts
+    validname=False	#flag for knowing if have valid name
+    while(validname==False and i<100):
+    # want to ensure filename is unique
+        try:
+            validname=True	# assume attempt will be success
+            if(i==0):		# first attempt
+                os.rename(img,newname+ext)	#simple rename
+            else:			# not first attempt
+                os.rename(img,newname+'_'+str(i)+ext)
+        except WindowsError: # error windows gives if ...
+            validname=False	#  try to name two files same
+            i=i+1	# reset flag and increment counter
 #
 def imgreduce(imgname,maxsize=2000,overwrite=False):
 	'''Objective: reduce image size, and by default save 
@@ -253,74 +255,74 @@ def imgreduce(imgname,maxsize=2000,overwrite=False):
 	di.write() # have now saved metadata
 	return 'Resized:'+imgname
 #
-def renredall(maxsize=2000,overwrite=False):
-	''' objective: in current folder, rename all jpg's
-		and resize them to desired amount as well as choose
-		whether or not to overwrite files
-		NOTE: only targets jpg files. ignores all others.
-		'''
-	import os
-	for i in os.listdir('.'):
-		if('jpg' in i or 'JPG' in i):
-			imgrename(i)
-	for i in os.listdir('.'):
-		if('jpg' in i or 'JPG' in i):
-			imgreduce(i,maxsize,overwrite)
-	print 'done'
-#
-def recrenredall(overwrite,maxsize=2000):
-	''' Objective: in current and all subfolders, rename
-		all jpg's and resize them to desired amount as well
-		as choose whether or not to overwrite files. Because
-		of high risk of error without proper input, require
-		'overwrite' field to be filled out.
-		'overwrite=True' >> overwrite old files
-		NOTE: only targets jpg files, ignores all others.
-	'''
-	import os
-	# first, rename all files to proper convention
-	os.system('dir /s /b "*jpg" > delme')
-	f=file('delme')
-	a=[]
-	for i in f:
-		if('jpg' in i or 'JPG' in i):
-			a.append(i[:-1])
-	f.close()
-	for i in a:
-		imgrename(i)
-	# after renaming, must get new list for resizing
-	os.system('dir /s /b "*jpg" > delme')
-	f=file('delme')
-	a=[]
-	for i in f:
-		if('jpg' in i or 'JPG' in i):
-			a.append(i[:-1])
-	f.close()
-	counter=1
-	for i in a:
-		print imgreduce(i,maxsize,overwrite),'('+str(counter)+'/'+str(len(a))+')'
-		counter=counter+1
-	# once complete renaming, resizing: delete txt file
-	os.system('del delme')
-	print 'done'
-#
-def renSubfolder(SubfolderName,JPGONLY=True,DATEONLY=False):
-	''' Objective: Rename a SUBFOLDER of current directory 
-	by going in, looking at each img's mod dates (this
-	uses function 'getdate', doesn't depend on 
-	filename), then determining min / max. optional 
-	YYMMDD data. arguments are if only look at 
-	imgs, use only.
-	'''
+# def renredall(maxsize=2000,overwrite=False):
+	# ''' objective: in current folder, rename all jpg's
+		# and resize them to desired amount as well as choose
+		# whether or not to overwrite files
+		# NOTE: only targets jpg files. ignores all others.
+		# '''
+	# import os
+	# for i in os.listdir('.'):
+		# if('jpg' in i or 'JPG' in i):
+			# imgrename(i)
+	# for i in os.listdir('.'):
+		# if('jpg' in i or 'JPG' in i):
+			# imgreduce(i,maxsize,overwrite)
+	# print 'done'
+# #
+# def recrenredall(overwrite,maxsize=2000):
+	# ''' Objective: in current and all subfolders, rename
+		# all jpg's and resize them to desired amount as well
+		# as choose whether or not to overwrite files. Because
+		# of high risk of error without proper input, require
+		# 'overwrite' field to be filled out.
+		# 'overwrite=True' >> overwrite old files
+		# NOTE: only targets jpg files, ignores all others.
+	# '''
+	# import os
+	# # first, rename all files to proper convention
+	# os.system('dir /s /b "*jpg" > delme')
+	# f=file('delme')
+	# a=[]
+	# for i in f:
+		# if('jpg' in i or 'JPG' in i):
+			# a.append(i[:-1])
+	# f.close()
+	# for i in a:
+		# imgrename(i)
+	# # after renaming, must get new list for resizing
+	# os.system('dir /s /b "*jpg" > delme')
+	# f=file('delme')
+	# a=[]
+	# for i in f:
+		# if('jpg' in i or 'JPG' in i):
+			# a.append(i[:-1])
+	# f.close()
+	# counter=1
+	# for i in a:
+		# print imgreduce(i,maxsize,overwrite),'('+str(counter)+'/'+str(len(a))+')'
+		# counter=counter+1
+	# # once complete renaming, resizing: delete txt file
+	# os.system('del delme')
+	# print 'done'
+# #
+# def renSubfolder(SubfolderName,JPGONLY=True,DATEONLY=False):
+	# ''' Objective: Rename a SUBFOLDER of current directory 
+	# by going in, looking at each img's mod dates (this
+	# uses function 'getdate', doesn't depend on 
+	# filename), then determining min / max. optional 
+	# YYMMDD data. arguments are if only look at 
+	# imgs, use only.
+	# '''
 	
-	import os
-	a=SubfolderName
-	#try:
-	os.chdir(a)
-	b=getrange(jpgOnly=JPGONLY,dateOnly=DATEONLY)
-	os.chdir('..')
-	os.rename(a,b)
-#
+	# import os
+	# a=SubfolderName
+	# #try:
+	# os.chdir(a)
+	# b=getrange(jpgOnly=JPGONLY,dateOnly=DATEONLY)
+	# os.chdir('..')
+	# os.rename(a,b)
+# #
 
 
 
