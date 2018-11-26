@@ -24,4 +24,8 @@ clone into repo using ssh (rsa)
     1. copy in rsa key
     2. git clone git@github.com:EXAMPLE/REPO.git
     3. DONE
+create a symlink (soft link) with another file / folder:
+    ln -s Path/OrJustItem name/of/link
+    * note: -s flag is better than without
+
 # eof

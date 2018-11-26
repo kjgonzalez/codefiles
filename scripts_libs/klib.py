@@ -38,6 +38,62 @@ In Windows:
     headaches across different programs, platforms, etc.
 '''
 
+# FIRST, BEFORE ALL ELSE, CHECK VERSIONS OF OS AND PYTHON
+def __getSysInfo__():
+    ''' Get local computer info. Generally, should keep software OS and version
+        independent, but this may not always be possible. Also, avoiding
+        importing sys or other modules to pylib.
+    Returns:
+        * OSVERSION (linux[0]/win[1]/mac[2]?)
+        * PYVERSION (2/3)
+    '''
+    import sys
+    if('linux' in sys.platform):
+        osver = 0
+    elif('win' in sys.platform):
+        osver = 1
+    else:
+        osver = 2
+    return (osver,sys.version_info.major)
+
+(OSVERSION,PYVERSION) = __getSysInfo__()
+
+
+# create a function that will make a noise when done
+def ringbell(duration=0.15,freq=1300):
+    ''' Objective: play a noise when called
+    
+    NOTE: this function requires sox to be installed on linux system!
+    '''
+    if(OSVERSION==0):
+        # using linux
+        import os
+        msg=os.system('play --no-show-progress --null --channels 1 synth {} sine {}'.format(duration,freq))
+        if(msg!=0):
+            raise Exception("Program 'sox' not installed. Sound could not play")
+    elif(OSVERSION==1):
+        raise Exception ("Not implemented yet, please verify below code")
+        import winsound
+        winsound.Beep(freq,duration)
+# def ringbell
+
+def timestamper(pfunc):
+    ''' intended to wrap a print function or similar, which prepends text to be 
+        printed with a timestamp, which looks like:
+        LOG: YYMMDD-HHmmSS
+    '''
+    import time
+    import functools
+    logstr='LOG: '+time.strftime('%Y%b%d-%H:%M:%S',time.localtime(time.time()))+'\n'
+    @functools.wraps(pfunc)
+    def wrapper_stamper(*args,**kwargs):
+        pfunc(logstr,*args,**kwargs)
+    return wrapper_stamper
+
+
+
+
+
 class Stopwatch:
     ''' Stopwatch: Basic class that logs a time when it's created. Can also 
         restart timer with function call "tik", and can get the elapsed time
@@ -60,29 +116,6 @@ class Stopwatch:
         self.time=time
         self.tik()
 # class Stopwatch
-
-
-
-# check version of python being used
-def __getSysInfo__():
-    ''' Get local computer info. Generally, should keep software OS and version
-        independent, but this may not always be possible. Also, avoiding
-        importing sys or other modules to pylib.
-    Returns:
-        * OSVERSION (linux[0]/win[1]/mac[2]?)
-        * PYVERSION (2/3)
-    '''
-    import sys
-    if('linux' in sys.platform):
-        osver = 0
-    elif('win' in sys.platform):
-        osver = 1
-    else:
-        osver = 2
-    return (osver,sys.version_info.major)
-
-(OSVERSION,PYVERSION) = __getSysInfo__()
-
 
 def listContents(arr,ReturnAsNPArr=False):
     ''' Take in a string list and return a dict or numpy array of
