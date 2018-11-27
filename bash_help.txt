@@ -27,5 +27,11 @@ clone into repo using ssh (rsa)
 create a symlink (soft link) with another file / folder:
     ln -s Path/OrJustItem name/of/link
     * note: -s flag is better than without
+create either function or variables in bash:
+    argexample(){
+      # show how to give input arguments with bash as well as variables
+      greet="hey" # NO SPACES ON EITHER SIDE OF EQUAL SIGN!!!
+      echo "$greet, you've asked me to say $1"
+    }
 
 # eof
