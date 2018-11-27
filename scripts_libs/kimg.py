@@ -97,57 +97,6 @@ def getdate(img):
     t=gdt(img) #date photo taken (not always available)
     return min(m,c,t)
 #
-def getrange(jpgOnly=True,dateOnly=True,sub='.'):
-    ''' Objective: return in a string the min and max dates of
-        the files / photos contained in a single folder (no 
-        subfolders)
-        Assumptions: 
-            * can search jpg's only, or all files
-            * EVENTUALLY: recursive search option
-            * return string of format: YYMMDD_HHmmSS-YYMMDD_HHmmSS
-            * if dateOnly=True, then give format YYMMDD-YYMMDD
-    '''
-    # kjg181121: kinda works, but maybe needs to be optimized
-    import os
-    import time
-    minDate=time.time()	# intitialize high
-    maxDate=0			# initialize low
-    startDir=os.getcwd() # store orig directory for return
-    if(sub!='.'):
-        # change to correct directory
-        # 1. check directory exists
-        # 2. go to directory
-        # 3. begin operations
-        # 4. (later) go back to current directory
-        os.chdir(sub)
-    if(jpgOnly==True):
-        # using list comprehension technique here:
-        mainList=[x for x in os.listdir('.') if (
-        'jpg' in x or 'JPG' in x)]
-    else:
-        mainList=os.listdir('.')
-    for iFile in mainList:
-        a=getdate(iFile)
-        if(a<minDate): minDate = a
-        if(a>maxDate): maxDate = a
-    # once complete, convert to dates and return that
-    if(dateOnly==True): 
-        # if only want dates (YYMMDD), then isolate for that
-        a=imgdate(minDate)
-        a=a[:a.find("_")]
-        b=imgdate(maxDate)
-        b=b[:b.find("_")]
-        rangeStr=a+"-"+b
-    else:
-        rangeStr=imgdate(minDate)+"-"+imgdate(maxDate)
-    os.chdir(startDir) # go back to orig directory (safeguard)
-    return rangeStr
-#
-def getext(img):
-    # objective: return extension (with period) of file
-    # kjg181121: works
-    return img.split('.')[-1]
-#
 def getlist(types=['jpg'],recursive=True):
     ''' Objective: return list of files desired to be 
         modified. Can search recursively or only in 
@@ -170,6 +119,53 @@ def getlist(types=['jpg'],recursive=True):
             [items.append(os.getcwd()+ifile[1:]) for ifile in glob('./*.jpg')]
     # now have list of files including their filepaths
     return items
+#
+def getrange(dateOnly=True,subfolder='.',types=['jpg']):
+    ''' Objective: return in a string the min and max dates of
+        the files / photos contained in a single folder (no 
+        subfolders)
+        Assumptions: 
+            * can search jpg's only, or all files
+            * EVENTUALLY: recursive search option
+            * return string of format: YYMMDD_HHmmSS-YYMMDD_HHmmSS
+            * if dateOnly=True, then give format YYMMDD-YYMMDD
+    '''
+    # kjg181121: kinda works, but maybe needs to be optimized
+    import os
+    assert os.path.exists(subfolder),"Error: path doesn't exist: "+subfolder
+    import time
+    minDate=time.time()  # intitialize high
+    maxDate=0            # initialize low
+    startDir=os.getcwd() # store orig directory for return
+    if(subfolder!='.'):
+        # change to correct directory
+        # 1. check directory exists
+        # 2. go to directory
+        # 3. begin operations
+        # 4. (later) go back to current directory
+        os.chdir(subfolder)
+    mainList=getlist(types=types,recursive=False)
+    for ifile in mainList:
+        a=getdate(ifile)
+        if(a<minDate): minDate = a
+        if(a>maxDate): maxDate = a
+    # once complete, convert to dates and return that
+    if(dateOnly==True): 
+        # if only want dates (YYMMDD), then isolate for that
+        a=imgdate(minDate)
+        a=a[:a.find("_")]
+        b=imgdate(maxDate)
+        b=b[:b.find("_")]
+        rangeStr=a+"-"+b
+    else:
+        rangeStr=imgdate(minDate)+"-"+imgdate(maxDate)
+    os.chdir(startDir) # go back to orig directory (safeguard)
+    return rangeStr
+#
+def getext(img):
+    # objective: return extension (with period) of file
+    # kjg181121: works
+    return img.split('.')[-1]
 #
 def imgrename(img,appendOldName=False):
     ''' objective: handle the messiness of renaming an image
@@ -269,23 +265,20 @@ def renred(maxsize=2000,overwrite=False,recursive=False):
         imgreduce(ifile,maxsize,overwrite)
     print("FN 'renred': Done")
 #
-# def renSubfolder(SubfolderName,JPGONLY=True,DATEONLY=False):
-	# ''' Objective: Rename a SUBFOLDER of current directory 
-	# by going in, looking at each img's mod dates (this
-	# uses function 'getdate', doesn't depend on 
-	# filename), then determining min / max. optional 
-	# YYMMDD data. arguments are if only look at 
-	# imgs, use only.
-	# '''
-	
-	# import os
-	# a=SubfolderName
-	# #try:
-	# os.chdir(a)
-	# b=getrange(jpgOnly=JPGONLY,dateOnly=DATEONLY)
-	# os.chdir('..')
-	# os.rename(a,b)
-# #
+def renSubfolder(SubfolderName,JPGONLY=True,DATEONLY=False):
+    ''' Objective: Rename a SUBFOLDER of current directory 
+    by going in, looking at each img's mod dates (this
+    uses function 'getdate', doesn't depend on 
+    filename), then determining min / max. optional 
+    YYMMDD data. arguments are if only look at 
+    imgs, use only.
+    '''
+    n1=SubfolderName
+    n2=getrange(jpgOnly=JPGONLY,dateOnly=DATEONLY,subfolder=SubfolderName)
+    #try:
+    os.rename(n1,n2)
+    print("FN 'renSubfolder': renamed '{}' to '{}'".format(n1,n2))
+#
 
 
 
