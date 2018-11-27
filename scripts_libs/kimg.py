@@ -269,42 +269,6 @@ def renred(maxsize=2000,overwrite=False,recursive=False):
         imgreduce(ifile,maxsize,overwrite)
     print("FN 'renred': Done")
 #
-# def recrenredall(overwrite,maxsize=2000):
-	# ''' Objective: in current and all subfolders, rename
-		# all jpg's and resize them to desired amount as well
-		# as choose whether or not to overwrite files. Because
-		# of high risk of error without proper input, require
-		# 'overwrite' field to be filled out.
-		# 'overwrite=True' >> overwrite old files
-		# NOTE: only targets jpg files, ignores all others.
-	# '''
-	# import os
-	# # first, rename all files to proper convention
-	# os.system('dir /s /b "*jpg" > delme')
-	# f=file('delme')
-	# a=[]
-	# for i in f:
-		# if('jpg' in i or 'JPG' in i):
-			# a.append(i[:-1])
-	# f.close()
-	# for i in a:
-		# imgrename(i)
-	# # after renaming, must get new list for resizing
-	# os.system('dir /s /b "*jpg" > delme')
-	# f=file('delme')
-	# a=[]
-	# for i in f:
-		# if('jpg' in i or 'JPG' in i):
-			# a.append(i[:-1])
-	# f.close()
-	# counter=1
-	# for i in a:
-		# print imgreduce(i,maxsize,overwrite),'('+str(counter)+'/'+str(len(a))+')'
-		# counter=counter+1
-	# # once complete renaming, resizing: delete txt file
-	# os.system('del delme')
-	# print 'done'
-# #
 # def renSubfolder(SubfolderName,JPGONLY=True,DATEONLY=False):
 	# ''' Objective: Rename a SUBFOLDER of current directory 
 	# by going in, looking at each img's mod dates (this
