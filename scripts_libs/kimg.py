@@ -1,39 +1,40 @@
 '''
-OBJECTIVE: Quickly / easily rename many image files for 
-    photo archives
+Title: The kimg module
+Author: Kristian Gonzalez
+Objective: Quickly & easily edit many image files for photo archives
 
-ASSUMPTIONS: 
-    * user has pillow (PIL fork) installed (pip3 intall Pillow)
-    * images are located in same folder where some operations are done
-    * without user input, shall not overwrite an image when resizing
-    * all tabs are soft (use spaces, not \t)
+== CALLING THIS MODULE REMOTELY ============================
+(see module klib.py)
 
-DEPRACATED INFO:
-* assumption:user has pyexiv2 installed (http://tilloy.net/dev/pyexiv2/download.html)
+== NOTES ===================================================
+Assumptions include:
+* user has pillow (PIL fork) installed (pip3 intall Pillow)
+* user has piexif installed (pip3 install piexif (exif preservation)
+* images are located in same folder where some operations are done
+* without user input, shall not overwrite an image when resizing
+* all tabs are soft (use spaces, not \t)
+* will follow guidelines from klib, such as 80char line limit, assume python3,
+    use hanging indent (like shown here), create help text, etc.
 
-
-KJG171112: BASED ON NEW DEVELOPMENT OF FUNCTION 'RECLIST', NEED TO 
-COMPLETELY RETHINK THE FLOW / STRUCTURE OF YOUR FUNCTIONS. FUCK.
-
-KJG181121: need to overhaul kimg in order to: 
-1. make cross-platform
-2. behave nicely with klib
-3. use PIL
-4. ensure all have triple-quote based description
-5. figure out what's meant by kjg171112 statement
-
-
+* KJG181121: need to overhaul kimg in order to: 
+    1. make cross-platform
+    2. behave nicely with klib
+    3. use PIL
+    4. ensure all have triple-quote based description
+    5. KJG171112: BASED ON NEW DEVELOPMENT OF FUNCTION 'RECLIST', NEED TO 
+        COMPLETELY RETHINK THE FLOW / STRUCTURE OF YOUR FUNCTIONS. FUCK.
+        kjg181127: not sure what #5 means
 
 '''
 
 # INITIALIZE MODULES #######################################
-import klib
 from klib import pad # want direct access w/o module
+from klib import PYVERSION
 import PIL.Image as pil
 import numpy as np
 import os
 # Ensure that using python3. don't want to use py2 anymore
-assert klib.PYVERSION==3, "Must use python3. Exiting."
+assert PYVERSION==3, "Must use python3. Exiting."
 
 # from PIL import Image - done
 # import os - done
@@ -212,66 +213,62 @@ def imgrename(img,appendOldName=False):
             i=i+1	# reset flag and increment counter
 #
 def imgreduce(imgname,maxsize=2000,overwrite=False):
-	'''Objective: reduce image size, and by default save 
-		to new file name. if file is smaller than
-		maxsize, image will not be modified at all.
-		defaults: maxsize = 2000, overwrite=False
-	'''
-	from PIL import Image
-	import piexif # LEARN HOW TO USE THIS!!!
-    # kjg181125: FIXME!!! here
-	
-	im=Image.open(imgname)	#open image file object
-	# before doing anything else, check if img too small
-	if(im.size[0]<maxsize and im.size[1]<maxsize):
-		return 'NoChnge:'+imgname
-	
-	# before modifying image, get exif properties
-	si=pyexiv2.ImageMetadata(imgname)
-	si.read()
-	
-	if(overwrite==False):
-		#do not want to overwrite image; make new file
-		i=imgname.split('.')
-		imgname=i[0]+'_edit'+'.'+i[1]
-	#otherwise, imgname will remain the same and overwrite
-	
-	#next, set new image dimensions
-	i=im.size # (w,h)
-	if(i[0]>i[1]):	#if w > h
-		w2=maxsize
-		h2=int(float(w2)/float(i[0])*i[1])
-	else:			# w<=h
-		h2=maxsize
-		w2=int(float(h2)/float(i[1])*i[0])
-	
-	#resize and save image
-	im.resize((w2,h2),Image.ANTIALIAS).save(imgname)
-	
-	# transfer over exif properties before done with file
-	di=pyexiv2.ImageMetadata(imgname)
-	di.read()
-	si.copy(di)
-	di['Exif.Photo.PixelXDimension'] = w2
-	di['Exif.Photo.PixelYDimension'] = h2
-	di.write() # have now saved metadata
-	return 'Resized:'+imgname
+    '''Objective: reduce image size, and by default save 
+        to new file name. if file is smaller than
+        maxsize, image will not be modified at all.
+        defaults: maxsize = 2000, overwrite=False
+    '''
+    from PIL import Image
+    import piexif # LEARN HOW TO USE THIS!!!
+    # kjg181127: works
+    im=Image.open(imgname)	#open image file object
+    # before doing anything else, check if img too small
+    if(im.size[0]<maxsize and im.size[1]<maxsize):
+        return 'NoChnge:'+imgname
+    
+    # before modifying image, try getting exif properties
+    flag_hasexif=True
+    try:
+        exif=piexif.load(im.info['exif'])
+        flag_hasexif=True
+    except KeyError:
+        print("FN 'imgreduce' WARNING: MISSING EXIF DATA:",imgname)
+        flag_hasexif=False
+    if(overwrite==False):
+        #do not want to overwrite image; make new file
+        i=imgname.split('.')
+        imgname=i[0]+'_edit'+'.'+i[1]
+    #otherwise, imgname will remain the same and overwrite
+    
+    #next, set new image dimensions
+    i=im.size # (w,h)
+    if(i[0]>i[1]):	#if w > h
+        w2=maxsize
+        h2=int(float(w2)/float(i[0])*i[1])
+    else:			# w<=h
+        h2=maxsize
+        w2=int(float(h2)/float(i[1])*i[0])
+    #resize and save image, with exif data
+    if(flag_hasexif):
+        exif_byte=piexif.dump(exif) # perhaps can do sooner
+        im.resize((w2,h2),Image.ANTIALIAS).save(imgname,exif=exif_byte)
+    else:
+        im.resize((w2,h2),Image.ANTIALIAS).save(imgname)
 #
-# def renredall(maxsize=2000,overwrite=False):
-	# ''' objective: in current folder, rename all jpg's
-		# and resize them to desired amount as well as choose
-		# whether or not to overwrite files
-		# NOTE: only targets jpg files. ignores all others.
-		# '''
-	# import os
-	# for i in os.listdir('.'):
-		# if('jpg' in i or 'JPG' in i):
-			# imgrename(i)
-	# for i in os.listdir('.'):
-		# if('jpg' in i or 'JPG' in i):
-			# imgreduce(i,maxsize,overwrite)
-	# print 'done'
-# #
+def renred(maxsize=2000,overwrite=False,recursive=False):
+    ''' Objective: rename and resize all images from filename list given
+        and resize them to desired amount as well as choose
+        whether or not to overwrite files
+        NOTE: only targets jpg files. ignores all others.
+        '''
+    for ifile in getlist(recursive=recursive):
+        print('Renaming:',ifile)
+        imgrename(ifile)
+    for ifile in getlist(recursive=recursive):
+        print('Resizing:',ifile)
+        imgreduce(ifile,maxsize,overwrite)
+    print("FN 'renred': Done")
+#
 # def recrenredall(overwrite,maxsize=2000):
 	# ''' Objective: in current and all subfolders, rename
 		# all jpg's and resize them to desired amount as well
