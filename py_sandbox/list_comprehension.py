@@ -4,6 +4,8 @@ will review list comprehension, including nested comprehensions
 from klib import Stopwatch
 st=Stopwatch()
 
+
+
 print(
 '\nsimple list comprehension is when you have something iterated on in a single line of code:')
 
