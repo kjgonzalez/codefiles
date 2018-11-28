@@ -59,6 +59,17 @@ def __getSysInfo__():
 (OSVERSION,PYVERSION) = __getSysInfo__()
 
 
+def getallsubfolders():
+    ''' Simple command to get all subfolders in a given folder. index 0 is the 
+        current folder.
+    '''
+    import os
+    from glob import glob
+    subfolders=[os.getcwd()+y[1:] 
+            for x in os.walk('.') 
+                for y in glob(os.path.join(x[0]))]
+    return subfolders
+
 # create a function that will make a noise when done
 def ringbell(duration=0.15,freq=1300):
     ''' Objective: play a noise when called
