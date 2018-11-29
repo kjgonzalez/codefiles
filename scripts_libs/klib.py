@@ -81,20 +81,16 @@ def dir(rec=False,files=True,ext=''):
     paths=os.walk('.') if rec else '.' # where to check, if recursive
     ext='.'+ext if ext!='' else ext # if not default, prefix '.'
     
+    # for each directory, for each file/folder, append to list
     all = [ipath for base in paths for ipath in glob(opj(abp(base[0]),'*'))]
-    # at this point, have found (rec or not) all files and sub-folders
-
     if(files):
         # only want files back. if ext='', return all incl w/o ext.
-        sub=[ipath for ipath in all if isf(ipath)]
-        sub=[ipath for ipath in sub if ext in ipath]
+        sub=[ipath for ipath in all if (isf(ipath) and (ext in ipath))]
         return sub
     else:
         sub=[ipath for ipath in all if not isf(ipath)]
         return sub
-    # return all
 # def dir
-# [os.getcwd()+y[1:] for x in os.walk('.') for y in glob(os.path.join(x[0],'*'))]
 
 def ringbell(duration=0.15,freq=1300):
     ''' Objective: play a noise when called

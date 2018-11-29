@@ -30,6 +30,7 @@ Assumptions include:
 # INITIALIZE MODULES #######################################
 from klib import pad # want direct access w/o module
 from klib import PYVERSION
+from klib import dir
 import PIL.Image as pil
 import numpy as np
 import os
@@ -97,26 +98,17 @@ def getdate(img):
     t=gdt(img) #date photo taken (not always available)
     return min(m,c,t)
 #
-def getlist(types=['jpg'],recursive=True):
+def getlist(types=['jpg','JPG'],recursive=True):
     ''' Objective: return list of files desired to be 
         modified. Can search recursively or only in 
         the current folder. can also choose which types of files are returned in list
     '''
     # kjg181125: works
-    import os
-    from glob import glob
-    # for each type, append to list
-    
-    # ensure types are valid
-    if(type(types)==str): types=[types] # if given as string, correct it
-    
+    # ensure types argument is valid
+    assert type(types)==list, "'types' argument must be a list of strings"
     items=[]
-    for itype in types: 
-        if(recursive):
-            [items.append(os.getcwd()+y[1:]) for x in os.walk('.') for y in glob(os.path.join(x[0], '*.'+itype))]
-        # for each type, append the list of files that are present with the specified type
-        else:
-            [items.append(os.getcwd()+ifile[1:]) for ifile in glob('./*.jpg')]
+    for itype in set(types): # set(...) ensures unique values only
+        items.extend(dir(rec=recursive,ext=itype))
     # now have list of files including their filepaths
     return items
 #
