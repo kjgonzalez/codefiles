@@ -59,18 +59,43 @@ def __getSysInfo__():
 (OSVERSION,PYVERSION) = __getSysInfo__()
 
 
-def getallsubfolders():
-    ''' Simple command to get all subfolders in a given folder. index 0 is the 
-        current folder.
+def dir(rec=False,files=True,ext=''):
+    ''' 
+    Objective: Emulate ls / dir command to be cross platform and return as a 
+        list. Can choose to run recursively, only show folders or show all 
+        files (of specific types) and folders. if recursive = False and 
+        files=False, would just show current working directory. filetypes will
+        show all filetypes by default, but can be specific ones as well.
+    Inputs: 
+        * rec: Recursive check. Default: False (no recursion)
+        * files: Show only files or folders. Default: True (files only)
+        * ext: Which filetypes to return. Default: '' (any)
+    Output: 
+        * <list>: filepaths
     '''
     import os
     from glob import glob
-    subfolders=[os.getcwd()+y[1:] 
-            for x in os.walk('.') 
-                for y in glob(os.path.join(x[0]))]
-    return subfolders
+    isf=os.path.isfile
+    opj=os.path.join
+    abp=os.path.abspath
+    paths=os.walk('.') if rec else '.' # where to check, if recursive
+    ext='.'+ext if ext!='' else ext # if not default, prefix '.'
+    
+    all = [ipath for base in paths for ipath in glob(opj(abp(base[0]),'*'))]
+    # at this point, have found (rec or not) all files and sub-folders
 
-# create a function that will make a noise when done
+    if(files):
+        # only want files back. if ext='', return all incl w/o ext.
+        sub=[ipath for ipath in all if isf(ipath)]
+        sub=[ipath for ipath in sub if ext in ipath]
+        return sub
+    else:
+        sub=[ipath for ipath in all if not isf(ipath)]
+        return sub
+    # return all
+# def dir
+# [os.getcwd()+y[1:] for x in os.walk('.') for y in glob(os.path.join(x[0],'*'))]
+
 def ringbell(duration=0.15,freq=1300):
     ''' Objective: play a noise when called
     
