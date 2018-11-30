@@ -37,7 +37,6 @@ In Windows:
     delimiter. using a "hard tab" causes too many formatting
     headaches across different programs, platforms, etc.
 '''
-
 # FIRST, BEFORE ALL ELSE, CHECK VERSIONS OF OS AND PYTHON
 def __getSysInfo__():
     ''' Get local computer info. Generally, should keep software OS and version
@@ -55,9 +54,8 @@ def __getSysInfo__():
     else:
         osver = 2
     return (osver,sys.version_info.major)
-
+# def __getSysInfo__
 (OSVERSION,PYVERSION) = __getSysInfo__()
-
 
 def dir(rec=False,files=True,ext=''):
     ''' 
@@ -92,10 +90,23 @@ def dir(rec=False,files=True,ext=''):
         return sub
 # def dir
 
+def ping(ip_address): 
+    import os 
+    import time 
+    while(not os.system('ping {} -c 1'.format(ip_address))==0): 
+        print(stamp())
+        time.sleep(5) 
+    ringbell()
+    time.sleep(0.01)
+    ringbell()
+    print('checker: connection works!') 
+# def ping
+
 def ringbell(duration=0.15,freq=1300):
     ''' Objective: play a noise when called
     
     NOTE: this function requires sox to be installed on linux system!
+    NOTE: not verified on windows
     '''
     if(OSVERSION==0):
         # using linux
@@ -109,6 +120,15 @@ def ringbell(duration=0.15,freq=1300):
         winsound.Beep(freq,duration)
 # def ringbell
 
+def stamp():
+    ''' Return current time in string format: YYYYMMMDD-HH:mm:SS
+    >> print(stamp())
+    2018Nov29-12:58:30
+    '''
+    import time
+    return time.strftime('%Y%b%d-%H:%M:%S',time.localtime(time.time()))
+# def stamp
+
 def timestamper(pfunc):
     ''' intended to wrap a print function or similar, which prepends text to be 
         printed with a timestamp, which looks like:
@@ -116,15 +136,12 @@ def timestamper(pfunc):
     '''
     import time
     import functools
-    logstr='LOG: '+time.strftime('%Y%b%d-%H:%M:%S',time.localtime(time.time()))+'\n'
+    logstr='LOG: '+stamp()+'\n'
     @functools.wraps(pfunc)
     def wrapper_stamper(*args,**kwargs):
         pfunc(logstr,*args,**kwargs)
     return wrapper_stamper
-
-
-
-
+# def timestamper
 
 class Stopwatch:
     ''' Stopwatch: Basic class that logs a time when it's created. Can also 
