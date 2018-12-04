@@ -1,5 +1,5 @@
 '''
-objective: want to practice PIL library a bit and get familiar with some of what's possible. the main goals for this are to: 
+objective: want to practice PIL library a bit and get familiar with some of what's possible. the main goals for this are to:
 
 * load an image
 * flip / rotate an image
@@ -43,7 +43,7 @@ plt.imshow(img3)
 #plt.show(block=False);time.sleep(0.5);plt.close()
 
 ## save an image
-#img3.save('out.png') 
+#img3.save('out.png')
 
 # resize an image
 img2=img.resize((int(img.size[0]/2),int(img.size[1]/2)))
@@ -68,7 +68,8 @@ def rectangle2(imgdraw,bbox,outline=(255,255,255),fill=None,width=1):
     x2=bbox[2]
     y2=bbox[3]
     for i in range(width):
-        imgdraw.rectangle(((x1-i,y1-i),(x2+i,y2+i)),outline=outline,fill=fill)
+        for j in range(width):
+            imgdraw.rectangle(((x1+i,y1+j),(x2+i,y2+j)),outline=outline,fill=fill)
         #imgdraw.rectangle(((30,30),(200,200)))
     return imgdraw
 
