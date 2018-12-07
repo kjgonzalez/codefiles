@@ -33,5 +33,10 @@ create either function or variables in bash:
       greet="hey" # NO SPACES ON EITHER SIDE OF EQUAL SIGN!!!
       echo "$greet, you've asked me to say $1"
     }
+list subfolder / files size, and give in order:
+    du -hs * | sort -h -r
+    (list summary of human-readable disk usage for all items in folder, and 
+        sort by -h flag in reverse order (largest-first)
+
 
 # eof
