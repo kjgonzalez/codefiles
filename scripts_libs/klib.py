@@ -288,24 +288,26 @@ def wordCount(arr):
     return n
 # def wordCount
 
+def getprimes(integer):
+    assert type(integer)==int, "Given value needs to be an integer"
+    curr=int(integer+0)
+    div=2
+    d={}
+    while(curr!=1):
+        if(curr%div==0):
+            d[div]=d[div]+1 if(div in d.keys()) else 1
+            curr=curr/div
+        else:
+            div+=1
+    return d
+# def getprimes
+
 def pyt(arr):
     ''' pyt(array) = pythagorean of items in list
     Assumptions:
         All items in list are double or integer numbers
         Return number as float
     '''
-    b=0
-    for i in arr: b=b+i*i
+    b=sum([i*i for i in arr])
     return b**0.5
 #def pyt
-
-def avg(arr):
-    ''' avg(array) = average items in list
-    Assumptions:
-        All items in list are double or integer numbres
-        return number as float
-    '''
-    b=0.0
-    for i in arr: b = b+float(i)
-    return b/float(len(arr))
-#def avg
