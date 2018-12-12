@@ -1,6 +1,5 @@
 '''
 objective: calculate primes of a given number, and return as a dict where d[prime]=count
-temp change, delme
 '''
 
 from sys import argv

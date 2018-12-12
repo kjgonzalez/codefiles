@@ -4,7 +4,7 @@ Objective: unify all code in all locations, and enable simple way to have all co
 ## Overall Layout of this Repository
 1. catkin_ws for ROS packages / ROS-related work
 2. *_sandbox folders for testing assorted programming ideas
-3. scripts folder for running useful, live code a
+3. scripts folder for running useful, live code
 
 ### establish kjg repo on new computer
 (for all steps, refer to bash_help.txt)
@@ -12,5 +12,12 @@ Objective: unify all code in all locations, and enable simple way to have all co
 2. clone repo
 3. DONE
 
-# delme
-#temp
+
+
+
+
+
+
+
+
+eof
