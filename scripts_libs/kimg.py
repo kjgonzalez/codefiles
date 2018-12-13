@@ -15,12 +15,17 @@ Assumptions include:
 * all tabs are soft (use spaces, not \t)
 * will follow guidelines from klib, such as 80char line limit, assume python3,
     use hanging indent (like shown here), create help text, etc.
+* kjgnote: in order to prevent damaging photos that are panoramas (images with
+	high ratios), will try to prevent resizing images that have a ratio greater
+	than 2.0. Empirically, the 2015 image set shows this is where there's a 
+	higher probability of a photo being a panorama, and thus being hurt by the
+	"maximum dimension" resizing rule.
 
 * KJG181121: need to overhaul kimg in order to: 
-    1. make cross-platform
-    2. behave nicely with klib
-    3. use PIL
-    4. ensure all have triple-quote based description
+    1. make cross-platform - done?
+    2. behave nicely with klib - done?
+    3. use PIL - done
+    4. ensure all have triple-quote based description - in progress
     5. KJG171112: BASED ON NEW DEVELOPMENT OF FUNCTION 'RECLIST', NEED TO 
         COMPLETELY RETHINK THE FLOW / STRUCTURE OF YOUR FUNCTIONS. FUCK.
         kjg181127: not sure what #5 means
@@ -44,26 +49,25 @@ assert PYVERSION==3, "Must use python3. Exiting."
 
 # INITIALIZE FUNCTIONS #####################################
 
-def gdm(img):
-    # objective: get date modified
+def gdm(imgname):
+	''' Get date modified '''
     # kjg181121: works
     import os
-    return os.path.getmtime(img)
+    return os.path.getmtime(imgname)
 #
-def gdc(img):
-    # objective: get date created
+def gdc(imgname):
+	''' Get date created '''
     # kjg181121: works
     import os
-    return os.path.getctime(img)
+    return os.path.getctime(imgname)
 #
-def gdt(img):
-    #objective: get date taken (via PIL)
-    # NOTE: THIS FAILS FOR PNG IMGS, perhaps due tag No.
+def gdt(imgname):
+    ''' Get date taken (via PIL). Note: this fails for PNG images '''
     # kjg181121: works
     from PIL import Image	# compiled module from internet
     import time
     try:
-        a= Image.open(img)._getexif()[36867] #gives string
+        a= Image.open(imgname)._getexif()[36867] #gives string
         b='%Y:%m:%d %H:%M:%S' #string parser
         c=time.mktime(time.strptime(a,b)) 
         return c #format: seconds since epoch
@@ -72,7 +76,7 @@ def gdt(img):
         return time.time() #worst case, return current time
     except IOError:
         # reason: attempting to get data on non-JPG file
-        print("FN 'gdt' WARNING, NON-JPG FILE:",img)
+        print("FN 'gdt' WARNING, NON-JPG FILE:",imgname)
         return time.time() #user: use at own risk
     except TypeError:
         # reason: not entirely sure yet, but seems to be rare error
@@ -80,22 +84,22 @@ def gdt(img):
         #   for now, will simply return current date, and hope that 
         #   functions 'gdm' or 'gdc' will capture earliest 
         #   date. (KJG170830)
-        print("FN 'gdt' WARNING, missing attribute 'date taken':",img)
+        print("FN 'gdt' WARNING, missing attribute 'date taken':",imgname)
         return time.time()
 #
 def imgdate(seconds):
-    # convert float seconds value to formatted string
+    ''' Convert float seconds value to formatted string '''
     # kjg181121: works
     import time
     tstruct=time.localtime(seconds) #get 'time.struct_time' type
     return time.strftime("%Y%m%d_%H%M%S",tstruct)[2:] # drop 2 digits from year
 #
-def getdate(img):
+def getdate(imgname):
     ''' Objective: return earliest img file made, in seconds.'''
     # kjg181121: works
-    m=gdm(img) #date photo modified
-    c=gdc(img) #date photo created
-    t=gdt(img) #date photo taken (not always available)
+    m=gdm(imgname) #date photo modified
+    c=gdc(imgname) #date photo created
+    t=gdt(imgname) #date photo taken (not always available)
     return min(m,c,t)
 #
 def getlist(types=['jpg','JPG'],recursive=True):
@@ -112,7 +116,7 @@ def getlist(types=['jpg','JPG'],recursive=True):
     # now have list of files including their filepaths
     return items
 #
-def getrange(dateOnly=True,subfolder='.',types=['jpg']):
+def getrange(dateOnly=True,subfolder='.',types=['jpg','JPG']):
     ''' Objective: return in a string the min and max dates of
         the files / photos contained in a single folder (no 
         subfolders)
@@ -154,12 +158,12 @@ def getrange(dateOnly=True,subfolder='.',types=['jpg']):
     os.chdir(startDir) # go back to orig directory (safeguard)
     return rangeStr
 #
-def getext(img):
-    # objective: return extension (with period) of file
+def getext(imgname):
+    ''' Return extension (with period) of file '''
     # kjg181121: works
-    return img.split('.')[-1]
+    return imgname.split('.')[-1]
 #
-def imgrename(img,appendOldName=False):
+def imgrename(imgname,appendOldName=False):
     ''' objective: handle the messiness of renaming an image
         file and ensuring that it doesn't have the same name
         as an image taken in the same YYMMDD_HHmmSS as
@@ -169,13 +173,15 @@ def imgrename(img,appendOldName=False):
         generated, such as if wanting to keep a video's 
         original name.
     '''
-    # kjg181125: works, but may ONLY work in windows!!!
+    # kjg181125: works, but ONLY works in windows!!!
+	# kjg181213: FIX THIS SECTION!!!! 
+	''' fix this section!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '''
     import os
-    newname=imgdate(getdate(img))	#get new name for img
+    newname=imgdate(getdate(imgname))	#get new name for img
     if(appendOldName==True):
         # append imgdate value with old 
         #	filename (except extension)
-        newname = newname + '_'+img[:img.find('.')]
+        newname = newname + '_'+imgname[:imgname.find('.')]
     #adding in special section in case function being used 
     #	to modify a file remotely
     if('\\' in img):
