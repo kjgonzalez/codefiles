@@ -84,6 +84,10 @@ for i in itemList:
 for k in d:
 	print d[k],k
 
+# how to do list comprehension with dict: 
+d={i:i*3 for i in range(9)}
+
+d={letter:num for num,letter in enumerate('a b c d e f g h i'.split(' '))}
 
 
 
