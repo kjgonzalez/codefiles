@@ -60,3 +60,50 @@ class dog(object):
 			self.__itemstate() # default is to not have anything
 		else:
 			print(self.name+' doesn''t have anything')
+
+'''
+just want to confirm how using a subclass works
+
+example: shape>>rectangle>>square
+actual: imdb>>kitti>>kitti_3d
+'''
+
+class shape:
+    def __init__(self,color):
+        self.color=color
+    def perim(self):
+        raise NotImplementedError
+    def area(self):
+        raise NotImplementedError
+
+class rectangle(shape):
+    def __init__(self,length,width,color='red'):
+        shape.__init__(self,color)
+        self.length=length
+        self.width=width
+    def perim(self):
+        return 2*(self.length+self.width)
+    
+    @property
+    def area(self):
+        return self.length*self.width
+
+
+('KEY SUBCLASS HERE ================================================')
+class square(rectangle):
+    def __init__(self,length,color='blue'):
+        rectangle.__init__(self,length,length,color)
+
+    def area(self):
+        print('giving square area')
+        return self.length*self.length
+
+('KEY SUBCLASS HERE ================================================')
+
+
+shap=shape('purple')
+rect=rectangle(3,5)
+squa=square(4)
+
+import ipdb;
+ipdb.set_trace()
