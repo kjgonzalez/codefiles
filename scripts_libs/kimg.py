@@ -16,10 +16,10 @@ Assumptions include:
 * will follow guidelines from klib, such as 80char line limit, assume python3,
     use hanging indent (like shown here), create help text, etc.
 * kjgnote: in order to prevent damaging photos that are panoramas (images with
-	high ratios), will try to prevent resizing images that have a ratio greater
-	than 2.0. Empirically, the 2015 image set shows this is where there's a 
-	higher probability of a photo being a panorama, and thus being hurt by the
-	"maximum dimension" resizing rule.
+    high ratios), will try to prevent resizing images that have a ratio greater
+    than 2.0. Empirically, the 2015 image set shows this is where there's a 
+    higher probability of a photo being a panorama, and thus being hurt by the
+    "maximum dimension" resizing rule.
 
 * KJG181121: need to overhaul kimg in order to: 
     1. make cross-platform - done?
@@ -50,13 +50,13 @@ assert PYVERSION==3, "Must use python3. Exiting."
 # INITIALIZE FUNCTIONS #####################################
 
 def gdm(imgname):
-	''' Get date modified '''
+    ''' Get date modified '''
     # kjg181121: works
     import os
     return os.path.getmtime(imgname)
 #
 def gdc(imgname):
-	''' Get date created '''
+    ''' Get date created '''
     # kjg181121: works
     import os
     return os.path.getctime(imgname)
@@ -174,19 +174,19 @@ def imgrename(imgname,appendOldName=False):
         original name.
     '''
     # kjg181125: works, but ONLY works in windows!!!
-	# kjg181213: FIX THIS SECTION!!!! 
-	''' fix this section!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '''
+    # kjg181213: FIX THIS SECTION!!!! 
+    ''' fix this section!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! '''
     import os
     newname=imgdate(getdate(imgname))	#get new name for img
     if(appendOldName==True):
         # append imgdate value with old 
-        #	filename (except extension)
+        #   filename (except extension)
         newname = newname + '_'+imgname[:imgname.find('.')]
     #adding in special section in case function being used 
-    #	to modify a file remotely
+    #   to modify a file remotely
     if('\\' in img):
         #get path to file (using some replace magic)
-        c=img.count('\\')	#want to replace last '\\'
+        c=img.count('\\')   #want to replace last '\\'
         path=img.replace('\\','/').replace('/','\\',c-1)
         path=path.split('/')[0]+'\\' #use '/' as splitter
         newname=path+newname #prefix filename w/ path
@@ -236,10 +236,10 @@ def imgreduce(imgname,maxsize=2000,overwrite=False):
     
     #next, set new image dimensions
     i=im.size # (w,h)
-    if(i[0]>i[1]):	#if w > h
+    if(i[0]>i[1]):  #if w > h
         w2=maxsize
         h2=int(float(w2)/float(i[0])*i[1])
-    else:			# w<=h
+    else:           # w<=h
         h2=maxsize
         w2=int(float(h2)/float(i[1])*i[0])
     #resize and save image, with exif data
