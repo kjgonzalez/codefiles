@@ -9,8 +9,9 @@ done | make main window
 done | show a single photo
 done | enable closing window with 'Esc'
 done | be able to cycle through multiple photos
-.... | control size of photo (max to window?)
-.... | be able to rotate photo, save when move to next photo
+done | control size of photo (max to window?)
+.... | rotate currently loaded photo
+.... | save any edits when move to next photo
 .... | optional: get rid of exif data?
 
 DEBUGGING:
@@ -42,26 +43,51 @@ class MainWindow:
         
         # setup gui elements
         self.main=tk.Tk()
-        frame=tk.Frame(self.main)
-        frame.pack()
+        screen=( self.main.winfo_screenwidth(),
+                self.main.winfo_screenheight() )
+        iniD=[int(i*2/3) for i in screen]
+        self.main.geometry("{}x{}".format(*iniD)) # width,height
         self.txt01=tk.Label(self.main,text=self.getfname())
         self.txt01.pack()
-        but01=tk.Button(self.main,text='next pic',command=self.get_next)
-        but01.pack()
-        but02=tk.Button(self.main,text='prev pic',command=self.get_prev)
-        but02.pack()
-        init=self.files[0]
-        img=tki.PhotoImage(pil.open(init))
+        
+        # setup button frame and all relevant buttons
+        kb={} # initialize keybinds
+        kb['prev']='<a>'
+        kb['next']='<d>'
+        kb['rot']='<r>'
+        self.fra_but=tk.Frame(self.main)
+        self.fra_but.pack()
+        but_prv=tk.Button(self.fra_but,
+                text='prev pic {}'.format(kb['prev']),command=self.get_prev)
+        but_prv.pack(side=tk.LEFT)
+        but_nxt=tk.Button(self.fra_but,
+                text='next pic {}'.format(kb['next']),command=self.get_next)
+        but_nxt.pack(side=tk.LEFT)
+        # but_dim=tk.Button(self.fra_but,text='wdims',command=self.getwdims)
+        # but_dim.pack(side=tk.LEFT)
+        but_rot=tk.Button(self.fra_but,
+                text='Rot90CW {}'.format(kb['rot']),command=self.img_rotate)
+        but_rot.pack(side=tk.LEFT)
+        but_dbg=tk.Button(self.fra_but,text='DEBUG',command=self.rundebug)
+        but_dbg.pack(side=tk.RIGHT)
+        self.image=pil.open(self.files[0])
+        img=self.resizeToWindow(self.image,iniD)
+        img=tki.PhotoImage(img)
         self.img01=tk.Label(image=img)
         self.img01.pack()
-        
+
         # setup keybinds
         self.main.bind('<Escape>',lambda quit:self.main.destroy()) # quit
-        self.main.bind('<a>',lambda prev:self.get_prev())
-        self.main.bind('<d>',lambda next:self.get_next())
+        self.main.bind(kb['prev'],lambda prev:self.get_prev())
+        self.main.bind(kb['next'],lambda next:self.get_next())
+        self.main.bind(kb['rot'],lambda rot:self.img_rotate())
         
         # run everything
         self.main.mainloop()
+    @property
+    def imagepath(self):
+        ''' return path to currently loaded file '''
+        return self.files[self.counter]
     def incdec(self,dir):
         # 0 = down, 1 = up
         if(dir==0):
@@ -75,6 +101,8 @@ class MainWindow:
             if(self.counter>=self.n):
                 self.counter=0
     # def incdec
+    def rundebug(self):
+        import ipdb;ipdb.set_trace()
     def getfname(self):
         curr=self.files[self.counter]
         return curr.split(os.sep)[-1]
@@ -90,10 +118,42 @@ class MainWindow:
         # self.txt01.text=self.getfname()
     def fn(self):
         print(self.getfiles())
+    def getwdims(self):
+        ''' Return current (width,height) of window. NOTE: pillow library uses 
+            'size', which returns dimensions as (width,height) '''
+        HToffset=50 # (offset for control stuff.)
+        wsize=(self.main.winfo_width(),self.main.winfo_height()-HToffset)
+        return wsize
     def newpic(self,imgname):
-        img=tki.PhotoImage(pil.open(imgname))
+        ''' Load new pic for display. note that PIL displays dimensions via 
+            'size', which returns values as (width,height) '''
+        # kjgnote: pil *.size returns (width,height) in pixels
+        self.image=pil.open(imgname)
+        img=self.resizeToWindow(self.image,self.getwdims())
+        img=tki.PhotoImage(img)
         self.img01.configure(image=img)
         self.img01.image=img
+    def img_rotate(self):
+        ''' rotate image, update window
+        KJGNOTE: may need new 'update' function, because this function shares
+            code with "newpic"
+        '''
+        self.image=self.image.rotate(90,expand=1) # CW 90deg
+        img=self.resizeToWindow(self.image,self.getwdims())
+        img=tki.PhotoImage(img)
+        self.img01.configure(image=img)
+        self.img01.image=img
+    def resizeToWindow(self,img_pil,wdims):
+        ''' Return img resized to window. img_pil comes in as pil image object, 
+            with dimensions expressed as (width,height)'''
+        I=[float(i) for i in img_pil.size] # get as (w,h). img dims
+        M=[float(i) for i in wdims] # get (w,h). max dims
+        minR=min([M[k]/I[k] for k in range(2)]) # min ratio
+        if(minR<1.0):
+            return img_pil.resize(tuple([int(i*minR) for i in I]))
+        else:
+            return img_pil
 # class MainWindow
+
 if(__name__=='__main__'):
     w=MainWindow()
