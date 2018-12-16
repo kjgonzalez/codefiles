@@ -40,6 +40,7 @@ class MainWindow:
         self.files=kimg.getlist(recursive=False)
         self.n=len(self.files)
         self.counter=0
+        self.image=pil.open(self.files[0])
         
         # setup gui elements
         self.main=tk.Tk()
@@ -47,8 +48,6 @@ class MainWindow:
                 self.main.winfo_screenheight() )
         iniD=[int(i*2/3) for i in screen]
         self.main.geometry("{}x{}".format(*iniD)) # width,height
-        self.txt01=tk.Label(self.main,text=self.getfname())
-        self.txt01.pack()
         
         # setup button frame and all relevant buttons
         kb={} # initialize keybinds
@@ -70,12 +69,21 @@ class MainWindow:
         but_rot.pack(side=tk.LEFT)
         but_dbg=tk.Button(self.fra_but,text='DEBUG',command=self.rundebug)
         but_dbg.pack(side=tk.RIGHT)
-        self.image=pil.open(self.files[0])
-        img=self.resizeToWindow(self.image,iniD)
-        img=tki.PhotoImage(img)
-        self.img01=tk.Label(image=img)
+        
+        # setup in-window text
+        self.fra_txt=tk.Frame(self.main)
+        self.fra_txt.pack()
+        self.txt01=tk.Label(self.fra_txt)
+        self.txt01.pack(side=tk.LEFT)
+        self.txtdims=tk.Label(self.fra_txt)
+        self.txtdims.pack(side=tk.LEFT)
+        self.updateText()
+        
+        # load image into window
+        self.img01=tk.Label(image)
         self.img01.pack()
-
+        self.newpic(self.image_path)
+        
         # setup keybinds
         self.main.bind('<Escape>',lambda quit:self.main.destroy()) # quit
         self.main.bind(kb['prev'],lambda prev:self.get_prev())
@@ -106,16 +114,18 @@ class MainWindow:
     def getfname(self):
         curr=self.files[self.counter]
         return curr.split(os.sep)[-1]
+    def updateText(self):
+        self.txt01.configure(text=self.getfname())
+        dim_str='[W,H]: [{},{}]'.format(*self.image.size)
+        self.txtdims.configure(text=dim_str)
     def get_next(self):
         self.incdec(1) # increment counter
         self.newpic(self.files[self.counter])
-        self.txt01.configure(text=self.getfname())
-        # self.txt01.text=self.getfname()
+        self.updateText()
     def get_prev(self):
         self.incdec(0) # decrement counter
         self.newpic(self.files[self.counter])
-        self.txt01.configure(text=self.getfname())
-        # self.txt01.text=self.getfname()
+        self.updateText()
     def fn(self):
         print(self.getfiles())
     def getwdims(self):
@@ -143,6 +153,7 @@ class MainWindow:
         img=tki.PhotoImage(img)
         self.img01.configure(image=img)
         self.img01.image=img
+        self.updateText()
     def resizeToWindow(self,img_pil,wdims):
         ''' Return img resized to window. img_pil comes in as pil image object, 
             with dimensions expressed as (width,height)'''
