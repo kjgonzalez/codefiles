@@ -182,16 +182,29 @@ def add(*args):
 
 (''' ===========================================================================
 Using the "super" function
+src1: https://www.pythonforbeginners.com/super/working-python-super-function
+src2: https://www.python-course.eu/python3_multiple_inheritance.php
+
+goal: want a "much more abstract and portable solution for initializing 
+    classes" (arguably within the subclass it's being called from)
+additionally: seems to handle the "Method Resolution Order" much better than
+    the default way of simply initializing the class.
+
 ''')
 
+# will try and use the shapes examples
 
+class triangle(shape):
+    def __init__(self,sides_arr,color='blue'):
+        super().__init__(color=color)
+        self.lengths=sides_arr+[]
+        self.lengths.sort()
+        assert self.lengths[-1]<sum(self.lengths[:2]),"Longest side too long"
+    def perim(self):
+        return sum(self.lengths)
 
-
-
-
-
-
-
+t=triangle([3.0,4.0,5.0])
+import ipdb;ipdb.set_trace()
 
 
 
