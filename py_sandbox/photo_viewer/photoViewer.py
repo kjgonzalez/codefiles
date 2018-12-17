@@ -10,7 +10,7 @@ done | show a single photo
 done | enable closing window with 'Esc'
 done | be able to cycle through multiple photos
 done | control size of photo (max to window?)
-.... | rotate currently loaded photo
+done | rotate currently loaded photo
 .... | save any edits when move to next photo
 .... | optional: get rid of exif data?
 
@@ -20,7 +20,8 @@ DEBUGGING:
     * file name / path
     * dimensions
     * ratio?
-
+* have getwdims initialize and use object variable to store "current" window 
+    dimensions
 ASSUMPTIONS: 
 * python3
 * will be editing photos and preserving exif data
@@ -41,6 +42,7 @@ class MainWindow:
         self.n=len(self.files)
         self.counter=0
         self.image=pil.open(self.files[0])
+        self.edited=False
         
         # setup gui elements
         self.main=tk.Tk()
@@ -77,13 +79,14 @@ class MainWindow:
         self.txt01.pack(side=tk.LEFT)
         self.txtdims=tk.Label(self.fra_txt)
         self.txtdims.pack(side=tk.LEFT)
+        self.txtedit=tk.Label(self.fra_txt)
+        self.txtedit.pack(side=tk.LEFT)
         self.updateText()
         
         # load image into window
-        self.img01=tk.Label(image)
+        self.img01=tk.Label()
         self.img01.pack()
-        self.newpic(self.image_path)
-        
+        self.newpic(self.imagepath,(iniD[0],iniD[1]-50))
         # setup keybinds
         self.main.bind('<Escape>',lambda quit:self.main.destroy()) # quit
         self.main.bind(kb['prev'],lambda prev:self.get_prev())
@@ -115,9 +118,12 @@ class MainWindow:
         curr=self.files[self.counter]
         return curr.split(os.sep)[-1]
     def updateText(self):
-        self.txt01.configure(text=self.getfname())
-        dim_str='[W,H]: [{},{}]'.format(*self.image.size)
-        self.txtdims.configure(text=dim_str)
+        str_name='{}{}'.format(self.getfname(),'*' if self.edited else '')
+        self.txt01.configure(text=str_name)
+        str_dim='[W,H]: [{},{}]'.format(*self.image.size)
+        self.txtdims.configure(text=str_dim)
+        str_edit=' (edited)' if self.edited else ' '
+        self.txtedit.configure(text=str_edit)
     def get_next(self):
         self.incdec(1) # increment counter
         self.newpic(self.files[self.counter])
@@ -126,6 +132,9 @@ class MainWindow:
         self.incdec(0) # decrement counter
         self.newpic(self.files[self.counter])
         self.updateText()
+    def save_current(self):
+        ''' save current image as-is (with exif data) '''
+        
     def fn(self):
         print(self.getfiles())
     def getwdims(self):
@@ -134,12 +143,15 @@ class MainWindow:
         HToffset=50 # (offset for control stuff.)
         wsize=(self.main.winfo_width(),self.main.winfo_height()-HToffset)
         return wsize
-    def newpic(self,imgname):
+    def newpic(self,imgname,wdims=(0,0)):
         ''' Load new pic for display. note that PIL displays dimensions via 
             'size', which returns values as (width,height) '''
         # kjgnote: pil *.size returns (width,height) in pixels
         self.image=pil.open(imgname)
-        img=self.resizeToWindow(self.image,self.getwdims())
+        self.edited=False
+        if(sum(wdims)==0):
+            wdims=self.getwdims()
+        img=self.resizeToWindow(self.image,wdims)
         img=tki.PhotoImage(img)
         self.img01.configure(image=img)
         self.img01.image=img
@@ -149,6 +161,7 @@ class MainWindow:
             code with "newpic"
         '''
         self.image=self.image.rotate(90,expand=1) # CW 90deg
+        self.edited=True
         img=self.resizeToWindow(self.image,self.getwdims())
         img=tki.PhotoImage(img)
         self.img01.configure(image=img)
