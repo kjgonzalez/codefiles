@@ -37,6 +37,11 @@ list subfolder / files size, and give in order:
     du -hs * | sort -h -r
     (list summary of human-readable disk usage for all items in folder, and 
         sort by -h flag in reverse order (largest-first)
+use screen to safely run commands in ssh connection:
+    start:    screen -S <name>
+    detach:   CTRL+a,d
+    reattach: screen -r <pid_OR_name>
+    kill:     screen -X -S <pid_OR_name> quit (or 'exit' while inside)
 
 
 # eof
