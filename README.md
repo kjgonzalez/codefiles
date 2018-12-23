@@ -10,7 +10,7 @@ Objective: unify all code in all locations, and enable simple way to have all co
 (for all steps, refer to bash_help.txt)
 1. generate ssh key & upload
 2. clone repo
-3. DONE
+3. set rebase: git config --global pull.rebase true
 
 
 
