@@ -38,6 +38,7 @@ In Windows:
     headaches across different programs, platforms, etc.
 * because the following is useful but too compact to put into a function, 
     here's how to sort a numpy array by i'th column: a[a[:,1].argsort()]
+
 '''
 # FIRST, BEFORE ALL ELSE, CHECK VERSIONS OF OS AND PYTHON
 def __getSysInfo__():
