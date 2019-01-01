@@ -211,6 +211,8 @@ def imgreduce(imgname,maxsize=2000,overwrite=False):
         to new file name. if file is smaller than
         maxsize, image will not be modified at all.
         defaults: maxsize = 2000, overwrite=False
+	** kjgnote: need to double check if this function truly working, as 
+		well as being cross-platform.
     '''
     from PIL import Image
     import piexif # LEARN HOW TO USE THIS!!!
