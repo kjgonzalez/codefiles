@@ -3,20 +3,18 @@
 idea 1: 
 >> help('modules')
 * note: outputs a multi-column list of names. bit of a hassle, but simple and reliable.
-2. 
-
 
 - - - - - - - - - - - - -
 How to use Pip: 
 Basic usage
-The standard packaging tools are all designed to be used from the command line.
-
-The following command will install the latest version of a module and its dependencies from the Python Packaging Index:
-
-python -m pip install SomePackage
+Standard packaging tools are all designed to be used from the command line. The
+    following command will install the latest version of a module and its 
+    dependencies from the Python Packaging Index:
+typical:   python -m pip install SomePackage --user
+alternate: pip install SomePackage --user
 
 - - - - - - - - - - - - -
-List comprehension in python: 
+List comprehension in python (see list_comprehension.py)
 >>> x=range(1,6)
 >>> x
 [1, 2, 3, 4, 5]
@@ -38,8 +36,20 @@ in order to run, a command would look like so:
 you're also able to see an intermediate state of data, meaning you can do a sort
 	of helpful debugging
 
+- - - - - - - - - - - - -
+Quick note about making a print table in python (using pandas)
 
+In [38]: body=np.array(np.round(np.random.rand(3,3)*5,2),dtype=object)
+In [39]: head='one two three'.split(' ')
+In [40]: rownames=['a','b','c']
+In [41]: pd.DataFrame(data=body,columns=head,index=rownames)
+Out[41]: 
+    one   two three
+a  0.52  3.97  0.43
+b  0.68  4.54  4.19
+c  4.16  1.73  4.54
 
+- - - - - - - - - - - - -
 
 
 
