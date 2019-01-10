@@ -9,7 +9,10 @@ git \
 kate \
 pinta \
 vim\
-compizconfig-settings-manager
+compizconfig-settings-manager \
+unity-tweak-tool \
+kompare
+
 sudo pip3 install --upgrade pip # after 1st run, just pip
 pip install -r python_requirements.txt --user
 
