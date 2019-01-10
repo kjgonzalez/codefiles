@@ -1,0 +1,42 @@
+INSTALL: ---------------------------------------------------
+sudo apt-get update
+sudo apt-get ugprade
+sudo apt-get install terminator
+sudo apt-get install chromium-browser
+sudo apt-get install python3-pip
+sudo pip3 install --upgrade pip # after this command just use pip (not pip3)
+sudo apt-get install git
+sudo apt-get install kate
+sudo apt-get install pinta
+sudo apt-get install vim
+sudo apt-get install compizconfig-settings-manager
+(relevant libraries)
+
+
+python libs: -----------------------------------------------
+upgrade pip
+matplotlib
+Pillow
+opencv-contrib-python
+etc...
+
+ADJUST SETTINGS: -------------------------------------------
+STATUS | DESCRIP
+done   | do not mount certain drives
+done   | never allow screen to turn off (until brightness issue is fixed)
+done   | correctly adjust date/time incl. how displayed
+done   | create external bash file for modifying settings
+done   | clone codefiles repo
+done   | install ublock origin for firefox
+done   | install atom (download filename.deb, sudo dpkg -i filename.deb)
+!!!!   | make system backup image of current state, quick recovery
+!!!!   | setup git properly
+
+
+GIT SETTINGS -----------------------------------------------
+git config --global user.email
+git config --global user.name
+git config --global pull.rebase true
+
+
+

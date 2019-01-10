@@ -1,0 +1,19 @@
+# Title: Python Modules Install List
+# Usage: pip install -r FILENAME --user
+jupyter
+ipython
+ipdb
+numpy
+matplotlib
+Pillow
+scipy
+opencv-contrib-python
+pandas
+# # requirements for thesis, not sure if needed yet
+# boltons
+# pprint
+# torch==0.4.0
+# torchvision
+# easydict
+# cffi
+# pyyaml # not sure if needed right now
