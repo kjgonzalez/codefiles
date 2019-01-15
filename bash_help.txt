@@ -42,6 +42,9 @@ use screen to safely run commands in ssh connection:
     detach:   CTRL+a,d
     reattach: screen -r <pid_OR_name>
     kill:     screen -X -S <pid_OR_name> quit (or 'exit' while inside)
-
+install *deb file: 
+    1. cd ~/FileLocation
+    2. sudo dpkg -i FileName.deb
+    3. 
 
 # eof

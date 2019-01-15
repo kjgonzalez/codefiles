@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.15)  15 JAN 2019 12:24
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.15)  15 JAN 2019 17:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -674,148 +674,118 @@ LaTeX Info: Redefining \nameref on input line 21.
 \@outlinefile=\write4
 \openout4 = `kjg_practice.out'.
 
-LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 28
+LaTeX Font Info:    Try loading font information for OT1+ztmcm on input line 29
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
 File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 28
+LaTeX Font Info:    Try loading font information for OML+ztmcm on input line 29
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 28
+LaTeX Font Info:    Try loading font information for OMS+ztmcm on input line 29
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsztmcm.fd
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
-LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 28
+LaTeX Font Info:    Try loading font information for OMX+ztmcm on input line 29
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxztmcm.fd
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 28.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 29.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 28.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 29.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 28.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 29.
+ [1
 
-<media/titleimg.jpg, id=60, 2055.68pt x 1156.32pt>
-File: media/titleimg.jpg Graphic file (type jpg)
- <use media/titleimg.jpg>
-Package pdftex.def Info: media/titleimg.jpg used on input line 32.
-(pdftex.def)             Requested size: 483.69687pt x 272.07047pt.
-
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 32--33
-[][] 
- []
-
-[1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./media/titleimg.jpg>]
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <17.28> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 37.
-
-(./kjg_practice.toc
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 36.
+ (./kjg_practice.toc
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 1.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 2.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 3.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 2.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 3.
 )
 \tf@toc=\write5
 \openout5 = `kjg_practice.toc'.
 
  [1]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 72.
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 48.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
 File: omsptm.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 72.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 48.
+ [1]
 
-Underfull \hbox (badness 10000) in paragraph at lines 103--108
+LaTeX Warning: Reference `Sectioning' on page 2 undefined on input line 106.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 140--145
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 103--108
+Underfull \hbox (badness 10000) in paragraph at lines 140--145
 
  []
 
 
-Overfull \hbox (1.86505pt too wide) in paragraph at lines 132--144
-\OT1/ptm/m/n/12 So, the be-low is nec-es-sary plus some pre-able lines.
- []
+LaTeX Warning: `h' float specifier changed to `ht'.
 
-[1
+[2
 
-] <media/img2.png, id=106, 695.59875pt x 561.09625pt>
+] <media/img2.png, id=126, 695.59875pt x 561.09625pt>
 File: media/img2.png Graphic file (type png)
  <use media/img2.png>
-Package pdftex.def Info: media/img2.png used on input line 151.
+Package pdftex.def Info: media/img2.png used on input line 188.
 (pdftex.def)             Requested size: 241.84843pt x 195.07669pt.
 
-Overfull \hbox (5.0pt too wide) in paragraph at lines 151--152
- [][] 
- []
-
-<media/result.pdf, id=108, 578.16pt x 433.62pt>
+<media/result.pdf, id=128, 578.16pt x 433.62pt>
 File: media/result.pdf Graphic file (type pdf)
  <use media/result.pdf>
-Package pdftex.def Info: media/result.pdf used on input line 159.
+Package pdftex.def Info: media/result.pdf used on input line 196.
 (pdftex.def)             Requested size: 241.84843pt x 181.38472pt.
 
-Overfull \hbox (5.0pt too wide) in paragraph at lines 159--160
- [][] 
- []
 
+LaTeX Warning: `h' float specifier changed to `ht'.
 
-Overfull \hbox (1.72092pt too wide) in paragraph at lines 156--162
-\OT1/ptm/m/n/12 used. BUT WAIT, THERE'S MORE: do you want
- []
-
-
-Overfull \hbox (3.16045pt too wide) in paragraph at lines 187--188
-\OT1/ptm/m/n/12 first type-set as pdfLa-TeX, then Bib-TeX, then
- []
-
-[2 <./media/img2.png> <./media/result.pdf>] (./kjg_practice.bbl
-Underfull \hbox (badness 1953) in paragraph at lines 14--19
-\OT1/ptm/m/it/12 Or-ga-ni-za-tion\OT1/ptm/m/n/12 , pages 173--204. Cam-bridge
- []
-
-
-Underfull \hbox (badness 1953) in paragraph at lines 21--26
-\OT1/ptm/m/it/12 Or-ga-ni-za-tion\OT1/ptm/m/n/12 , pages 173--204. Cam-bridge
- []
-
-)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 221.
- [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 221.
+[3 <./media/img2.png>] (./tex/remote_section.tex) [4 <./media/result.pdf>]
+(./kjg_practice.bbl [5])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 281.
+ [6]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 281.
  (./kjg_practice.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 221.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 221.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 281.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 281.
 Package rerunfilecheck Info: File `kjg_practice.out' has not changed.
-(rerunfilecheck)             Checksum: 9B79551880160AE8178599EA6078FB8F;890.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 221.
+(rerunfilecheck)             Checksum: 1EEFF42C33D1B52D13266031186BBC58;1167.
+
+
+LaTeX Warning: There were undefined references.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 281.
  ) 
 Here is how much of TeX's memory you used:
- 7066 strings out of 494953
- 113991 string characters out of 6180976
- 202912 words of memory out of 5000000
- 10181 multiletter control sequences out of 15000+600000
+ 7078 strings out of 494953
+ 114116 string characters out of 6180976
+ 201999 words of memory out of 5000000
+ 10184 multiletter control sequences out of 15000+600000
  40101 words of font info for 83 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 40i,11n,46p,577b,335s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 40i,11n,46p,627b,405s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/share/texliv
 e/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist
@@ -827,10 +797,10 @@ usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/
 times/utmri8a.pfb>
-Output written on kjg_practice.pdf (5 pages, 337195 bytes).
+Output written on kjg_practice.pdf (8 pages, 147190 bytes).
 PDF statistics:
- 239 PDF objects out of 1000 (max. 8388607)
- 181 compressed objects within 2 object streams
- 46 named destinations out of 1000 (max. 500000)
- 128 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 276 PDF objects out of 1000 (max. 8388607)
+ 214 compressed objects within 3 object streams
+ 53 named destinations out of 1000 (max. 500000)
+ 155 words of extra memory for PDF output out of 10000 (max. 10000000)
 

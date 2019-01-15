@@ -1,0 +1,71 @@
+\begin{thebibliography}{10}
+
+\bibitem{chu_surfconv:_2018}
+Hang Chu, Wei-Chiu Ma, Kaustav Kundu, Raquel Urtasun, and Sanja Fidler.
+\newblock {SurfConv}: {Bridging} 3d and 2d {Convolution} for {RGBD} {Images}.
+\newblock {\em CoRR}, abs/1812.01519, 2018.
+
+\bibitem{eitel_multimodal_2015}
+Andreas Eitel, Jost~Tobias Springenberg, Luciano Spinello, Martin~A.
+  Riedmiller, and Wolfram Burgard.
+\newblock Multimodal {Deep} {Learning} for {Robust} {RGB}-{D} {Object}
+  {Recognition}.
+\newblock {\em CoRR}, abs/1507.06821, 2015.
+
+\bibitem{girshick_fast_2015}
+Ross~B. Girshick.
+\newblock Fast {R}-{CNN}.
+\newblock {\em CoRR}, abs/1504.08083, 2015.
+
+\bibitem{gu_recognition_2009}
+Chunhui Gu, Joseph~J Lim, Pablo Arbeláez, and Jitendra Malik.
+\newblock Recognition using regions.
+\newblock In {\em Computer {Vision} and {Pattern} {Recognition}, 2009. {CVPR}
+  2009. {IEEE} {Conference} on}, pages 1030--1037. IEEE, 2009.
+
+\bibitem{gupta_cross_2015}
+Saurabh Gupta, Judy Hoffman, and Jitendra Malik.
+\newblock Cross {Modal} {Distillation} for {Supervision} {Transfer}.
+\newblock {\em CoRR}, abs/1507.00448, 2015.
+
+\bibitem{huber_integrating_2011}
+D.~Huber, T.~Kanade, and H.~Badino.
+\newblock Integrating {LIDAR} into {Stereo} for {Fast} and {Improved}
+  {Disparity} {Computation}.
+\newblock In {\em 2011 {International} {Conference} on 3D {Imaging},
+  {Modeling}, {Processing}, {Visualization} and {Transmission}(3DIMPVT)},
+  volume~00, pages 405--412, 2011.
+
+\bibitem{maddern_real-time_2016}
+Will Maddern and Paul Newman.
+\newblock Real-time probabilistic fusion of sparse 3d lidar and dense stereo.
+\newblock In {\em Intelligent {Robots} and {Systems} ({IROS}), 2016
+  {IEEE}/{RSJ} {International} {Conference} on}, pages 2181--2188. IEEE, 2016.
+
+\bibitem{qi_frustum_2017}
+Charles~Ruizhongtai Qi, Wei Liu, Chenxia Wu, Hao Su, and Leonidas~J. Guibas.
+\newblock Frustum {PointNets} for 3d {Object} {Detection} from {RGB}-{D}
+  {Data}.
+\newblock {\em CoRR}, abs/1711.08488, 2017.
+
+\bibitem{redmon_you_2015}
+Joseph Redmon, Santosh~Kumar Divvala, Ross~B. Girshick, and Ali Farhadi.
+\newblock You {Only} {Look} {Once}: {Unified}, {Real}-{Time} {Object}
+  {Detection}.
+\newblock {\em CoRR}, abs/1506.02640, 2015.
+
+\bibitem{ren_faster_2015}
+Shaoqing Ren, Kaiming He, Ross~B. Girshick, and Jian Sun.
+\newblock Faster {R}-{CNN}: {Towards} {Real}-{Time} {Object} {Detection} with
+  {Region} {Proposal} {Networks}.
+\newblock {\em CoRR}, abs/1506.01497, 2015.
+
+\bibitem{yang_exploit_2016}
+F.~Yang, W.~Choi, and Y.~Lin.
+\newblock Exploit {All} the {Layers}: {Fast} and {Accurate} {CNN} {Object}
+  {Detector} with {Scale} {Dependent} {Pooling} and {Cascaded} {Rejection}
+  {Classifiers}.
+\newblock In {\em 2016 {IEEE} {Conference} on {Computer} {Vision} and {Pattern}
+  {Recognition} ({CVPR})}, pages 2129--2137, June 2016.
+
+\end{thebibliography}

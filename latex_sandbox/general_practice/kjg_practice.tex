@@ -19,52 +19,90 @@
 
 % DOC START ====================================================================
 \begin{document}
-\title{My First Document}
-\author{Kris Gonzalez}
+\title{Summary of LaTeX Features \\
+(following ``LaTeX for Beginners'')}
+\author{Kris Gonzalez, John Deere} 
 \date{2018-10-25}
 \date{October 25,2018}
-\date{\today} % can also be "October 25, 2017" or "2018-10-25" if desired, only treated as string
-\maketitle
+\date{15.01.2019} % can also be "October 25, 2017" or "2018-10-25" if desired, only treated as string
+\maketitle % necessary to have title page on first page
 \pagenumbering{gobble} % turns off page numbering when you don't want it
 
-
-
-\includegraphics[width=1\textwidth]{media/titleimg.jpg} % note, you need width=0.5 if dealing w/ two columns
+%  \includegraphics[width=1\textwidth]{media/titleimg.jpg} 
+% note, you need width=0.5 if dealing w/ two columns
 
 \newpage
 % TABLE OF CONTENTS ============================================================
 \pagenumbering{roman}
 \tableofcontents
 
+%\twocolumn % enables two or \onecolumn (default) behavior
 
-
-% start actual content
-
-\twocolumn % enables two or \onecolumn (default) behavior
+% SECTION ======================================================================
+\newpage
 \pagenumbering{arabic} % can use initial things to 
+\section{Introduction}
+\label{Introduction}
+So, this document accompanies the pdf ``Latex for Beginners'' which can be found at the following link: www.google.com. This document will generally follow  the same order as the pdf. Any special commands will be included at the end. General structure of the supplemental PDF: 
+\begin{itemize}
+\itemsep=-0.5em
+\item Creating a Title
+\item Sections
+\item Labelling
+\item Table of Contents
+\item Typsetting Text
+\item Lists
+\item Comments \& Spacing
+\item Special Characters
+\item Tables
+\item Figures
+\item Equations
+\item References
+\item Special Commands (kjg own section)
+\end{itemize} % list
+
+So, let's get started. 
 
 % SECTION ======================================================================
-\section{Sectioning}
-\label{Sectioning}
+\section{Document Structure} \label{Document Structure}
+\subsection{Basic document} \label {Basic document}
+Each document requires a few things, given as examples below (in order of appearance): 
 
-Lorem ipsum dolo
-\subsection{super duper}
-\label{super duper}
-Mauris iaculis id magna 
-\subsection{another1}
-Mauris iaculis id magna 
-\subsection{another2}
-Mauris iaculis id magna
-\subsubsection{another another}
-Mauris iaculis id magna
-\paragraph{another still}
-Mauris iaculis id magna. 
+\begin{itemize}
+\itemsep=-0.5em
+\item \textbackslash documentclass[a4paper,12pt]\{article\} : defines what the document's like (*)
+\item \textbackslash usepackage\{chngcntr\}                 : imports helpful packages
+\item \textbackslash counterwithin\{equation\}\{section\}   : enables numbering on figures, etc
+\item \textbackslash begin\{document\}                      : end of preamble, start of main body (*)
+\item \textbackslash section\{SectionName\}                 : section title
+\item \textbackslash label\{SectionLabel\}                  : linkable / reference for each (sub)section
+\item \textbackslash subsection\{SubsectionName\}           : subsection title
+\item \textbackslash end\{document\}                        : end of body, start of post-body (*)
+\end{itemize}
+
+Each of these are important for the document to function properly, but only three are essential [marked with (*) ]. The document can be roughly divided into 3 parts: preamble, body, and post-body (kjg name). the preamble is for package loading and initializations; the body is for actual content, and the post-body is for comments / non-printed stuff (anything can be written here, not put in final document).
+
+\subsection{Title Page / Initial Commands}
+Main commands that are needed: 
+
+\begin{itemize}
+\itemsep=-0.5em
+\item \textbackslash title
+\item \textbackslash author
+\item \textbackslash date
+\item \textbackslash maketitle
+\item \textbackslash pagenumbering
+\item \textbackslash maketitle
+\item \textbackslash pagenumbering\{gobble\}
+
+\end{itemize}
 
 
-\subsection{another3}
-Mauris iaculis id magna.
 
-% SECTION ======================================================================
+\newpage
+\onecolumn
+
+% SECTION: Basic Formatting ====================================================
 \section{Basic Formatting} \label{Basic Formatting}
 So here I am with my own text. Please see section \ref{Sectioning} on page \pageref{Basic Formatting} to blah blah blah. Yo, this color text is {\color{red}fire}. lol. Here's a list of font effects:
 \begin{itemize}
@@ -176,8 +214,13 @@ v_{esc} &=& \sqrt{\frac{2GM}{R}} \\
 \frac{\sin(x)}{\cos(x)} &=& \tan(x) 
 \end{eqnarray} % on last line, leave no spaces and have no newlines
 
+% SECTION ======================================================================
+\section{Importing *.tex files for longer documents} \label{sect_teximporting}
+This section to be covered by an imported document.
+\input{tex/remote_section}This text is now part of the main document again. notice how close ``This'' is to the input command
+
 % SECTION: References and Such =================================================
-\section{References and Such}
+\section{References and Such} \label {sect_references}
 So, at this point have about 70\% of the report able to be written. In order to create a set of references (and to cite them), we need a BibTeX file. We eventually want to make a citation, such as to J. Redmon's paper \cite{red16}. Note, however, that getting a bibliography to work is a MASSIVE pain in the ass:
 \begin{enumerate}
 \itemsep=-0.5em % this is the correct way to reduce the spaces in a list... :)
@@ -208,6 +251,21 @@ Last test, can i go back to a table by refering to its caption? See Table \ref{M
 
 BUT DOES IT THOUGH?
 
+Lorem ipsum dolo. Today's date: \today.
+\subsection{super duper}
+\label{super duper}
+Mauris iaculis id magna 
+\subsection{another1}
+Mauris iaculis id magna 
+\subsection{another2}
+Mauris iaculis id magna
+\subsubsection{another another}
+Mauris iaculis id magna
+\paragraph{another still}
+Mauris iaculis id magna. 
+
+\subsection{another3}
+Mauris iaculis id magna.
 
 
 

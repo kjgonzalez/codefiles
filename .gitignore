@@ -3,3 +3,12 @@ catkin_ws/build/
 catkin_ws/devel/
 scripts_libs/__pycache__/
 scripts_libs/klib.pyc
+
+# get rid of annoying latex build files
+latex_sandbox/*.aux
+latex_sandbox/*.log
+latex_sandbox/*.out
+latex_sandbox/*.gz
+latex_sandbox/*.toc
+latex_sandbox/*.pdf
+
