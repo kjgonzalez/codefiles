@@ -1,0 +1,34 @@
+\documentclass[a4paper,12pt]{article} % must always appear at start of every document
+
+\begin{document}
+
+Hello World. This document created to give steps on how to compile latex using bash (command line) in case that ever becomes necessary. Simplest steps: 
+
+\begin{enumerate}
+\itemsep=-0.5em
+\item Write out the *.tex file
+\item Open up terminal in folder
+\item \texttt{>> pdflatex TexFile.tex}
+\item (done)
+\end{enumerate}
+
+
+If you also need to include a bibtex file: 
+
+\begin{enumerate}
+\itemsep=-0.5em
+\item Write out the *.tex file
+\item Write out the *.bib file
+\item Open up terminal in folder
+\item \texttt{>> pdflatex TexFile.tex} (just to generate an *.aux file)
+\item \texttt{>> bibtex BibFile.bib} (generate *.bbl file)
+\item \texttt{>> pdflatex TexFile.tex} (final file to create pdf)
+\item (done)
+\end{enumerate}
+
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
