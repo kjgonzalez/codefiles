@@ -1,0 +1,63 @@
+% KJGNOTE: PLEASE SEE BOTTOM OF DOCUMENT FOR BLOCK COMMENTS
+\documentclass[a4paper,12pt]{article} % must always appear at start of every document
+% alternative classes to "article": report, proc, book, slides
+
+\usepackage{mathptmx} % this package makes the font look closest to Times New Roman
+%\usepackage{color} % allows color to be used
+%\usepackage[margin=2cm]{geometry} % attempt to control margin width on pages (can be "in" or "cm")
+%\usepackage[utf8]{inputenc} % allows german characters
+%\usepackage{csvsimple} % lets you import a csv file to make, say, a table
+%\usepackage{graphicx} % required to load images into image
+%
+%\usepackage{chngcntr} % enables per-section numbering of any captions
+%\counterwithin{figure}{section} % per-section numbering, figures
+%\counterwithin{table}{section} % per-section numbering, tables
+%\counterwithin{equation}{section} % per-section numbering, equations
+%\usepackage{hyperref} % allows you to hyperlink to other sections in a document
+
+% anything before \begin{document} is considered "Preamble"
+
+% DOC START ====================================================================
+\begin{document}
+
+How to render the bibliography in a latex document: 
+
+\begin{enumerate}
+%\itemsep=-0.25em
+
+\item Create main *.txt document (like this one)
+\item Create bibliography *.bib document (like the references.bib file)
+\item The bottom of your document (or wherever you want your references to show up), include ``bibliographystyle'' and ``bibliography'' tags. note that you don't put the ``.bib'' extension in the tag
+\item In order to render properly (assuming you're using texworks), change the compile option from ``pdfLaTeX'' to ``BibTeX''
+\item Render as ``BibTeX'' (perhaps two or three times)
+\item Switch back to ``pdfLaTeX'' and render as ``pdfLaTeX''
+\item Render AGAIN as ``pdfLaTeX'' and you should have a bibliography AND all correct citations
+\end{enumerate}
+
+\textbf{KEEP IN MIND:} stuff only gets included in the references / bibliography section if you tag it in ``cite'' or ``nocite'' somewhere in your document
+
+
+% hello world \cite{ab94} this is a test.
+\nocite{Birdetal2001}
+\nocite{ab94}
+
+
+% BIBLIOGRAPHY =================================================================
+\bibliographystyle{plain}
+\bibliography{references}
+
+% END OF DOCUMENT ==============================================================
+\end{document}
+% anything typed here is ignored
+%
+%Author: Kris Gonzalez
+%DateCreated: 190115
+%Objective: demonstrate in really simple terms how to include a bibliography. will be grabbing sample 
+%	bibtex records from arxiv, which is basically what would be done anyway.
+
+
+
+
+
+
+% eof

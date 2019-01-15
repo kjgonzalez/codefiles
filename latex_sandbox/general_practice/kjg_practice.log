@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.15)  14 JAN 2019 14:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2018.10.15)  15 JAN 2019 12:24
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -798,15 +798,15 @@ Underfull \hbox (badness 1953) in paragraph at lines 21--26
  []
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 219.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 221.
  [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 219.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 221.
  (./kjg_practice.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 219.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 219.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 221.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 221.
 Package rerunfilecheck Info: File `kjg_practice.out' has not changed.
 (rerunfilecheck)             Checksum: 9B79551880160AE8178599EA6078FB8F;890.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 219.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 221.
  ) 
 Here is how much of TeX's memory you used:
  7066 strings out of 494953
@@ -827,7 +827,7 @@ usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texli
 ve/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/f
 onts/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/
 times/utmri8a.pfb>
-Output written on kjg_practice.pdf (5 pages, 337174 bytes).
+Output written on kjg_practice.pdf (5 pages, 337195 bytes).
 PDF statistics:
  239 PDF objects out of 1000 (max. 8388607)
  181 compressed objects within 2 object streams
