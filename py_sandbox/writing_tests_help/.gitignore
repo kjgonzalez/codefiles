@@ -1,0 +1,3 @@
+# avoid including unnecessary stuf
+*__pycache__/
+

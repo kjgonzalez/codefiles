@@ -6,6 +6,7 @@
 # Assumptions: 
 #   * screen installed (apt-get install screen)
 #   * jupyter installed (pip install jupyter)
+#   * repo 'codefiles' is located in user's home folder
 
 
 # make bash line colorful 
