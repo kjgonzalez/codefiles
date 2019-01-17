@@ -3,3 +3,5 @@ catkin_ws/build/
 catkin_ws/devel/
 *.pyc
 */__pycache__/
+*.gz
+latex_sandbox/*.pdf

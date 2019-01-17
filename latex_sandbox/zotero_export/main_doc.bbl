@@ -23,6 +23,12 @@ Chunhui Gu, Joseph~J Lim, Pablo Arbeláez, and Jitendra Malik.
 \newblock In {\em Computer {Vision} and {Pattern} {Recognition}, 2009. {CVPR}
   2009. {IEEE} {Conference} on}, pages 1030--1037. IEEE, 2009.
 
+\bibitem{gupta_learning_2014}
+Saurabh Gupta, Ross~B. Girshick, Pablo Arbelaez, and Jitendra Malik.
+\newblock Learning {Rich} {Features} from {RGB}-{D} {Images} for {Object}
+  {Detection} and {Segmentation}.
+\newblock {\em CoRR}, abs/1407.5736, 2014.
+
 \bibitem{gupta_cross_2015}
 Saurabh Gupta, Judy Hoffman, and Jitendra Malik.
 \newblock Cross {Modal} {Distillation} for {Supervision} {Transfer}.
@@ -35,6 +41,11 @@ D.~Huber, T.~Kanade, and H.~Badino.
 \newblock In {\em 2011 {International} {Conference} on 3D {Imaging},
   {Modeling}, {Processing}, {Visualization} and {Transmission}(3DIMPVT)},
   volume~00, pages 405--412, 2011.
+
+\bibitem{law_cornernet:_2018}
+Hei Law and Jia Deng.
+\newblock {CornerNet}: {Detecting} {Objects} as {Paired} {Keypoints}.
+\newblock {\em CoRR}, abs/1808.01244, 2018.
 
 \bibitem{maddern_real-time_2016}
 Will Maddern and Paul Newman.
@@ -66,6 +77,6 @@ F.~Yang, W.~Choi, and Y.~Lin.
   {Detector} with {Scale} {Dependent} {Pooling} and {Cascaded} {Rejection}
   {Classifiers}.
 \newblock In {\em 2016 {IEEE} {Conference} on {Computer} {Vision} and {Pattern}
-  {Recognition} ({CVPR})}, pages 2129--2137, June 2016.
+  {Recognition} ({CVPR})}, pages 2129--2137, 2016.
 
 \end{thebibliography}
