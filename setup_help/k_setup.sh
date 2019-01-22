@@ -11,8 +11,8 @@ pinta \
 vim\
 compizconfig-settings-manager \
 unity-tweak-tool \
-kompare
+kompare \
+python3-tk
 
 sudo pip3 install --upgrade pip # after 1st run, just pip
 pip install -r python_requirements.txt --user
-
