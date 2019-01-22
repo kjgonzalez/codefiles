@@ -22,4 +22,4 @@ for phase in np.linspace(0, 10*np.pi, 500):
 	line1.set_ydata(updatey(y))
 	fig.canvas.draw()
 	fig.canvas.flush_events()
-	print time.time()
+	print(time.time())

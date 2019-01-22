@@ -43,7 +43,7 @@ then redraw using fig.canvas.draw()
 			self.line.set_ydata(ydata)
 
 		else:
-			print 'ERROR: data is not same length. will not update'
+			print('ERROR: data is not same length. will not update')
 	# def getxy(self):
 	# 	'''return xy data so that someone may do something with it'''
 	# 	return self.line.get_data()
@@ -58,7 +58,7 @@ then redraw using fig.canvas.draw()
 			self.fig.canvas.draw()
 			self.fig.canvas.flush_events()
 		else:
-			print 'ERROR: data is not same length. will not update'
+			print('ERROR: data is not same length. will not update')
 	def close(self):
 		self.plt.close()
 
@@ -101,4 +101,4 @@ then redraw using fig.canvas.draw()
 # 	line1.set_ydata(y) # change the data
 # 	fig.canvas.draw()			# redraw the data
 # 	fig.canvas.flush_events()	# remove extra changes that were too fast
-# 	print time.time()
+# 	print(time.time())
