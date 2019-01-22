@@ -5,3 +5,4 @@ catkin_ws/devel/
 */__pycache__/
 *.gz
 latex_sandbox/*.pdf
+delme.txt
