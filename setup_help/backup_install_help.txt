@@ -35,9 +35,4 @@ done   | install atom (download filename.deb, sudo dpkg -i filename.deb)
 
 
 GIT SETTINGS -----------------------------------------------
-git config --global user.email
-git config --global user.name
-git config --global pull.rebase true
-git config --global push.default simple
-
-
+(see git_notes.txt for more)

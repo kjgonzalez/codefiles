@@ -1,0 +1,21 @@
+KJG Git Notes
+
+Initial Setup ==============================================
+git config --global user.email
+git config --global user.name
+git config --global pull.rebase true
+git config --global push.default simple
+
+INITIALIZING A NEW BRANCH ==================================
+  git branch NewBranch
+  git checkout NewBranch
+  (some changes get committed here)
+  git push --set-upstream origin NewBranch
+
+DELETING A BRANCH ==========================================
+  git branch -d NewBranch (local)
+  git push --delete NewBranch (remote)
+
+MERGING A BRANCH ===========================================
+  git merge NewBranch (must already be in main branch)
+
