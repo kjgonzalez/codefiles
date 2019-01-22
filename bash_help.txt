@@ -10,27 +10,34 @@ generate rsa_id: ------ ssh-keygen (don't make password, just install in ~/.ssh/
 install *deb file:      sudo dpkg -i FileName.deb
 create a symlink: ----- ln -s TargetPath NewLinkName
 delete folder w/ stuff: rm -r DirName
-
-output bash text to both screen and file:   ./somecommand | tee the/output/file.txt
+print to screen & file: ./somecommand | tee the/output/file.txt
 
 clone into repo using ssh (rsa)
     1. copy in rsa key
     2. git clone git@github.com:EXAMPLE/REPO.git
     3. DONE
+
 create bash function / variables:
     argexample(){
       # show how to give input arguments with bash as well as variables
       greet="hey" # NO SPACES ON EITHER SIDE OF EQUAL SIGN!!!
       echo "$greet, you've asked me to say $1"
     }
+
 list subfolder / files size, and give in order:
     du -hs * | sort -h -r
     (list summary of human-readable disk usage for all items in folder, and 
         sort by -h flag in reverse order (largest-first)
+
 use screen to safely run commands in ssh connection:
     start:    screen -S <name>
     detach:   CTRL+a,d
     reattach: screen -r <pid_OR_name>
     kill:     screen -X -S <pid_OR_name> quit (or 'exit' while inside)
+
+remove file/folder from git without actually deleting (stop tracking):
+    1. add file to .gitignore file
+    2. git rm --cached FILE  |or| git rm --cached -r FOLDER
+    3. (add/commit/push as usual)
 
 # eof
