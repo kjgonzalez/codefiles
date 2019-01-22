@@ -1,0 +1,65 @@
+
+% ``canonical way'' to make if statements in latex. doesn't require importing, and can therefore go before document class declaration. 
+\newif\ifkclass
+\kclasstrue
+\kclassfalse
+
+%\documentclass{}
+
+\ifkclass
+  % true
+  \documentclass[a4paper,12pt]{article}
+\else
+  % false
+  \documentclass{beamer}
+\fi
+
+
+%\documentclass{minimal}
+
+\usepackage{etoolbox} % optional package, allows some simple conditional statements
+\newtoggle{paper}
+\toggletrue{paper}
+\togglefalse{paper}
+
+
+
+
+
+
+
+\begin{document}
+
+
+
+% SLIDE ========================================================================
+%\begin{frame}
+
+%  \titlepage
+%\end{frame}
+
+% SLIDE ========================================================================
+%\begin{frame}{Hello}
+This is a test.
+
+\iftoggle{paper}{
+	% if true
+	paper is true
+}{
+	% if false
+	paper is false
+}
+%\end{frame}
+
+\ifkclass
+  % true
+  kclass is true
+\else
+  % false
+  kclass is false
+\fi
+
+
+
+
+\end{document}
