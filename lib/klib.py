@@ -36,7 +36,7 @@ In Windows:
 * as of 181008, will now always use 4 spaces as the tab
     delimiter. using a "hard tab" causes too many formatting
     headaches across different programs, platforms, etc.
-* because the following is useful but too compact to put into a function, 
+* because the following is useful but too compact to put into a function,
     here's how to sort a numpy array by i'th column: a[a[:,1].argsort()]
 
 '''
@@ -61,17 +61,17 @@ def __getSysInfo__():
 (OSVERSION,PYVERSION) = __getSysInfo__()
 
 def dir(rec=False,files=True,ext=''):
-    ''' 
-    Objective: Emulate ls / dir command to be cross platform and return as a 
-        list. Can choose to run recursively, only show folders or show all 
-        files (of specific types) and folders. if recursive = False and 
+    '''
+    Objective: Emulate ls / dir command to be cross platform and return as a
+        list. Can choose to run recursively, only show folders or show all
+        files (of specific types) and folders. if recursive = False and
         files=False, would just show current working directory. filetypes will
         show all filetypes by default, but can be specific ones as well.
-    Inputs: 
+    Inputs:
         * rec: Recursive check. Default: False (no recursion)
         * files: Show only files or folders. Default: True (files only)
         * ext: Which filetypes to return. Default: '' (any)
-    Output: 
+    Output:
         * <list>: filepaths
     '''
     import os
@@ -81,7 +81,7 @@ def dir(rec=False,files=True,ext=''):
     abp=os.path.abspath
     paths=os.walk('.') if rec else '.' # where to check, if recursive
     ext='.'+ext if ext!='' else ext # if not default, prefix '.'
-    
+
     # for each directory, for each file/folder, append to list
     all = [ipath for base in paths for ipath in glob(opj(abp(base[0]),'*'))]
     if(files):
@@ -93,21 +93,21 @@ def dir(rec=False,files=True,ext=''):
         return sub
 # def dir
 
-def ping(ip_address): 
-    import os 
-    import time 
-    while(not os.system('ping {} -c 1'.format(ip_address))==0): 
+def ping(ip_address):
+    import os
+    import time
+    while(not os.system('ping {} -c 1'.format(ip_address))==0):
         print(stamp())
-        time.sleep(5) 
+        time.sleep(5)
     ringbell()
     time.sleep(0.01)
     ringbell()
-    print('checker: connection works!') 
+    print('checker: connection works!')
 # def ping
 
 def ringbell(duration=0.15,freq=1300):
     ''' Objective: play a noise when called
-    
+
     NOTE: this function requires sox to be installed on linux system!
     NOTE: not verified on windows
     '''
@@ -133,7 +133,7 @@ def stamp():
 # def stamp
 
 def timestamper(pfunc):
-    ''' intended to wrap a print function or similar, which prepends text to be 
+    ''' intended to wrap a print function or similar, which prepends text to be
         printed with a timestamp, which looks like:
         LOG: YYMMDD-HHmmSS
     '''
@@ -147,12 +147,12 @@ def timestamper(pfunc):
 # def timestamper
 
 class Stopwatch:
-    ''' Stopwatch: Basic class that logs a time when it's created. Can also 
+    ''' Stopwatch: Basic class that logs a time when it's created. Can also
         restart timer with function call "tik", and can get the elapsed time
         with function "tok". Designed to be a bit similar to matlab functions.
         Note that all values are in seconds.
-        
-        Example: 
+
+        Example:
         >> from klib import Stopwatch as st
         >> a=st()
         >> (some code)
@@ -191,11 +191,12 @@ def listContents(arr,ReturnAsNPArr=False):
 def pad(text,strLen,char=' ',side='L'):
     ''' Objective: provide easy, powerful padding tool for
         text. vars:
-        'text': the text to pad
+        'text': the text to pad. if not a string, will try to convert
         'strLen': maximum length of final string
         'char': padding character, default ' '
         'side': side to pad, default left. options: L, R
     '''
+    text=str(text) if type(text)!=str else text
     if(len(text)<strLen):
         if(side=='R'):
             return pad(text+char,strLen,char,side)

@@ -5,7 +5,7 @@ Objective: do a little bit of practice with the book "Make Your Own Neural Netwo
 # PAGE 19
 import numpy as np
 import matplotlib.pyplot as plt
-
+from klib import pad
 
 # just gonna generate a few points to imitate the image seen
 
@@ -37,7 +37,7 @@ for i,ipair in enumerate(np.row_stack((caterpillars,ladybirds))):
     err = estimate-ipair[1]
     d_a=lr*(err/ipair[0])
     a+=-d_a
-    print('Iter{}: {}, {:.2f}, {:.2f}, {:.2f}, {:.2f}'.format(i,np.round(ipair,2),estimate,err,d_a,a) )
+    print('Iter{}: {}, {:.2f}, {:.2f}, {:.2f}, {:.2f}'.format(pad(i,2),np.round(ipair,2),estimate,err,d_a,a) )
 
 
 divline=np.array([[0,0],[length*np.cos(a),length*np.sin(a)]])
