@@ -10,9 +10,9 @@ generate rsa_id: ------ ssh-keygen (don't make password, just install in ~/.ssh/
 install *deb file:      sudo dpkg -i FileName.deb
 create a symlink: ----- ln -s TargetPath NewLinkName
 delete folder w/ stuff: rm -r DirName
-copy entire folder:  -- cp -r /TARGET/FOLDER /remote/destination/
+copy entire folder: --- cp -r /pathTo/FOLDER /remote/destination/
 print to screen & file: ./somecommand | tee the/output/file.txt
-
+move entire folder: --- mv /path/to/FOLDER /remote/destination/
 clone into repo using ssh (rsa)
     1. copy in rsa key
     2. git clone git@github.com:EXAMPLE/REPO.git

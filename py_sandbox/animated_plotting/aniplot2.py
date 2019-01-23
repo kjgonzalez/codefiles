@@ -11,6 +11,7 @@ https://stackoverflow.com/questions/23345565/is-it-possible-to-control-matplotli
 
 
 '''
+import numpy as np
 
 class quickplot(object):
 	''' make a simple object that takes in xy data and plots it, then updates
@@ -62,11 +63,13 @@ then redraw using fig.canvas.draw()
 	def close(self):
 		self.plt.close()
 
+x=np.linspace(0,6)
+y=np.cos(x)
 
-# plotme=quickplot(0,0,'r.')
-# plotme.setxy(x,y)
-# plotme.redraw()
-# a=raw_input('test')
+plotme=quickplot(0,0,'r.')
+plotme.setxy(x,y)
+plotme.redraw()
+a=raw_input('test')
 
 
 
