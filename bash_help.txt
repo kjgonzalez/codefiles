@@ -35,6 +35,11 @@ use screen to safely run commands in ssh connection:
     detach:   CTRL+a,d
     reattach: screen -r <pid_OR_name>
     kill:     screen -X -S <pid_OR_name> quit (or 'exit' while inside)
+    enable scroll: 
+        1. vim ~/.screenrc
+        2. # Enable mouse scrolling and scroll bar history scrolling
+           termcapinfo xterm* ti@:te@
+        3. ESC >> :x >> ENTER
 
 remove file/folder from git without actually deleting (stop tracking):
     1. add file to .gitignore file

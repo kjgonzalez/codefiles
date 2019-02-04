@@ -50,7 +50,8 @@ b  0.68  4.54  4.19
 c  4.16  1.73  4.54
 
 - - - - - - - - - - - - -
-
+Fix python indentation (only) to PEP8:
+>> autopep8 path/to/file.py --select=E101,E121 --in-place
 
 
 

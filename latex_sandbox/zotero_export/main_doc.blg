@@ -2,45 +2,47 @@ This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: main_doc.aux
 The style file: plain.bst
-Database file #1: temp.bib
-You've used 13 entries,
+Database file #1: smart3d_refs.bib
+Warning--empty journal in powers2011evaluation
+You've used 3 entries,
             2118 wiz_defined-function locations,
-            563 strings with 6512 characters,
-and the built_in function-call counts, 4759 in all, are:
-= -- 467
-> -- 263
-< -- 5
-+ -- 103
-- -- 90
-* -- 312
-:= -- 799
-add.period$ -- 41
-call.type$ -- 13
-change.case$ -- 84
+            512 strings with 4542 characters,
+and the built_in function-call counts, 835 in all, are:
+= -- 75
+> -- 53
+< -- 0
++ -- 21
+- -- 18
+* -- 54
+:= -- 163
+add.period$ -- 9
+call.type$ -- 3
+change.case$ -- 18
 chr.to.int$ -- 0
-cite$ -- 13
-duplicate$ -- 188
-empty$ -- 327
-format.name$ -- 90
-if$ -- 1001
+cite$ -- 4
+duplicate$ -- 30
+empty$ -- 52
+format.name$ -- 18
+if$ -- 159
 int.to.chr$ -- 0
-int.to.str$ -- 13
-missing$ -- 13
-newline$ -- 68
-num.names$ -- 26
-pop$ -- 75
+int.to.str$ -- 3
+missing$ -- 3
+newline$ -- 18
+num.names$ -- 6
+pop$ -- 16
 preamble$ -- 1
-purify$ -- 71
+purify$ -- 15
 quote$ -- 0
-skip$ -- 161
+skip$ -- 23
 stack$ -- 0
-substring$ -- 217
-swap$ -- 60
-text.length$ -- 5
+substring$ -- 15
+swap$ -- 2
+text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 52
-warning$ -- 0
-while$ -- 38
-width$ -- 15
-write$ -- 148
+type$ -- 12
+warning$ -- 1
+while$ -- 6
+width$ -- 4
+write$ -- 33
+(There was 1 warning)
