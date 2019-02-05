@@ -6,3 +6,4 @@ catkin_ws/devel/
 *.gz
 latex_sandbox/*.pdf
 delme.txt
+py_sandbox/book_MakeYourOwnNeuralNetwork/BOOK_TariqRashid-MakeYourOwnNeuralNetwork.pdf
