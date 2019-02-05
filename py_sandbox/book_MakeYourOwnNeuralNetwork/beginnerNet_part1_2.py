@@ -1,8 +1,10 @@
+#!/usr/bin/env python3.5
 '''
 Objective: do a little bit of practice with the book "Make Your Own Neural Network", by Tariq Rashid. basically, this code will be from the first part.
 '''
 
 # AROUND PAGE 69
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from klib import pad
@@ -17,22 +19,24 @@ def sigmoid(arr):
 
 print(pad('From pg63 ',50,'=','R')) #===========================================
 # this is an example forward pass of the network
-input=np.array([0.9,0.1,0.8])
-w2=np.array([[0.9,0.3,0.4],[0.2,0.8,0.2],[0.1,0.5,0.6]])
-w3=np.array([[3,7,5],[6,5,2],[8,1,9]])/10
+x0=np.array([0.9,0.1,0.8]) # input
 
-x2=np.matmul(w2,input[:,None])
+w1=np.array([[0.9,0.3,0.4],[0.2,0.8,0.2],[0.1,0.5,0.6]])
+w2=np.array([[3,7,5],[6,5,2],[8,1,9]])/10
+
+x1=np.matmul(w1,x0[:,None])
+y1=sigmoid(x1)
+
+x2=np.matmul(w2,y1)
 y2=sigmoid(x2)
 
-x3=np.matmul(w3,y2)
-y3=sigmoid(x3)
-
-out=np.copy(y3)
-print(x3)
-print(out)
+out=np.copy(y2)
+# print(x2)
+print('in:\n',x0[:,None])
+print('out:\n',np.round(out,3))
 
 
-exit()
+# exit()
 
 
 
