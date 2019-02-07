@@ -55,6 +55,10 @@ img2=img.crop((70,30,200,200)) #pixx format, (x1,y1,x2,y2)
 plt.imshow(img2)
 #plt.show(block=False);time.sleep(1);plt.close()
 
+# convert betwene pil and numpy
+img_arr=np.array(img2)
+img_pil=pil.fromarray(img_arr) # ensure that data is 0-255 uint8!
+
 # draw stuff on image
 def rectangle2(imgdraw,bbox,outline=(255,255,255),fill=None,width=1):
     ''' KJG custom modification to PIL ImageDraw method.

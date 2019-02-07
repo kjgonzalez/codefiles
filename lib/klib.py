@@ -36,9 +36,10 @@ In Windows:
 * as of 181008, will now always use 4 spaces as the tab
     delimiter. using a "hard tab" causes too many formatting
     headaches across different programs, platforms, etc.
-* because the following is useful but too compact to put into a function,
-    here's how to sort a numpy array by i'th column: a[a[:,1].argsort()]
 
+* because the following is useful but too compact to put into a function,
+    here's how to sort a numpy array by i'th column: a[a[:,i].argsort()], and
+    backwards: a[a[:,i].argsort()[::-1]]
 '''
 # FIRST, BEFORE ALL ELSE, CHECK VERSIONS OF OS AND PYTHON
 def __getSysInfo__():
