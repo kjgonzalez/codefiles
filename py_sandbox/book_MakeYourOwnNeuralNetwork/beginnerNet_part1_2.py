@@ -8,7 +8,7 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from klib import pad
-
+nl='\n'
 # just gonna generate a few points to imitate the image seen
 
 
@@ -32,10 +32,17 @@ y2=sigmoid(x2)
 
 out=np.copy(y2)
 # print(x2)
+
+gt=np.array([[.5,.6,.7]]).transpose()
+e2=gt-y2
+e1=np.matmul(w2.transpose(),e2) # i THINK it's w2, not sure at the moment
+
 print('in:\n',x0[:,None])
 print('out:\n',np.round(out,3))
-
-
+print('will approximate error:')
+print('ground truth:'+nl,gt) # nl = newline
+print('err2:'+nl,e2)
+print('err2:'+nl,e1)
 # exit()
 
 

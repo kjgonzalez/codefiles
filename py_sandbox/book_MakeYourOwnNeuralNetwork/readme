@@ -1,3 +1,8 @@
+= 190210 =======================================================================
+at about page 97. 
+to use gradient descent, need to use calculus to find slope of error function 
+	wrt weights
+
 = 190205 =======================================================================
 working on next section, backpropagation. got to pg 78. use comp notebook as
     companion
