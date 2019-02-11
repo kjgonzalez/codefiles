@@ -1,3 +1,6 @@
+= 190211 =======================================================================
+at about page 99, and have been able to work out the error update equation. next
+	is to actually implement it.
 = 190210 =======================================================================
 at about page 97. 
 to use gradient descent, need to use calculus to find slope of error function 
