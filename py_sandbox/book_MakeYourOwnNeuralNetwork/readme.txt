@@ -1,3 +1,11 @@
+= 190213 =======================================================================
+have reached Part 2, pg ~139, working to create own network
+
+
+kjgnote: simple normalization works best, probably least computationally
+	expensive as well. if norm1=(x-avg)/std and norm2=(x-xmin)/(xmax-xmin)-0.5, then
+	they're both linearly scaling the data nearly identically, just to different
+	scales.
 = 190211 =======================================================================
 at about page 99, and have been able to work out the error update equation. next
 	is to actually implement it.
