@@ -61,6 +61,10 @@ def __getSysInfo__():
 # def __getSysInfo__
 (OSVERSION,PYVERSION) = __getSysInfo__()
 
+def getlist(rec=False,files=True,ext=''):
+    ''' this function is implemented as alias for "dir". use that function. '''
+    return dir(rec,files,ext)
+
 def dir(rec=False,files=True,ext=''):
     '''
     Objective: Emulate ls / dir command to be cross platform and return as a
