@@ -13,6 +13,16 @@ delete folder w/ stuff: rm -r DirName
 copy entire folder: --- cp -r /pathTo/FOLDER /remote/destination/
 print to screen & file: ./somecommand | tee the/output/file.txt
 move entire folder: --- mv /path/to/FOLDER /remote/destination/
+read out targz file: -- tar -tf filename.tar.gz (add "v" for verbose output)
+
+quick targz flag help
+    c: create archive
+    f: to file (need filename)
+    t: list contents
+    v: be verbose (while listing)
+    x: extract archive
+    z: use gzip during operation
+
 clone into repo using ssh (rsa)
     1. copy in rsa key
     2. git clone git@github.com:EXAMPLE/REPO.git
