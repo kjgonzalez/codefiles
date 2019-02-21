@@ -1,4 +1,4 @@
 # files that will be generated constantly again and again
-*.aux
-*.log
-*.toc
+#*.aux
+# *.log
+# *.toc
