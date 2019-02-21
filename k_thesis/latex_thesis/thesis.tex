@@ -1,0 +1,171 @@
+\documentclass[11pt,twoside,a4paper,titlepage]{article}
+\usepackage[inner=3.0cm,outer=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage[pdftex]{graphicx}
+\usepackage[authoryear]{natbib}
+%\usepackage{subfig}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+\usepackage{setspace}
+%\usepackage{url}
+%\usepackage{listings}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage{color}
+%\usepackage{verbatim,framed} 
+
+\onehalfspacing %1.5-facher zeilenabstand
+
+\usepackage{fancyhdr}
+\fancyhf{}
+
+\title{{Das ist der Titel meiner Bachelor-Arbeit}}
+\author{Erika Musterfrau}
+\date{Jan 29th, 2018}
+
+\begin{document}
+
+\setlength{\parindent}{0pt}
+
+\input{title.tex}
+\cleardoublepage
+
+\pagestyle{fancy}
+
+\fancyhead[RO,LE]{Abstract}
+
+\input{abstract.tex}
+
+\newpage
+
+
+\fancyhead[RO,LE]{Contents}
+\tableofcontents
+\cleardoublepage
+
+\fancyhead[RO,LE]{\nouppercase{\leftmark}}
+\fancyfoot[RO,LE]{\thepage}
+
+\renewcommand{\headrulewidth}{0.5pt}
+
+\setcounter{page}{1}
+
+\newpage
+
+\section{Introduction}
+
+An interesting definition of artificial intelligence is given in \cite{Rich:MCG1983}, because it is independent from the current state of research. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. AI and object relational rules are discussed in \cite{Kaelbling:AAAI2001}. \\  
+
+\subsection{Alan Turing and the Turing Machine}
+
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.\\
+
+%\begin{figure}[htbp]
+%\centering 
+% \includegraphics[width=0.5\textwidth]{imgs/alan_turing.jpg} 
+% \caption{Alan Turing as a young student.\label{alan_turing}}
+%\end{figure}
+
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum.
+
+\subsection{Carl Friedrich Gauss and the Normal Distribution}
+
+The young Alan Turing is shown in Figure %\ref{alan_turing}. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.\\
+
+%\begin{figure}[htbp]
+%\centering 
+% \includegraphics[width=0.6\textwidth]{imgs/10-dm-schein.jpg} 
+% \caption{C. F. Gauss and the normal distribution on a german banknote.\label{10dm_schein}}
+%\end{figure}
+
+Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. The probability density function of the normal distribution is defined as follows:
+%\begin{align} \label{gaussian}
+%f(x) = \frac{1}{{\sigma \sqrt {2\pi } }}e^{-\tfrac{(x-\mu)^2}{2\sigma ^2 }}
+%\end{align}
+
+Carl-Friedrich Gauss is shown on the german banknote in Figure %\ref{10dm_schein}. You can find Equation \ref{gaussian} on the bank note as well. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum. sanctus sea sed takimata ut vero voluptua. est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur\\
+
+\section{Related Work}
+
+
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum. sanctus sea sed takimata ut vero voluptua. est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur\\
+
+%\begin{algorithm}
+%\begin{algorithmic}
+%
+%\STATE $S$ is an array of integer
+%\FOR {$i$ in $1:length(S)-1)$}
+%    \FOR {$j$ in $(i+1):length(S)$ }
+%        \IF {$S[i]> S[j]$}
+%            \STATE swap $S[i]$ and $S[j]$
+%        \ENDIF
+%    \ENDFOR
+%\ENDFOR
+%
+%\end{algorithmic}
+%\caption{Bubble sort algorithm}
+%\label{bubble_sort}
+%\end{algorithm}
+
+
+%The Bubblesort algorithm is shown in Algorithm \ref{bubble_sort}. It shouldn't be used for large arrays because bubblesort has a computation complexity of $\mathcal{O}(n^2)$ while there are sorting algorithms with a complexity $\mathcal{O}(n\log{}n)$. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.\\
+
+%\begin{center}
+%\begin{tabular}{|r|l|}
+%  \hline
+%  7C0 & hexadecimal \\
+%  3700 & octal \\ \cline{2-2}
+%  11111000000 & binary \\
+%  \hline \hline
+%  1984 & decimal \\
+%  \hline
+%\end{tabular}
+%\captionof{table}{A table with merged cells.}\label{mergedcells}
+%\end{center}
+
+%A table with merged cells is shown in Table \ref{mergedcells}. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum. sanctus sea sed takimata ut vero voluptua. est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur\\
+
+sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. 
+
+
+\subsection{Same Problem but Different Solution}
+
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum. sanctus sea sed takimata ut vero voluptua. est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur\\
+
+
+%\begin{center}
+%  \begin{tabular}{ | l | c | r }
+%    \hline
+%    1 & 2 & 3 \\ \hline
+%    4 & 5 & 6 \\ \hline
+%    7 & 8 & 9 \\
+%    \hline
+%  \end{tabular}
+%  \captionof{table}{A table with right side left open.}
+%\end{center}
+
+
+\section{Conclusion}
+
+Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, At accusam aliquyam diam diam dolore dolores duo eirmod eos erat, et nonumy sed tempor et et invidunt justo labore Stet clita ea et gubergren, kasd magna no rebum. sanctus sea sed takimata ut vero voluptua. est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur\\
+
+
+
+
+%%\nocite{*} % list all references
+%\cleardoublepage
+%\bibliographystyle{apalike}
+%\bibliography{references}
+%\fancyhead[RO,LE]{References}
+%\listoffigures
+%\listoftables
+%\fancyhead[RO,LE]{Listings}
+%\listofalgorithms
+%\cleardoublepage
+
+\end{document}
+% END OF MAIN DOCUMENT ==========================================================
+
+at this point, can write anything you want, so go ahead and keep whatever you like in this section.
+
