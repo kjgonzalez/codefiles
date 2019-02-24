@@ -1,0 +1,30 @@
+\pagenumbering{arabic}
+\section{Introduction}
+
+Hello world. This text is separated from the rest of the document in order to keep everything nice and clean. helps separate the formatting, compiling, and actual writing nice and separate. 
+
+For one, notice how all the annoying auto-generated latex files are kept in their own folder, and the body / information is kept neatly away. 
+
+\section{Structure}
+the basic structure goes like this:
+\begin{itemize} \itemsep=-1em
+    \item Project\_Folder\_Name/
+    \begin{itemize} 
+    %\itemsep=-0.5em
+        \item Latex/
+        \begin{itemize} 
+        %\itemsep=-0.5em
+            \item compile\_name.tex
+            \item (other latex compilation files)
+        \end{itemize}
+        \item m/
+        \begin{itemize} 
+        %\itemsep=-0.5em
+            \item (media files including .pdf, .png, etc.)
+        \end{itemize}
+        \item 00\_front\_matter.tex
+        \item 01\_main\_body.tex
+        \item 02\_bibliography.tex
+        \item 03\_appendices.tex
+    \end{itemize}
+\end{itemize} % list
