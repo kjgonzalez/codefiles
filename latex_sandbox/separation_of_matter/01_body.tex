@@ -3,17 +3,25 @@
 
 Hello world. This text is separated from the rest of the document in order to keep everything nice and clean. helps separate the formatting, compiling, and actual writing nice and separate. 
 
-For one, notice how all the annoying auto-generated latex files are kept in their own folder, and the body / information is kept neatly away. 
+For one, notice how all the annoying auto-generated latex files are kept in their own folder, and the body / information is kept neatly away. additionally, you can keep those files out of your git repo by simply creating a .gitignore file including all the following items:
+\newline \newline
+*.aux \newline
+*.log \newline
+*.pdf \newline
+*.synctex.gz \newline
+*.bbl \newline
+*.blg \newline
+
 
 \section{Structure}
 the basic structure goes like this:
-\begin{itemize} \itemsep=-1em
+\begin{itemize} 
+%\itemsep=-0.5em 
+% kjgnote: single itemsep works well for nested lists
     \item Project\_Folder\_Name/
     \begin{itemize} 
-    %\itemsep=-0.5em
         \item Latex/
         \begin{itemize} 
-        %\itemsep=-0.5em
             \item compile\_name.tex
             \item (other latex compilation files)
         \end{itemize}
