@@ -30,7 +30,6 @@ img=pil.open(klib.data.jpgpath)
 print('path:',klib.data.jpgpath)
 print('w,h:',img.size) # returns shape as a tuple in (width,height) format
 
-import ipdb; ipdb.set_trace()
 # flip / rotate / transpose an image
 img2=img.transpose(pil.FLIP_LEFT_RIGHT)
 plt.imshow(img2)
