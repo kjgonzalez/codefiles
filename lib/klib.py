@@ -319,3 +319,41 @@ def pyt(arr):
     b=sum([i*i for i in arr])
     return b**0.5
 #def pyt
+
+class DataHelp(object):
+    ''' Call this object when want to use a binary such as an image. This saves
+        space and effort on binaries on the repo without having to constantly
+        copy/paste new data in.
+    '''
+    def __init__(self):
+        pass
+
+    @property
+    def jpgpath(self):
+        ''' Absolute path to jpg file. should be cross-platform '''
+        path=os.path.abspath(os.path.join('data','baby.jpg'))
+        assert os.path.exists(path),'error,missing file: '+path
+        return path
+
+    @property
+    def jpgimg(self):
+        ''' Return jpg image as 3-channel numpy array, [0-255] uint8. This is
+            "success baby" image.
+        '''
+        return np.array(pil.open(self.jpgpath))
+
+    @property
+    def pngpath(self):
+        ''' Absolute path to png file. should be cross-platform '''
+        path=os.path.abspath(os.path.join('data','cvlogo.png'))
+        assert os.path.exists(path),'error,missing file: '+path
+        return path
+
+    @property
+    def pngimg(self):
+        ''' Return png image as 4-channel numppy array, [0-255] uint8. This is
+            open cv logo image.
+        '''
+        return np.array(pil.open(self.pngpath))
+data=DataHelp()
+# class Data
