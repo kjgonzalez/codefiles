@@ -27,6 +27,7 @@ Some sample operations that need to be understood and shown:
 import cv2
 import numpy as np
 import os
+import klib
 
 def qs(img,title='CLOSE WITH KEYBOARD'):
     cv2.imshow(title,img)
@@ -39,9 +40,10 @@ def qs(img,title='CLOSE WITH KEYBOARD'):
         #os.remove(ifile)
 
 # load image ###########################
-filename='orig.jpg'
+filename=klib.data.jpgpath
 img = cv2.imread(filename)
-print(img.shape)# print as (row,column,channels) format
+print('path:',filename)
+print('h,w,ch:',img.shape)# print as (row,column,channels) format
 
 # flip / rotate an image
 img2=cv2.flip(img,0) # 0 is up-down flip, 1 is left-right flip
@@ -104,7 +106,7 @@ crop2 = cropCentered(img,wide=505,height=505)
 
 # save an image back to disk
 qs(res_ratio)
-cv2.imwrite('out.jpg',res_ratio)
+# cv2.imwrite('out.jpg',res_ratio)
 
 # LEARNING ABOUT BLURS #####################################
 # blur helps remove noise
