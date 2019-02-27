@@ -1,9 +1,12 @@
 '''
 Author: Kris Gonzalez
-Objective: demonstrate how to read a single image from a tarball without creating an extracted copy
+Objective: demonstrate how to read a single image from a tarball without
+    creating an extracted copy. additionally, show how to generate a hash file
+    that can be used as a checksum when downloading from a server
 '''
 
 import tarfile
+import hashlib
 import numpy as np
 import PIL.Image as pil
 import matplotlib.pyplot as plt
@@ -27,6 +30,10 @@ print('files in tarball:',allFiles)
 ifile=tar.extractfile(allFiles[0])  # choose desired file and "extractfile"
 ipic=np.array(pil.open(ifile))      # can also use plt.imread
 plt.imshow(ipic),plt.show()
+
+# generate a hash file that can be used as a checksum
+hash=hashlib.md5(open(tarname,'rb').read()).hexdigest()
+print('hash / checksum:',hash)
 
 # once complete, delete tarball (save on having so many binaries)
 os.remove(tarname)
