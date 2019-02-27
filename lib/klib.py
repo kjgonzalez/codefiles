@@ -51,10 +51,10 @@ import sys
 import numpy as np
 from glob import glob
 import time
-# import winsound # kjg190227: this is not cross platform, leave in-function
 import functools
-import tkinter
-
+import PIL.Image as pil
+import tkinter # kjgnote: may not be that useful anymore
+# import winsound # kjg190227: this is not cross platform, leave in-function
 
 
 # FIRST, BEFORE ALL ELSE, CHECK VERSIONS OF OS AND PYTHON
@@ -326,12 +326,13 @@ class DataHelp(object):
         copy/paste new data in.
     '''
     def __init__(self):
+        self.basedir=os.path.dirname(__file__) # get abs path to lib
         pass
 
     @property
     def jpgpath(self):
         ''' Absolute path to jpg file. should be cross-platform '''
-        path=os.path.abspath(os.path.join('data','baby.jpg'))
+        path=os.path.abspath(os.path.join(self.basedir,'data','baby.jpg'))
         assert os.path.exists(path),'error,missing file: '+path
         return path
 
@@ -345,7 +346,7 @@ class DataHelp(object):
     @property
     def pngpath(self):
         ''' Absolute path to png file. should be cross-platform '''
-        path=os.path.abspath(os.path.join('data','cvlogo.png'))
+        path=os.path.abspath(os.path.join(self.basedir,'data','cvlogo.png'))
         assert os.path.exists(path),'error,missing file: '+path
         return path
 
