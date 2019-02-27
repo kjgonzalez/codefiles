@@ -36,11 +36,27 @@ In Windows:
 * as of 181008, will now always use 4 spaces as the tab
     delimiter. using a "hard tab" causes too many formatting
     headaches across different programs, platforms, etc.
-
 * because the following is useful but too compact to put into a function,
     here's how to sort a numpy array by i'th column: a[a[:,i].argsort()], and
     backwards: a[a[:,i].argsort()[::-1]]
+* will import all necessary modules at top instead of within each function /
+    class. this makes more sense from a usability perspective, and avoids
+    unecessarily importing each time a call is made.
+
 '''
+
+# INITIALIZATIONS ==============================================================
+import os
+import sys
+import numpy as np
+from glob import glob
+import time
+# import winsound # kjg190227: this is not cross platform, leave in-function
+import functools
+import tkinter
+
+
+
 # FIRST, BEFORE ALL ELSE, CHECK VERSIONS OF OS AND PYTHON
 def __getSysInfo__():
     ''' Get local computer info. Generally, should keep software OS and version
@@ -50,7 +66,6 @@ def __getSysInfo__():
         * OSVERSION (linux[0]/win[1]/mac[2]?)
         * PYVERSION (2/3)
     '''
-    import sys
     if('linux' in sys.platform):
         osver = 0
     elif('win' in sys.platform):
@@ -62,7 +77,7 @@ def __getSysInfo__():
 (OSVERSION,PYVERSION) = __getSysInfo__()
 
 def getlist(rec=False,files=True,ext=''):
-    ''' this function is implemented as alias for "dir". use that function. '''
+    ''' This function is implemented as alias for "dir". Use THAT function. '''
     return dir(rec,files,ext)
 
 def dir(rec=False,files=True,ext=''):
@@ -79,8 +94,6 @@ def dir(rec=False,files=True,ext=''):
     Output:
         * <list>: filepaths
     '''
-    import os
-    from glob import glob
     isf=os.path.isfile
     opj=os.path.join
     abp=os.path.abspath
@@ -99,8 +112,6 @@ def dir(rec=False,files=True,ext=''):
 # def dir
 
 def ping(ip_address):
-    import os
-    import time
     while(not os.system('ping {} -c 1'.format(ip_address))==0):
         print(stamp())
         time.sleep(5)
@@ -118,13 +129,12 @@ def ringbell(duration=0.15,freq=1300):
     '''
     if(OSVERSION==0):
         # using linux
-        import os
         msg=os.system('play --no-show-progress --null --channels 1 synth {} sine {}'.format(duration,freq))
         if(msg!=0):
             raise Exception("Program 'sox' not installed. Sound could not play")
     elif(OSVERSION==1):
         raise Exception ("Not implemented yet, please verify below code")
-        import winsound
+        import winsound # must leave this here, would not work on other platforms.
         winsound.Beep(freq,duration)
 # def ringbell
 
@@ -133,7 +143,6 @@ def stamp():
     >> print(stamp())
     2018Nov29-12:58:30
     '''
-    import time
     return time.strftime('%Y%b%d-%H:%M:%S',time.localtime(time.time()))
 # def stamp
 
@@ -142,8 +151,6 @@ def timestamper(pfunc):
         printed with a timestamp, which looks like:
         LOG: YYMMDD-HHmmSS
     '''
-    import time
-    import functools
     logstr='LOG: '+stamp()+'\n'
     @functools.wraps(pfunc)
     def wrapper_stamper(*args,**kwargs):
@@ -169,7 +176,6 @@ class Stopwatch:
     def tok(self):
         return self.time.time()-self.t1
     def __init__(self):
-        import time
         self.time=time
         self.tik()
 # class Stopwatch
@@ -187,7 +193,6 @@ def listContents(arr,ReturnAsNPArr=False):
     if(ReturnAsNPArr==False):
         return z
     else:
-        import numpy as np
         names=np.array([list(z.keys())],dtype='object').transpose()
         nums=np.array([list(z.values())],dtype='object').transpose()
     return np.column_stack((names,nums))
@@ -213,7 +218,6 @@ def pad(text,strLen,char=' ',side='L'):
 
 def clipin():
     ''' copy text from clipboard to a variable in python'''
-    import tkinter
     r=tkinter.Tk()
     r.withdraw()
     a=r.clipboard_get()
@@ -225,8 +229,7 @@ def clipout(a):
     '''copy text from variable in python to clipboard
     KJGNOTE: not functioning correctly in python3 (ubuntu side)
     '''
-    import Tkinter
-    r=Tkinter.Tk()
+    r=tkinter.Tk()
     r.withdraw()
     r.clipboard_clear()
     r.clipboard_append(a)
@@ -252,7 +255,6 @@ def InsInFilenames(txt,criterion='',loc=0):
         3. affect files in filtered list
         4. done.
     '''
-    import os
     a=os.listdir(os.curdir)
     b=[]
     if(criterion!=''):
@@ -267,7 +269,6 @@ def InsInFilenames(txt,criterion='',loc=0):
 def ListAllSubfolders():
     ''' Objective: list all subfolders in a directory
     '''
-    import os
     a=[]
     b=os.getcwd();
     for dirpath, dirnames, filenames in os.walk('.'):
