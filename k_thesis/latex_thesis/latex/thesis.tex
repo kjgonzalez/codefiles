@@ -1,0 +1,66 @@
+\documentclass[11pt,twoside,a4paper,titlepage]{article}
+\usepackage[inner=3.0cm,outer=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{url}
+\usepackage[pdftex]{graphicx}
+\usepackage[authoryear]{natbib}
+\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{setspace}
+\usepackage{url}
+\usepackage{listings}
+%\usepackage{algorithm} % kjg190221: seems to be giving problems even on ubuntu
+%\usepackage{algorithmic}
+\usepackage{color}
+\usepackage{verbatim,framed} 
+
+\onehalfspacing %1.5-facher zeilenabstand
+
+\usepackage{fancyhdr}
+\fancyhf{}
+
+\title{{XX ANOTHER WORKING TITLE HERE XX}}
+\author{Kristian Gonzalez}
+\date{XX FIXME XX}
+
+% Document Start ===============================================================
+\begin{document}
+
+% introductory pages (title, abstract, etc) ================
+\setlength{\parindent}{0pt}
+\input{../title.tex}
+\cleardoublepage
+\pagestyle{fancy}
+\fancyhead[RO,LE]{Abstract}
+\input{../abstract.tex}
+\newpage
+\fancyhead[RO,LE]{Contents}
+\tableofcontents
+\cleardoublepage
+\fancyhead[RO,LE]{\nouppercase{\leftmark}}
+\fancyfoot[RO,LE]{\thepage}
+\renewcommand{\headrulewidth}{0.5pt}
+\setcounter{page}{1}
+\newpage
+
+% body of document =========================================
+\input{../main_body.tex}
+% bibliography section =====================================
+
+\nocite{*} % list all references
+%\cleardoublepage
+\bibliographystyle{apalike}
+\bibliography{../references}
+%\fancyhead[RO,LE]{References}
+%\listoffigures
+%\listoftables
+%\fancyhead[RO,LE]{Listings}
+%\listofalgorithms
+%\cleardoublepage
+
+\end{document}
+% END OF MAIN DOCUMENT =========================================================
+
+at this point, can write anything you want, so go ahead and keep whatever you like in this section.
+

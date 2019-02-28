@@ -1,4 +1,5 @@
-\documentclass[11pt,twoside,a4paper,titlepage]{article}
+%\documentclass[11pt,twoside,a4paper,titlepage]{article}
+\documentclass[11pt,a4paper,titlepage]{article}
 \usepackage[inner=3.0cm,outer=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage[utf8]{inputenc}
 \usepackage{url}
@@ -17,41 +18,41 @@
 
 \onehalfspacing %1.5-facher zeilenabstand
 
-\usepackage{fancyhdr}
-\fancyhf{}
+%\usepackage{fancyhdr}
+%\fancyhf{}
 
-\title{{Das ist der Titel meiner Bachelor-Arbeit}}
-\author{Kristian Gonzalez hello}
-\date{XX FIXME XX}
+% \title{{XX ANOTHER WORKING TITLE HERE XX}}
+% \author{Kristian Gonzalez}
+% \date{XX FIXME XX}
 
 % Document Start ===============================================================
 \begin{document}
 
 % introductory pages (title, abstract, etc) ================
 \setlength{\parindent}{0pt}
-\input{title.tex}
-\cleardoublepage
-\pagestyle{fancy}
-\fancyhead[RO,LE]{Abstract}
-\input{abstract.tex}
-\newpage
-\fancyhead[RO,LE]{Contents}
-\tableofcontents
-\cleardoublepage
-\fancyhead[RO,LE]{\nouppercase{\leftmark}}
-\fancyfoot[RO,LE]{\thepage}
-\renewcommand{\headrulewidth}{0.5pt}
+\input{../title.tex}
+%\cleardoublepage
+%\pagestyle{fancy}
+% \fancyhead[RO,LE]{Abstract}
+% \input{../abstract.tex}
+%\newpage
+%\fancyhead[RO,LE]{Contents}
+% \tableofcontents
+% \cleardoublepage
+%\fancyhead[RO,LE]{\nouppercase{\leftmark}}
+%\fancyfoot[RO,LE]{\thepage}
+%\renewcommand{\headrulewidth}{0.5pt}
 \setcounter{page}{1}
-\newpage
+% \newpage
 
 % body of document =========================================
-\input{main_body.tex}
+\input{../main_body.tex}
 % bibliography section =====================================
 
 \nocite{*} % list all references
 %\cleardoublepage
 \bibliographystyle{apalike}
-\bibliography{references}
+\bibliography{../references}
 %\fancyhead[RO,LE]{References}
 %\listoffigures
 %\listoftables
