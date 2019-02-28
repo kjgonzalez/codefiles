@@ -13,25 +13,22 @@
 \usepackage{color}
 \usepackage{verbatim,framed} 
 
-\onehalfspacing %1.5-facher zeilenabstand
-
+\onehalfspacing
 
 % Document Start ===============================================================
 \begin{document}
 
 % introductory pages (title, abstract, etc) ================
-\input{../title.tex}
-
-% \setlength{\parindent}{10pt}
+\input{../proposal_title.tex}
 \setcounter{page}{1}
 
 % body of document =========================================
-\input{../main_body.tex}
+\input{../proposal_body.tex}
 % bibliography section =====================================
 
 \nocite{*} % list all references
-\bibliographystyle{apalike}
-\bibliography{../references}
+\bibliographystyle{plain} % if must use `apalike', then need a way to number refs
+\bibliography{../refs_190228}
 
 \end{document}
 % END OF MAIN DOCUMENT =========================================================
