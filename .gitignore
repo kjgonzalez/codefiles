@@ -4,7 +4,6 @@ catkin_ws/devel/
 *.pyc
 */__pycache__/
 *.gz
-latex_sandbox/*.pdf
 *.ods#
 # linux-side pdf
 py_sandbox/book_MakeYourOwnNeuralNetwork/BOOK_TariqRashid-MakeYourOwnNeuralNetwork.pdf

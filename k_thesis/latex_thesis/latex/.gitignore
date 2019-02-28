@@ -1,8 +1,8 @@
 # files that will be generated constantly again and again
-*.aux
-*.bbl
-*.blg
-*.log
-*.synctex.gz
-*.toc
-*.pdf
+/*.aux
+/*.bbl
+/*.blg
+/*.log
+/*.synctex.gz
+/*.toc
+/*.pdf

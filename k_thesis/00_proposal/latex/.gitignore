@@ -1,0 +1,7 @@
+# ignore all latex-based compilation items in current folder
+/*.aux
+/*.log
+/*.pdf
+/*.synctex.gz
+/*.bbl
+/*.blg
