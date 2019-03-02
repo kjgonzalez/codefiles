@@ -1,5 +1,8 @@
 = 190302 =======================================================================
 have reached page 143, now moving on to the mnist database.
+note: although have downloaded the 100-value mnist example, must also create 
+    helper function that can convert the labels into correct format (10-value 
+    array) and actual images into a numpy array (reshape the flattened array)
 
 
 = 190213 =======================================================================
