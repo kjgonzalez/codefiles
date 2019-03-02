@@ -358,3 +358,24 @@ class DataHelp(object):
         return np.array(pil.open(self.pngpath))
 data=DataHelp()
 # class Data
+
+def scale(arr,ymin=0.01,ymax=0.99):
+    ''' return a linearly scaled output of original array. follows simple
+        interpolation for each element in the array. xmin and xmax are the
+        min/max values of the original array. note: this is used instead of name
+        "map", as this is already taken.
+    INPUTS:
+        arr: original array. e.g. 3x3 array
+        ymin: minimum value for scaled output, default=0.01
+        ymax: maximum value for scaled output, default=0.99
+    OUTPUT:
+        yarray: scaled array with same shape.
+    '''
+    xmin=np.min(arr)
+    xmax=np.max(arr)
+    return (ymax-ymin)/(xmax-xmin)*(arr-xmin)+ymin
+
+
+
+
+# eof
