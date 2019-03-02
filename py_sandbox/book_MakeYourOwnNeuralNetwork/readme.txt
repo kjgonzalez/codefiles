@@ -1,3 +1,7 @@
+= 190302 =======================================================================
+have reached page 143, now moving on to the mnist database.
+
+
 = 190213 =======================================================================
 have reached Part 2, pg ~139, working to create own network
 
