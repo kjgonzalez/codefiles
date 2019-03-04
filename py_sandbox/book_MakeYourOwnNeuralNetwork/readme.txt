@@ -1,4 +1,8 @@
 = 190302 =======================================================================
+have reached pg 158, have been able to actually train the network on an image, 
+    and must now iterate through entire database and then test network.
+    
+= 190302 =======================================================================
 have reached page 143, now moving on to the mnist database.
 note: although have downloaded the 100-value mnist example, must also create 
     helper function that can convert the labels into correct format (10-value 
