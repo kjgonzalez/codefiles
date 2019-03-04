@@ -3,8 +3,8 @@ Author: Kris Gonzalez
 Date Created: 180509
 Objective: make simple python script to monitor network download / upload speed
 
-note: in the future, may care about which network 
-	connection am looking at. for now, will stick to 
+note: in the future, may care about which network
+	connection am looking at. for now, will stick to
 	ethernet.
 '''
 
@@ -14,7 +14,7 @@ from sys import argv
 ''' argument inputs:
 arg1: cycle period (float)
 arg2: number of cycles (int)
-arg3: source (str)
+arg3: internet source (str)
 '''
 
 
@@ -29,14 +29,14 @@ def calculateRate(dt,source):
 	dat0 = getData(source)
 	time.sleep(dt)
 	dat1 = getData(source)
-	
+
 	t0 = dat0[0]
 	t1 = dat1[0]
 	d0 = dat0[1]
 	d1 = dat1[1]
 	u0 = dat0[2]
 	u1 = dat1[2]
-	
+
 	# t0=1.0
 	# t1=2.0
 	# d0=5.0
@@ -48,15 +48,16 @@ def calculateRate(dt,source):
 	return (rateDn,rateUp)
 
 if(len(argv)<2):
-	print 'no input arg'
+	print 'no "internet source" input arg, using default values'
 	s = 1.0
 	n = 100
 	source='Ethernet'
+	
 else:
 	s = float(argv[1])
 	n = int(argv[2])
 	source = argv[3]
-	print 'Collecting data every',s,'seconds,', n,'times, from',source,'. down/up in Kb/s'
+	print 'Collecting data every',s,'seconds,', n,'times, from',source,'. tuple of (down,up) speeds in Kb/s'
 
 for i in range(n):
 	print calculateRate(s,source)
