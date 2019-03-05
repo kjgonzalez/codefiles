@@ -1,3 +1,9 @@
+= 190305 =======================================================================
+have reached pg 163, and have successfully trained and tested a neural network! 
+    it's a small network, but seems to do nicely on the mnist data. 
+next up is to make small improvements, and once this book is complete, will 
+    return to working on more complex networks, such as those with CNN's and 
+    detection tasks, rather than just classification.
 = 190302 =======================================================================
 have reached pg 158, have been able to actually train the network on an image, 
     and must now iterate through entire database and then test network.
