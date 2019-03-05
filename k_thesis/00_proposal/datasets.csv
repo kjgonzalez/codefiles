@@ -1,0 +1,29 @@
+Datasets for autonomous driving,,,,,,,
+note: all data as of 190305,,,,,,,
+name,No. Imgs,2D BB?,3D BB?,has stereo?,has lidar?,class count: cars,more info
+berkeley deep drive,100000,yes,,,,???,
+baidu apolloscape,1000000,yes,,,,175000,
+comma AI dataset,20000000,,,,,???,
+oxford robotic car,,???,???,yes,yes,???,
+cityscapes,20000,,,,,???,
+kitti dataset,8000,yes,yes,yes,yes,28k,http:// www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=2d
+ford campus vision & lidar,???,???,???,no,yes,???,
+motion based seg & recognition,???,yes,???,???,no?,???,http://mi.eng.cam.ac.uk/research/projects/VideoRec/CamVid/
+tuSimple,10000,yes,,,,,Focused on lane detection and speed estimation. http://benchmark.tusimple.ai/#/
+CMU visual localization,???,???,???,???,???,???,Focused on localization. http:// 3dvis.ri.cmu.edu/data-sets/localization
+ccsad,???,yes?,???,yes,???,???,focused on stereo data. 
+kul belgium. Traffic signs,???,???,???,???,???,???,focuses on traffic signs
+mit age lab,,,,,,,
+lisa: intelligent & safe automobiles,,,,,,,
+udacity,,,,,,,
+nclt,,,,,,,
+diplecs,,,,,,,
+velodyne slam,,,,,,,
+daimler urban segmentation dataset,,,,,,,
+the uah-driveset,,,,,,,
+davis driving dataset 2017,,,,,,,
+bDD driving model,,,,,,,
+Mit-avt autnomous vehicle tech,,,,,,,
+,,,,,,,
+List sources (in order of reference),link,,,,,,
+public datasets for autonomous driving,,,,,,,
