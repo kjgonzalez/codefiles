@@ -104,7 +104,7 @@ Main commands that are needed:
 
 % SECTION: Basic Formatting ====================================================
 \section{Basic Formatting} \label{Basic Formatting}
-So here I am with my own text. Please see section \ref{Sectioning} on page \pageref{Basic Formatting} to blah blah blah. Yo, this color text is {\color{red}fire}. lol. Here's a list of font effects:
+So here I am with my own text. Please see section \ref{Basic Formatting} on page \pageref{Basic Formatting} to blah blah blah. Yo, this color text is {\color{red}fire}. lol. Here's a list of font effects:
 \begin{itemize}
 \itemsep=-0.5em % this is the correct way to reduce the spaces in a list... :)
 \item textit = \textit{italics (*sl for \textsl{slanted})}
@@ -251,6 +251,18 @@ Last test, can i go back to a table by refering to its caption? See Table \ref{M
 
 BUT DOES IT THOUGH?
 
+\subsection{Hyperlinks to outside sources}
+If you wanna link to somewhere outside the document, especially if you're just *listing* the link, it's a good idea to use \textbackslash href or \textbackslash url, like so: 
+
+\begin{enumerate} \itemsep=-0.5em
+\item use "\textbackslash usepackage \{ hyperref \}"
+\item include a link with \textbackslash href\{LinkHere\}\{Name\} or just \textbackslash url\{LinkHere\}
+\item example: \url{https://www.latex-tutorial.com/tutorials/hyperlinks/} .
+\item example2: \href{https://www.latex-tutorial.com/tutorials/hyperlinks/}{Special Name} .
+
+\end{enumerate}
+
+
 Lorem ipsum dolo. Today's date: \today.
 \subsection{super duper}
 \label{super duper}
@@ -263,10 +275,6 @@ Mauris iaculis id magna
 Mauris iaculis id magna
 \paragraph{another still}
 Mauris iaculis id magna. 
-
-\subsection{another3}
-Mauris iaculis id magna.
-
 
 
 % BIBLIOGRAPHY =================================================================
