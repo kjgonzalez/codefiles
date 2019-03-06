@@ -1,4 +1,21 @@
 % ==============================================================================
+\begin{center}
+    \large
+    \textbf{Master Thesis Proposal: Tradeoff Comparison between Stereo and Lidar Depth Estimation in 3D Object Detection}\\
+    \noindent \textbf{April-September 2019}\\
+    \normalsize 
+\end{center}
+
+\begin{tabular}{ll}
+    Student: & Kristian Gonzalez \\
+    & Ravensburg-Weingarten University of Applied Sciences\\
+    Supervisor: & Prof. Dr. Wolfgang Ertel \\
+    & Ravensburg-Weingarten University of Applied Sciences\\
+    Co-supervisor: & Prof. Dr. Stefan Elser\\
+    & Ravensburg-Weingarten University of Applied Sciences\\
+\end{tabular}
+
+% ==============================================================================
 \section{Introduction}
 Computer vision is a field that has grown explosively in the last few years, very much in thanks to the utilization of Convolutional Neural Networks, or CNN's, to accurately identify different kinds of information from raw image data. This capability has led to many different subfields of research, including 3D localization of objects using a variety of sensor setups. To that end, a few questions naturally arise: how many sensors are needed to accurately locate objects, and what trade-offs exist for using more or less sensors?
 
@@ -9,15 +26,15 @@ To that end, a paper is proposed to seek out a comparison between two specific s
 There are multiple questions to answer regarding what is possible in this project. To that end, a literature search is underway to answer:
 
 \begin{itemize} \itemsep=-0.5em
-\item What is the state of the art in current stereo vision-based object detection?
-\item What is the state of the art in current camera/lidar-based object detection?
-\item What dataset meets the required criteria for usage in this project?
+\item What is the state of the art in current stereo vision-based object detection? % kjg done
+\item What is the state of the art in current camera/lidar-based object detection?  % in progress
+\item What dataset meets the required criteria for usage in this project?			% in progress
 \item How are 3D bounding boxes evaluated, and what standard is used to obtain a score, such as precision, recall, and average precision?
 \end{itemize}
 
 % ==============================================================================
 \subsection{State of the Art: Stereo-Based Object Detection}
-To know the state of the art (SOTA) of stereo-based object detection, 
+To know the state of the art (SOTA) of stereo-based object detection, one may look at various benchmarks that use a single, common dataset to compare multiple networks and algorithms. The well-known Middlebury \cite{scharstein2014high,middlebury_leaderboard} dataset is a common benchmark, as well as the KITTI \cite{geiger_are_2012,kitti_leaderboard} 2015 Stereo benchmark. Additionally, there are even some aggregate lists, including the 2018 Robust Vision Challenge \cite{rvc_leaderboard} leaderboard. Looking at the aggregated Robust Vision Challenge leaderboard, last updated in December 2018, two top-performing networks are iResNet, holding 1st place, as well as PSMNet, in 4th place. What also makes these two stereo networks special is that both have publicly available repositories. Furthermore, PSMNet, or Pyramid Stereo-Matching Network, has simpler and fewer dependencies than iResNet. Lastly, PSMNet is (as of this writing) in the top 10 of the current KITTI 2015 leaderboard. Therefore, this project will use PSMNet's method to generate and use stereo disparity maps. 
 
 \subsection{State of the Art: Camera/Lidar-Based Object Detection}
 TextHere

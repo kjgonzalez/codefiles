@@ -12,25 +12,23 @@
 \usepackage{listings}
 \usepackage{color}
 \usepackage{verbatim,framed} 
+\usepackage{mathptmx} % this package makes the font look closest to Times New Roman
 
 \onehalfspacing
 
 % Document Start ===============================================================
 \begin{document}
-
-% introductory pages (title, abstract, etc) ================
-\input{../proposal_title.tex}
 \setcounter{page}{1}
 
 % body of document =========================================
 \input{../proposal_body.tex}
-% bibliography section =====================================
 
-\nocite{*} % list all references
+% bibliography section =====================================
+\nocite{*} % list all references (instead of only using those that are mentinoed)
 \bibliographystyle{plain} % if must use `apalike', then need a way to number refs
-\bibliography{../refs_190228}
+\bibliography{../refs_190306}
 
 \end{document}
-% END OF MAIN DOCUMENT =========================================================
+% end of main document =========================================================
 
 %eof
