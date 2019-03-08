@@ -4,7 +4,7 @@ Objective: control led via bluetooth.
 ASSUMPTIONS:
     * python script only runs on Windows
     * MUST use python3 on pc(otherwise have bytes/str type issue)
-
+    * kjg190308: works!
 General steps: 
 1. run python script, send [w,a,s,d] over BT (bytes)
 2. bt receives, sends comm to teensy, teensy changes led state
