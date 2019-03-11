@@ -37,7 +37,7 @@ In the field of autonomous driving, a ``typical" sensor system may include the f
 
 Because of this sensor complexity, this paper proposes to seek out a more streamlined approach by primarily utilizing stereo vision to create 3D bounding box proposals and estimates. The current norm in the field leans heavily towards using lidar-based networks (typically nets that use some combination of camera and lidar information), while this paper instead asks: can stereo disparity maps provide a competitive alternative by using methods adapted from lidar networks? It must be acknowledged at the start of this proposal that lidar sensors do typically provide more accurate distance measurements by virtue of directly measuring the environment, but not without downsides. Lidar technology is typically expensive (although this price is decreasing), and has difficulty with reflective surfaces. Therefore, the aim of this paper is not to obtain better 3D object detection than lidar, but to demonstrate stereo vision's competitiveness. 
 
-To that end, this paper proposes a novel method of using stereo disparity maps to localize objects. A modified stereo depth estimation network, Pyramid Stereo Matching Network (PSMnet), will be used to generate a stereo image, which will then be projected to 3D point space and fed into a well-known point network, Frustum Point Net.
+To that end, this paper proposes a novel method of using stereo disparity maps to localize objects. A modified stereo depth estimation network, Pyramid Stereo Matching Network (PSMnet), will be used to generate a stereo image, which will then be projected to 3D point space and fed into a well-known point network, Frustum Point Net (FPnet).
 
 
 \section{Related Work}
@@ -46,7 +46,14 @@ delme: things to talk about:
 	different kinds of stereo networks / methods
 	different 3D bounding box networks (non-stereo) \\
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-TextHere
+A variety of networks exist that estimate 3-dimensionsal bounding boxes, including Frustum PointNet, which is to be modified in this paper. FPnet takes a three step approach, which includes: ``traditional" 2D object detection, 3D segmentation, and amodal estimation. This is demonstrated below in figure xx, reproduced from the original paper.
+\begin{figure}[h] % h = "approx here", {h,t,b}
+    \includegraphics[width=1\textwidth]{m/placeholder.png}
+    \caption{Reproduced image of general FPnet steps. First, 2D object detection locates an image and creates a "frustum" (or cone) of the valid lidar point cloud. Next, this reduced set of points segmented in the 3D space, by removing the fore- and background points. Finally, an estimate of the remaining points is made about the object's size and orientation to generate a bounding box.}
+% \label{figure-parking}
+\end{figure}
+
+
 
 \section{Proposed Solution}
 delme: things to talk about: 
