@@ -29,7 +29,7 @@ Computer vision is a field that has grown explosively in the last few years, ver
 In the field of autonomous driving, a ``typical" sensor system may include the following: forward facing camera, a complimentary second camera for stereo image generation, an IMU (inertial measurement unit), a lidar sensor (either a single sensor on the top or one at the front \& back of the vehicle), a forward-facing radar, and possibly other cameras facing various directions. 
 
 %kjgnote: need examples: 
-%KITTI dataset: http://www.cvlibs.net/publications/Geiger2013IJRR.pdf
+%kitti dataset: http://www.cvlibs.net/publications/Geiger2013IJRR.pdf
 %apolloscape: https://arxiv.org/pdf/1803.06184.pdf
 %Berkeley deep drive: https://bair.berkeley.edu/blog/2018/06/18/bdd-update/
 %robotcar: https://robotcar-dataset.robots.ox.ac.uk/images/robotcar_ijrr.pdf
@@ -46,13 +46,38 @@ delme: things to talk about:
 	different kinds of stereo networks / methods
 	different 3D bounding box networks (non-stereo) \\
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Convolutional Networks Using Point Clouds}
 A variety of networks exist that estimate 3-dimensionsal bounding boxes, including Frustum PointNet, which is to be modified in this paper. FPnet takes a three step approach, which includes: ``traditional" 2D object detection, 3D segmentation, and amodal estimation. This is demonstrated below in figure xx, reproduced from the original paper.
 \begin{figure}[h] % h = "approx here", {h,t,b}
-    \includegraphics[width=1\textwidth]{m/placeholder.png}
+    \includegraphics[width=1\textwidth]{m/fpnet_steps.png}
     \caption{Reproduced image of general FPnet steps. First, 2D object detection locates an image and creates a "frustum" (or cone) of the valid lidar point cloud. Next, this reduced set of points segmented in the 3D space, by removing the fore- and background points. Finally, an estimate of the remaining points is made about the object's size and orientation to generate a bounding box.}
 % \label{figure-parking}
 \end{figure}
 
+
+The first point net to successfully implement this approach was the aptly-named "Pointnet" \cite{qi2017pointnet}, which focused on working with point cloud data in its native format, rather than transform the data to 3D voxel grids or views. This approach provides some clear advantages over networks like Voxnet \cite{maturana2015voxnet}, which relies on creating a three-dimensional occupancy grid requiring a reference frame and given resolution. Though creating volumetric or 3D CNN's created an initial approach, they are limited by data sparsity and computation cost. By contrast, the original Pointnet and subsequent FPnet are designed to work with a point cloud's inherent properties, paraphrased from \cite{qi2017pointnet}: 
+\begin{itemize} \itemsep=-0.5em
+    \item Unordered: point clouds are essentially an undordered set of vectors containing \textit{x,y,z} coordinates, among other information.
+    \item Point interaction: because the points come from euclidean space, neighboring points form a meaningful group, so any network must be able to represent the "local structures" of a subset of points.
+    \item Invariance under transformation: some simple transformations, such as rotation, translation, or scaling, do not change the inherent category the object belongs to, such as a car or plane.
+\end{itemize}
+
+Using multiple views is another approach taken to tackle point cloud data. In practice, multiview CNN's project 3D point clouds onto 2D planes, then apply 2D CNN's for classification. However, this rapidly increases in copmlexity when extending the usage to understanding or shape completion. 
+
+\subsection{Using CNN's to Generate Stereo Disparity Maps}
+Creating a dispartity map by use of two cameras, or stereo matching,has its roots in finding a matching pixel between two cameras to understand its distance away from the cameras by use of epipolar geometry. Typically, an image similar to figure xx (reproduced from Hamzah and Ibrahim \cite{hamzah_literature_2016}) below is used to illustrate this. 
+
+\begin{figure}[h] % h = "approx here", {h,t,b}
+    \centering
+    \includegraphics[width=0.375\textwidth]{m/stereo_parallax.png}
+    \caption{Using trigonometry, a target at point P can be located on two image planes at their local points and estimated at a certain distance from the sensors.}
+    % \label{figure-parking}
+\end{figure}
+
+Creating a disparity map has its roots in mathematically rigorous approaches, typically starting with trigonometry and parallax to explain how distance may be estimated from two cameras separated by a known distance. This gives rise to the term stereo matching. Ibraim and Hamzah \cite{hamzah_literature_2016} present a comprehensive but not exhaustive survey on existing algorithms, many of which used only a CPU for their calculations. However, as also stated, the "number of calculations required increases with an increasing number of pixels", making the matching problem computationally complex. 
+
+\subsection{Using Stereo Disparity Maps and CNN's for 3D Object Detection}
 
 
 \section{Proposed Solution}
