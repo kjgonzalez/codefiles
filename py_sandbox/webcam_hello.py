@@ -15,7 +15,6 @@ else:
 	exit()
 
 cap = cv2.VideoCapture(vidsrc)
-
 while(True):
 	# Capture frame-by-frame
 	ret, frame = cap.read()
