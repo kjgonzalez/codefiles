@@ -17,35 +17,25 @@
 
 % body section =================================================================
 
+% intro ========================================================================
 \section{Introduction}
-delme: things to talk about:
-	a little about computer vision
-	what are typical issues in field
-	what is main problem?
-	small sample of solution (to be intro'd later) \\
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%delme: things to talk about:
+%	a little about computer vision
+%	what are typical issues in field
+%	what is main problem?
+%	small sample of solution (to be intro'd later) \\
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 Computer vision is a field that has grown explosively in the last few years, very much in thanks to the utilization of convolutional neural networks, or CNN's, to accurately identify different kinds of information from raw image data. This capability has led to many different sub-fields of research, including 3D localization of objects using a variety of sensor setups. In having a branching set of possible sensor setups, a few questions naturally arise: how many sensors are needed to accurately locate objects, and how competitive are systems that do not directly take distance measurements to localize objects? 
 
-In the field of autonomous driving, a ``typical" sensor system may include the following: forward facing camera, a complimentary second camera for stereo image generation, an IMU (inertial measurement unit), a lidar sensor (either a single sensor on the top or one at the front \& back of the vehicle), a forward-facing radar, and possibly other cameras facing various directions. 
-
-%kjgnote: need examples: 
-%kitti dataset: http://www.cvlibs.net/publications/Geiger2013IJRR.pdf
-%apolloscape: https://arxiv.org/pdf/1803.06184.pdf
-%Berkeley deep drive: https://bair.berkeley.edu/blog/2018/06/18/bdd-update/
-%robotcar: https://robotcar-dataset.robots.ox.ac.uk/images/robotcar_ijrr.pdf
-%(kjgnote: will omit others, i think the point gets across)
+In the field of autonomous driving, a ``typical" sensor system may include any combination of the following: forward facing camera, a complimentary second camera for stereo image generation, an IMU (inertial measurement unit), a lidar sensor (either a single sensor on the top or one at the front \& back of the vehicle), a forward-facing radar, and possibly other cameras facing various directions. The KITTI dataset \cite{geiger_are_2012} features one lidar sensor with multiple cameras; the Oxford RobotCar \cite{maddern_1_2017}, which focuses on driving through a similar area multiple times, especially contains two lidar sensors (front and rear); finally, some datasets such as Apolloscape \cite{huang_apolloscape_2018} or Berkeley Deep Drive \cite{yu_bdd100k:_2018} obtain large amounts of RGB data, with less of a focus on lidar or stereo imaging. 
 
 Because of this sensor complexity, this paper proposes to seek out a more streamlined approach by primarily utilizing stereo vision to create 3D bounding box proposals and estimates. The current norm in the field leans heavily towards using lidar-based networks (typically nets that use some combination of camera and lidar information), while this paper instead asks: can stereo disparity maps provide a competitive alternative by using methods adapted from lidar networks? It must be acknowledged at the start of this proposal that lidar sensors do typically provide more accurate distance measurements by virtue of directly measuring the environment, but not without downsides. Lidar technology is typically expensive (although this price is decreasing), and has difficulty with reflective surfaces. Therefore, the aim of this paper is not to obtain better 3D object detection than lidar, but to demonstrate stereo vision's competitiveness. 
 
 To that end, this paper proposes a novel method of using stereo disparity maps to localize objects. A modified stereo depth estimation network, Pyramid Stereo Matching Network (PSMnet), will be used to generate a stereo image, which will then be projected to 3D point space and fed into a well-known point network, Frustum Point Net (FPnet).
 
 
+% related work =================================================================
 \section{Related Work}
-delme: things to talk about:
-	existing 3D bounding box networks that use stereo
-	different kinds of stereo networks / methods
-	different 3D bounding box networks (non-stereo) \\
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Convolutional Networks Using Point Clouds}
 A variety of networks exist that estimate 3-dimensionsal bounding boxes, including Frustum PointNet, which is to be modified in this paper. FPnet takes a three step approach, which includes: ``traditional" 2D object detection, 3D segmentation, and amodal estimation. This is demonstrated below in figure xx, reproduced from the original paper.
@@ -70,47 +60,98 @@ Creating a dispartity map by use of two cameras, or stereo matching,has its root
 
 \begin{figure}[h] % h = "approx here", {h,t,b}
     \centering
-    \includegraphics[width=0.375\textwidth]{m/stereo_parallax.png}
+    \includegraphics[width=0.35\textwidth]{m/stereo_parallax.png}
     \caption{Using trigonometry, a target at point P can be located on two image planes at their local points and estimated at a certain distance from the sensors.}
     % \label{figure-parking}
 \end{figure}
 
-Ibraim and Hamzah \cite{hamzah_literature_2016} present a comprehensive but not exhaustive survey on existing algorithms, several of which used only a CPU for their calculations. However, as also stated, the "number of calculations required increases with an increasing number of pixels", making the matching problem computationally complex. 
+Ibraim and Hamzah \cite{hamzah_literature_2016} present a comprehensive but not exhaustive survey on existing algorithms, several of which used only a CPU for their calculations. However, as also stated, the "number of calculations required increases with an increasing number of pixels", making the matching problem computationally complex. Of course, any discussion of stereo correspondence algorithms warrants mention of the four classical steps of stereo matching, per \cite{scharstein2002taxonomy}: matching cost computation, aggregation, optimization, and refinement.
 
-To know the state of the art (SOTA) of stereo disparity map creation, one may look at various benchmarks that use a single, common dataset to compare multiple networks and algorithms. The well-known Middlebury \cite{scharstein2014high,middlebury_leaderboard} dataset is a common benchmark, as well as the KITTI \cite{geiger_are_2012,kitti_leaderboard} 2015 Stereo benchmark. Additionally, there are even some aggregate lists, including the 2018 Robust Vision Challenge \cite{rvc_leaderboard} leaderboard. Looking at the aggregated Robust Vision Challenge leaderboard, last updated in December 2018, two top-performing networks are iResNet, holding 1st place, as well as PSMnet (Pyramid Stereo Matching network), in 4th place. What also makes these two stereo networks special is that both have publicly available repositories. Furthermore, PSMnet, or Pyramid Stereo-Matching Network, has simpler and fewer dependencies than iResNet. Lastly, PSMnet is (as of this writing) in the top 10 of the current KITTI 2015 stereo vision challenge leaderboard. This already qualifies PSMnet as one of the better options, but there are also conceptual reasons that it performs best. 
+To know the state of the art (SOTA) of stereo disparity map creation, one may look at various benchmarks that use a single, common dataset to compare multiple networks and algorithms. The well-known Middlebury \cite{scharstein2014high,middlebury_leaderboard} dataset is a common benchmark, as well as the KITTI \cite{geiger_are_2012,kitti_leaderboard} 2015 Stereo benchmark. Additionally, there are even some aggregate lists, including the 2018 Robust Vision Challenge \cite{rvc_leaderboard} leaderboard. Looking at the aggregated Robust Vision Challenge leaderboard, last updated in December 2018, two top-performing networks are iResNet, holding 1st place, as well as PSMnet (Pyramid Stereo Matching network), in 4th place. What also makes these two stereo networks special is that both have publicly available repositories. Furthermore, PSMnet, or Pyramid Stereo-Matching Network, has simpler and fewer dependencies than iResNet. Lastly, PSMnet is (as of this writing) in the top 10 of the current KITTI 2015 stereo vision challenge leaderboard. 
+
+PSMnet itself is comprised of two main modules, as stated by the authors: spatial pyramid pooling and a 3D CNN. 
 
 
-kjgnote: need to explain WHY using psmnet is the best option! 
-some simple reasons
-* performs best in kitti dataset, middlebury, robust vision challenge, etc.
-* what makes it better than perhaps iResNet or CBMV, from a methodology perspective?
-* 
+%This already qualifies PSMnet as one of the better options, but there are also conceptual reasons that it performs best. 
+%
+%
+%kjgnote: need to explain WHY using psmnet is the best option! 
+%some simple reasons
+%* performs best in kitti dataset, middlebury, robust vision challenge, etc.
+%* what makes it better than perhaps iResNet or CBMV, from a methodology perspective?
+%* 
 
 \subsection{Using Stereo Disparity Maps and CNN's for 3D Object Detection}
-kjgnote: need some examples of networks that have been developed for stereo-based 3D localizations should check a few sources, including: 
-* kitti dataset
-* oxford robotcar
-* cityscapes
-* what other benchmarks are there?
-
-from kitti benchmark:
-* Stereo R-CNN
+%kjgnote: need some examples of networks that have been developed for stereo-based 3D localizations should check a few sources, including: 
+%* kitti dataset
+%* oxford robotcar
+%* cityscapes
+%* what other benchmarks are there?
+%
+%from kitti benchmark:
+%* Stereo R-CNN
 
 
 
 Alongside point cloud-based point nets, stereo-based CNN's have also been used and developed to localize objects in three-dimensional space. Several have been driven by the desire to reduce complexity in a system that would depend on expensive lidar or its complex data structure (citation needed xx). Some stereo-based detection networks are created to address the problem of utilizing an active sensor for detection, which would not scale well in applications such as autonomous driving or swarms of robots cooperating.
 
+% proposal =====================================================================
 \section{Proposed Solution}
-delme: things to talk about: 
-	what is your general approach
-	how is each part to be prepared
-	how will results be verified?
-	what are your expected risks?
-	what is expected timeline of project \\
-% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-TextHere
+%delme: things to talk about: 
+%	what is your general approach
+%	how is each part to be prepared
+%	how will results be verified?
+%	what are your expected risks?
+%	what is expected timeline of project \\
+%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Given the current state of 3D localization using stereo vision, as well the opportunity it presents, this paper proposes to investigate taking a new approach on 3D localization using stereo data. The key idea is to use inspiration from Frustum Pointnet, taking a point cloud and working with that data in 3D space rather than 2D space, and extend this to stereo data. Using an appropriate transform, disparity data that is projected onto the 2D image plane can be moved to 3D space, and treated as a point cloud. With this pseudo-point cloud, generated from a best-in-class stereo algorithm such as Pyramid Stereo Matching, Frustum Pointnet will be trained and evaluated on its performance with this new data input. 
+Naturally, there are several moving components in this idea, and each must be addressed: 
+\begin{itemize}\itemsep=-0.5em
+    \item Obtaining stereo disparity maps from PSMnet
+    \item Transforming between lidar data and stereo data
+    \item Feeding this data into FPnet
+    \item Evaluating performance on 3D bounding boxes
+    \item Overall Project Timeline
+\end{itemize}
+
+\subsection{Obtaining stereo disparity maps}
+In order to obtain stereo disparity maps, Pyramid Stereo Matching has been selected to output this data. The networks is easily one of the best in its class, and has openly available code. In fact, this network has already been downloaded, configured, and modularized as of the time of this writing. This means that the important first step of obtaining stereo images from the dataset has been completed. Additionally, this means that the network has been simplified down to a simple object that can be called: the loaded model is given a stereo image pair and returns an estimated disparity map. The model was trained following the instructions by the original authors: first it was trained from scratch on Freiburg SceneFlow data for xx epochs, then finetuned on KITTI 2015 stereo data for 300 epochs. This has thus produced a robust and ready-to-use solution for stereo imaging using the KITTI dataset. 
+
+\subsection{Transforming between Lidar Data and Stereo Data}
+The task of transforming stereo data into a point cloud (and perhaps the reverse as well) is also underway, and already has some initial results. There are some important steps required to transform a stereo image into something that can imitate a point cloud, but a side-by-side comparison of two similar images may provide some insight. There are technically two datasets being demonstrated below from KITTI benchmark, the stereo 2015 dataset and the 3D object detection dataset. As seen below in figure xx, there are some visual correlations between a transformed image (figure xx c) and the stereo ground truth (figure xx d).
 
 
+\begin{figure}[h]
+    \centering  
+    \subfigure[LHS image, Object Detection]{
+        \includegraphics[width=0.45\linewidth]{m/000286_lhs_objdet.png}}
+    \subfigure[LHS image, Stereo]{
+        \includegraphics[width=0.45\linewidth]{m/000132_10_lhs_stereo.png}}
+    \subfigure[Projected Lidar, Object Detection]{
+        \includegraphics[width=0.45\linewidth]{m/000286_disp_gen.png}}
+    \subfigure[Disparity Ground Truth, Stereo]{
+        \includegraphics[width=0.45\linewidth]{m/000132_10_disp_gt.png}}
+    \caption{Side-by-side comparison of similar images from different datasets and their respective depth images. Subfigure (c) was created by taking the record's lidar scan and projecting the points onto the image plane. By contrast, subfigure (d) is the stereo dataset record's ground truth image, and seems to have higher values for points that are closer. }
+\end{figure}
+
+This aspect of the project, while important, is expected to take some time to develop a suitable transformation function, but should feature simpler mathematics by comparison.
+
+\subsection{Feeding Data into FPnet}
+In order to modify the data going into Frustum Pointnet, there must be some understanding of how to interact with the original data. This step may take some iteration, but is expected to be understood within the first half of the thesis. The original author's repository for FPnet uses Tensorflow, different than the pytorch implementation of Stereo Pyramid Matching. This means that there will generally be some slowdown when converting from one format to another, but there is no backpropagation that will be performed from one network to the other. The primary idea here is that FPnet will receive either a stereo disparity map or a pseudo-point cloud that comes from a previously trained, fully functioning stereo generation network. Thus, FPnet will take the data as-is, and learn to estimte distance from these values.
+
+\subsection{Evaluating Performance on 3D Bounding Boxes}
+In order to properly evaluate the detections of the network's 3D bounding boxes, the well known methods of evaluating 2D bounding boxes must be adapted. This has already been investigated by and accomplished by (need source) those at the kitti dataset. For the KITTI benchmark 3D detection challenge, an evaluation method was developed and proposed by xx. Thus, this method will be followed to evaluate and compare performance of the network. 
+
+\subsection{Project Timeline}
+In order to meet all requirements while also satisfying educational program requirements, a proposed timeline is provided below. Notable dates here include the official start of the thesis, the final date of the thesis, including presentation and document turn-in.
+
+% kjgnote: "makebox" used in order to make an oversized-but-still-centered figure
+\begin{figure}[h] % ahh, h = "approx here", t = "top of page", b = "bottom of pg"
+    \makebox[\textwidth][c]{\includegraphics[scale=.85]{m/proposed_timeline.pdf}}
+    \caption{Proposed schedule of paper. Highlighted tasks are critical milestones. Numbers inside of gray cells indicate the number of weeks each individual task lasts.}
+% \label{figure-parking}
+\end{figure}
 
 
 
