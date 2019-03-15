@@ -14,8 +14,16 @@
 \usepackage{verbatim,framed} 
 \usepackage{mathptmx} % approximate Times New Roman
 %\titleformat{\subsubsection}[runin]{\bfseries}{}{}{}[.]
-
+\usepackage{hyperref} % necessary to create hyperlinks
 \onehalfspacing
+
+
+\usepackage{chngcntr} % enables per-section numbering of any captions
+\counterwithin{figure}{section} % per-section numbering, figures
+\counterwithin{table}{section} % per-section numbering, tables
+\counterwithin{equation}{section} % per-section numbering, equations
+
+
 
 % Document Start ===============================================================
 \begin{document}
@@ -25,9 +33,11 @@
 \input{../proposal_body.tex}
 
 % bibliography section =====================================
-\nocite{*} % list all references (instead of only using those that are mentinoed)
+%\nocite{*} % list all references (instead of only using those that are mentinoed)
 \bibliographystyle{plain} % if must use `apalike', then need a way to number refs
-\bibliography{../refs_190306}
+
+
+\bibliography{../refs_temp}
 
 \end{document}
 % end of main document =========================================================
