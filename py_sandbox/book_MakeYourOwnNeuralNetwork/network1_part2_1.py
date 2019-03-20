@@ -8,7 +8,7 @@ NOTES:
     * sigmoid function: y = 1/(1+exp(-x))
 '''
 import numpy as np
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import time
 
 class NeuralNetwork:

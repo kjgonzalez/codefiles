@@ -39,21 +39,27 @@ In Windows:
 * because the following is useful but too compact to put into a function,
     here's how to sort a numpy array by i'th column: a[a[:,i].argsort()], and
     backwards: a[a[:,i].argsort()[::-1]]
-* will import all necessary modules at top instead of within each function /
+* REJECTED: will import all necessary modules at top instead of within each function /
     class. this makes more sense from a usability perspective, and avoids
     unecessarily importing each time a call is made.
+* will return to putting modules within each function. this increases 
+    portability because not every function can be used across every platform. 
+    thus, don't want to shut out entire module to a single platform because of
+    this. only the most global and standard of modules are imported globally, 
+    INCLUDING numpy. from current perspective, serious computing would require
+    this module at the very least.
 
 '''
 
 # INITIALIZATIONS ==============================================================
-import os
+import os # only "standard" modules are imported here
 import sys
 import numpy as np
 from glob import glob
 import time
-import functools
-import PIL.Image as pil
-import tkinter # kjgnote: may not be that useful anymore
+import functools # not sure if this is standard
+# import PIL.Image as pil # not standard, must remove
+# import tkinter # not standard across versions #kjgnote: may not be that useful anymore
 # import winsound # kjg190227: this is not cross platform, leave in-function
 
 
@@ -111,13 +117,14 @@ def dir(rec=False,files=True,ext=''):
         return sub
 # def dir
 
-def ping(ip_address):
+def ping(ip_address='www.google.com'):
+    ''' check that an internet connection works'''
     while(not os.system('ping {} -c 1'.format(ip_address))==0):
         print(stamp())
         time.sleep(5)
-    ringbell()
+    # ringbell() # kjg190320: perhaps not necessary?
     time.sleep(0.01)
-    ringbell()
+    # ringbell() # perhaps not necessary?
     print('checker: connection works!')
 # def ping
 
@@ -218,6 +225,7 @@ def pad(text,strLen,char=' ',side='L'):
 
 def clipin():
     ''' copy text from clipboard to a variable in python'''
+    import tkinter
     r=tkinter.Tk()
     r.withdraw()
     a=r.clipboard_get()
@@ -229,6 +237,7 @@ def clipout(a):
     '''copy text from variable in python to clipboard
     KJGNOTE: not functioning correctly in python3 (ubuntu side)
     '''
+    import tkinter
     r=tkinter.Tk()
     r.withdraw()
     r.clipboard_clear()
@@ -324,6 +333,7 @@ class DataHelp(object):
     ''' Call this object when want to use a binary such as an image. This saves
         space and effort on binaries on the repo without having to constantly
         copy/paste new data in.
+        KJG190320: uses non-standard module, may not work on all platforms.
     '''
     def __init__(self):
         self.basedir=os.path.dirname(__file__) # get abs path to lib
@@ -331,7 +341,7 @@ class DataHelp(object):
 
     @property
     def jpgpath(self):
-        ''' Absolute path to jpg file. should be cross-platform '''
+        ''' Absolute path to jpg file. path should be cross-platform '''
         path=os.path.abspath(os.path.join(self.basedir,'data','baby.jpg'))
         assert os.path.exists(path),'error,missing file: '+path
         return path
@@ -341,6 +351,7 @@ class DataHelp(object):
         ''' Return jpg image as 3-channel numpy array, [0-255] uint8. This is
             "success baby" image.
         '''
+        import PIL.Image as pil
         return np.array(pil.open(self.jpgpath))
 
     @property
@@ -355,6 +366,7 @@ class DataHelp(object):
         ''' Return png image as 4-channel numppy array, [0-255] uint8. This is
             open cv logo image.
         '''
+        import PIL.Image as pil
         return np.array(pil.open(self.pngpath))
 data=DataHelp()
 # class Data
