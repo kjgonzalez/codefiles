@@ -19,7 +19,6 @@ ASSUMPTIONS:
 #define p2a 5
 #define p2b 6
 
-
 void motor1(int vel){
     /* Receive command between [-255,255] to translate into magnitude & 
         direction of motor1 velocity. 
@@ -72,33 +71,34 @@ void loop(){
     char inp [3];
     // int inByte;
     int tdelay=40;
+    int speed = 200;
     if(Serial1.available()>0){
         
         // inByte=Serial1.read();
         Serial1.readBytes(inp,3);
         if(inp[0]=='w'){
             Serial.println("bt: w");
-            motor1(125);
-            motor2(125);
+            motor1(speed);
+            motor2(speed);
             delay(tdelay);
 
         }//if_w
         else if(inp[0]=='a'){
             Serial.println("bt: a");
             motor1(0);
-            motor2(125);
+            motor2(speed);
             delay(tdelay);
         }//if_a
         else if(inp[0]=='s'){
             Serial.println("bt: s");
-            motor1(-125);
-            motor2(-125);
+            motor1(-speed);
+            motor2(-speed);
             
             delay(tdelay);
         }//if_s
         else if(inp[0]=='d'){
             Serial.println("bt: d");
-            motor1(125);
+            motor1(speed);
             motor2(0);
             
             delay(tdelay);

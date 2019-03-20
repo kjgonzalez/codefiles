@@ -125,6 +125,6 @@ if(__name__=='__main__'):
         # import ipdb;ipdb.set_trace()
     # once the test set has been iterated through, get (%) correct as score:
     print('network performance:',sum(scorecard)/len(scorecard))
-
+    # import ipdb;ipdb.set_trace()
 
 # eof

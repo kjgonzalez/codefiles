@@ -22,6 +22,7 @@ class Buffer:
         self._L=length
         self._buf=[[i,None] for i in range(length)]
         self._k = 0 # pointer to latest location in buffer
+        self._has_reset=False
     # def __init__
     
     def __len__(self):
@@ -34,17 +35,19 @@ class Buffer:
         self._k+=1
         if(self._k==self._L):
             self._k=0 # reset pointer back
+            self._has_reset=True
         return 0 # status that all is ok
     # def toBuffer
     
-    @property
     def getBuffer(self):
         ''' Return values in buffer (oldest first), ignoring any indices that 
             haven't been written to yet. 
         '''
-        out=[self._buf[i][1] for i in range(self._k,self._L) if \
-            self._buf[i][1]!=None]+ \
+        if(self._has_reset):
+            out=[self._buf[i][1] for i in range(self._k,self._L)]+ \
                 [self._buf[i][1] for i in range(0,self._k)]
+        else:
+            out=[self._buf[i][1] for i in range(0,self._k)]
         return out
     # def buffer
     
