@@ -127,21 +127,21 @@ Naturally, there are several moving components in this idea, and each must be ad
 In order to obtain stereo disparity maps, Pyramid Stereo Matching has been selected to output this data. The networks is easily one of the best in its class, and has openly available code. In fact, this network has already been downloaded, configured, and modularized as of the time of this writing. This means that the important first step of obtaining stereo images from the dataset has been completed. Additionally, this means that the network has been simplified down to a simple object that can be called: the loaded model is given a stereo image pair and returns an estimated disparity map. The model was trained following the instructions by the original authors: first it was trained from scratch on Freiburg SceneFlow data for 10 epochs, then finetuned on KITTI 2015 stereo data for 300 epochs. This has thus produced a ready-to-use solution for stereo imaging using the KITTI dataset. 
 
 \subsection{Transforming between Lidar Data and Stereo Data}
-The task of transforming stereo data into a point cloud (and perhaps the reverse as well) is also underway, and already has some initial results. There are some important steps required to transform a stereo image into something that can imitate a point cloud, but a side-by-side comparison of two similar images may provide some insight. There are technically two datasets being demonstrated below from KITTI benchmark, the stereo 2015 dataset and the 3D object detection dataset. As seen below in figure \ref{stereo_comparison}, there are some visual correlations between a transformed image (c) and the stereo ground truth (d).
+The task of transforming stereo data into a point cloud (and perhaps the reverse as well) is also underway, and already has some initial results. There are some important steps required to transform a stereo image into something that can imitate a point cloud, but a side-by-side comparison of two similar images may provide some insight. There are technically two datasets being demonstrated below from KITTI benchmark, the stereo 2015 dataset and the 3D object detection dataset. As seen below in Figure \ref{stereo_comparison}, there are some visual correlations between a transformed image (c) and the stereo ground truth (d).
 
 
 \begin{figure}[ht]
     \centering  
-    \subfigure[LHS image, Object Detection]{
+    \subfigure[LHS image, Object detection dataset]{
         \includegraphics[width=0.45\linewidth]{m/000286_lhs_objdet.png}}
-    \subfigure[LHS image, Stereo]{
+    \subfigure[LHS image, Stereo dataset]{
         \includegraphics[width=0.45\linewidth]{m/000132_10_lhs_stereo.png}}
     \subfigure[Projected Lidar, Object Detection]{
         \includegraphics[width=0.45\linewidth]{m/000286_disp_gen.png}}
     \subfigure[Disparity Ground Truth, Stereo]{
         \includegraphics[width=0.45\linewidth]{m/000132_10_disp_gt.png}}
     \label{stereo_comparison}
-    \caption{Side-by-side comparison of similar images from different datasets and their respective depth images. Sub-figure (c) was created by taking the record's lidar scan and projecting the points onto the image plane. By contrast, sub-figure (d) is the stereo dataset record's ground truth image, and seems to have higher values for points that are closer. }
+    \caption{Side-by-side comparison of similar images from different datasets and their respective depth images. Sub-figure (c) was created by taking the record's lidar scan and projecting the points onto the image plane. By contrast, Sub-figure (d) is the stereo dataset record's ground truth image, and seems to have higher values for points that are closer. }
 \end{figure}
 
 This aspect of the project, while important, is expected to take some time to develop a suitable transformation function, but should feature simpler mathematics by comparison. The main task is not to identically match each pixel that lidar and stereo data share, but rather to reduce error as much as possible so that the difference between stereo and lidar performance is not due to the conversion between one format to the other.
