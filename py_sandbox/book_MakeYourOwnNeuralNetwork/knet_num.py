@@ -12,6 +12,7 @@ NOTES:
     * sigmoid function: y = 1/(1+exp(-x))
 '''
 import numpy as np
+import os
 # import matplotlib.pyplot as plt
 import time
 
@@ -27,7 +28,21 @@ class NeuralNetwork:
         # scipy.special.expit replacement
         self.activation_function = lambda x:1/(1+np.exp(-np.array(x))) 
 
-    def train(self,inputs_list,targets_list):
+    def saveWeights(self,filename='wts.npz'):
+        ''' Save weights to binary file. Will use numpy for simplicity and 
+            convenience. 
+            '''
+        np.savez(filename,wih=self.wih,who=self.who)
+        print('weights saved.')
+        
+    def loadWeights(self,filename='wts.npz'):
+        ''' Load weights from binary file. Using numpy. '''
+        z=np.load(filename)
+        self.wih=z['wih']
+        self.who=z['who']
+        print('weights loaded.')
+        
+    def train_one(self,inputs_list,targets_list):
         # train network
         # prepare input arguments
         inputs = np.array(inputs_list,ndmin=2).T # not sure why T or ndmin
@@ -55,7 +70,16 @@ class NeuralNetwork:
         self.who +=self.lr*np.dot( (output_errors * final_outputs * (1.0-final_outputs) ), np.transpose(hidden_outputs) )
         # update weights for links between input and hidden layers
         self.wih +=self.lr*np.dot( (hidden_errors * hidden_outputs *(1.0-hidden_outputs)), np.transpose(inputs)) 
-
+    
+    def train_full(self,dataset,epochs=1):
+        ''' Run complete training phase '''
+        for iepoch in range(epochs):
+            for idat in dataset:
+                nn.train_one(*idat)
+            # idat_loop
+        # iepoch_loop
+        print('training complete')
+    
     def query(self,inputs_list):
         # test network on something
         
@@ -110,13 +134,18 @@ if(__name__=='__main__'):
     # TRAINING PHASE =======================================
     # start of training (note: about 1130samples/second at 100 hidden nodes. 
     #   about 54s to train 60k)
-    t0=time.time()
-    for idat in ds_train:
-        nn.train(*idat)
-    time_train=time.time()-t0
-    print('time to train:',time_train)
-    print('number of training samples:',len(ds_train))
-    print('samples/second in training:',len(ds_train)/time_train)
+    if(os.path.exists('wts.npz')):
+        print('loading pretrained model')
+        nn.loadWeights()
+    else:
+        print("weights don't exist, training")
+        t0=time.time()
+        nn.train_full(ds_train)
+        time_train=time.time()-t0
+        print('time to train:',time_train)
+        print('number of training samples:',len(ds_train))
+        print('samples/second in training:',len(ds_train)/time_train)
+        nn.saveWeights()
     
     # TESTING PHASE ========================================
     # at this point, need to actually "score" the networkn=0
