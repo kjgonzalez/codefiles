@@ -42,13 +42,13 @@ In Windows:
 * REJECTED: will import all necessary modules at top instead of within each function /
     class. this makes more sense from a usability perspective, and avoids
     unecessarily importing each time a call is made.
-* will return to putting modules within each function. this increases 
-    portability because not every function can be used across every platform. 
+* will return to putting modules within each function. this increases
+    portability because not every function can be used across every platform.
     thus, don't want to shut out entire module to a single platform because of
-    this. only the most global and standard of modules are imported globally, 
+    this. only the most global and standard of modules are imported globally,
     INCLUDING numpy. from current perspective, serious computing would require
     this module at the very least.
-
+* as of 190321, will put classes after inits, before functions
 '''
 
 # INITIALIZATIONS ==============================================================
@@ -81,6 +81,98 @@ def __getSysInfo__():
     return (osver,sys.version_info.major)
 # def __getSysInfo__
 (OSVERSION,PYVERSION) = __getSysInfo__()
+
+class Stamper:
+    ''' wrapper for time function under following assumptions:
+        * don't care about sub-second precision
+        * want human-readable timestamp
+        * want easy conversion b/t string and float of timestamp
+    Example usage:
+    stamp=Stamper()
+    stamp.now
+        OUT: "2019Mar21-13:11:23"
+    stamp.toseconds(stamp.now())
+        OUT: 1553170283.0
+    stamp.tostamp(stamp.toseconds(stamp.now()))
+        OUT: "2019Mar21-13:11:23"
+    '''
+    def __init__(self):
+        self.tsf="%Y%b%d-%H:%M:%S" # time stamp format
+    def now(self):
+        ''' Return current time in string. note: decimal value is truncated, not
+            rounded.
+        '''
+        return time.strftime(self.tsf,time.localtime(time.time()))
+    def toseconds(self,ts_str):
+        ''' convert string timestamp to epoch seconds '''
+        return time.mktime(time.strptime(ts_str,self.tsf))
+    def tostamp(self,ts_float):
+        ''' convert epoch seconds to string timestamp '''
+        return time.strftime(self.tsf,time.localtime(ts_float))
+# class Stamper
+
+class Stopwatch:
+    ''' Stopwatch: Basic class that logs a time when it's created. Can also
+        restart timer with function call "start", and can get the elapsed time
+        with function "lap". Note that all values are in seconds.
+
+        Example:
+        from klib import Stopwatch
+        sw=Stopwatch()
+        (some code)
+        print(sw.lap())
+            OUT: 5.2087955
+    '''
+    def __init__(self):
+        self.t1=time.time()
+    def start(self):
+        self.t1=time.time()
+    def lap(self):
+        return time.time()-self.t1
+
+# class Stopwatch
+
+class DataHelp(object):
+    ''' Call this object when want to use a binary such as an image. This saves
+        space and effort on binaries on the repo without having to constantly
+        copy/paste new data in.
+        KJG190320: uses non-standard module, may not work on all platforms.
+    '''
+    def __init__(self):
+        self.basedir=os.path.dirname(__file__) # get abs path to lib
+        pass
+
+    @property
+    def jpgpath(self):
+        ''' Absolute path to jpg file. path should be cross-platform '''
+        path=os.path.abspath(os.path.join(self.basedir,'data','baby.jpg'))
+        assert os.path.exists(path),'error,missing file: '+path
+        return path
+
+    @property
+    def jpgimg(self):
+        ''' Return jpg image as 3-channel numpy array, [0-255] uint8. This is
+            "success baby" image.
+        '''
+        import PIL.Image as pil
+        return np.array(pil.open(self.jpgpath))
+
+    @property
+    def pngpath(self):
+        ''' Absolute path to png file. should be cross-platform '''
+        path=os.path.abspath(os.path.join(self.basedir,'data','cvlogo.png'))
+        assert os.path.exists(path),'error,missing file: '+path
+        return path
+
+    @property
+    def pngimg(self):
+        ''' Return png image as 4-channel numppy array, [0-255] uint8. This is
+            open cv logo image.
+        '''
+        import PIL.Image as pil
+        return np.array(pil.open(self.pngpath))
+data=DataHelp()
+# class Data
 
 def getlist(rec=False,files=True,ext=''):
     ''' This function is implemented as alias for "dir". Use THAT function. '''
@@ -119,8 +211,9 @@ def dir(rec=False,files=True,ext=''):
 
 def ping(ip_address='www.google.com'):
     ''' check that an internet connection works'''
+    s=Stamper();now=s.now
     while(not os.system('ping {} -c 1'.format(ip_address))==0):
-        print(stamp())
+        print(now())
         time.sleep(5)
     # ringbell() # kjg190320: perhaps not necessary?
     time.sleep(0.01)
@@ -145,47 +238,7 @@ def ringbell(duration=0.15,freq=1300):
         winsound.Beep(freq,duration)
 # def ringbell
 
-def stamp():
-    ''' Return current time in string format: YYYYMMMDD-HH:mm:SS
-    >> print(stamp())
-    2018Nov29-12:58:30
-    '''
-    return time.strftime('%Y%b%d-%H:%M:%S',time.localtime(time.time()))
-# def stamp
 
-def timestamper(pfunc):
-    ''' intended to wrap a print function or similar, which prepends text to be
-        printed with a timestamp, which looks like:
-        LOG: YYMMDD-HHmmSS
-    '''
-    logstr='LOG: '+stamp()+'\n'
-    @functools.wraps(pfunc)
-    def wrapper_stamper(*args,**kwargs):
-        pfunc(logstr,*args,**kwargs)
-    return wrapper_stamper
-# def timestamper
-
-class Stopwatch:
-    ''' Stopwatch: Basic class that logs a time when it's created. Can also
-        restart timer with function call "tik", and can get the elapsed time
-        with function "tok". Designed to be a bit similar to matlab functions.
-        Note that all values are in seconds.
-
-        Example:
-        >> from klib import Stopwatch as st
-        >> a=st()
-        >> (some code)
-        >> print(a.tok())
-        OUT: 5.2087955
-    '''
-    def tik(self):
-        self.t1=self.time.time()
-    def tok(self):
-        return self.time.time()-self.t1
-    def __init__(self):
-        self.time=time
-        self.tik()
-# class Stopwatch
 
 def listContents(arr,ReturnAsNPArr=False):
     ''' Take in a string list and return a dict or numpy array of
@@ -329,47 +382,7 @@ def pyt(arr):
     return b**0.5
 #def pyt
 
-class DataHelp(object):
-    ''' Call this object when want to use a binary such as an image. This saves
-        space and effort on binaries on the repo without having to constantly
-        copy/paste new data in.
-        KJG190320: uses non-standard module, may not work on all platforms.
-    '''
-    def __init__(self):
-        self.basedir=os.path.dirname(__file__) # get abs path to lib
-        pass
 
-    @property
-    def jpgpath(self):
-        ''' Absolute path to jpg file. path should be cross-platform '''
-        path=os.path.abspath(os.path.join(self.basedir,'data','baby.jpg'))
-        assert os.path.exists(path),'error,missing file: '+path
-        return path
-
-    @property
-    def jpgimg(self):
-        ''' Return jpg image as 3-channel numpy array, [0-255] uint8. This is
-            "success baby" image.
-        '''
-        import PIL.Image as pil
-        return np.array(pil.open(self.jpgpath))
-
-    @property
-    def pngpath(self):
-        ''' Absolute path to png file. should be cross-platform '''
-        path=os.path.abspath(os.path.join(self.basedir,'data','cvlogo.png'))
-        assert os.path.exists(path),'error,missing file: '+path
-        return path
-
-    @property
-    def pngimg(self):
-        ''' Return png image as 4-channel numppy array, [0-255] uint8. This is
-            open cv logo image.
-        '''
-        import PIL.Image as pil
-        return np.array(pil.open(self.pngpath))
-data=DataHelp()
-# class Data
 
 def scale(arr,ymin=0.01,ymax=0.99):
     ''' return a linearly scaled output of original array. follows simple
