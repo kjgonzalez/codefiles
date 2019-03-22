@@ -387,7 +387,11 @@ def scale(arr,ymin=0.01,ymax=0.99):
     xmax=np.max(arr)
     return (ymax-ymin)/(xmax-xmin)*(arr-xmin)+ymin
 
-
+def md5_hash(filename):
+    ''' return the md5 checksum of a file '''
+    import hashlib as hl
+    with open(filename,'rb') as f:
+        return hl.md5(f.read()).hexdigest()
 
 
 # eof
