@@ -82,6 +82,7 @@ def __getSysInfo__():
 # def __getSysInfo__
 (OSVERSION,PYVERSION) = __getSysInfo__()
 
+
 class Stamper:
     ''' wrapper for time function under following assumptions:
         * don't care about sub-second precision
