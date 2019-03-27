@@ -50,6 +50,11 @@ def threshold(arr,thresh=0.5):
     '''
     return [0 if(ival<thresh) else 1 for ival in arr]
 
+# at this point, create the datasets to use, for now will be randomly generated each time
+
+ntotal=10000
+ntrain= 8500
+# kjg190327: for some reason, hitting a problem with 'set' function while trying to make train and test sets...
 if(__name__=='__main__'):
     # show example of above functions
     a=-np.pi
