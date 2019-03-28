@@ -6,6 +6,9 @@ Objective: quick demo on some of the basic numpy matrix operations
 KJGNOTE: this module is pretty badass, not gonna lie.
 '''
 
+import sys
+assert sys.version_info[0]>2,'Please do not use py2.'
+
 import numpy as np
 
 x=np.linspace(0,6,100) # default gives vector (no orientation, 1D)
@@ -43,8 +46,28 @@ print('sorted by column1:\n',x_sort)
 x_revsort=x[x[:,1].argsort()[::-1]]
 print('reverse sorted by column1:\n',x_revsort)
 
+print('''kjg quick note on matrix multiplication: please note that the following 3
+    methods for multiplication are similar, but not 100% identical. in some very
+    rare cases, this may cause some numerical errors.''')
+a=np.random.rand(3,3)
+b=np.random.rand(3,3)
+c=np.random.rand(3,4)
+mm=np.matmul
+ans1=a.dot(b).dot(c)
+ans2=mm(a,mm(b,c))
+ans3=a@b@c # note: equivalent to ans1
 
+print('full precision')
+print('1&2: ',(ans1==ans2).all(),end=' | ') # false
+print('1&3: ',(ans1==ans3).all(),end=' | ') # true
+print('2&3: ',(ans2==ans3).all())           # false
 
-
+print('with rounding:')
+a1=np.round(ans1,6)
+a2=np.round(ans2,6)
+a3=np.round(ans3,6)
+print('1&2: ',(a1==a2).all(),end=' | ') # true
+print('1&3: ',(a1==a3).all(),end=' | ') # true
+print('2&3: ',(a2==a3).all())           # true
 
 # eof
