@@ -53,9 +53,10 @@ a=np.random.rand(3,3)
 b=np.random.rand(3,3)
 c=np.random.rand(3,4)
 mm=np.matmul
-ans1=a.dot(b).dot(c)
-ans2=mm(a,mm(b,c))
-ans3=a@b@c # note: equivalent to ans1
+
+ans1=a.dot(b).dot(c) # better
+ans2=mm(a,mm(b,c))   # good
+ans3=a@b@c           # best, but only for 3.5+. note: equivalent to ans1
 
 print('full precision')
 print('1&2: ',(ans1==ans2).all(),end=' | ') # false
