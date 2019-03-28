@@ -1,7 +1,7 @@
 '''
 Author: Kris Gonzalez
-DateCreated: 190320
-Objective: Improve final network created to be able to do new things.
+DateCreated: 190325
+Objective: use self built network for another task: approximating a cubic function in given range.
 
 Overall goals: 
     * save model to avoid retraining
@@ -156,7 +156,7 @@ if(__name__=='__main__'):
         nn.saveWeights(fp_wts)
     
     # TESTING PHASE ========================================
-    # at this point, need to actually "score" the networkn=0
+    # at this point, need to actually "score" the network
     t0=time.time()
     scorecard=[] # append 1 if right, 0 if wrong
     for idat in ds_test:

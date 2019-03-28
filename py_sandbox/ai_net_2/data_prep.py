@@ -54,7 +54,18 @@ def threshold(arr,thresh=0.5):
 
 ntotal=10000
 ntrain= 8500
-# kjg190327: for some reason, hitting a problem with 'set' function while trying to make train and test sets...
+idx=np.arange(ntotal)
+np.random.shuffle(idx) # note: shuffles in-place 
+set_train_idx=idx[:ntrain]
+set_test_idx =idx[ntrain:]
+
+x=np.linspace(-4,4,ntotal)
+y=x**3-x
+ds_total=np.column_stack((x,y)) # [Nx2] set of inputs/answers
+ds_train=ds_total[set_train_idx,:]
+ds_test =ds_total[set_test_idx, :]
+
+# finally, convert all values into network-readable format
 if(__name__=='__main__'):
     # show example of above functions
     a=-np.pi
