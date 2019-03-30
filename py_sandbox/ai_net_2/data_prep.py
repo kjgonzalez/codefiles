@@ -13,18 +13,19 @@ import numpy as np
 from klib import scale, pad
 
 def dec2bin(val):
-    ''' Take decimal value and return custom binary array of value between -4 
-        and 4. 
+    ''' Take decimal value and return custom binary array of value between -64 
+        and 64. 
     '''
-    assert val<=4.0 and val>=-4.0, "value out of range:"+str(val)
+    assert val<=64.0 and val>=-64.0, "value out of range:"+str(val)
     arr=[]
     # pos/negative
     if(val<0):
         arr.append(1)
     else:
         arr.append(0)
+    # magnitude of value
     val2=abs(int(round(val*100000,0)))
-    val3=pad(bin(val2)[2:],16,'0')
+    val3=pad(bin(val2)[2:],17,'0')
     arr+=[int(i) for i in val3]
     return arr
 
@@ -52,20 +53,7 @@ def threshold(arr,thresh=0.5):
 
 # at this point, create the datasets to use, for now will be randomly generated each time
 
-ntotal=10000
-ntrain= 8500
-idx=np.arange(ntotal)
-np.random.shuffle(idx) # note: shuffles in-place 
-set_train_idx=idx[:ntrain]
-set_test_idx =idx[ntrain:]
 
-x=np.linspace(-4,4,ntotal)
-y=x**3-x
-ds_total=np.column_stack((x,y)) # [Nx2] set of inputs/answers
-ds_train=ds_total[set_train_idx,:]
-ds_test =ds_total[set_test_idx, :]
-
-# finally, convert all values into network-readable format
 if(__name__=='__main__'):
     # show example of above functions
     a=-np.pi
@@ -78,6 +66,49 @@ if(__name__=='__main__'):
     print('scaled:',d)
     e=threshold(d)
     print('descaled:',e)
+
+
+    # ntotal=10000
+    # ntrain= 8500
+    ntotal=5 # debugging
+    ntrain=3
+
+    idx=np.arange(ntotal)
+    np.random.shuffle(idx) # note: shuffles in-place 
+    set_train_idx=idx[:ntrain]
+    set_test_idx =idx[ntrain:]
+
+    x=np.linspace(-4,4,ntotal)
+    y=x**3-x
+    ds_total=np.column_stack((x,y)) # [Nx2] set of inputs/answers
+    ds_train=ds_total[set_train_idx,:]
+    ds_test =ds_total[set_test_idx, :]
+    
+    # example of how to convert with one array
+    dec2bin_arr=lambda arr:[[dec2bin(i[0]),dec2bin(i[1])] for i in arr]
+    bin2dec_arr=lambda arr:np.array([[bin2dec(i[0]),bin2dec(i[1])] for i in arr])
+
+    print('original:\n',ds_total)
+
+    dsTotal=dec2bin_arr(ds_total)
+    print('converted:\n',dsTotal[0])
+
+    dsTot2=[[scale(i[0]),scale(i[1])] for i in dsTotal]
+    print('scaled:\n',dsTot2[0])
+
+    dsTot3=[[threshold(i[0]),threshold(i[1])] for i in dsTot2]
+    print('descaled:\n',dsTot3[0])
+
+    #dsrec=[[bin2dec(i[0]),bin2dec(i[1])] for i in dsTotal]
+    dsrec=bin2dec_arr(dsTot3)
+    print('recovered:\n',dsrec)
+
+''' 
+so, to recap: dataset is generated ([x,y]), then converted to binary arrays,
+    then scaled. it is then split into train / test and put into network, and 
+    the given result is then thresholded (descaled) and converted (recovered) 
+    back into decimal form.
+'''
 
 
 
