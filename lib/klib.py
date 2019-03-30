@@ -399,9 +399,11 @@ def scale(arr,xlim=(None,None),ylim=(0.01,0.99) ):
     '''
 
     # allow user to set input limits as well (if scalar, etc)
-    xmin= np.min(arr) if(xlim[0]==None) else xlim[0]
-    xmax= np.max(arr) if(xlim[1]==None) else xlim[1]
-    return (ymax-ymin)/(xmax-xmin)*(arr-xmin)+ymin
+    xmin= np.min(arr) if(xlim[0]==None) else float(xlim[0])
+    xmax= np.max(arr) if(xlim[1]==None) else float(xlim[1])
+    ymin=ylim[0]
+    ymax=ylim[1]
+    return (ymax-ymin)/(xmax-xmin)*(np.array(arr)-xmin)+ymin
 
 def md5_hash(filename):
     ''' return the md5 checksum of a file '''
