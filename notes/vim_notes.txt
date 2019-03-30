@@ -1,0 +1,20 @@
+SOME BASIC NOTES ON HOW TO MANIPULATE TEXT IN VIM.
+Created: 190330
+Author: Kris Gonzalez
+* kjgnote: the commands given are NOT used while in "insert" mode.
+
+# SELECT TEXT ==============================================
+1. SHIFT+V (select line) or v (select characters)
+2. move cursor until have selected all text
+3. <done>
+
+# CUT / COPY / PASTE
+1. <select text>
+2. d=CUT,y=COPY
+3. move cursor to desired location
+4. p=PASTE
+5. <done>
+
+
+# eof
+
