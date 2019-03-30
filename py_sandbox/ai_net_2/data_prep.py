@@ -64,28 +64,52 @@ class DatasetGenerator:
     binary array form. when initialized, dataset is created. can then give the 
     train and test datasets as needed.
     '''
-    def __init__(self):
-        ntotal=5
-        ntrain=3
+    def __init__(self,ntotal=10000,ntrain=8500):
+        ''' when object initialized, create dataset and train/test split '''
         idx=np.arange(ntotal)
         np.random.shuffle(idx) # note: shuffles in-place 
         set_train_idx=idx[:ntrain]
         set_test_idx =idx[ntrain:]
-        # at this point, have created list of train/test indices
         
         x=np.linspace(-4,4,ntotal) # by design, dataset range is [-4,4]
-        y=x**3-x
+        y=x*x*x-x
         ds_total=np.column_stack((x,y)) # [Nx2] set of inputs/answers
-        self.idx_train=set_train_idx
-        self.idx_test =set_test_idx
-        self.ds_total_orig=ds_total
+        
+        dsTotal=dec2bin_arr(ds_total) # convert to binary
+
+        # scale binary values to float range [0.01,0.99]
+        dsTotal_bin2=[[scale(i[0],(0,1)),scale(i[1],(0,1))] for i in dsTotal]
+
+        self._idx_train=set_train_idx
+        self._idx_test =set_test_idx
+        self._ds_total_raw=np.array(ds_total,object)
+        self._ds_total=np.array(dsTotal_bin2,object)
     def get_training(self):
         ''' 
         Return preprocessed training dataset. dataset must have only 
             training values from total dataset, converted to binary array, and 
             rescaled. refer to array as such: ds_train[INDEX][INPUT,OUTPUT]  
         '''
-        pass
+        return self._ds_total[self._idx_train]
+    def get_testing(self):
+        ''' Return preprocessed testing dataset. dataset contains only testing
+            values from total dataset. converted to binary and rescaled. refer
+            to array as such: ds_test[INDEX][INPUT,OUTPUT]
+        '''
+        return self._ds_total[self._idx_test]
+    def get_dec_values(self,idx):
+        ''' given specific index, return values from given index as decimal 
+            values. 
+        '''
+        return self._ds_total_raw[idx]
+    def to_decimal(self,bin_arr,thresh=0.5):
+        ''' given an array of binary values (automatically thresholded), return
+            the decimal value of that array. default thresholding value = 0.5
+        INPUTS:
+            * bin_arr: binary array (scaled or not)
+            * thresh: threshold value for removing scaling, default=0.5
+        '''
+        return bin2dec(threshold(bin_arr))
 
 if(__name__=='__main__'):
     # show example of above functions
@@ -123,13 +147,6 @@ if(__name__=='__main__'):
     print('converted:\n',dsTotal[0])
 
     dsTot2=[[scale(i[0],(0,1)),scale(i[1],(0,1))] for i in dsTotal]
-    #dsTot2=[]
-    #for i in dsTotal:
-    #    print('first:',i[0])
-    #    print('second:',i[1])
-    #    print('1-s:',scale(i[0],xlim=(0,1)))
-    ## forloop
-    #exit()
     print('scaled:\n',dsTot2[0])
 
     dsTot3=[[threshold(i[0]),threshold(i[1])] for i in dsTot2]
@@ -138,6 +155,13 @@ if(__name__=='__main__'):
     #dsrec=[[bin2dec(i[0]),bin2dec(i[1])] for i in dsTotal]
     dsrec=bin2dec_arr(dsTot3)
     print('recovered:\n',dsrec)
+    dsgen=DatasetGenerator()
+    print(dsgen)
+    print('No. training entries:',len(dsgen.get_training()))
+    print('No. testing entries:',len(dsgen.get_testing()))
+    print('single entry example:\n',dsgen.get_training()[3])
+    print('single entry in dec:',dsgen.get_dec_values(3))
+    print('single entry conversion:',dsgen.to_decimal(dsgen.get_training()[3][0]))
 
 ''' 
 so, to recap: dataset is generated ([x,y]), then converted to binary arrays,
