@@ -112,7 +112,7 @@ if(__name__=='__main__'):
     set_test_idx =idx[ntrain:]
 
     x=np.linspace(-4,4,ntotal)
-    y=x**3-x
+    y=x*x*x-x
     ds_total=np.column_stack((x,y)) # [Nx2] set of inputs/answers
     ds_train=ds_total[set_train_idx,:]
     ds_test =ds_total[set_test_idx, :]
@@ -122,7 +122,14 @@ if(__name__=='__main__'):
     dsTotal=dec2bin_arr(ds_total)
     print('converted:\n',dsTotal[0])
 
-    dsTot2=[[scale(i[0]),scale(i[1])] for i in dsTotal]
+    dsTot2=[[scale(i[0],(0,1)),scale(i[1],(0,1))] for i in dsTotal]
+    #dsTot2=[]
+    #for i in dsTotal:
+    #    print('first:',i[0])
+    #    print('second:',i[1])
+    #    print('1-s:',scale(i[0],xlim=(0,1)))
+    ## forloop
+    #exit()
     print('scaled:\n',dsTot2[0])
 
     dsTot3=[[threshold(i[0]),threshold(i[1])] for i in dsTot2]
