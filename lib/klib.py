@@ -385,7 +385,7 @@ def pyt(arr):
 
 
 
-def scale(arr,ymin=0.01,ymax=0.99):
+def scale(arr,xlim=(None,None),ylim=(0.01,0.99) ):
     ''' return a linearly scaled output of original array. follows simple
         interpolation for each element in the array. xmin and xmax are the
         min/max values of the original array. note: this is used instead of name
@@ -397,8 +397,10 @@ def scale(arr,ymin=0.01,ymax=0.99):
     OUTPUT:
         yarray: scaled array with same shape.
     '''
-    xmin=np.min(arr)
-    xmax=np.max(arr)
+
+    # allow user to set input limits as well (if scalar, etc)
+    xmin= np.min(arr) if(xlim[0]==None) else xlim[0]
+    xmax= np.max(arr) if(xlim[1]==None) else xlim[1]
     return (ymax-ymin)/(xmax-xmin)*(arr-xmin)+ymin
 
 def md5_hash(filename):
