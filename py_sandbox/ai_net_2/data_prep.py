@@ -51,6 +51,14 @@ def threshold(arr,thresh=0.5):
     '''
     return [0 if(ival<thresh) else 1 for ival in arr]
 
+def dec2bin_arr(arr):
+    ''' convert entire decimal array to binary arrays '''
+    return [[dec2bin(i[0]),dec2bin(i[1])] for i in arr]
+
+def bin2dec_arr(arr):
+    ''' convert entire array of binary arrays to numpy decimal array '''
+    return np.array([[bin2dec(i[0]),bin2dec(i[1])] for i in arr])
+
 # at this point, create the datasets to use, for now will be randomly generated each time
 
 
@@ -84,10 +92,6 @@ if(__name__=='__main__'):
     ds_train=ds_total[set_train_idx,:]
     ds_test =ds_total[set_test_idx, :]
     
-    # example of how to convert with one array
-    dec2bin_arr=lambda arr:[[dec2bin(i[0]),dec2bin(i[1])] for i in arr]
-    bin2dec_arr=lambda arr:np.array([[bin2dec(i[0]),bin2dec(i[1])] for i in arr])
-
     print('original:\n',ds_total)
 
     dsTotal=dec2bin_arr(ds_total)
