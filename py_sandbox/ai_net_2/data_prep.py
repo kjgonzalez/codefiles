@@ -59,8 +59,33 @@ def bin2dec_arr(arr):
     ''' convert entire array of binary arrays to numpy decimal array '''
     return np.array([[bin2dec(i[0]),bin2dec(i[1])] for i in arr])
 
-# at this point, create the datasets to use, for now will be randomly generated each time
-
+class DatasetGenerator:
+    ''' class that can auto-generate train and test datasets, already in scaled 
+    binary array form. when initialized, dataset is created. can then give the 
+    train and test datasets as needed.
+    '''
+    def __init__(self):
+        ntotal=5
+        ntrain=3
+        idx=np.arange(ntotal)
+        np.random.shuffle(idx) # note: shuffles in-place 
+        set_train_idx=idx[:ntrain]
+        set_test_idx =idx[ntrain:]
+        # at this point, have created list of train/test indices
+        
+        x=np.linspace(-4,4,ntotal) # by design, dataset range is [-4,4]
+        y=x**3-x
+        ds_total=np.column_stack((x,y)) # [Nx2] set of inputs/answers
+        self.idx_train=set_train_idx
+        self.idx_test =set_test_idx
+        self.ds_total_orig=ds_total
+    def get_training(self):
+        ''' 
+        Return preprocessed training dataset. dataset must have only 
+            training values from total dataset, converted to binary array, and 
+            rescaled. refer to array as such: ds_train[INDEX][INPUT,OUTPUT]  
+        '''
+        pass
 
 if(__name__=='__main__'):
     # show example of above functions
