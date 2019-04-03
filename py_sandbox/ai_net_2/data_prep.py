@@ -25,7 +25,7 @@ def dec2bin(val):
         arr.append(0)
     # magnitude of value
     val2=abs(int(round(val*100000,0)))
-    val3=pad(bin(val2)[2:],17,'0')
+    val3=pad(bin(val2)[2:],23,'0')
     arr+=[int(i) for i in val3]
     return arr
 
@@ -97,11 +97,11 @@ class DatasetGenerator:
             to array as such: ds_test[INDEX][INPUT,OUTPUT]
         '''
         return self._ds_total[self._idx_test]
-    def get_dec_values(self,idx):
+    def get_dec_train(self,idx):
         ''' given specific index, return values from given index as decimal 
             values. 
         '''
-        return self._ds_total_raw[idx]
+        return self._ds_total_raw[self._idx_train[idx]]
     def to_decimal(self,bin_arr,thresh=0.5):
         ''' given an array of binary values (automatically thresholded), return
             the decimal value of that array. default thresholding value = 0.5
@@ -117,6 +117,7 @@ if(__name__=='__main__'):
     print('orig:',a)
     b=dec2bin(a)
     print('bin :',b)
+    print('len :',len(b))
     c=bin2dec(b)
     print('dec2:',c)
     d=scale(b)
@@ -124,44 +125,23 @@ if(__name__=='__main__'):
     e=threshold(d)
     print('descaled:',e)
 
-
-    # ntotal=10000
-    # ntrain= 8500
-    ntotal=5 # debugging
-    ntrain=3
-
-    idx=np.arange(ntotal)
-    np.random.shuffle(idx) # note: shuffles in-place 
-    set_train_idx=idx[:ntrain]
-    set_test_idx =idx[ntrain:]
-
-    x=np.linspace(-4,4,ntotal)
-    y=x*x*x-x
-    ds_total=np.column_stack((x,y)) # [Nx2] set of inputs/answers
-    ds_train=ds_total[set_train_idx,:]
-    ds_test =ds_total[set_test_idx, :]
-    
-    print('original:\n',ds_total)
-
-    dsTotal=dec2bin_arr(ds_total)
-    print('converted:\n',dsTotal[0])
-
-    dsTot2=[[scale(i[0],(0,1)),scale(i[1],(0,1))] for i in dsTotal]
-    print('scaled:\n',dsTot2[0])
-
-    dsTot3=[[threshold(i[0]),threshold(i[1])] for i in dsTot2]
-    print('descaled:\n',dsTot3[0])
-
-    #dsrec=[[bin2dec(i[0]),bin2dec(i[1])] for i in dsTotal]
-    dsrec=bin2dec_arr(dsTot3)
-    print('recovered:\n',dsrec)
-    dsgen=DatasetGenerator()
-    print(dsgen)
+    dsgen=DatasetGenerator(ntotal=100,ntrain=70)
     print('No. training entries:',len(dsgen.get_training()))
     print('No. testing entries:',len(dsgen.get_testing()))
-    print('single entry example:\n',dsgen.get_training()[3])
-    print('single entry in dec:',dsgen.get_dec_values(3))
+
+    rec=dsgen.get_training()[3]
+    print('single entry example:\n',rec,len(rec[0]),len(rec[1]))
+    print('example in decimal:',dsgen.get_dec_train(3))
     print('single entry conversion:',dsgen.to_decimal(dsgen.get_training()[3][0]))
+
+    rec=dsgen.get_training()[3]
+    print('len of input/output:',len(rec[0]),len(rec[1]))
+
+    # want to make sure always have same length for input values, output values.
+    lengths=[len(i[0]) for i in dsgen.get_training()]
+    lengths_out=[len(i[1]) for i in dsgen.get_training()]
+    print('mean length of input:',np.mean(lengths))
+    print('mean length of output:',np.mean(lengths_out))
 
 ''' 
 so, to recap: dataset is generated ([x,y]), then converted to binary arrays,
