@@ -45,8 +45,8 @@ class NeuralNetwork:
     def train_one(self,inputs_list,targets_list):
         # train network
         # prepare input arguments
-        inputs = np.array(inputs_list,ndmin=2).T # not sure why T or ndmin
-        targets = np.array(targets_list,ndmin=2).T # not sure why T or ndmin
+        inputs = np.array(list(inputs_list),ndmin=2).T # not sure why T or ndmin
+        targets = np.array(list(targets_list),ndmin=2).T # not sure why T or ndmin
         
         
         # signals into hidden layer
@@ -80,7 +80,7 @@ class NeuralNetwork:
         '''
         for iepoch in range(epochs):
             for idat in dataset:
-                nn.train_one(*idat)
+                self.train_one(*idat)
             # idat_loop
         # iepoch_loop
         print('training complete')
@@ -89,7 +89,7 @@ class NeuralNetwork:
         # test network on something
         
         # prepare input arguments
-        inputs = np.array(inputs_list,ndmin=2).T # not sure why T or ndmin
+        inputs = np.array(list(inputs_list),ndmin=2).T # not sure why T or ndmin
         
         # signals into hidden layer
         

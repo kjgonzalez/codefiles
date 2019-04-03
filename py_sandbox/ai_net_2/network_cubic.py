@@ -16,38 +16,49 @@ from data_prep import DatasetGenerator
 
 
 # setup data to be manipulated =================================================
-dsgen=DatasetGenerator(ntotal=10000,ntrain=7000)
-print(dir(dsgen))
+print('loading dataset...')
+t0=time.time()
+dsgen=DatasetGenerator(ntotal=20000,ntrain=18000)
+print('loaded.',time.time()-t0)
+
 dstrain=dsgen.get_training()
 dstest=dsgen.get_testing()
 rec=dstrain[0]
-print('training set length:',len(dstrain))
-print('first item example:',rec[0],dsgen.to_decimal(rec[0]))
-print('verification:',dsgen.get_train_dec(0)[0])
 
 # setup network for training ===================================================
+print('loading network... ')
 nn=NeuralNetwork(24,200,24,0.01)
-#print(dir(nn))
-
-## first attempt, just train once.
-#idat=dstrain[0]
-#print(*idat)
-#itrain=list(idat[0])
-#ians=list(idat[1])
-#nn.train_one(itrain,ians)
+print('loaded.')
 
 # next attempt, train a full epoch
+print('training network... ')
 t0=time.time()
-for idat in dstrain:
-    itrain=list(idat[0])
-    ians=list(idat[1])
-    nn.train_one(itrain,ians)
+#for idat in dstrain:
+#    #itrain=list(idat[0])
+#    #ians=list(idat[1])
+#    nn.train_one(*idat)
+nEpochs=4
+nn.train_full(dstrain,nEpochs)
 
-print('training complete:',time.time()-t0)
+print('complete:',time.time()-t0)
 print('training count:',len(dstrain))
+print('num Epochs:',nEpochs)
 
-print('success')
+# at this point, try querying the network to see if it knows the answer
 
+# first, query single value
+idat=dstest[0]
+bf2d=dsgen.to_decimal
+print('querying network')
+print('true::',dsgen.get_test_dec(0))
+truedec=dsgen.get_test_dec(0)[1]
+
+ans=nn.query(idat[0])
+#print('ans:',ans.T) # transpose so it's horizontal
+ansdec=bf2d(ans)
+print('estimated:',ansdec)
+print('error:',(ansdec-truedec)/truedec)
+print('complete')
 
 
 # eof

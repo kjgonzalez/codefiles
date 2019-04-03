@@ -78,7 +78,8 @@ class DatasetGenerator:
         dsTotal=dec2bin_arr(ds_total) # convert to binary
 
         # scale binary values to float range [0.01,0.99]
-        dsTotal_bin2=[[scale(i[0],(0,1)),scale(i[1],(0,1))] for i in dsTotal]
+        dsTotal_bin2=[[list(scale(i[0],(0,1))),list(scale(i[1],(0,1)))] \
+                for i in dsTotal]
 
         self._idx_train=set_train_idx
         self._idx_test =set_test_idx
@@ -102,6 +103,9 @@ class DatasetGenerator:
             values. 
         '''
         return self._ds_total_raw[self._idx_train[idx]]
+    def get_test_dec(self,idx):
+        return self._ds_total_raw[self._idx_test[idx]]
+    
     def to_decimal(self,bin_arr,thresh=0.5):
         ''' given an array of binary values (automatically thresholded), return
             the decimal value of that array. default thresholding value = 0.5
