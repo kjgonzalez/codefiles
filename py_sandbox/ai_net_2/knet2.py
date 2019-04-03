@@ -72,7 +72,12 @@ class NeuralNetwork:
         self.wih +=self.lr*np.dot( (hidden_errors * hidden_outputs *(1.0-hidden_outputs)), np.transpose(inputs)) 
     
     def train_full(self,dataset,epochs=1):
-        ''' Run complete training phase '''
+        ''' Run complete training phase. dataset must be a list of 2-item lists containing the input and the answer. 
+        INPUTS:
+            * dataset: [N][TYPE] array, where N is number of samples, and TYPE 
+                is 0=input, 1=answer.
+            * epochs: number of epochs to train, default = 1.
+        '''
         for iepoch in range(epochs):
             for idat in dataset:
                 nn.train_one(*idat)
