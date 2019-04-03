@@ -4,6 +4,14 @@ objective: bring together two custom modules to train and test on a set on a
     well known set of data: the input/output of function y=x^3-x. in all 
     honesty, the most difficult part of this entire process has been to prep
     the data correctly, ensuring that the network is able to read from it.
+
+CONCLUSIONS:
+so, there are clearly ways to improve the results, but will not spend more 
+    effort to actually implement them. some of the obvious changes that should
+    be implemented:
+    * use proper float notation for numbers
+    * perhaps modify network so that it can take actual numbers?
+    * better control the conversion / formatting of numbers
 '''
 
 
@@ -18,7 +26,7 @@ from data_prep import DatasetGenerator
 # setup data to be manipulated =================================================
 print('loading dataset...')
 t0=time.time()
-dsgen=DatasetGenerator(ntotal=20000,ntrain=18000)
+dsgen=DatasetGenerator(ntotal=20000,ntrain=19000)
 print('loaded.',time.time()-t0)
 
 dstrain=dsgen.get_training()
@@ -60,6 +68,24 @@ print('estimated:',ansdec)
 print('error:',(ansdec-truedec)/truedec)
 print('complete')
 
+# now query the entire test dataset, and get a score
+# score = average([abspcterr(iest,itru) for ...])
+bf2d=dsgen.to_decimal
+scores=[]
+t0=time.time()
+print('starting scoring...')
+for idat in dstest:
+    ians=bf2d(nn.query(idat[0]))
+    itru=bf2d(idat[1])
+    if(itru!=0.0):
+        ierr=abs((ians-itru)/itru)
+    else:
+        ierr=abs((ians-itru)/(itru+0.01))
+    #print(itru,ians,ierr)
+    scores.append(ierr)
+print('scoring complete',time.time()-t0)
+print('test set:',len(dstest))
+print('average error:',np.mean(scores))
 
 # eof
 
