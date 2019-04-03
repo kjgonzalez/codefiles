@@ -97,7 +97,7 @@ class DatasetGenerator:
             to array as such: ds_test[INDEX][INPUT,OUTPUT]
         '''
         return self._ds_total[self._idx_test]
-    def get_dec_train(self,idx):
+    def get_train_dec(self,idx):
         ''' given specific index, return values from given index as decimal 
             values. 
         '''
@@ -131,7 +131,7 @@ if(__name__=='__main__'):
 
     rec=dsgen.get_training()[3]
     print('single entry example:\n',rec,len(rec[0]),len(rec[1]))
-    print('example in decimal:',dsgen.get_dec_train(3))
+    print('example in decimal:',dsgen.get_train_dec(3))
     print('single entry conversion:',dsgen.to_decimal(dsgen.get_training()[3][0]))
 
     rec=dsgen.get_training()[3]
