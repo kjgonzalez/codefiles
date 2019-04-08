@@ -1,0 +1,3 @@
+# dont want output crap to be tracked
+
+*.out
