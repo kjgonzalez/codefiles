@@ -1,0 +1,20 @@
+" This file serves as a remote backup for vim settings, and can be shared to
+"   other computers.
+" VIM config file. 'rc' = 'runtime configuration'
+"
+" sources:
+"   https://stackoverflow.com/questions/803464/how-do-i-source-something-in-my-vimrc-file
+"   https://vim.fandom.com/wiki/Open_vimrc_file
+"   https://vi.stackexchange.com/questions/7975/how-can-i-change-the-indent-size
+" how to use this file:
+" ensure vim starts with this config by going to ~/.vimrc and including
+"   contents:
+"     :source /path/to/this/file
+
+:set expandtab
+:set shiftwidth=4
+:set tabstop=4
+
+" eof
+
+
