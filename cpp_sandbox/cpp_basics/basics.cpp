@@ -200,7 +200,6 @@ class Rectangle {
 // rect.set_wdht(3,4);
 Rectangle rect(3,4);
 std::cout << "area of rect: "<< rect.area() << nl;
-std::cout << rect.width << '\n';
 }//main
 
 // #include <vector> // keep in mind: THIS IS A VALID PLACE TO PUT STUFF...
