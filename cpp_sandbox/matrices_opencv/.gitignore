@@ -1,0 +1,9 @@
+# dont want output crap to be tracked
+
+.settings/
+CMakeFiles/
+.cproject
+.project
+*.cmake
+output
+CMakeCache.txt
