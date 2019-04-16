@@ -98,18 +98,18 @@ class Stamper:
         OUT: "2019Mar21-13:11:23"
     '''
     def __init__(self):
-        self.tsf="%Y%b%d-%H:%M:%S" # time stamp format
+        self._tsf="%Y%b%d-%H:%M:%S" # time stamp format
     def now(self):
         ''' Return current time in string. note: decimal value is truncated, not
             rounded.
         '''
-        return time.strftime(self.tsf,time.localtime(time.time()))
+        return time.strftime(self._tsf,time.localtime(time.time()))
     def toseconds(self,ts_str):
         ''' convert string timestamp to epoch seconds '''
-        return time.mktime(time.strptime(ts_str,self.tsf))
+        return time.mktime(time.strptime(ts_str,self._tsf))
     def tostamp(self,ts_float):
         ''' convert epoch seconds to string timestamp '''
-        return time.strftime(self.tsf,time.localtime(ts_float))
+        return time.strftime(self._tsf,time.localtime(ts_float))
 # class Stamper
 
 class Stopwatch:
