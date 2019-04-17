@@ -15,19 +15,33 @@ R. references
 A. appendices(?)
 
 \subsection{Problem / Motivation}
-here the problem is defined
+The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications to many processes, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving being a process that requires 3D knowledge, the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being expensive relative to the amount of information they output when compared to something like a camera image [CITATION NEEDED XX], have relatively slow refresh rates (on the order of 10 Hz for a commercial Velodyne VLP-16), requires active sensing and thus may create a high degree of noise if there are many sensors in the same area, and may not work well with some reflective surfaces, even if they are close (such as a car window not directly perpendicular to the incident laser ray). Despite this, and despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects. 
+
+There are some interesting benefits that may be gained with stereo vision: stereo cameras are relatively cheap for the amount of information they provide [CITATION NEEDED XX], intuitively mimics the way that humans already perceive and navigate their world, is a passive sensor that does not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 30 Hz, "frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, which can include inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and when used to estimate position a squared error relationship to distance. This last points simply means that as the distance of an estimated point increases, the error of that value increases quadratically [CITATION NEEDED XX]. 
+
+With these pros and cons in mind, this paper takes the position that stereo vision can provide practical benefits to robotics and autonomous systems under the right conditions. Using stereo vision to estimate 3D locations of objects, specifically cars, is believed to be somewhat competitive with lidar.
+
+
 \subsection{Requirements}
-texthere
+In order to develop a stereo-based 3D estimation algorithm and conduct a performance comparison, there are multiple needs that must be met. The very first need that must be met is a dataset that contains all the necessary information for a lidar-based network to detect objects, as well as a stereo-based network. For this reason the KITTI dataset, a well-known and actively used benchmark, was selected as the source of data to compare the two technologies.
 
 \section{Related Work}
 \subsection{Stereo Vision Networks}
-TextHere
+Stereo disparity maps, which are built by the comparing the pixel distance between two similar regions of two images, have existed before the implementation of artificial intelligence to create them. Famously, XX paper sought to give a taxonomy and categorization of the various aspects of stereo vision. Out of this paper, the four main parts of conducting stereo vision have been defined as follows: 
 
-\subsection{3D estimation with Stereo}
-TextHere
+\begin{itemize} \itemsep=-0.5em
+    \item Item A
+    \item Item B
+    \item Item C
+    \item Item D
+    
+\end{itemize}
+
+\subsection{3D estimation with Stereo Disparity Maps}
+There is a surprisingly low amount of public research on stereo vision for use with 3D localization. One paper created a network-based approach that [xx citation needed]. This paper also cited other works such as [xx].
 
 \subsection{3D estimation with Lidar}
-TextHere
+Performing 3D estimation and localization with lidar has been a focus for a large portion of the field, and with good reason. Thus, there are many papers which focus on using lidar sensor capabilities to estimate 3D bounding boxes, to varying degrees of success. [xx] paper, currently one of the best performing networks, forms a part of the work of this research paper as well. 
 
 \subsection{3D Reconstruction with Stereo Data}
 TextHere
