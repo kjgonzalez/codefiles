@@ -47,5 +47,20 @@
 <node CREATED="1550763904983" ID="ID_775280810" MODIFIED="1550763919415" TEXT="datasets that have stereo images in outdoor (preferably) scenes"/>
 </node>
 </node>
+<node CREATED="1555575518877" ID="ID_1531422339" MODIFIED="1555575526528" POSITION="right" TEXT="perhaps publish your paper?">
+<node CREATED="1555575527613" ID="ID_1728759586" MODIFIED="1555575533872" TEXT="look for conferences to publish to immediately!">
+<node CREATED="1555575932880" ID="ID_1719517309" MODIFIED="1555575938469" TEXT="possible conferences...">
+<node CREATED="1555576011986" ID="ID_188986465" MODIFIED="1555576013285" TEXT="http://www.guide2research.com/conferences/"/>
+<node CREATED="1555576383244" ID="ID_1960693588" MODIFIED="1555576384650" TEXT="http://www.conferenceranks.com/"/>
+</node>
+<node CREATED="1555575939245" ID="ID_1365067049" MODIFIED="1555575942769" TEXT="ICINCO">
+<node CREATED="1555576171240" ID="ID_829219270" MODIFIED="1555576171598" TEXT="https://www.ieee-ras.org/conferences-workshops/technically-co-sponsored/icinco"/>
+<node CREATED="1555576317897" ID="ID_189773778" MODIFIED="1555576318845" TEXT="http://www.icinco.org/"/>
+</node>
+<node CREATED="1555576174296" ID="ID_1084730165" MODIFIED="1555576174296" TEXT=""/>
+</node>
+<node CREATED="1555576018648" ID="ID_1353233961" MODIFIED="1555576029975" TEXT="have something written by a certain deadline (internal deadline: june?)"/>
+<node CREATED="1555576031138" ID="ID_477016530" MODIFIED="1555576031138" TEXT=""/>
+</node>
 </node>
 </map>
