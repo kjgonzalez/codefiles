@@ -38,6 +38,13 @@ Stereo disparity maps, which are built by the comparing the pixel distance betwe
     
 \end{enumerate}
 
+(xx include here information about psmnet!!!)
+(xx include here info about traditional stereo vision)
+(xx include here info about competitive, ai-based stereo networks)
+
+
+
+
 \subsection{3D estimation with Stereo Disparity Maps}
 There is a surprisingly low amount of public research on stereo vision for use with 3D localization. \cite{li_stereo_2019} created an RCNN-based approach that currently performs best in class on the KITTI dataset, although achieving 59'th place when also compared against networks that use lidar. This paper also cites other works, such as "3DOP" by \cite{chen_3d_2016}. However, some prior information is encoded into the calculation before using regression to estimate object pose, including height above ground, object size priors, and "depth informed features", while our paper does not provide this information to the network beforehand.
 
@@ -61,7 +68,11 @@ Really there just isn't much to use
 At this point, we can start talking about how you have modified all the different networks to make them work for you. you should definitely catalog your troubles with each one. pwe can talk about this in depth. 
 
 \subsection{Modification of Pyramid Stereo Matching Network}
-Pyramid Stereo Matching Network was published by Jia-Ren Chang and Yong-Sheng Chen in March 2018. This network takes a deep learning approach to generating disparity maps from a pair of images. The network itself is near the top of the state of the art, and achieves this by the architecture of its network. 
+The first task in creating a network that can take a stereo image pair and generate 3D bounding boxes, as described in figure xx above, is to have the capability of taking a stereo image pair and creating a 2.5D disparity map. To that end, a best-in-class disparity generation algorithm was searched and was selected to be the Pyramid Stereo Matching Network. Pyramid Stereo Matching Network was published by Jia-Ren Chang and Yong-Sheng Chen in March 2018. This network takes a deep learning approach to generating disparity maps from a pair of images. The network itself is near the top of the state of the art, and achieves this by the architecture of its network. (xx architecture and style need to be elaborated upon in the "related work" section). The openly-available repository provided a foundation to start on towards making a compact, easy-to-use function. 
+
+
+
+
 
 \subsection{Development of Stereo 3D Reconstruction Function}
 texthere
