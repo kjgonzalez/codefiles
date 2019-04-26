@@ -6,6 +6,7 @@ catkin_ws/devel/
 *.gz
 *.ods#
 *.swp
+*.ipynb_checkpoints/
 # linux-side pdf
 py_sandbox/book_MakeYourOwnNeuralNetwork/BOOK_TariqRashid-MakeYourOwnNeuralNetwork.pdf
 # windows links
