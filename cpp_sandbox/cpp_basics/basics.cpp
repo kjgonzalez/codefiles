@@ -150,6 +150,19 @@ float x_flt=static_cast<float>(x_int);
 float x_flt2=x_int+0.0; // implicit conversion to float / double
 // for brevity, will omit other combinations. however, use above as template.
 
+// will try an enumerator, per ...
+// https://en.cppreference.com/w/cpp/language/enum
+printf("Enumerator 1 ============\n");
+enum Color {red,green,blue=5}; //note: can't then use something like "yellow"
+// default values: red=0, green=1, blue=2, etc (must be some kind of int)
+
+Color cc = red;
+switch(cc){
+  case red  : printf("red, %d\n",cc);  break;
+  case green: printf("green, %d\n",cc);break;
+  case blue : printf("blue, %d\n",cc); break;
+}
+
 // part 4: basic math operations ===============================================
 std::cout << "add, sub " << a+b-3 << nl;
 std::cout << "mult, div " << 2*c/5 << nl;
