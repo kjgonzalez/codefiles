@@ -12,21 +12,22 @@ kjg190412: std flag important for working with modern capabilities (eg. certain
 
 General things to practice:
 
-1 printing to screen & basic math operations
-  1.1 cout / printf
-  1.2 +,-,*,/,pow,mod
-2 if/else, loops, switches
-3 variables
-  int, float, char, enum, struct
-4 basic math operations
-5 string operations
-6 vectors & functions
-  6.1 vectors
-  6.2 functions
-  6.3 anonymous functions
-7 pointers
-8 classes
-9 matrices
+1  printing to screen & basic math operations
+     1.1 cout / printf
+     1.2 +,-,*,/,pow,mod
+2  if/else, loops, switches
+3  variables
+   int, float, char, enum, struct
+4  basic math operations
+5  string operations
+6  vectors & functions
+     6.1 vectors
+     6.2 functions
+     6.3 anonymous functions
+7  file I/O
+8  pointers
+9  classes
+10 matrices
 
 
 
@@ -41,10 +42,18 @@ General things to practice:
     * done: convert number to string
     * done: return i'th value
     * done: split a string into list/array of strings
-* structs
+* done: structs
 * done: vectors
+* done: because of strict typing, how to convert between different var types
+    * done: i to f, f to i
+    * done: str to f/i, f/i to str
+    * done: how to use static character strings (see below)
+    * done: this: https://www.geeksforgeeks.org/difference-const-char-p-char-const-p-const-char-const-p/
 * make mask / alternate reference for function (eg. inv=np.linalg.inv)
 * done: printf / a convenient way to print
+* inline functions
+* pointers
+* calling a function as an argument to another function?
 
 * simple powerful way to use arrays (eigen?)
 * matrix operations
@@ -52,20 +61,14 @@ General things to practice:
 * how to import / use another library / external cpp file (to help break up a
     file into multiple parts)
 * basic file i/o
-* because of strict typing, how to convert between different var types
-    * i to f, f to i
-    * str to f/i, f/i to str
-    * how to use static character strings (see below)
-    * this: https://www.geeksforgeeks.org/difference-const-char-p-char-const-p-const-char-const-p/
-    *
-stuff to practice for classes:
-    * initialization
-    * declaring
-    * methods
-    * attributes
+stuff to practice for classes / objects:
+    * done: initialization
+    * done: declaring
+    * done: methods
+    * done: attributes
     * class vars?
-    * private / public items
-    * ???
+    * done: private / public items
+    * inheritance
 
 * small case study:
     1. have a csv file to read from, with header row
