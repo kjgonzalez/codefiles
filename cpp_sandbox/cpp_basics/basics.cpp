@@ -237,10 +237,20 @@ switch(cc){
   case blue : printf("blue, %d\n",cc); break;
 }
 
-struct dog{
+struct Dog{
     int age;
     std::string name;
 };
+auto printDogInfo = [](Dog dog) {
+    /* anonymous function, explained below */
+    printf("dog name: %s\n",dog.name.c_str());
+    printf("dog age : %d\n",dog.age);
+};
+
+Dog woofer;
+woofer.age=3;
+woofer.name = "woof";
+printDogInfo(woofer);
 
 // part 5: basic string operations =============================================
 /*  * done: concatenate 2 strings
