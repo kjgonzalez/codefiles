@@ -11,20 +11,41 @@ kjg190412: std flag important for working with modern capabilities (eg. certain
   string operations, etc)
 
 General things to practice:
+
+1 printing to screen & basic math operations
+  1.1 cout / printf
+  1.2 +,-,*,/,pow,mod
+2 if/else, loops, switches
+3 variables
+  int, float, char, enum, struct
+4 basic math operations
+5 string operations
+6 vectors & functions
+  6.1 vectors
+  6.2 functions
+  6.3 anonymous functions
+7 pointers
+8 classes
+9 matrices
+
+
+
 * done: for loops
 * done: if statements
 * done: switch statements
 * done: variables
-* string operations
+* done: string operations
     * done: concatenate 2 strings
     * done: insert string in arbitrary places
     * done: convert string to number
     * done: convert number to string
     * done: return i'th value
     * done: split a string into list/array of strings
-* vectors
+* structs
+* done: vectors
 * make mask / alternate reference for function (eg. inv=np.linalg.inv)
-* sprintf / a convenient way to print
+* done: printf / a convenient way to print
+
 * simple powerful way to use arrays (eigen?)
 * matrix operations
 * some basic ai package???
@@ -84,13 +105,35 @@ float pyt(std::vector<float> vec){
   return pow(sum,0.5);
 } //fn pyt
 
+// std::string rpad(std::string inp, int maxLength){
+//     /* pad right side of a given string with given character to given length */
+//     if(maxLength>inp.size()) inp.insert(maxLength - inp.size(),maxLength,'=');
+//     return inp;
+// }//rpad
+
+std::string rpad(std::string str,int maxLength=70,const char& filler = '='){
+    if(maxLength>str.size()) str.insert(str.size(),maxLength-str.size(),filler);
+    return str;
+}//rpad
+
+std::string lpad(std::string str,int maxLength=70,const char& filler = '='){
+    if(maxLength>str.size()) str.insert(0,maxLength-str.size(),filler);
+    return str;
+}//lpad
+
+
 int main(){
 
-// part 1: printing to screen ==================================================
+printf("%s\n",rpad("= 1: printing to screen & basic math operations").c_str());
+
 // want to have simple way to print to screen
 int zz=5;
-std::cout << "print method 1, with cout. var: " << zz << nl;
-printf("print method 2, with printf. var: %d\n",zz); //kjg190415: this is convenient
+std::cout << "method 1, with cout. var: " << zz << nl;
+printf("method 2, with printf. var: %d\n",zz); //kjg190415: this is convenient
+
+std::string sampleString= "sampleString";
+std::cout << "method1: "<<sampleString << std::endl;
+printf("method2: %s\n",sampleString.c_str());
 
 /* PARAMETERS FOR PRINTF. src: http://www.cplusplus.com/reference/cstdio/printf/
   SYM  DESCRIPTION                                  EXAMPLE
@@ -114,23 +157,55 @@ printf("print method 2, with printf. var: %d\n",zz); //kjg190415: this is conven
   %   %% will write a single % to the stream.       %
 */
 
+printf("%s\n",rpad("= 1.2: basic math operations ",60).c_str());
+// 1.2 basic math operations
+std::cout << "add, sub " << 4+5-3 << nl;
+std::cout << "mult, div " << 2*10.1/5 << nl;
+std::cout << "power " << pow(2,3) << nl;
+std::cout << "modulus " << 8%3 << nl;
+
+
 // part 2: if/else, loops, switches  ===========================================
+printf("%s\n",rpad("= 2: if/else, loops, switches ").c_str());
+
+printf("forloop: ");
 for(int i=0;i<10;i++){
-    std::cout << i << " ";
-    if(i==0) std::cout << "a ";
-    else if(i==1) std::cout << "b ";
-    else std::cout << "c ";
-    switch(i){
-        case (4):
-            i+=1;
-            std::cout <<"f";
-        default:
-            std::cout <<"_";
-    }//switch
-} // forloop
-std::cout << nl;
+    printf("%d ",i);
+    }
+printf(nl);
+
+printf("do-while & while loop: ");
+int icounter=0;
+do {printf("%d ",icounter);icounter++;
+    } while(icounter <6);
+while(icounter<8){printf("%d ",icounter);icounter++;
+    }
+printf(nl);
+
+printf("if/else: ");
+int ifvar=3;
+if(ifvar==0) printf("this one");
+else if(ifvar==1) printf("that one");
+else printf("the other one");
+printf(nl);
+
+
+
+printf("switches: ");
+switch(ifvar){
+    case(0):
+        printf("yeehaw");break;
+    case(3):
+        printf("howdy");break;
+    default:
+        printf("giddyup");break;
+    } //switch
+printf(nl);
+
+
 
 // part 3: variables ===========================================================
+printf("%s\n",rpad("= 3: variables (int, float, ...) ").c_str());
 //kjg190412: if declare w/o initialize, var can be anything random.
 int a=3,b=8;
 float c;
@@ -152,7 +227,6 @@ float x_flt2=x_int+0.0; // implicit conversion to float / double
 
 // will try an enumerator, per ...
 // https://en.cppreference.com/w/cpp/language/enum
-printf("Enumerator 1 ============\n");
 enum Color {red,green,blue=5}; //note: can't then use something like "yellow"
 // default values: red=0, green=1, blue=2, etc (must be some kind of int)
 
@@ -163,11 +237,10 @@ switch(cc){
   case blue : printf("blue, %d\n",cc); break;
 }
 
-// part 4: basic math operations ===============================================
-std::cout << "add, sub " << a+b-3 << nl;
-std::cout << "mult, div " << 2*c/5 << nl;
-std::cout << "power " << pow(2,3) << nl;
-std::cout << "modulus " << b%a << nl;
+struct dog{
+    int age;
+    std::string name;
+};
 
 // part 5: basic string operations =============================================
 /*  * done: concatenate 2 strings
@@ -207,7 +280,7 @@ for(int i=0;i<arr.size();i++) std::cout << arr[i] << ",";
 std::cout << nl;
 
 
-// part 6: vectors, functions ==================================================
+// part 6: vectors, functions, anonymous functions =============================
 // kjg190412: can be treated a little bit like a list, but only for one type
 // kjg190415: need examples of more member functions
 std::vector<int> v;
@@ -222,6 +295,11 @@ w.push_back(3);
 w.push_back(4);
 w.push_back(12);
 std::cout << pyt(w) << nl;
+
+// anonymous functions (lambda functions)
+auto firstLambda = [](int a, int b) {return a+b;};
+std::cout << firstLambda(3,4) << "\n";
+
 
 // part 7: pointers ============================================================
 
