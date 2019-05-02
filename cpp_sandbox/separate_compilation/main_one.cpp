@@ -2,14 +2,16 @@
 here, want to create a function and a class. then,
   want to move it over to another file that will be a header
 
-KJGNOTE: how to compile for standard 11: g++ main_one.cpp -std=c++11
+KJGNOTE: how to compile for standard 11: g++ -std=c++11 main_one.cpp norms.cpp
 
 KJGNOTE: sometimes, get error as below:
     warning: ISO C++ forbids converting a string constant to ‘char*’ [-Wwrite-strings]
+MatrixXd m(2,2);
 in order to fix, use "char const *", not "char *":
     char const *name; // KJGNOTE: THIS IS THE PROPER WAY TO DEAL WITH STRINGS
 ADDITIONALLY, able to still rename just like in a string.
 
+kjg190502: need to include all relevant cpp files in compilation command (see above)
 */
 
 #include <iostream>
@@ -38,7 +40,7 @@ class puppy{
 };  //class puppy
 
 //KJGNOTE: the following two pieces of code aren't needed here, they've been
-//  moved to norms.cpp/h and rectangle.h
+//  moved to norms.cpp/h anderectangle.h
 // double pyt(double a, double b){
 //   return pow(a*a+b*b,0.5);
 // } //pyt
@@ -63,7 +65,7 @@ int main(){
   // std::vector<double> v;
   std::vector<double> v = {1,2,3};
   // v = ,2,3];
-  std::cout << "test: "<<pyt(3,5) << nl;
+  std::cout << "test: "<< pyt(3,5) << nl;
   std::cout << "vector length: " << v.size() << nl;
 
   // puppy class

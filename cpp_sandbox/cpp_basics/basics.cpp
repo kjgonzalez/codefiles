@@ -58,10 +58,10 @@ General things to practice:
 * simple powerful way to use arrays (eigen?)
 * matrix operations
 * some basic ai package???
-* how to import / use another library / external cpp file (to help break up a
-    file into multiple parts)
-* basic file i/o
-stuff to practice for classes / objects:
+* done: how to import / use another library / external cpp file (to help break up a
+    file into multiple parts). kjg19502: see "separate_compilation/"
+* done: basic file i/o
+* stuff to practice for classes / objects:
     * done: initialization
     * done: declaring
     * done: methods
