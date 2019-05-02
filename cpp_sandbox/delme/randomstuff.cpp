@@ -1,26 +1,48 @@
 /*
-emulate what you saw in "evaluate_object_3d_offline.cpp" file
+mini sandbox to test things. add / remove as necessry
 */
 
 #include <iostream>
-// #include <vector>
-// #include <stdio.h>
+#include <vector>
+#include <stdio.h>
+#include <fstream>
+
 using namespace std;
 
-enum CLASSES{CAR=3, PEDESTRIAN=4, CYCLIST=5};
-const int NUM_CLASS = 3;
-
 int main(){
-    // vector<bool> eval_image(NUM_CLASS,false);
-    // for(int i=0;i<eval_image.size();i++) cout<<eval_image[i]<< ' ';
-    // printf("\n");
+  // WANT TO BE ABLE TO READ IN A FILE WITH STDIO...
 
-    system("echo test");
-    /* try making file pointers */
-    // FILE *f;
-    // FILE *f = fopen("delme.txt","w");
-    // printf("hello world\n");
-    // system("rm delme.txt");
-    // fclose(f);
+    FILE * pFile;
+   long lSize;
+    char * buffer;
+    size_t result;
+
+    pFile = fopen ( "file.txt" , "r" );
+    if (pFile==NULL) {fputs ("File error",stderr); exit (1);}
+
+    // obtain file size:
+    fseek (pFile , 0 , SEEK_END);
+    lSize = ftell (pFile);
+    rewind (pFile);
+
+    // allocate memory to contain the whole file:
+    buffer = (char*) malloc (sizeof(char)*lSize);
+    if (buffer == NULL) {fputs ("Memory error",stderr); exit (2);}
+
+    // string line;
+    // getline(pFile,line)
+    // copy the file into the buffer:
+    result = fread (buffer,1,lSize,pFile);
+    if (result != lSize) {fputs ("Reading error",stderr); exit (3);}
+
+    /* the whole file is now loaded in the memory buffer. */
+
+    // terminate
+    string raw=buffer;
+    
+    cout << buffer;
+    fclose (pFile);
+    free (buffer);
+
     return 0;
 }

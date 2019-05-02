@@ -83,8 +83,9 @@ stuff to practice for classes / objects:
 #include <vector> // only needed for certain things
 #include <math.h> // required for pow()
 #include <string> // string class import
-#include <stdio.h>  // needed for splitting a string
+#include <stdio.h>  // needed for splitting a string & sometimes I/O operations
 #include <string.h> // needed for splitting a string
+#include <fstream> // I/O operations
 
 #define nl "\n"
 
@@ -315,8 +316,45 @@ auto firstLambda = [](int a, int b) {return a+b;};
 std::cout << firstLambda(3,4) << "\n";
 
 
-// part 6: pointers ============================================================
-printf("%s\n",rpad("= 6: Pointers ").c_str());
+// part 7: file i/o ============================================================
+printf("%s\n",rpad("= 7: File I/O ").c_str());
+/* File i/o is disappointingly tricky. There's one style to do it for writing to
+    a file, and another style to read from a file. the best way of each is given
+    below. note: you need <fstream> for reading and <stdio.h> for writing.
+*/
+// printf("METHOD fstream: writing to file... ");
+// std::ofstream f_out;
+// f_out.open("file.txt");
+// f_out << "Line 1" << nl;
+// f_out << "Line " << 2 << nl;
+// f_out.close();
+// printf("done.\n");
+
+printf("METHOD cstdio/stdio.h: writing to file... ");
+FILE *f_out2=fopen("file.txt","w");
+fprintf(f_out2,"new line 1\n");
+fprintf(f_out2,"new line %d\n",2);
+
+
+printf("method with fstream: reading from file... \n");
+std::ifstream fin("file.txt");
+std::vector<std::string> raw;
+std::string line;
+while(!fin.eof()){
+    getline(fin,line);
+    raw.push_back(line);
+    }
+fin.close();
+
+printf("file contents:\n");
+for(int i=0;i<raw.size();i++){
+  printf("%s\n",raw[i].c_str());
+}
+
+system("rm file.txt");
+
+// part 7: pointers ============================================================
+printf("%s\n",rpad("= 7: Pointers ").c_str());
 
 int var = 3;
 int* var_addr = &var; // pointers store addresses, so need '*'
@@ -326,8 +364,8 @@ std::cout << "memory location: " << &var << nl; // give address, using actual va
 std::cout << "memory location: "<< var_addr << nl; // give addr, using pointer
 std::cout << "actual value: " << *var_addr << nl; // give value at address held by pointer
 
-// part 7: classes =============================================================
-printf("%s\n",rpad("= 7: Classes & Objects ").c_str());
+// part 8: classes =============================================================
+printf("%s\n",rpad("= 8: Classes & Objects ").c_str());
 //kjg190412: normally classes go outside a function, unless only want local scope
 /* basics:
     * initialization
