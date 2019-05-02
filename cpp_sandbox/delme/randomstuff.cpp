@@ -1,5 +1,7 @@
 /*
-mini sandbox to test things. add / remove as necessry
+Mini sandbox to test things. add / remove as necessary
+GUIDELINE: when coming up with a new idea, just make a new function and call it
+  in main, which may help preserve older attempts / info
 */
 
 #include <iostream>
@@ -7,42 +9,19 @@ mini sandbox to test things. add / remove as necessry
 #include <stdio.h>
 #include <fstream>
 
-using namespace std;
+// using namespace std; // include on per-function  basis
+
+void vectorStuff_190502(){
+  using namespace std;
+  vector<int> a;
+  for(int i=0;i<5;i++) a.push_back(i);
+
+  for(int i=0;i<5;i++) printf(" %d",a[i]);
+  printf("\n");
+
+}
 
 int main(){
-  // WANT TO BE ABLE TO READ IN A FILE WITH STDIO...
-
-    FILE * pFile;
-   long lSize;
-    char * buffer;
-    size_t result;
-
-    pFile = fopen ( "file.txt" , "r" );
-    if (pFile==NULL) {fputs ("File error",stderr); exit (1);}
-
-    // obtain file size:
-    fseek (pFile , 0 , SEEK_END);
-    lSize = ftell (pFile);
-    rewind (pFile);
-
-    // allocate memory to contain the whole file:
-    buffer = (char*) malloc (sizeof(char)*lSize);
-    if (buffer == NULL) {fputs ("Memory error",stderr); exit (2);}
-
-    // string line;
-    // getline(pFile,line)
-    // copy the file into the buffer:
-    result = fread (buffer,1,lSize,pFile);
-    if (result != lSize) {fputs ("Reading error",stderr); exit (3);}
-
-    /* the whole file is now loaded in the memory buffer. */
-
-    // terminate
-    string raw=buffer;
-    
-    cout << buffer;
-    fclose (pFile);
-    free (buffer);
-
-    return 0;
+  vectorStuff_190502();
+  return 0;
 }

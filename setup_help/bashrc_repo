@@ -30,3 +30,14 @@ alias sr="screen -r $arg1"  # reattach to socket
 alias sl="screen -ls"       # list active socket
 #(detach is CTRL+A,C)
 #(delete is sr <ScrName>, exit)
+
+# ADDME!!!!!!!!!!
+cpprun(){
+  # show how to give input arguments with bash as well as variables
+  echo "building..."
+  g++ -std=c++11 $1
+  if [ $? -eq 0 ]
+    then
+      ./a.out
+  fi
+}
