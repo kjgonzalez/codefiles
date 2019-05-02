@@ -15,19 +15,19 @@ General things to practice:
 1  printing to screen & basic math operations
      1.1 cout / printf
      1.2 +,-,*,/,pow,mod
+     1.3 system-level commands
 2  if/else, loops, switches
 3  variables
    int, float, char, enum, struct
-4  basic math operations
-5  string operations
-6  vectors & functions
-     6.1 vectors
-     6.2 functions
-     6.3 anonymous functions
-7  file I/O
-8  pointers
-9  classes
-10 matrices
+4  string operations
+5  vectors & functions
+     5.1 vectors
+     5.2 functions
+     5.3 anonymous functions
+6  file I/O
+7  pointers
+8  classes
+9 matrices
 
 
 
@@ -127,6 +127,7 @@ std::string lpad(std::string str,int maxLength=70,const char& filler = '='){
 
 int main(){
 
+// 1  printing to screen & basic math operations ===============================
 printf("%s\n",rpad("= 1: printing to screen & basic math operations").c_str());
 
 // want to have simple way to print to screen
@@ -166,6 +167,10 @@ std::cout << "add, sub " << 4+5-3 << nl;
 std::cout << "mult, div " << 2*10.1/5 << nl;
 std::cout << "power " << pow(2,3) << nl;
 std::cout << "modulus " << 8%3 << nl;
+
+//1.3 system operations
+system("echo system level commands are also possible like so.");
+
 
 
 // part 2: if/else, loops, switches  ===========================================
@@ -255,14 +260,8 @@ woofer.age=3;
 woofer.name = "woof";
 printDogInfo(woofer);
 
-// part 5: basic string operations =============================================
-/*  * done: concatenate 2 strings
-    * done: insert string in arbitrary places
-    * done: convert string to number
-    * done: convert number to string
-    * done: return i'th value
-    * done: split a string into list/array of strings
-*/
+// part 4: basic string operations =============================================
+printf("%s\n",rpad("= 4: string operations ").c_str());
 
 std::string astr= "this is a test"; // initialize
 astr = astr+". nice.\n";            // concatenate
@@ -292,9 +291,10 @@ arr=split("This--is--split","--");
 for(int i=0;i<arr.size();i++) std::cout << arr[i] << ",";
 std::cout << nl;
 
-
 // part 6: vectors, functions, anonymous functions =============================
-// kjg190412: can be treated a little bit like a list, but only for one type
+printf("%s\n",rpad("= Vectors & Functions ").c_str());
+
+// 5.1 vectors
 // kjg190415: need examples of more member functions
 std::vector<int> v;
 v.push_back(0);
@@ -303,18 +303,20 @@ for(int i=2;i<5;i++){ v.push_back(i);}
 for(int i=0;i<v.size();i++) std::cout << v[i] << " ";
 std::cout << nl;
 
+// 5.2 functions
 std::vector<float> w;
 w.push_back(3);
 w.push_back(4);
 w.push_back(12);
 std::cout << pyt(w) << nl;
 
-// anonymous functions (lambda functions)
+// 5.3 anonymous functions (lambda functions)
 auto firstLambda = [](int a, int b) {return a+b;};
 std::cout << firstLambda(3,4) << "\n";
 
 
-// part 7: pointers ============================================================
+// part 6: pointers ============================================================
+printf("%s\n",rpad("= 6: Pointers ").c_str());
 
 int var = 3;
 int* var_addr = &var; // pointers store addresses, so need '*'
@@ -324,9 +326,9 @@ std::cout << "memory location: " << &var << nl; // give address, using actual va
 std::cout << "memory location: "<< var_addr << nl; // give addr, using pointer
 std::cout << "actual value: " << *var_addr << nl; // give value at address held by pointer
 
-// part 8: classes =============================================================
+// part 7: classes =============================================================
+printf("%s\n",rpad("= 7: Classes & Objects ").c_str());
 //kjg190412: normally classes go outside a function, unless only want local scope
-
 /* basics:
     * initialization
     * "deconstruction" ?
@@ -353,12 +355,6 @@ class Rectangle {
 Rectangle rect(3,4);
 printf("area of rect: %f\n", static_cast<float>(rect.area()) );
 std::cout << "area of rect: "<< rect.area() << nl;
-
-
-
-
-
-
 
 }//main
 
