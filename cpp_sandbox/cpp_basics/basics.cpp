@@ -27,7 +27,7 @@ General things to practice:
 6  file I/O
 7  pointers
 8  classes
-9 matrices
+9  matrices
 
 
 
@@ -363,6 +363,12 @@ std::cout << "actual value: " << var << nl; // give actual value, using actual v
 std::cout << "memory location: " << &var << nl; // give address, using actual variable
 std::cout << "memory location: "<< var_addr << nl; // give addr, using pointer
 std::cout << "actual value: " << *var_addr << nl; // give value at address held by pointer
+
+//arrow operator allows access to the members sof an object that a pointer is pointing to.
+std::string someString = "this text is accessed via a pointer.";
+std::string* delme = &someString;
+printf("%s\n",delme->c_str());
+
 
 // part 8: classes =============================================================
 printf("%s\n",rpad("= 8: Classes & Objects ").c_str());
