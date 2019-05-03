@@ -19,3 +19,5 @@ DELETING A BRANCH ==========================================
 MERGING A BRANCH ===========================================
   git merge NewBranch (must already be in main branch)
 
+MENTIONING AN ISSUE IN A COMMIT ============================
+commit <item> -m "#ISSUE_NUM: working on this thing"
