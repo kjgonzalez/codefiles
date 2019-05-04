@@ -70,7 +70,9 @@ At this point, we can start talking about how you have modified all the differen
 \subsection{Modification of Pyramid Stereo Matching Network}
 The first task in creating a network that can take a stereo image pair and generate 3D bounding boxes, as described in figure xx above, is to have the capability of taking a stereo image pair and creating a 2.5D disparity map. To that end, a best-in-class disparity generation algorithm was searched and was selected to be the Pyramid Stereo Matching Network. Pyramid Stereo Matching Network was published by Jia-Ren Chang and Yong-Sheng Chen in March 2018. This network takes a deep learning approach to generating disparity maps from a pair of images. The network itself is near the top of the state of the art, and achieves this by the architecture of its network. (xx architecture and style need to be elaborated upon in the "related work" section). The openly-available repository provided a foundation to start on towards making a compact, easy-to-use function. 
 
+the original evaluation code that was given was straightforward. i had great success in testing it out right away. Of course, there were some usual delays with making sure the correct packages were installed. additionally, the network was adapted to run in python3. as has been stated before, this project has placed a great focus on ensuring the future usability of the code, and so python 3.x was used. any deprecated functionality was manually changed. 
 
+after the initial evaluation, i set about to training the network from the ground up. i first pretrained the network from scratch using the freiburg dataset, then further pretrained it on the middlebury dataset. finally, i finetuned the network by training it on the kitti stereo datset, which contains similar but not identical scenes that are seen in the 3d object detection datset. 
 
 
 
