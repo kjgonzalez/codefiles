@@ -1,0 +1,27 @@
+= Search for a file in a folder (& recursively) ============
+in Powershell: 
+dir <filename>
+to make it recursive: dir -s <filename>
+
+= view text file contents in cmd ===========================
+more FileName.txt
+
+= set alias in powershell (note: not saved) ================
+Set-Alias -Name list -Value <SomeAction>
+
+src: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/set-alias?view=powershell-6
+note:https://stackoverflow.com/questions/24914589/how-to-create-permanent-powershell-aliases
+
+= CMD: create a symlink ====================================
+https://www.maketecheasier.com/create-symbolic-links-windows10/
+NOTE: must be done in COMMANDLINE, not POWERSHELL
+mklink path/to/desired/link /path/to/real/item
+
+= Powershell: command-line function ========================
+Function HelloWorld {
+  echo "Hello world! I'm a powershell function"
+}
+
+
+
+
