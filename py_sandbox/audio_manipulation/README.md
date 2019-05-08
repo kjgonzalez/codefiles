@@ -8,3 +8,8 @@
 * batch metadata manipulation
 * batch audio clip editing (replace one clip with another)
 * TBD
+
+
+## Useful links: 
+metadata manipulation lib: https://mutagen.readthedocs.io/en/latest/user/id3.html
+possible audio manipulation lib: https://github.com/jiaaro/pydub#installation
