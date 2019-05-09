@@ -17,6 +17,16 @@ k=3
 print('regular: choosing',k,'random elements from set:',random.sample(x,k))
 print('numpy:   choosing',k,'random elements from set:',np.random.choice(np.array(x),k))
 
+print(
+'''NOTE: when dealing with a 2D array (or higher), need to actually use
+    shuffling, because np.random.choice does not pick k unique random values,
+    only k random values. example: ''')
+x2=np.array(np.random.rand(5,3)*10,int)
+print(x2)
+
+print('sampling k rows from array:')
+
+
 # randomly choosing a single element from a list:
 print('random single choice:',random.choice(x))
 
@@ -30,6 +40,9 @@ print('shuffled:',x2)
 
 print()
 print('with numpy:')
+print(
+'''note: np.random.shuffle only shuffles along first axis of multi-dim array,
+    and happens in-place''')
 xnp=np.arange(10)
 def npshuffle(nparr):
     npa2=np.copy(nparr)
