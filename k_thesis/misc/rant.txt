@@ -1,0 +1,24 @@
+date: 190509
+objective: rant about finding out that your topic 
+    has already been done by someone else
+
+so. it turns out that there's a paper and a group people doing exactly the thing you thought of. there's a lot of emotions to process right now. definitely some emotional whiplash, because just this morning you were feeling quite good about yourself and the level of focus you had not had in quite some time. 
+
+let's take a moment to appreciate these feelings. i'm angry because i feel like i've been cheated out of my work, and potentially even credit. i'm sad because i blame myself for taking so long to both realize my work as well as find out that their work existed. i'm scared because i have no idea what i'm supposed to do, especially now that my plans were based on finishing by august. i'm frustrated, because i had been dragging my feet with a lack of motivation and confidence to continue working out of anxiety that my work was a dead end. and of course, i'm frustrated that i finally increased my focus, confidence, and productivity, only to find out that my goal has now changed for reasons out of my control.
+
+life sucks. Bad stuff happens. it's just business. and so on.
+
+alright, now that we've got these terrible feelings out of the way, maybe we can do something about the situation that we're in. we need to adapt. change course. overcome this obstacle. let's think about our options here, and let's exclude the dramatic "lay down and die" ideas. 
+
+first of all, this paper needs to be analyzed a little bit. what do they accomplish? let's just be clear on what they have, so we can then differentiate. in this paper, they have a multi-step process, which they made a pretty little image for: take stereo / monocular images >> create a disparity map >> convert to pseudo-lidar >> perform 3d object detection. they use the kitti dataset, and compare their performance on 3D object estimation as well as bird's eye view (bev). for stereo estimation, they use PSMnet. for 3d object detection, they use AVOD and fpointnet. finally, it seems like they do some "lateral" testing, where they explain various filters on disparity maps, use "dispnet" and "sps-stereo" to estimate disparity maps, as well as a monocular depth estimator DORN. 
+
+woof. alright, so, fair chunk. awesome. let's figure out what we can do to differentiate from that. as of now, you are currently trying to develop a multi-step process to estimate 3d bounding boxes. your multi step process more or less looks like: generate a disparity map >> convert to stereo-pcl >> estimate 3d BB's via fpnet.
+
+so, clearly your project is pretty much covered by their research. this means you're gonna wanna back up and distinguish your work in some other, meaningful way. 
+also, keep in mind that publishing really isn't your final goal. your final goal is of course, to graduate with your masters. 
+
+from now on, just assume that you will not publish your work, because it has simply already been published in the time since you began. 
+
+so, in order to complete your masters, is it possible to continue as if nothing has changed? i.e.: develop a stereo-based 3d bb estimation network? if this isn't ok, can you simply make your thesis about the best way to convert from disparity to pointcloud? if this isn't ok, can you make a study about the state of stereo vision field?
+
+whatever the case, i'm sure your professors will understand, and we'll see. 
