@@ -11,7 +11,7 @@ import argparse
 
 p=argparse.ArgumentParser()
 p.add_argument('--src',type=int,default=0,help='video source')
-# p.add_argument('-s',type=str,default="it's a nice day",help='string to print')
+# p.add_argument('--s',type=str,default="it's a nice day",help='string to print')
 p.add_argument('--hFlip',default=False,action='store_true',help='flip img about horizontal')
 p.add_argument('--vFlip',default=False,action='store_true',help='flip img about vertical')
 args=p.parse_args()
