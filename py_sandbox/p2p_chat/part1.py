@@ -38,8 +38,8 @@ def handler(c,a):
             break
 while True:
     c,a = sock.accept()
-    cThread = thrading.Thread(target=handler,args=(c,a))
+    cThread = threading.Thread(target=handler,args=(c,a))
     cThread.daemon = True # allows you to close program even if threads still running
-    cThrad.start()
+    cThread.start()
     connections.append(c)
     print(connections)
