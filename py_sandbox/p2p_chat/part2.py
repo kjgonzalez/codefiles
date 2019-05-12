@@ -9,7 +9,7 @@ import argparse
 
 p=argparse.ArgumentParser()
 p.add_argument('--server',default=False,action='store_true',help='run as server')
-p.add_argument('-ip',type=str,help='server ip address (as client)')
+p.add_argument('--ip',type=str,help='server ip address (as client)')
 
 args=p.parse_args()
 
@@ -44,7 +44,7 @@ class Client:
         self.sock.connect((address,10000))
 
         # want input and output threads
-        iThreead = threading.Thread(target = self.sendMsg)
+        iThread = threading.Thread(target = self.sendMsg)
         iThread.daemon = True
         iThread.start()
         while True:
