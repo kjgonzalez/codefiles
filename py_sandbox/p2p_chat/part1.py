@@ -13,6 +13,20 @@ sources:
 
 
 KJGNOTE: this should be run on the "server"
+
+how to use:
+on rpi:
+    1. startup rpi
+    2. ssh into rpi
+    3. python3 part1.py
+on local computer:
+    1. use telnet to access rpi. recommended to use PuTTY
+
+NOTE: if windows, you can use powershell command (must first be enabled) "telnet
+    IPADDR PORT" ip address is same as used for ssh
+NOTE: if dislike having immediate feedback, PuTTY can control this by going to
+    "Terminal >> Local line editing" and selecting "Force on", which allows you
+    to edit your text BEFORE hitting enter.
 '''
 
 
