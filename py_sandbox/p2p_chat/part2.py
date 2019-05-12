@@ -4,7 +4,14 @@ part 2 of ultimately building a p2p chat program. see part1.py for all details.
 
 '''
 
-import socket, threading, sys
+import socket, threading
+import argparse
+
+p=argparse.ArgumentParser()
+p.add_argument('--server',default=False,action='store_true',help='run as server')
+p.add_argument('-ip',type=str,help='server ip address (as client)')
+
+args=p.parse_args()
 
 class Server:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # ipv4, tcp
@@ -31,5 +38,26 @@ class Server:
             self.connections.append(c)
             print(self.connections)
 
-server = Server()
-server.run()
+class Client:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # ipv4, tcp
+    def __init__(self,address):
+        self.sock.connect((address,10000))
+
+        # want input and output threads
+        iThreead = threading.Thread(target = self.sendMsg)
+        iThread.daemon = True
+        iThread.start()
+        while True:
+            data=self.sock.recv(1024)
+            if not data:
+                break
+            print(data)
+    def sendMsg(self):
+        while True:
+            self.sock.send(bytes(input(''),'utf-8'))
+
+if(args.server):
+    server = Server()
+    server.run()
+else:
+    client = Client(args.ip)
