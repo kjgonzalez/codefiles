@@ -79,8 +79,9 @@ class Client:
                 break
             if(args.matrix_demo):
                 # special case
+                print('new data:')
                 arr=np.frombuffer(data,dtype=int).reshape((3,3))
-                print(data)
+                print(arr)
             else:
                 # normal operation
                 print(data)
