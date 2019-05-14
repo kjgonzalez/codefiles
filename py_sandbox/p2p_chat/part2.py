@@ -28,6 +28,7 @@ class Server:
             for connection in self.connections:
                 connection.send(bytes(data)) # can only send bytes
             if not data:
+                print(str(a[0])+':'+str(a[1]),'disconnected')
                 self.connections.remove(c)
                 c.close()
                 break
@@ -39,7 +40,7 @@ class Server:
             cThread.daemon = True
             cThread.start()
             self.connections.append(c)
-            print(self.connections)
+            print(str(a[0])+':'+str(a[1]),'connected')
 
 class Client:
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # ipv4, tcp
@@ -54,7 +55,7 @@ class Client:
             data=self.sock.recv(1024)
             if not data:
                 break
-            print(data)
+            print(str(data,'utf-8'))
     def sendMsg(self):
         while True:
             self.sock.send(bytes(input(""),'utf-8'))
