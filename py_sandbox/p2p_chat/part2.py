@@ -4,8 +4,11 @@ part 2 of ultimately building a p2p chat program. see part1.py for all details.
 
 '''
 
-import socket, threading
+import socket, threading,sys
 import argparse
+
+if(sys.version_info[0]!=3):
+    raise Exception('Please use python3. exiting.')
 
 p=argparse.ArgumentParser()
 p.add_argument('--server',default=False,action='store_true',help='run as server')
@@ -54,9 +57,7 @@ class Client:
             print(data)
     def sendMsg(self):
         while True:
-            inp=input('')
-            inp_b=bytes(inp)
-            self.sock.send(inp_b)
+            self.sock.send(bytes(input(""),'utf-8'))
 
 if(args.server):
     server = Server()
