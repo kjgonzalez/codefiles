@@ -50,7 +50,7 @@ class Server:
     def run(self):
         while True:
             c,a = self.sock.accept()
-            cThread = threading.Thread(target=self.handler,args=(c,a))
+            cThread = threading.Thread(target=self.h2,args=(c,a))
             # allows you to close program even if threads still running
             cThread.daemon = True
             cThread.start()
