@@ -54,7 +54,7 @@ class Client:
             print(data)
     def sendMsg(self):
         while True:
-            self.sock.send(bytes(input(''),'utf-8'))
+            self.sock.send(bytes(input(""),'utf-8'))
 
 if(args.server):
     server = Server()
