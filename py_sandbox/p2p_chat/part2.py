@@ -15,6 +15,7 @@ if(sys.version_info[0]!=3):
 p=argparse.ArgumentParser()
 p.add_argument('--server',default=False,action='store_true',help='run as server')
 p.add_argument('--ip',type=str,help='server ip address (as client)')
+p.add_argument('--matrix_demo',default=False,action='store_true',help='transmit & receive matrix data'))
 
 args=p.parse_args()
 
@@ -28,7 +29,7 @@ class Server:
         while True:
             data = c.recv(1024) # 1024 bytes max
             for connection in self.connections:
-                connection.send(bytes(data)) # can only send bytes
+                connection.send(bytes(data,'utf-8')) # can only send bytes
             if not data:
                 print(str(a[0])+':'+str(a[1]),'disconnected')
                 self.connections.remove(c)
@@ -36,6 +37,7 @@ class Server:
                 break
     def h2(self,c,a):
         while True:
+            data=bytes('here','utf-8')
             rand_arr=np.array(np.random.rand(3,3)*10,int)
             arr_bytes=rand_arr.tobytes()
             for connection in self.connections:
@@ -50,7 +52,12 @@ class Server:
     def run(self):
         while True:
             c,a = self.sock.accept()
-            cThread = threading.Thread(target=self.h2,args=(c,a))
+            if(args.matrix_demo):
+                # special case
+                cThread = threading.Thread(target=self.h2,args=(c,a))
+            else:
+                # normal operation (per video)
+                cThread = threading.Thread(target=self.handler,args=(c,a))
             # allows you to close program even if threads still running
             cThread.daemon = True
             cThread.start()
@@ -70,7 +77,13 @@ class Client:
             data=self.sock.recv(1024)
             if not data:
                 break
-            print(data)
+            if(args.matrix_demo):
+                # special case
+                arr=np.frombuffer(data,dtype=int).reshape((3,3))
+                print(data)
+            else:
+                # normal operation
+                print(data)
     def sendMsg(self):
         while True:
             self.sock.send(bytes(input(""),'utf-8'))
