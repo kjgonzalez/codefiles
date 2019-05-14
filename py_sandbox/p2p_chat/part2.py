@@ -6,6 +6,8 @@ part 2 of ultimately building a p2p chat program. see part1.py for all details.
 
 import socket, threading,sys
 import argparse
+import time
+import numpy as np
 
 if(sys.version_info[0]!=3):
     raise Exception('Please use python3. exiting.')
@@ -32,6 +34,19 @@ class Server:
                 self.connections.remove(c)
                 c.close()
                 break
+    def h2(self,c,a):
+        while True:
+            rand_arr=np.array(np.random.rand(3,3)*10,int)
+            arr_bytes=rand_arr.tobytes()
+            for connection in self.connections:
+                connection.send(bytes(arr_bytes))
+            if not data:
+                print(str(a[0])+':'+str(a[1]),'disconnected')
+                self.connections.remove(c)
+                c.close()
+                break
+            time.sleep(1) # wait a second before sending next packet
+
     def run(self):
         while True:
             c,a = self.sock.accept()
@@ -55,7 +70,7 @@ class Client:
             data=self.sock.recv(1024)
             if not data:
                 break
-            print(str(data,'utf-8'))
+            print(data)
     def sendMsg(self):
         while True:
             self.sock.send(bytes(input(""),'utf-8'))
