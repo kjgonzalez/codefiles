@@ -15,7 +15,7 @@ if(sys.version_info[0]!=3):
 p=argparse.ArgumentParser()
 p.add_argument('--server',default=False,action='store_true',help='run as server')
 p.add_argument('--ip',type=str,help='server ip address (as client)')
-p.add_argument('--matrix_demo',default=False,action='store_true',help='transmit & receive matrix data'))
+p.add_argument('--matrix_demo',default=False,action='store_true',help='transmit & receive matrix data')
 
 args=p.parse_args()
 
