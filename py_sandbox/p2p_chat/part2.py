@@ -2,6 +2,10 @@
 part 2 of ultimately building a p2p chat program. see part1.py for all details.
     Also next, will start working in a more object-oriented way.
 
+kjg190514: matrix_demo kinda works, but need to figure out how to detect that
+    socket connection has closed without crashing. NOTE: using a try/except
+    doesn't really solve the problem, so you're better off figuring out how the
+    fucking socket module works. 
 '''
 
 import socket, threading,sys
@@ -37,11 +41,19 @@ class Server:
                 break
     def h2(self,c,a):
         while True:
+            # data=c.recv(1024)
             data=bytes('here','utf-8')
             rand_arr=np.array(np.random.rand(3,3)*10,int)
             arr_bytes=rand_arr.tobytes()
             for connection in self.connections:
-                connection.send(bytes(arr_bytes))
+                try:
+                    connection.send(bytes(arr_bytes))
+                except ConnectionAbortedError:
+                    print('oops')
+                    print(str(a[0])+':'+str(a[1]),'disconnected')
+                    self.connections.remove(c)
+                    c.close()
+                    break
             if not data:
                 print(str(a[0])+':'+str(a[1]),'disconnected')
                 self.connections.remove(c)
@@ -51,12 +63,15 @@ class Server:
 
     def run(self):
         while True:
-            c,a = self.sock.accept()
             if(args.matrix_demo):
                 # special case
+                c,a = self.sock.accept()
+                # c.settimeout(0.01)
+                # c.setblocking(False)
                 cThread = threading.Thread(target=self.h2,args=(c,a))
             else:
                 # normal operation (per video)
+                c,a = self.sock.accept()
                 cThread = threading.Thread(target=self.handler,args=(c,a))
             # allows you to close program even if threads still running
             cThread.daemon = True
