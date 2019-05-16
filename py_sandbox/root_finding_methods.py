@@ -56,16 +56,17 @@ def root_newton(function,yValue,start_point,eps=1e-6,maxit=10000):
         iter+=1
     return x,iter,gval+yValue
 
-print('Will solve for x in f(x)=x^2-2 with two different solvers')
-print()
-fn = lambda x: x**2-2
-ydes=4
+if(__name__=='__main__'):
+    print('Will solve for x in f(x)=x^2-2 with two different solvers')
+    print()
+    fn = lambda x: x**2-2
+    ydes=4
 
-print('using bisection method:'+'='*10)
-result=root_bisection(fn,ydes,[0,3])
-print('answer: {} | No.Iterations: {} | approximation: {}'.format(*result))
-print()
+    print('using bisection method:'+'='*10)
+    result=root_bisection(fn,ydes,[0,3])
+    print('answer: {} | No.Iterations: {} | approximation: {}'.format(*result))
+    print()
 
-print('using newton method:'+'='*10)
-result=root_newton(fn,ydes,5)
-print('answer: {} | No.Iterations: {} | approximation: {}'.format(*result))
+    print('using newton method:'+'='*10)
+    result=root_newton(fn,ydes,5)
+    print('answer: {} | No.Iterations: {} | approximation: {}'.format(*result))
