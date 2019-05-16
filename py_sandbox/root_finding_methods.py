@@ -16,7 +16,9 @@ def root_bisection(function,yValue,lims,eps=1e-6,maxit=10000):
         * eps: maximum allowable error
         * maxit: max number of iterations before giving up
     OUTPUT:
-        * value of x at yValue
+        * solved root of f(x)-yValue
+        * number of iterations
+        * approximated yValue
     '''
     # want to minimize this function
     g=lambda x:function(x)-yValue
@@ -43,7 +45,9 @@ def root_newton(function,yValue,start_point,eps=1e-6,maxit=10000):
         * eps: maximum allowable error
         * maxit: max number of iterations before giving up
     OUTPUT:
-        * value of x at yValue
+        * solved root of f(x)-yValue
+        * number of iterations
+        * approximated yValue
     '''
     g=lambda x:function(x)-yValue
     x=start_point+0
