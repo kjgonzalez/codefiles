@@ -182,7 +182,10 @@ Next, we're gonna spend some time figuring out how to create a table but with nu
 
 \newpage
 \subsubsection{Figures}
-This section to cover how to make figures, which require images to be loaded outside of the file.
+This section to cover how to make figures, which require images to be loaded outside of the file. hopefully, this works. let's see what happens when you reference a figure, such as \ref{figure-parking} below. well what about \ref{figure-improved}??? Ok, kjg190521 note: if you want a reference / label to work properly, you need to put it near the end of figure definition. the order essentially goes: \\
+begin - includegraphics - caption - label - end. 
+\\
+\textbf{VERY IMPORTANT!}
 
 \begin{figure}[h] % ahh, h = "approx here", t = "top of page", b = "bottom of pg"
 \centering
@@ -196,7 +199,9 @@ Not bad, alright so this seems to work nicely. Note the two extra lines that are
 \centering
 \includegraphics[width=0.5\textwidth]{media/result.pdf}
 \caption{Just look at that \textit{NICE} quality.}	
+\label{figure-improved}
 \end{figure}
+
 
 
 \subsubsection{Equations}
