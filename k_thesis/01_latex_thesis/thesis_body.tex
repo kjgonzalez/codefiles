@@ -1,5 +1,3 @@
-\def \m {../media}
-
 \section{Introduction}
 so, need to figure out what the general order of this paper will be. let's try the following: \\
 1.0 introduction \\
@@ -50,18 +48,28 @@ Stereo disparity maps, which are built by the comparing the pixel distance betwe
 \subsection{3D estimation with Stereo Disparity Maps}
 There is a surprisingly low amount of public research on stereo vision for use with 3D localization. \cite{li_stereo_2019} created an RCNN-based approach that currently performs best in class on the KITTI dataset, although achieving 59'th place when also compared against networks that use lidar. This paper also cites other works, such as "3DOP" by \cite{chen_3d_2016}. However, some prior information is encoded into the calculation before using regression to estimate object pose, including height above ground, object size priors, and "depth informed features", while our paper does not provide this information to the network beforehand.
 
+A recent development has been published since the start of this paper, by Wang et. al. In their paper, "Pseudo-LiDAR from Visual Depth Estimation" \cite{wang_pseudo-lidar_2019}, the authors took an extremely similar approach to this paper. Their pipeline / steps, outlined below in Figure \ref{wang_pipeline}, was to take a stereo image pair, generate a disparity map via Pyramid Stereo Matching network, convert it to a "pseudo-lidar" scan, and extract 3D bounding box estimations via Frustum Pointnet. \\
 
+\begin{figure}[ht] % h = "approx here", {h,t,b}
+    \includegraphics[width=1\textwidth]{../media/wang_pipeline.png}
+    \caption{Pipeline of the Pseudo-Lidar estimation network. Stereo (or mono) image data is used to create a disparity map, which is converted to lidar, and is then used by a 3D detector to estimate 3D bounding boxes.}
+    \label{wang_pipeline} %label goes last
+\end{figure}
 
+In their paper, the authors argue that within a short distance, up to 30 meters away, stereo vision performs competitively with lidar.
 
-\subsection{3D estimation with Lidar}
+\subsection{3D Estimation with Lidar}
 Performing 3D estimation and localization with lidar has been a focus for a large portion of the field, and with good reason. Thus, there are many papers which focus on using lidar sensor capabilities to estimate 3D bounding boxes, to varying degrees of success. \cite{qi_frustum_2017} paper, currently one of the best performing networks, forms a part of the work of this research paper as well. 
 
 \subsection{3D Reconstruction with Stereo Data}
-so, i'm having trouble finding information about 3D reconstruction, and i think it may be because i'm using the wrong terminology. almost invariably, 3d reconstruction is used to describe the process of taking photos of an object with multiple cameras to then creating a 3D model. instead, i am trying to obtain a point cloud from a stereo image. unfortunately, i think this may either be a rare or unpopular task... doesn't seem like there's a lot of people doing it. i'm gonna make a small list of all the places that i find references about stereo-pointcloud conversion: 
+So, i'm having trouble finding information about 3D reconstruction, and i think it may be because i'm using the wrong terminology. almost invariably, 3d reconstruction is used to describe the process of taking photos of an object with multiple cameras to then creating a 3D model. instead, i am trying to obtain a point cloud from a stereo image. unfortunately, i think this may either be a rare or unpopular task... doesn't seem like there's a lot of people doing it. i'm gonna make a small list of all the places that i find references about stereo-point cloud conversion: 
 
-\url{https://www.youtube.com/watch?v=ujm3TKfVarQ}\\
+\url{https://www.youtube.com/watch?v=ujm3TKfVarQ} \\
 \url{https://www.researchgate.net/post/3D_reconstruction_from_stereo_images_the_point_clouds_seem_to_be_warped_and_curved_towards_the_edges_of_the_image_why}\\
-Really there just isn't much to use
+Really there just isn't much to use in the way of "research". So, will instead cover the "traditional" methods. For one, will cite \cite{szeliski_computer_2010}, a very helpful book for understanding stereo correspondence as well as reconstruction.
+
+
+
 
 
 
@@ -74,32 +82,24 @@ The first task in creating a network that can take a stereo image pair and gener
 
 the original evaluation code that was given was straightforward. i had great success in testing it out right away. Of course, there were some usual delays with making sure the correct packages were installed. additionally, the network was adapted to run in python3. as has been stated before, this project has placed a great focus on ensuring the future usability of the code, and so python 3.x was used. any deprecated functionality was manually changed. 
 
-after the initial evaluation, i set about to training the network from the ground up. i first pretrained the network from scratch using the freiburg dataset, then further pretrained it on the middlebury dataset. finally, i finetuned the network by training it on the kitti stereo datset, which contains similar but not identical scenes that are seen in the 3d object detection datset. 
+after the initial evaluation, i set about to training the network from the ground up. i first pretrained the network from scratch using the Freiburg dataset, then further pretrained it on the middlebury dataset. finally, i finetuned the network by training it on the kitti stereo datset, which contains similar but not identical scenes that are seen in the 3d object detection dataset. 
 
 
 
 \subsection{Development of Stereo 3D Reconstruction Function}
 texthere
 
-\newcommand{\R}[1]{\textit{#1}}
-
-
-hello world i like \R{one}
-
 \subsection{Modification of Frustum Point Net}
-texthere
 
 Frustum Pointnet, being originally written for Python 2, needed to undergo some minor adaptations while being modified for usage with Python 3. For example, several modules and functions were deprecated or modified, and so had to be properly adapted. There are also two actively maintained versions of the frustum Pointnet code. as explained in the original paper [xx], there are two versions of the FPNet model: the first which uses standard Tensorflow libraries, and the second which uses custom Tensorflow operators that must be compiled. For the purposes of this paper, version 1 was used and will be the default version unless otherwise noted. 
 
-
-In order to transition from using the provided pretrained model and preprocessed data to self-made preprocessed and trained data, a set of steps and "paths" were created to clarify what was happening in each step and set of "runs". As shown below in Figure \ref{fppaths}, there are various 
+In order to transition from using the provided pretrained model and preprocessed data to self-made preprocessed and trained data, a set of steps and "paths" were created to clarify what was happening in each step and set of "runs". As shown below in Figure \ref{fp_paths}, there are various 
 
 \begin{figure}[ht] % h = "approx here", {h,t,b}
-    \label{fppaths}
-    \includegraphics[width=1\textwidth]{\m/fpnet_paths_img.png}
+    \includegraphics[width=1\textwidth]{../media/fpnet_paths_img.png}
     \caption{Various paths that were planned to simply transition from lidar-based 3D estimation to stereo-based 3D estimation. Generally, paths went chronologically as follow: ADF, AEF, BEF, and finally CEF.}
+    \label{fp_paths} %label goes last
 \end{figure}
-
 
 
 
