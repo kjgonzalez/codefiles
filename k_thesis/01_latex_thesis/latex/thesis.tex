@@ -1,23 +1,27 @@
 \documentclass[11pt,twoside,a4paper,titlepage]{article}
 \usepackage[inner=3.0cm,outer=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage[utf8]{inputenc}
+%\usepackage{url} % enable listing url's. 
 \usepackage[pdftex]{graphicx} % enable importing of graphics?
 \usepackage[authoryear]{natbib}
-\usepackage{subfig} % important to allow multiple subfigures
+\usepackage{subfigure} % important to allow multiple subfigures. replaces subfig
 \usepackage{amsmath} 
 \usepackage{amssymb}
 \usepackage{setspace} % kjg190521: spacing between paragraphs?
-\usepackage{url} % enable listing url's. 
 \usepackage{listings}
-%\usepackage{algorithm} % kjg190221: seems to be giving problems even on ubuntu
-%\usepackage{algorithmic} % kjg190521: not really used, perhaps removable
 \usepackage{color}
 \usepackage{verbatim,framed} 
 \usepackage[font=small]{caption} % kjg190521:captions smaller than regular text
-\onehalfspacing 
+\usepackage{hyperref} % necessary to create hyperlinks. helps with figure references
+\onehalfspacing
 
-\usepackage{fancyhdr}
+\usepackage{fancyhdr} % enables "fancy" headers / footers
 \fancyhf{}
+
+\usepackage{chngcntr} % enables per-section numbering of any captions
+\counterwithin{figure}{section} % per-section numbering, figures
+\counterwithin{table}{section} % per-section numbering, tables
+\counterwithin{equation}{section} % per-section numbering, equations
 
 
 % Document Start ===============================================================
@@ -43,13 +47,13 @@
 % -!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!
 % body of document =========================================
 % -!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!
-\input{../main_body.tex}
+\input{../thesis_body.tex}
 % bibliography section =====================================
 
 \nocite{*} % list all references
 %\cleardoublepage
 \bibliographystyle{apalike}
-\bibliography{../refs_190426}
+\bibliography{../refs_190521}
 %\fancyhead[RO,LE]{References}
 %\listoffigures
 %\listoftables
