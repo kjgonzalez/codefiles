@@ -8,12 +8,11 @@
 \usepackage{amsmath} 
 \usepackage{amssymb}
 \usepackage{setspace} % kjg190521: spacing between paragraphs?
-\usepackage{listings}
-\usepackage{color}
+\usepackage{color} % enables color in document
 \usepackage{verbatim,framed} 
 \usepackage[font=small]{caption} % kjg190521:captions smaller than regular text
 \usepackage{hyperref} % necessary to create hyperlinks. helps with figure references
-\onehalfspacing
+\usepackage{appendix} % ensures appendices are recognized in table of contents
 
 \usepackage{fancyhdr} % enables "fancy" headers / footers
 \fancyhf{}
@@ -23,12 +22,35 @@
 \counterwithin{table}{section} % per-section numbering, tables
 \counterwithin{equation}{section} % per-section numbering, equations
 
+\onehalfspacing
+
+\usepackage{listings} % "source code printer". unsure, will leave alone
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\lstset{frame=tb,
+language=Python,
+aboveskip=1mm,
+belowskip=1mm,
+showstringspaces=false,
+columns=flexible,
+basicstyle={\small\ttfamily\linespread{0.8}},
+numbers=none,
+numberstyle=\tiny\color{gray},
+keywordstyle=\color{blue},
+commentstyle=\color{dkgreen},
+stringstyle=\color{mauve},
+breaklines=true,
+breakatwhitespace=true,
+tabsize=2
+}
+
 
 % Document Start ===============================================================
 \begin{document}
 
 % introductory pages (title, abstract, etc) ================
-\setlength{\parindent}{0pt}
+% \setlength{\parindent}{0pt} % controls how each paragraph is indented
 \input{../title.tex}
 \cleardoublepage
 \pagestyle{fancy}
@@ -54,12 +76,23 @@
 %\cleardoublepage
 \bibliographystyle{apalike}
 \bibliography{../refs_190521}
+
+% kjgnote: not sure if will need the below, have simply commented it out.
 %\fancyhead[RO,LE]{References}
 %\listoffigures
 %\listoftables
 %\fancyhead[RO,LE]{Listings}
 %\listofalgorithms
 %\cleardoublepage
+
+
+% -!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!
+% appendices / extra info ==================================
+\newpage
+\appendix % change how sections are numbered
+\input{../appendices.tex}
+
+
 
 \end{document}
 % END OF MAIN DOCUMENT =========================================================
