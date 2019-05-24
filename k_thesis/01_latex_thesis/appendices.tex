@@ -1,1 +1,113 @@
 % Appendices file. here, cover all topics related to thesis.
+
+\section{Performance Metrics}
+The concept of verifying accuracy in a statistical estimate is covered in [xx source], and contains well documented techniques of knowing how well a particular heuristic performs. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, two other metrics can be derived, precision and recall. 
+
+\subsection{Intersection Over Union}
+In image recognition, as well as other spatially-based algorithms, accuracy is needed in various forms to know "how well" a prediction matches the ground truth, or true value. If, for example, an object-detection algorithm predicts the location of a car in a photo, there may be multiple values to use, and questions to answer: ``How closely does the prediction's center of mass match the true center of mass?", ``How much overlap does the prediction have with the ground truth?", or even ``How well do the two bounding boxes align?". 
+
+In light of this, a simple metric is needed that can encompass all aspects of matching two shapes (e.g. rectangles) together. IOU enables a more granular scoring of an estimate's performance, rather than saying it is 100\% correct or incorrect. IOU is calculated as the ratio of two bounding regions' intersection over their union, as the name states. Visually, this looks something like the below in Figure \ref{iou_img}. Uniquely, the calculation of area and intersection for image boundaries is inclusive of the bounds, meaning that the length of a given difference must have ``+1" added to it. This is explained in the example below.
+
+\begin{figure}[ht] % h = "approx here", {h,t,b}
+    \includegraphics[width=1\textwidth]{../media/iou_img.png}
+    \caption{Example of ground truth bounding box (solid green) and prediction bounding box (dashed red). In this image, the overlap between the green and red regions is the intersection, while the combined area is the union. The IOU of the two boxes is 0.64. Image index: 8.}
+    \label{iou_img} %label goes last
+\end{figure}
+
+In order to formally calculate IOU, a generalized form may be generated to apply to n-dimensions. The generalized mathematical equation is simply as follows. Given a region A and a region B: 
+\begin{equation}
+IOU = \frac{|A\cap B|}{|A\cup B|} = \frac{|A\cap B|}{|A|+|B|- |A\cap B|}
+\end{equation}
+
+To assist in understanding IOU, a code snippet as well as an example are presented.
+
+All aspects of calculating the IOU (including area and intersection) are broken up into multiple pieces, but presented together below. For n-dimensions, the code (presented here in python) is as follows: 
+
+
+%
+%\begin{lstlisting}
+%'''
+%NOTE:
+%Internal convention: [Nx2] array,
+%| x1 x2 |
+%| y1 y2 |
+%| z1 z2 |
+%| .. .. |
+%
+%'''
+%
+%import numpy as np
+%
+%def extent(box,inclusive=False):
+%    '''
+%    Return the size or "extent" (length, area, volume, etc) of a given box in
+%    n-dimensions.
+%    INPUTS:
+%        box: n-dimensional bounds, format [x1,y1,z1, .. ,x2,y2,z2, ..]
+%        inclusive: boolean. add 1 unit to calculation, such as for image area
+%    OUTPUT:
+%    extent: size of box bounds, scalar float.
+%    '''
+%    o= 1 if(inclusive) else 0 # add '1' if inclusive is true
+%    b=box.reshape((2,-1)).T # now in internal convention
+%    return np.product([i[1]-i[0]+o for i in b])
+%def intersection(box1,box2,inclusive=False):
+%    '''
+%    Return the size / "extent" of intersection between two bounds
+%    INPUTS:
+%    box1,box2: n-dimensional bounds, format [x1,y1,z1, .. ,x2,y2,z2, ..]
+%    OUTPUT:
+%    intersection: size of overlapping bounds, scalar float.
+%    '''
+%    o= 1 if(inclusive) else 0 # add '1' if inclusive is true
+%    b1=box1.reshape((2,-1)).T
+%    b2=box2.reshape((2,-1)).T # internal convention
+%    c=np.stack((b1,b2),2)
+%    # for each dimension, get (min(upperbound)-max(lowerbound)) and get product
+%    return np.product([np.min(c[i,1,:])-np.max(c[i,0,:])+o for i in range(len(b1))])
+%
+%def IOU(b1,b2,inclusive=False):
+%    '''
+%    Return generalized intersection over union for two bounding boxes of matching n-dimension.
+%    INPUTS:
+%    b1,b2: n-dimensional bounding boxes, format [x1,y1,z1, .. ,x2,y2,z2, ..]
+%    OUTPUT:
+%    iou: intersection over union, scalar float, range [0,1].
+%    '''
+%    inter = intersection(b1,b2,inclusive)
+%    union = extent(b1,inclusive)+extent(b2,inclusive)-inter
+%    return inter / union
+%
+%\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+
+\subsection{Precision}
+texthere
+
+one texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere
+
+two
+
+
+\subsection{Recall}
+
+\section{Sample Appendix}
+one
+
+\begin{figure}[ht] % h = "approx here", {h,t,b}
+    \includegraphics[width=1\textwidth]{../media/wang_pipeline.png}
+    \caption{texthere}
+    \label{delme} %label goes last
+\end{figure}
+
+
