@@ -24,91 +24,86 @@ To assist in understanding IOU, a code snippet as well as an example are present
 All aspects of calculating the IOU (including area and intersection) are broken up into multiple pieces, but presented together below. For n-dimensions, the code (presented here in python) is as follows: 
 
 
-%\begin{lstlisting}[basicstyle=\linespread{0.8}\listingsfont]
-
+\begin{figure}[ht]
+\setstretch{0.84} % want code to be nice and compact
 \begin{lstlisting}
 import numpy as np
-import numpy as np
-import numpy as np
-import numpy as np
+
+def extent(box,inclusive=False):
+    '''
+    Return the size or "extent" (length, area, volume, etc) of a given box in
+    n-dimensions.
+    INPUTS:
+        box: n-dimensional bounds, format [x1,y1,z1, .. ,x2,y2,z2, ..]
+        inclusive: boolean. add 1 unit to calculation, such as for image area
+    OUTPUT:
+    extent: size of box bounds, scalar float.
+    '''
+    o= 1 if(inclusive) else 0 # add '1' if inclusive is true
+    b=box.reshape((2,-1)).T # now in internal convention
+    return np.product([i[1]-i[0]+o for i in b])
+
+def intersection(box1,box2,inclusive=False):
+    '''
+    Return the size / "extent" of intersection between two bounds
+    INPUTS:
+    box1,box2: n-dimensional bounds, format [x1,y1,z1, .. ,x2,y2,z2, ..]
+    OUTPUT:
+    intersection: size of overlapping bounds, scalar float.
+    '''
+    o= 1 if(inclusive) else 0 # add '1' if inclusive is true
+    b1=box1.reshape((2,-1)).T
+    b2=box2.reshape((2,-1)).T # internal convention
+    c=np.stack((b1,b2),2)
+    # for each dimension, get (min(upperbound)-max(lowerbound)) and get product
+    return np.product([np.min(c[i,1,:])-np.max(c[i,0,:])+o for i in range(len(b1))])
+
+def IOU(b1,b2,inclusive=False):
+    '''
+    Return generalized intersection over union for two bounding boxes of 
+        matching n-dimension.
+    INPUTS:
+    b1,b2: n-dimensional bounding boxes, format [x1,y1,z1, .. ,x2,y2,z2, ..]
+    OUTPUT:
+    iou: intersection over union, scalar float, range [0,1].
+    '''
+    inter = intersection(b1,b2,inclusive)
+    union = extent(b1,inclusive)+extent(b2,inclusive)-inter
+    return inter / union
+
 \end{lstlisting}
+\onehalfspacing % set line spacing back to normal
+\caption{Python implementation of generalized IOU calculation.}
+KJG190528: MUST CHANGE WHAT CODE IS HERE, KNOWN ERROR IN INTERSECTION CALCULATION XX.
+\label{codeBlock1}
+\end{figure}
 
-%
-%\begin{lstlisting}
-%'''
-%NOTE:
-%Internal convention: [Nx2] array,
-%| x1 x2 |
-%| y1 y2 |
-%| z1 z2 |
-%| .. .. |
-%
-%'''
-%
-%import numpy as np
-%
-%def extent(box,inclusive=False):
-%    '''
-%    Return the size or "extent" (length, area, volume, etc) of a given box in
-%    n-dimensions.
-%    INPUTS:
-%        box: n-dimensional bounds, format [x1,y1,z1, .. ,x2,y2,z2, ..]
-%        inclusive: boolean. add 1 unit to calculation, such as for image area
-%    OUTPUT:
-%    extent: size of box bounds, scalar float.
-%    '''
-%    o= 1 if(inclusive) else 0 # add '1' if inclusive is true
-%    b=box.reshape((2,-1)).T # now in internal convention
-%    return np.product([i[1]-i[0]+o for i in b])
-%def intersection(box1,box2,inclusive=False):
-%    '''
-%    Return the size / "extent" of intersection between two bounds
-%    INPUTS:
-%    box1,box2: n-dimensional bounds, format [x1,y1,z1, .. ,x2,y2,z2, ..]
-%    OUTPUT:
-%    intersection: size of overlapping bounds, scalar float.
-%    '''
-%    o= 1 if(inclusive) else 0 # add '1' if inclusive is true
-%    b1=box1.reshape((2,-1)).T
-%    b2=box2.reshape((2,-1)).T # internal convention
-%    c=np.stack((b1,b2),2)
-%    # for each dimension, get (min(upperbound)-max(lowerbound)) and get product
-%    return np.product([np.min(c[i,1,:])-np.max(c[i,0,:])+o for i in range(len(b1))])
-%
-%def IOU(b1,b2,inclusive=False):
-%    '''
-%    Return generalized intersection over union for two bounding boxes of matching n-dimension.
-%    INPUTS:
-%    b1,b2: n-dimensional bounding boxes, format [x1,y1,z1, .. ,x2,y2,z2, ..]
-%    OUTPUT:
-%    iou: intersection over union, scalar float, range [0,1].
-%    '''
-%    inter = intersection(b1,b2,inclusive)
-%    union = extent(b1,inclusive)+extent(b2,inclusive)-inter
-%    return inter / union
-%
-%\end{lstlisting}
+one two three \\
+
+\begin{figure}[ht]
+\setstretch{0.84} % want code to be nice and compact
+\begin{lstlisting}
+def pyt(a,b):
+    return (a*a+b*b)**0.5
+\end{lstlisting}
+\onehalfspacing % set line spacing back to normal
+\caption{this is some sample text}
+\label{code2}
+\end{figure}
+
+two\\
+three
 
 
-
-
-
-
-
-
-
-
-
+kjg190528: is there a frame thing to put around code for captions?
 
 \subsection{Precision}
 texthere
 
-one texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere texthere
-
-two
 
 
 \subsection{Recall}
+texthere
 
 \section{Sample Appendix}
 one
@@ -116,7 +111,17 @@ one
 \begin{figure}[ht] % h = "approx here", {h,t,b}
     \includegraphics[width=1\textwidth]{../media/wang_pipeline.png}
     \caption{texthere}
-    \label{delme} %label goes last
+    \label{delme_figure} %label goes last
 \end{figure}
 
 
+\begin{figure}[ht]
+\setstretch{0.84} % want code to be nice and compact
+\begin{lstlisting}[numbers=left]
+def pyt(a,b):
+    return (a**2+b**2)**0.5
+\end{lstlisting}
+\onehalfspacing % set line spacing back to normal
+\caption{Python implementation of generalized IOU calculation.}
+\label{delme_code} % label goes last
+\end{figure}

@@ -22,30 +22,29 @@
 \counterwithin{table}{section} % per-section numbering, tables
 \counterwithin{equation}{section} % per-section numbering, equations
 
-\onehalfspacing
+\onehalfspacing % controls linespacing. 
 
 \usepackage{listings} % "source code printer". unsure, will leave alone
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
-
+\definecolor{bggray}{rgb}{0.98,0.98,0.98}
 \lstset{frame=tb,
-numbers=left,
-numberstyle=\tiny,
-language=Python,
-aboveskip=1mm,
-belowskip=1mm,
-showstringspaces=false,
-columns=flexible,
-basicstyle={\small\ttfamily\linespread{0.8}},
-numbers=none,
-numberstyle=\tiny\color{gray},
-keywordstyle=\color{blue},
-commentstyle=\color{dkgreen},
-stringstyle=\color{mauve},
-breaklines=true,
-breakatwhitespace=true,
-tabsize=2,
+    language=Python,
+    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue},
+    commentstyle=\color{dkgreen},
+    stringstyle=\color{mauve},
+    backgroundcolor=\color{bggray},
+%    numbers=left, % choose individual blocks to use with: [numbers=left]
+    numberstyle=\tiny,
+    showstringspaces=false, % don't show spaces in strings
+    aboveskip=1mm, % space to give before and after code block
+    belowskip=1mm,
+    columns=flexible,
+    basicstyle={\small\ttfamily\linespread{0.8}},
+    breaklines=true,
+    breakatwhitespace=true,
 }
 
 % more info: http://texdoc.net/texmf-dist/doc/latex/listings/listings.pdf
@@ -72,10 +71,10 @@ tabsize=2,
 \newpage
 
 % -!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!
-% body of document =========================================
+% BODY OF DOCUMENT =========================================
 % -!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!
 \input{../thesis_body.tex}
-% bibliography section =====================================
+% BIBLIOGRAPHY =============================================
 
 \nocite{*} % list all references
 %\cleardoublepage
@@ -91,8 +90,7 @@ tabsize=2,
 %\cleardoublepage
 
 
-% -!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!-!
-% appendices / extra info ==================================
+% APPENDICES ===============================================
 \newpage
 \appendix % change how sections are numbered
 \input{../appendices.tex}
