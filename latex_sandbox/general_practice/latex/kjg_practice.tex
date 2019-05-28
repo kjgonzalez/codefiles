@@ -1,0 +1,62 @@
+% KJGNOTE: PLEASE SEE BOTTOM OF DOCUMENT FOR BLOCK COMMENTS
+\documentclass[a4paper,12pt]{article} % must always appear at start of every document
+% alternative classes to "article": report, proc, book, slides
+
+\usepackage{color} % allows color to be used
+\usepackage[margin=2cm]{geometry} % attempt to control margin width on pages (can be "in" or "cm")
+\usepackage[utf8]{inputenc} % allows german characters
+\usepackage{mathptmx} % this package makes the font look closest to Times New Roman
+\usepackage{csvsimple} % lets you import a csv file to make, say, a table
+\usepackage{graphicx} % required to load images into image
+
+\usepackage{chngcntr} % enables per-section numbering of any captions
+\counterwithin{figure}{section} % per-section numbering, figures
+\counterwithin{table}{section} % per-section numbering, tables
+\counterwithin{equation}{section} % per-section numbering, equations
+\usepackage{hyperref} % allows you to hyperlink to other sections in a document
+
+% anything before \begin{document} is considered "Preamble"
+
+% DOC START ====================================================================
+\begin{document}
+\input{../kjg_practice_body.tex}
+\end{document}
+% anything typed here is ignored
+This section can be used as commenting?
+
+some objectives of learning to use latex: 
+* title %done
+* table of contents %done
+* figures / tables %done
+* equations %done
+* bullets / numbered lists % done
+* changing fonts (monospace) %done
+* in-text math % done
+* special symbols (math or stuff like ü) % done
+* sections %done
+* section numbering %done
+* paragraph formatting (hanging/firstline/justified/right/etc) % will not pursue
+* authors
+* bold / italics / underline / etc
+* referencing
+* citing / cross referencing
+* appendices 
+
+= notes / questions while learning:  =======================
+* what about multiple authors in the title?
+* can't seem to continue page numbering in the middle of a document when have been turned off
+* in order to deal with subsections beyond a depth of 3 (e.g. x.x.x.x), check out modifying paragraph: https://tex.stackexchange.com/questions/60209/how-to-add-an-extra-level-of-sections-with-headings-below-subsubsection
+* why isn't the first paragraph of each section being automatically indented? 
+* to control spacing in a list: %\itemsep=-0.5em % this is the correct way to reduce the spaces in a list... :)
+* continuous / persection caption numbering: https://tex.stackexchange.com/questions/28333/continuous-v-per-chapter-section-numbering-of-figures-tables-and-other-docume
+* maybe be possible to embed python code directly in a latex document: http://www.texample.net/weblog/2008/oct/24/embedding-python-latex/
+
+
+
+
+
+
+
+
+
+% eof

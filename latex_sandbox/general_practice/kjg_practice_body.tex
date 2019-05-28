@@ -1,24 +1,3 @@
-% KJGNOTE: PLEASE SEE BOTTOM OF DOCUMENT FOR BLOCK COMMENTS
-\documentclass[a4paper,12pt]{article} % must always appear at start of every document
-% alternative classes to "article": report, proc, book, slides
-
-\usepackage{color} % allows color to be used
-\usepackage[margin=2cm]{geometry} % attempt to control margin width on pages (can be "in" or "cm")
-\usepackage[utf8]{inputenc} % allows german characters
-\usepackage{mathptmx} % this package makes the font look closest to Times New Roman
-\usepackage{csvsimple} % lets you import a csv file to make, say, a table
-\usepackage{graphicx} % required to load images into image
-
-\usepackage{chngcntr} % enables per-section numbering of any captions
-\counterwithin{figure}{section} % per-section numbering, figures
-\counterwithin{table}{section} % per-section numbering, tables
-\counterwithin{equation}{section} % per-section numbering, equations
-\usepackage{hyperref} % allows you to hyperlink to other sections in a document
-
-% anything before \begin{document} is considered "Preamble"
-
-% DOC START ====================================================================
-\begin{document}
 \title{Summary of LaTeX Features \\
 (following ``LaTeX for Beginners'')}
 \author{Kris Gonzalez, John Deere} 
@@ -174,7 +153,7 @@ Next, we're gonna spend some time figuring out how to create a table but with nu
 \begin{tabular}{|c|c|}%
 \hline
 \bfseries Time (s) & \bfseries Zeroed time (s)% specify table head
-\csvreader[head to column names]{media/Basket_ball.csv}{}% use head of csv as column names
+\csvreader[head to column names]{../media/Basket_ball.csv}{}% use head of csv as column names
 {\\\hline\csvcoli&\csvcolii}% specify your columns here
 \\\hline
 \end{tabular}
@@ -189,7 +168,7 @@ begin - includegraphics - caption - label - end.
 
 \begin{figure}[h] % ahh, h = "approx here", t = "top of page", b = "bottom of pg"
 \centering
-\includegraphics[width=0.5\textwidth]{media/img2.png} % note, you need width=0.5 if dealing w/ two columns
+\includegraphics[width=0.5\textwidth]{../media/img2.png} % note, you need width=0.5 if dealing w/ two columns
 \caption{Loading an image from a subfolder}
 \label{figure-parking}
 \end{figure}
@@ -197,7 +176,7 @@ begin - includegraphics - caption - label - end.
 Not bad, alright so this seems to work nicely. Note the two extra lines that are needed in the preamble to ensure that per-section numbering is used. BUT WAIT, THERE'S MORE: do you want beautiful, zoomable, non pixelated images? then save your graphs to pdf, then import them like so:
 \begin{figure}[h]
 \centering
-\includegraphics[width=0.5\textwidth]{media/result.pdf}
+\includegraphics[width=0.5\textwidth]{../media/result.pdf}
 \caption{Just look at that \textit{NICE} quality.}	
 \label{figure-improved}
 \end{figure}
@@ -222,7 +201,7 @@ v_{esc} &=& \sqrt{\frac{2GM}{R}} \\
 % SECTION ======================================================================
 \section{Importing *.tex files for longer documents} \label{sect_teximporting}
 This section to be covered by an imported document.
-\input{tex/remote_section}This text is now part of the main document again. notice how close ``This'' is to the input command
+\input{../tex/remote_section}This text is now part of the main document again. notice how close ``This'' is to the input command
 
 % SECTION: References and Such =================================================
 \section{References and Such} \label {sect_references}
@@ -287,43 +266,3 @@ Mauris iaculis id magna.
 
 
 % END OF DOCUMENT ==============================================================
-\end{document}
-% anything typed here is ignored
-This section can be used as commenting?
-
-some objectives of learning to use latex: 
-* title %done
-* table of contents %done
-* figures / tables %done
-* equations %done
-* bullets / numbered lists % done
-* changing fonts (monospace) %done
-* in-text math % done
-* special symbols (math or stuff like ü) % done
-* sections %done
-* section numbering %done
-* paragraph formatting (hanging/firstline/justified/right/etc) % will not pursue
-* authors
-* bold / italics / underline / etc
-* referencing
-* citing / cross referencing
-* appendices 
-
-= notes / questions while learning:  =======================
-* what about multiple authors in the title?
-* can't seem to continue page numbering in the middle of a document when have been turned off
-* in order to deal with subsections beyond a depth of 3 (e.g. x.x.x.x), check out modifying paragraph: https://tex.stackexchange.com/questions/60209/how-to-add-an-extra-level-of-sections-with-headings-below-subsubsection
-* why isn't the first paragraph of each section being automatically indented? 
-* to control spacing in a list: %\itemsep=-0.5em % this is the correct way to reduce the spaces in a list... :)
-* continuous / persection caption numbering: https://tex.stackexchange.com/questions/28333/continuous-v-per-chapter-section-numbering-of-figures-tables-and-other-docume
-* maybe be possible to embed python code directly in a latex document: http://www.texample.net/weblog/2008/oct/24/embedding-python-latex/
-
-
-
-
-
-
-
-
-
-% eof
