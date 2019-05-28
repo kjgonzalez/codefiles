@@ -1,7 +1,7 @@
 % Appendices file. here, cover all topics related to thesis.
 
 \section{Performance Metrics}
-The concept of verifying accuracy in a statistical estimate is covered in [xx source], and contains well documented techniques of knowing how well a particular heuristic performs. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, two other metrics can be derived, precision and recall. 
+The concept of verifying accuracy in a statistical estimate is covered in [xx source], and contains well documented techniques of knowing how well a particular heuristic performs. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, two other metrics can be derived, precision and recall. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision and mean Average Precision (mAP). The following information is primarily derived from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and "An Introduction to Information Retrieval" \cite{Manning:2008:IIR:1394399}.
 
 \subsection{Intersection Over Union}
 In image recognition, as well as other spatially-based algorithms, accuracy is needed in various forms to know "how well" a prediction matches the ground truth, or true value. If, for example, an object-detection algorithm predicts the location of a car in a photo, there may be multiple values to use, and questions to answer: ``How closely does the prediction's center of mass match the true center of mass?", ``How much overlap does the prediction have with the ground truth?", or even ``How well do the two bounding boxes align?". 
@@ -24,48 +24,51 @@ To assist in understanding IOU, a code snippet as well as an example are present
 All aspects of calculating the IOU (including area and intersection) are broken up into multiple pieces, but presented together below. For n-dimensions, the code (presented here in python) is as follows: 
 
 
-\begin{figure}[ht]
+\begin{figure}[H]
 \setstretch{0.84} % want code to be nice and compact
 \begin{lstlisting}
 import numpy as np
 
 def extent(box,inclusive=False):
     '''
-    Return the size or "extent" (length, area, volume, etc) of a given box in
-    n-dimensions.
+    Return the size / "extent" (length, area, volume, etc) of a given box in
+        n-dimensions.
     INPUTS:
         box: n-dimensional bounds, format [x1,y1,z1, .. ,x2,y2,z2, ..]
-        inclusive: boolean. add 1 unit to calculation, such as for image area
+        inclusive: boolean. add 1 unit to each dimension, such as for images
     OUTPUT:
-    extent: size of box bounds, scalar float.
+        extent: size of box bounds, scalar float.
     '''
     o= 1 if(inclusive) else 0 # add '1' if inclusive is true
-    b=box.reshape((2,-1)).T # now in internal convention
+    b=np.array(box).reshape((2,-1)).T # now in internal convention
     return np.product([i[1]-i[0]+o for i in b])
 
 def intersection(box1,box2,inclusive=False):
     '''
-    Return the size / "extent" of intersection between two bounds
+    Return the size / "extent" of intersection between two bounds of
+        n-dimension. Internal convention follows same as "extent" function.
     INPUTS:
-    box1,box2: n-dimensional bounds, format [x1,y1,z1, .. ,x2,y2,z2, ..]
+        box1,box2: n-dimensional bounds, format [x1,y1,z1, .. ,x2,y2,z2, ..]
+        inclusive: boolean. add 1 unit to each dimension, such as for images
     OUTPUT:
-    intersection: size of overlapping bounds, scalar float.
+        intersection: size of overlapping bounds, scalar float.
     '''
     o= 1 if(inclusive) else 0 # add '1' if inclusive is true
-    b1=box1.reshape((2,-1)).T
-    b2=box2.reshape((2,-1)).T # internal convention
+    b1=np.array(box1).reshape((2,-1)).T
+    b2=np.array(box2).reshape((2,-1)).T # internal convention
     c=np.stack((b1,b2),2)
     # for each dimension, get (min(upperbound)-max(lowerbound)) and get product
-    return np.product([np.min(c[i,1,:])-np.max(c[i,0,:])+o for i in range(len(b1))])
+    val = np.product([np.min(c[i,1,:])-np.max(c[i,0,:])+o for i in range(len(b1))])
+    return max(val,0.0)
 
 def IOU(b1,b2,inclusive=False):
     '''
     Return generalized intersection over union for two bounding boxes of 
         matching n-dimension.
     INPUTS:
-    b1,b2: n-dimensional bounding boxes, format [x1,y1,z1, .. ,x2,y2,z2, ..]
+        b1,b2: n-dimensional bounding boxes, format [x1,y1,z1, .. ,x2,y2,z2, ..]
     OUTPUT:
-    iou: intersection over union, scalar float, range [0,1].
+        iou: intersection over union, scalar float, range [0,1].
     '''
     inter = intersection(b1,b2,inclusive)
     union = extent(b1,inclusive)+extent(b2,inclusive)-inter
@@ -74,49 +77,62 @@ def IOU(b1,b2,inclusive=False):
 \end{lstlisting}
 \onehalfspacing % set line spacing back to normal
 \caption{Python implementation of generalized IOU calculation.}
-KJG190528: MUST CHANGE WHAT CODE IS HERE, KNOWN ERROR IN INTERSECTION CALCULATION XX.
-\label{codeBlock1}
+\label{code_iou}
 \end{figure}
 
-one two three \\
+\subsubsection{Example: IOU of a Ground Truth and Prediction Label}
+Suppose there is an image, as given below, where there is a ground truth label `gt' and a prediction label `pred' with 2D bounding boxes formatted as \texttt{[x1,y1,x2,y2]}, all units in pixels. To determine the IOU of the image, the calculations are listed below. Because boxes represent pixel values, remember to add "1" to each dimension.
 
-\begin{figure}[ht]
-\setstretch{0.84} % want code to be nice and compact
-\begin{lstlisting}
-def pyt(a,b):
-    return (a*a+b*b)**0.5
-\end{lstlisting}
-\onehalfspacing % set line spacing back to normal
-\caption{this is some sample text}
-\label{code2}
+
+
+\def \pxpx {\; [px^2]}
+\def \Asub #1{A\textsubscript{#1}}
+\begin{enumerate}\itemsep=-0.5em
+
+\item Find area of each bounding box: \\ $\Asub{gt} = (x2-x1+1)*(y2-y1+1) = 16,335 \pxpx $ , $ \Asub{pr} = 12905 \pxpx $
+
+\item Find overlapping area, e.g. intersection (see \ref{code_iou} for more info): $I = 11455 \pxpx $
+
+\item Calculate IOU: $\frac{I}{\Asub{gt} + \Asub{pr} - I} = 0.644 $
+\end{enumerate}
+
+\begin{figure}[h] % h = "approx here", {h,t,b}
+    \centering
+    \includegraphics[width=.4\textwidth]{../media/iou_example.png}
+    \caption{IOU calculation example. Ground truth (red solid) has BB: [712,143,810,307]. Prediction (red dotted) has BB: [732,153,820,297]. IOU is 0.644.}
+    \label{iou_example} %label goes last
 \end{figure}
 
-two\\
-three
-
-
-kjg190528: is there a frame thing to put around code for captions?
 
 \subsection{Precision}
-texthere
-
 
 
 \subsection{Recall}
-texthere
+TextHere
+
+
+
+
+
+
+
+
+
+% SAMPLE =======================================================================
 
 \section{Sample Appendix}
-one
+TextHere
 
-\begin{figure}[ht] % h = "approx here", {h,t,b}
+\begin{figure}[h] % h = "approx here", {h,t,b}
     \includegraphics[width=1\textwidth]{../media/wang_pipeline.png}
     \caption{texthere}
     \label{delme_figure} %label goes last
 \end{figure}
 
 
-\begin{figure}[ht]
+\begin{figure}[h] %h=here,t=top,b=bottom,H=exactlyHere
 \setstretch{0.84} % want code to be nice and compact
+% note: optional line numbers argument
 \begin{lstlisting}[numbers=left]
 def pyt(a,b):
     return (a**2+b**2)**0.5

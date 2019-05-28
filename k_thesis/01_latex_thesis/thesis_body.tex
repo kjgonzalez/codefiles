@@ -50,7 +50,7 @@ There is a surprisingly low amount of public research on stereo vision for use w
 
 A recent development has been published since the start of this paper, by Wang et. al. In their paper, "Pseudo-LiDAR from Visual Depth Estimation" \cite{wang_pseudo-lidar_2019}, the authors took an extremely similar approach to this paper. Their pipeline / steps, outlined below in Figure \ref{wang_pipeline}, was to take a stereo image pair, generate a disparity map via Pyramid Stereo Matching network, convert it to a "pseudo-lidar" scan, and extract 3D bounding box estimations via Frustum Pointnet. \\
 
-\begin{figure}[ht] % h = "approx here", {h,t,b}
+\begin{figure}[h] % h = "approx here", {h,t,b}
     \includegraphics[width=1\textwidth]{../media/wang_pipeline.png}
     \caption{Pipeline of the Pseudo-Lidar estimation network. Stereo (or mono) image data is used to create a disparity map, which is converted to lidar, and is then used by a 3D detector to estimate 3D bounding boxes.}
     \label{wang_pipeline} %label goes last
@@ -82,7 +82,7 @@ The first task in creating a network that can take a stereo image pair and gener
 
 the original evaluation code that was given was straightforward. i had great success in testing it out right away. Of course, there were some usual delays with making sure the correct packages were installed. additionally, the network was adapted to run in python3. as has been stated before, this project has placed a great focus on ensuring the future usability of the code, and so python 3.x was used. any deprecated functionality was manually changed. 
 
-after the initial evaluation, i set about to training the network from the ground up. i first pretrained the network from scratch using the Freiburg dataset, then further pretrained it on the middlebury dataset. finally, i finetuned the network by training it on the kitti stereo datset, which contains similar but not identical scenes that are seen in the 3d object detection dataset. 
+after the initial evaluation, i set about to training the network from the ground up. i first pretrained the network from scratch using the Freiburg dataset, then further pretrained it on the Middlebury dataset. finally, i finetuned the network by training it on the KITTI stereo dataset, which contains similar but not identical scenes that are seen in the 3d object detection dataset. 
 
 
 
@@ -95,7 +95,7 @@ Frustum Pointnet, being originally written for Python 2, needed to undergo some 
 
 In order to transition from using the provided pretrained model and preprocessed data to self-made preprocessed and trained data, a set of steps and "paths" were created to clarify what was happening in each step and set of "runs". As shown below in Figure \ref{fp_paths}, there are various 
 
-\begin{figure}[ht] % h = "approx here", {h,t,b}
+\begin{figure}[h] % h = "approx here", {h,t,b}
     \includegraphics[width=1\textwidth]{../media/fpnet_paths_img.png}
     \caption{Various paths that were planned to simply transition from lidar-based 3D estimation to stereo-based 3D estimation. Generally, paths went chronologically as follow: ADF, AEF, BEF, and finally CEF.}
     \label{fp_paths} %label goes last
