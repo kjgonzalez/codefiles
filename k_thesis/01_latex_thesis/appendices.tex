@@ -6,6 +6,30 @@ KJG190529: BE SURE TO TALK ABOUT (AND INCLUDE GRAPHIC OF) TRUE/FALSE POSITIVES/N
 \section{Performance Metrics}
 The concept of verifying accuracy in a statistical estimate is covered in [xx source], and contains well documented techniques of knowing how well a particular heuristic performs. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, two other metrics can be derived, precision and recall. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision and mean Average Precision (mAP). The following information is primarily derived from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and "An Introduction to Information Retrieval" \cite{Manning:2008:IIR:1394399}.
 
+\subsection{Defining a Result}
+The first step in measuring performance is categorizing a result. With a visual task such as object classification, there are 4 possible outcomes, as shown below. In general, there may be a True Positive, False Positive, True Negative, or False Negative. In practice, True Negatives are not used, and the remaining three are used to varying degrees.
+
+KJGNOTE: are false negatives the ones that are really not looked at? 
+
+\begin{figure}[h] % h = "approx here", {h,t,b}
+	\centering
+	\includegraphics[width=.4\textwidth]{../media/tp_help.png}
+	\caption{A visual representation of various outcomes, ground truths as solid black boxes and detections as dotted red boxes. True positives (TP) are a correct detection, FP's are a detection of no actual object, and FN's are a lack of detection of an actual object.}
+	\label{tp_help} %label goes last
+\end{figure}
+
+Each is better clarified as such:
+%\begin{enumerate} \itemsep=-0.5em7
+%	\item True Positive: Correctly 
+%	\item False Positive: one
+%	\item False Negative: two
+%	\item True Negative: three
+%\end{enumerate}
+
+
+
+
+
 \subsection{Intersection Over Union}
 In image recognition, as well as other spatially-based algorithms, accuracy is needed in various forms to know "how well" a prediction matches the ground truth, or true value. If, for example, an object-detection algorithm predicts the location of a car in a photo, there may be multiple values to use, and questions to answer: ``How closely does the prediction's center of mass match the true center of mass?", ``How much overlap does the prediction have with the ground truth?", or even ``How well do the two bounding boxes align?". 
 
@@ -108,7 +132,7 @@ Suppose there is an image, as given below, where there is a ground truth label `
 
 
 \subsection{Precision}
-
+The broader topic of 
 
 \subsection{Recall}
 TextHere
@@ -144,3 +168,9 @@ def pyt(a,b):
 \caption{Python implementation of generalized IOU calculation.}
 \label{delme_code} % label goes last
 \end{figure}
+
+%\begin{enumerate}\itemsep=-0.5em7
+%	\item one
+%	\item two
+%	\item three
+%\end{enumerate}
