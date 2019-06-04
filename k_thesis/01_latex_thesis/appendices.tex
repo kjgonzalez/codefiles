@@ -7,9 +7,13 @@ KJG190529: BE SURE TO TALK ABOUT (AND INCLUDE GRAPHIC OF) TRUE/FALSE POSITIVES/N
 The concept of verifying accuracy in a statistical estimate is covered in [xx source], and contains well documented techniques of knowing how well a particular heuristic performs. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, two other metrics can be derived, precision and recall. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision and mean Average Precision (mAP). The following information is primarily derived from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and "An Introduction to Information Retrieval" \cite{Manning:2008:IIR:1394399}.
 
 \subsection{Defining a Result}
-The first step in measuring performance is categorizing a result. With a visual task such as object classification, there are 4 possible outcomes, as shown below. In general, there may be a True Positive, False Positive, True Negative, or False Negative. In practice, True Negatives are not used, and the remaining three are used to varying degrees.
-
-KJGNOTE: are false negatives the ones that are really not looked at? 
+The first step in measuring performance is categorizing a result. With a visual task such as object classification, there are 4 possible outcomes, as shown below. In general, there may be a True Positive, False Positive, True Negative, or False Negative. In practice, True Negatives are not used, and the remaining three are used to varying degrees. Each is better clarified as such:
+\begin{itemize} \itemsep=-.5em
+	\item True Positive: Correctly detecting a true object
+	\item False Positive: Incorrectly detecting something that isn't there
+	\item False Negative: Incorrectly ignoring a true object
+	\item True Negative: Correctly ignoring something that isn't there
+\end{itemize}
 
 \begin{figure}[h] % h = "approx here", {h,t,b}
 	\centering
@@ -18,13 +22,6 @@ KJGNOTE: are false negatives the ones that are really not looked at?
 	\label{tp_help} %label goes last
 \end{figure}
 
-Each is better clarified as such:
-%\begin{enumerate} \itemsep=-0.5em7
-%	\item True Positive: Correctly 
-%	\item False Positive: one
-%	\item False Negative: two
-%	\item True Negative: three
-%\end{enumerate}
 
 
 
@@ -131,17 +128,18 @@ Suppose there is an image, as given below, where there is a ground truth label `
 \end{figure}
 
 
-\subsection{Precision}
-The broader topic of 
+\subsection{Precision \& Recall}
+Once all detections have been tallied and placed into their correct categories, their precision and recall may be calculated. In information retrieval, precision is defined as "the fraction of retrieved documents that are relevant", and recall is defined as "the fraction of relevant documents that are retrieved". Reworded for object detection: precision is the number of correct predictions divided by the total number of predictions, and recall is the number of correct predictions divided by the total number of possible answers. These two are also given as equations in terms of true positives and so on. 
 
-\subsection{Recall}
-TextHere
+\begin{equation}
+Precision = \frac{TruePositives}{TruePositives + FalsePositives}
+\end{equation}
 
+\begin{equation}
+Recall = \frac{TruePositives}{TruePositives + FalseNegatives}
+\end{equation}
 
-
-
-
-
+Using the two above equations, a precision-recall curve may be created.
 
 
 
@@ -169,7 +167,7 @@ def pyt(a,b):
 \label{delme_code} % label goes last
 \end{figure}
 
-%\begin{enumerate}\itemsep=-0.5em7
+%\begin{enumerate}\itemsep=-0.5em
 %	\item one
 %	\item two
 %	\item three
