@@ -3,6 +3,15 @@ Created: 190330
 Author: Kris Gonzalez
 * kjgnote: the commands given are NOT used while in "insert" mode.
 
+# CONFIG: create / save vim config file ====================
+linux:
+user-specific: ~/.vimrc
+global: /etc/vimrc
+
+# CONFIG: set soft tab spacing =============================
+set tabstop=4
+set expandtab
+
 # SELECT TEXT ==============================================
 1. SHIFT+V (select line) or v (select characters)
 2. move cursor until have selected all text
@@ -15,6 +24,10 @@ Author: Kris Gonzalez
 4. p=PASTE
 5. <done>
 
+# SEARCH FOR TEXT ==========================================
+1. /<searchText>
+2. ENTER
+3. to find next instance, 'n', previous, 'N'
 
 # eof
 
