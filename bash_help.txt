@@ -40,6 +40,10 @@ quick targz flag help
     x: extract archive
     z: use gzip during operation
 
+how to know an ssh server is running (hint: they usually are)
+    ps -A | grep sshd
+
+
 = Helpful Commands =========================================
 find text in files: --- grep -r 'TextToMatch' Directory/To/Search
 zip a file:             zip -r filename.zip DirectoryName
