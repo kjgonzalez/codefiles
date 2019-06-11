@@ -52,11 +52,9 @@ In Windows:
 '''
 
 # INITIALIZATIONS ==============================================================
-import os # only "standard" modules are imported here
-import sys
+import os,sys,time # only "standard" modules are imported here
 import numpy as np
 from glob import glob
-import time
 import functools # not sure if this is standard
 # import PIL.Image as pil # not standard, must remove
 # import tkinter # not standard across versions #kjgnote: may not be that useful anymore
@@ -214,6 +212,29 @@ class DataHelp(object):
 data=DataHelp()
 # class Data
 
+def antiOverwrite(filename):
+    ''' Given a filename, check if it already exists, and if so, find a unique
+        filename in same folder, with similar name.
+    INPUT: filename: string, proposed filename and path
+    OUTPUT: name2: string, available, unused filename and path.
+    '''
+    if(not os.path.exists(filename)):
+        return filename
+    path = os.path.dirname(filename) # no separator at end
+    _name = os.path.basename(filename)
+    if('.' in _name):
+        name,ext = _name.split('.')
+    else:
+        name,ext = _name,'' # in case file has no extension
+    # try creating a valid filename
+    i=0
+    valid=False
+    while(not valid):
+        i+=1 # 2nd file should start with 1, etc
+        name2=os.path.join(path,'{}_{}.{}'.format(name,i,ext))
+        valid=not os.path.exists(name2) # True = name available
+    return name2
+
 def getlist(rec=False,files=True,ext=''):
     ''' This function is implemented as alias for "dir". Use THAT function. '''
     return dir(rec,files,ext)
@@ -277,8 +298,6 @@ def ringbell(duration=0.15,freq=1300):
         import winsound # must leave this here, would not work on other platforms.
         winsound.Beep(freq,duration)
 # def ringbell
-
-
 
 def listContents(arr,ReturnAsNPArr=False):
     ''' Take in a string list and return a dict or numpy array of

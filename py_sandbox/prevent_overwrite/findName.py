@@ -1,6 +1,8 @@
 '''
 date: 190611
 objective: create function that avoids overwriting a filename if it already exists
+
+KJG190611: function has been copied into klib
 '''
 # initializations
 import os,sys
@@ -9,7 +11,7 @@ import os,sys
 fpath = 'test.txt'
 
 
-def findName(filename):
+def antiOverwrite(filename):
     ''' find valid new name for file if file already exists '''
     if(not os.path.exists(filename)):
         return filename
@@ -28,7 +30,7 @@ def findName(filename):
         valid=not os.path.exists(name2) # True = name available
     return name2
 
-fpath2=findName(fpath)
+fpath2=antiOverwrite(fpath)
 print('new:',fpath2)
 f=open(fpath2,'w')
 f.close()
@@ -50,5 +52,3 @@ f.close()
 #
 #print('new: ',name2)
 #print(os.path.exists(name2))
-
-
