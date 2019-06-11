@@ -25,8 +25,7 @@ def findName(filename):
     while(not valid):
         i+=1 # 2nd file should start with 1, etc
         name2=os.path.join(path,'{}_{}.{}'.format(name,i,ext))
-        if(not os.path.exists(name2)):
-            valid=True
+        valid=not os.path.exists(name2) # True = name available
     return name2
 
 fpath2=findName(fpath)
