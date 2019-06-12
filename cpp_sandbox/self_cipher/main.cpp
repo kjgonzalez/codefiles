@@ -19,6 +19,9 @@ compile: g++ argsin.cpp -o test
 
 
 #include <iostream>
+#include <fstream> // I/O operations
+#include <stdio.h>  // needed for splitting a string & sometimes I/O operations
+#include <vector>
 
 char swapLetter(char letter){
     /* Return an offset letter from given. simplest cipher possible. */
@@ -42,12 +45,58 @@ std::string swapLine(std::string line){
     return line2;
 }//swapLine
 
+std::vector<std::string> swapParagraph(std::vector<std::string> raw){
+    /* Replace all given lines with ciphered text */
+    std::vector<std::string> raw2;
+    for(int i=0;i<raw.size();i++){
+        raw2.push_back(swapLine(raw[i]));
+    }
+}//swapParagraph
+
+void disp(std::vector<std::string> text){
+    for(int i=0;i<text.size();i++) std::cout << text[i] << '\n';
+}//disp
+
+std::vector<std::string> readFile(std::string filename){
+    /* read in file, and return as a string vector */
+    std::ifstream fin(filename.c_str());
+    std::vector<std::string> raw;
+    std::string line;
+    while(!fin.eof()){
+        getline(fin,line); // perhaps a native C/C++ function?
+        raw.push_back(line);
+    }
+    fin.close();
+    return raw;
+}//readFile
+
+
+/* at this point, want to be able to work on a file, which would have multiple
+    lines. load the file, swap it, and save it to a new file */
+
 int main(int argc,char **argv){
     printf("= kjg cipher ========== \n");
-    std::string input = argv[1];
+    // std::string input = argv[1];
+    if(0){
+        std::string input;
+        input="test\nitem";
+        printf("input : %s\n",input.c_str());
+        printf("output: %s\n",swapLine(input).c_str());
+    }
 
-    input="test\nitem";
-    printf("input : %s\n",input.c_str());
-    printf("output: %s\n",swapLine(input).c_str());
+    std::vector<std::string> raw=readFile("sample.txt");
+    printf("original text:\n");
+    disp(raw);
+
+    printf("swapped text:\n");
+    // std::vector<std::string> raw2=swapParagraph(raw);
+    // raw=swapParagraph(raw);
+    // disp(raw);
+    for(int i=0;i<raw.size();i++){
+        std::cout << swapLine(raw[i]) << '\n';
+    }
+    // std::cout << readFile("sample.txt");
+    // now, work on reading from a file (first)
+
 
 }//int main
