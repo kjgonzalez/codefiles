@@ -50,8 +50,8 @@ std::vector<std::string> swapParagraph(std::vector<std::string> raw){
     std::vector<std::string> raw2;
     for(int i=0;i<raw.size();i++){
         raw2.push_back(swapLine(raw[i]));
-
-    }
+    }//forloop
+    return raw2;
 }//swapParagraph
 
 void disp(std::vector<std::string> text){
@@ -90,12 +90,13 @@ int main(int argc,char **argv){
     disp(raw);
 
     printf("swapped text:\n");
+    disp(swapParagraph(raw));
     // std::vector<std::string> raw2=swapParagraph(raw);
     // raw=swapParagraph(raw);
     // disp(raw);
-    for(int i=0;i<raw.size();i++){
-        std::cout << swapLine(raw[i]) << '\n';
-    }
+    // for(int i=0;i<raw.size();i++){
+    //     std::cout << swapLine(raw[i]) << '\n';
+    // }
     // std::cout << readFile("sample.txt");
     // now, work on reading from a file (first)
 
