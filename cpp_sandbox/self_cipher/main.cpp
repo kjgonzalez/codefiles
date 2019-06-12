@@ -50,6 +50,7 @@ std::vector<std::string> swapParagraph(std::vector<std::string> raw){
     std::vector<std::string> raw2;
     for(int i=0;i<raw.size();i++){
         raw2.push_back(swapLine(raw[i]));
+
     }
 }//swapParagraph
 
