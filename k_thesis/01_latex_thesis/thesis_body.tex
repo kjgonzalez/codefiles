@@ -85,12 +85,23 @@ The first task in creating a network that can take a stereo image pair and gener
 
 the original evaluation code that was given was straightforward. i had great success in testing it out right away. Of course, there were some usual delays with making sure the correct packages were installed. additionally, the network was adapted to run in python3. as has been stated before, this project has placed a great focus on ensuring the future usability of the code, and so python 3.x was used. any deprecated functionality was manually changed. 
 
-after the initial evaluation, i set about to training the network from the ground up. i first pretrained the network from scratch using the Freiburg dataset, then further pretrained it on the Middlebury dataset. finally, i finetuned the network by training it on the KITTI stereo dataset, which contains similar but not identical scenes that are seen in the 3d object detection dataset. 
+\subsubsection{Using a Modified Set of Ground Truths}
+After the initial evaluation, i set about to training the network from the ground up. I first downloaded the network that was pretrained on the Freiburg SceneFlow dataset, available from the PSMnet authors. Next, I finetuned the network by training it on KITTI data. Here, it must be clarified that there are images in the KITTI stereo dataset that overlap greatly in similarity to those in the KITTI object detection dataset. The difference between the two datasets are essentially that one has been optimized for object detection, and the other for stereo disparity map estimation. This similarity was also noted in [xx], and I took the same approach as [xx authors] to correct it, as described below.Figure xx below also demonstrates the similarity between two sample images, which leads to the problem of having a part of the network trained on what may be validation or even evaluation data. 
 
+\begin{figure}[H]
+    \centering  
+    \subfigure[000132\_10 from Stereo]{
+        \includegraphics[width=0.485\linewidth]{../media/similar_000132_10_stereo.png}}
+    \subfigure[000286 from ObjDet]{
+        \includegraphics[width=0.485\linewidth]{../media/similar_000286_objdet.png}}
+    \label{similarity_stereo_objdet}
+    \caption{Example of how two unique records from the separate datasets have overly-similar scenes. There are multiple examples of this, which creates the motivation to generate a secondary set of disparity ground truths for the object detection dataset}
+\end{figure}
 
+In order to deal with the dataset overlap, the KITTI object detection dataset was adapted to be used for training stereo data. Lidar data was projected onto the LHS image plane, converted to integer values, then multiplied by a constant. These steps are in line with both the way that [xx] were able to generate their self-made stereo ground truths as well as how the KITTI dataset authors generated their ground truth [xx reference to devkit]. Locations in the image that have no lidar data are left alone at a value of 0.0, and finally the resulting array is saved to a PNG image file format containing integer values. Please refer to the generation script in the repository for the exact steps used to generate the pseudo ground truth stereo images.
 
 \subsection{Development of Stereo 3D Reconstruction Function}
-texthere
+
 
 \subsection{Modification of Frustum Point Net}
 
