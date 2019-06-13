@@ -65,6 +65,23 @@ In their paper, the authors argue that within a short distance, up to 30 meters 
 Performing 3D estimation and localization with lidar has been a focus for a large portion of the field, and with good reason. Thus, there are many papers which focus on using lidar sensor capabilities to estimate 3D bounding boxes, to varying degrees of success. \cite{qi_frustum_2017} paper, currently one of the best performing networks, forms a part of the work of this research paper as well. 
 
 \subsection{3D Reconstruction with Stereo Data}
+3D reconstruction from a disparity map can be performed with two similar but slightly different approaches. The first approach, working with epipolar equations, is the most intuitive. The second, remapping the projected 2D points back into 3D space, is equally effective. \cite{szeliski_computer_2010} goes into some detail over the first method, which principally deals with the high level equations necessary to generate each (x,y,z) coordinate.
+
+The first approach, using epipolar equations, can be described as follows. There must first be a given disparity map image, $D$, with indices ($u$,$v$) corresponding to the image's x-axis and y-axis (origin located at the top left of the image). 
+\begin{equation}
+z(u,v) = \frac{f_U * b}{D}
+\end{equation}
+
+\begin{equation}
+x = \frac{(u - c_U) * z}{f_U}
+\end{equation}
+
+\begin{equation}
+y = \frac{(v - c_V) * z}{f_V}
+\end{equation}
+
+
+
 So, i'm having trouble finding information about 3D reconstruction, and i think it may be because i'm using the wrong terminology. almost invariably, 3d reconstruction is used to describe the process of taking photos of an object with multiple cameras to then creating a 3D model. instead, i am trying to obtain a point cloud from a stereo image. unfortunately, i think this may either be a rare or unpopular task... doesn't seem like there's a lot of people doing it. i'm gonna make a small list of all the places that i find references about stereo-point cloud conversion: 
 
 %\url{https://www.youtube.com/watch?v=ujm3TKfVarQ} \\
