@@ -65,12 +65,24 @@ In their paper, the authors argue that within a short distance, up to 30 meters 
 Performing 3D estimation and localization with lidar has been a focus for a large portion of the field, and with good reason. Thus, there are many papers which focus on using lidar sensor capabilities to estimate 3D bounding boxes, to varying degrees of success. \cite{qi_frustum_2017} paper, currently one of the best performing networks, forms a part of the work of this research paper as well. 
 
 \subsection{3D Reconstruction with Stereo Data}
-3D reconstruction from a disparity map can be performed with two similar but slightly different approaches. The first approach, working with epipolar equations, is the most intuitive. The second, remapping the projected 2D points back into 3D space, is equally effective. \cite{szeliski_computer_2010} goes into some detail over the first method, which principally deals with the high level equations necessary to generate each (x,y,z) coordinate.
+3D reconstruction from a disparity map can be performed multiple similar but slightly different approaches. Regardless of the approach, the goal is to end up with a pointcloud, an unordered set of metric coordinates. The first approach, working with epipolar equations, is the most intuitive. The second, remapping the projected 2D points back into 3D space, is equally effective, but only used to map lidar points onto the image plane (the reverse of reconstruction). \cite{szeliski_computer_2010} goes into some detail over the first method, which principally deals with the high level equations necessary to generate each (x,y,z) coordinate.
+\\
+\\
+\\
+The first approach, using epipolar equations, can be described in general as follows. First, some necessary assumptions: 
+\begin{itemize} \itemsep=-0.5em
+    \item The camera centers are aligned (for simplified rectification).
+    \item Images are already rectified (to remove all distortion).
+\end{itemize}
 
-The first approach, using epipolar equations, can be described as follows. There must first be a given disparity map image, $D$, with indices ($u$,$v$) corresponding to the image's x-axis and y-axis (origin located at the top left of the image). 
+There must first be a given disparity map image, $D$, with indices ($u$,$v$) corresponding to the image's x-axis and y-axis (origin located at the top-left of the image). The cameras' intrinsic properties must also be known (P2 for the KITTI dataset), as well as the baseline, $b$, distance (also known as the distance between camera centers). In the KITTI dataset, Camera 2 is the LHS color camera, and thus each record's corresponding P2 matrix is used. The matrix contains the horizontal focal length $f_U$ as well as the vertical focal length $f_V$. \cite{szeliski_computer_2010} describes this in Equation 2.57 of Chapter 2: Image Formation. The camera baseline is given in multiple locations, namely \cite{geiger_are_2012}, although the value is given as "roughly 54 cm", which may reduce the overall accuracy somewhat.
+
+Given this data, the depth value at each pixel location may be calculated via Equation \ref{eq1}, ignoring locations where the disparity value is 0 or Not-A-Number (NaN).
 \begin{equation}
 z(u,v) = \frac{f_U * b}{D}
+\label{eq1}
 \end{equation}
+Next, the real-world $x$ and $y$ locations may be calculated by taking the relative coordinate location from camera center $(c_U,c_V)$, multiplying by the depth values at each pixel location. Successfully calculating this leads to an estimated metric coordinate value for every valid pixel disparity value in the image.
 
 \begin{equation}
 x = \frac{(u - c_U) * z}{f_U}
