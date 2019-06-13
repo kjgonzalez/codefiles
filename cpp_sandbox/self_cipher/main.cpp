@@ -90,7 +90,7 @@ int main(int argc,char **argv){
     disp(raw);
 
     printf("swapped text:\n");
-    disp(swapParagraph(raw));
+    disp(swapParagraph(raw))
     // std::vector<std::string> raw2=swapParagraph(raw);
     // raw=swapParagraph(raw);
     // disp(raw);
