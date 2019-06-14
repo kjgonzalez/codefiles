@@ -94,29 +94,23 @@ int checkPassword(std::string attempt){
     lines. load the file, swap it, and save it to a new file */
 
 int main(int argc,char **argv){
-    printf("= kjg cipher ========== \n");
-    // std::string input = argv[1];
-    if(0){
-        std::string input;
-        input="test\nitem";
-        printf("input : %s\n",input.c_str());
-        printf("output: %s\n",swapLine(input).c_str());
+    if(strcmp(argv[1],"--help")==0){
+        printf("usage: swapper <password> <filepath>\n");
+        printf("note: given file will be overwritten\n");
+        return 0;
+    }
+    printf("= kjg swapper ========== \n");
+    if(checkPassword(argv[1]) !=0){
+        std::cout << "incorrect password.\n";
+        return 0;
     }
 
-    std::vector<std::string> raw=readFile("sample.txt");
-    printf("original text:\n");
-    disp(raw);
+    printf("Opening file %s ...\n",argv[2]);
+    std::vector<std::string> raw=readFile(argv[2]);
 
-    printf("swapped text:\n");
-    disp(swapParagraph(raw))
-    // std::vector<std::string> raw2=swapParagraph(raw);
-    // raw=swapParagraph(raw);
-    // disp(raw);
-    // for(int i=0;i<raw.size();i++){
-    //     std::cout << swapLine(raw[i]) << '\n';
-    // }
-    // std::cout << readFile("sample.txt");
-    // now, work on reading from a file (first)
-
-
-}//int main
+    printf("Swapping text... \n");
+    std::vector<std::string> raw2=swapParagraph(raw);
+    printf("overwriting original file...\n");
+    writeFile(argv[2],raw2);
+    printf("complete.\n");
+}
