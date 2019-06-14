@@ -22,16 +22,15 @@ compile: g++ argsin.cpp -o test
 #include <fstream> // I/O operations
 #include <stdio.h>  // needed for splitting a string & sometimes I/O operations
 #include <vector>
-
+#include <string.h>
 char swapLetter(char letter){
     /* Return an offset letter from given. simplest cipher possible. */
-    if(letter<33 || letter>126){
+    if(letter<32 || letter>125){
         // ensure no issues with characters not in range
         return letter;
-    }
-
-    int newval = letter+27;
-    if(newval>126) newval-=94;
+    }//if in range
+    int newval = letter+47;
+    if(newval>125) newval-=94;
     return char(newval);
 }//swapLetter
 
