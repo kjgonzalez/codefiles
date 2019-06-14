@@ -61,3 +61,4 @@ move entire folder: --- mv /path/to/FOLDER /remote/destination/
 explicit pip call:      python -m pip install PackageName
 read out targz file: -- tar -tf filename.tar.gz (add "v" for verbose output)
 use autopep8:           autopep8 path/to/file.py --select=E101,E121 --in-place
+see command content: -- type <nameOfCommand> (e.g. "alias aserver")
