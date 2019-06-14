@@ -54,6 +54,7 @@ std::vector<std::string> swapParagraph(std::vector<std::string> raw){
 }//swapParagraph
 
 void disp(std::vector<std::string> text){
+    /* simple way to display vector string */
     for(int i=0;i<text.size();i++) std::cout << text[i] << '\n';
 }//disp
 
@@ -70,6 +71,24 @@ std::vector<std::string> readFile(std::string filename){
     return raw;
 }//readFile
 
+void writeFile(std::string filename,std::vector<std::string> text){
+    /* Given a filename and a vector of strings, save text to a file all at
+        once. */
+    FILE *f_out = fopen(filename.c_str(),"w");
+    for(int i=0;i<text.size();i++){
+        fprintf(f_out,text[i].c_str());
+        if(i<text.size()-1) fprintf(f_out,"\n"); // prevents extra newlines
+    }//forloop
+}//writeFile
+
+/* finally, want to prevent auto decoding without having a password, so store
+    something in memory and ensure that it matches.
+    */
+
+int checkPassword(std::string attempt){
+    int result = strcmp("dimeloprincesa",attempt.c_str());
+    return result;
+}
 
 /* at this point, want to be able to work on a file, which would have multiple
     lines. load the file, swap it, and save it to a new file */
