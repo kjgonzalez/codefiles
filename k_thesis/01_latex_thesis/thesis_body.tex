@@ -1,18 +1,23 @@
 \section{Introduction}
-so, need to figure out what the general order of this paper will be. let's try the following: \\
-1.0 introduction \\
-2.0 related work \\
-3.0 Short overview of components in stereo network \\
-  3.1 psmnet and stereo estimation networks \\
-  3.2 mathematics of stereo 3D reconstruction \\
-  3.2 pointnet and pointnetworks \\
-4.0 general steps of spnet (stereo point net) \\
-  4.1 stereo estimation (performance, results) \\
-  4.2 stereo 3d reconstruction (performance, results) \\
-  4.3 stereo point net (procedure, modifications, performance) \\
-5.0 results of stereo point net \\
-R. references \\
-A. appendices \\
+This thesis was performed alongside work and research done for the SMART3D project. This project originally started as an investigation into the feasibility of using a Photonic Mixing Device (PMD) sensor as an alternative to lidar in detecting 3D objects in specific applications. Over the course of the project, a shift was made to stereo-based object detection, and thus began the topic of this thesis. This work seeks to address and answer the how well a stereo-based 3D object detector perform, especially in comparison to other sensor setups. Stereo detection, specifically on vehicles, typically consists of a 2-camera setup, using passive color light detection to generate an estimated stereo disparity map, which may then be transformed into a pointcloud, which may then in turn be analyzed with a Pointnet object detector.
+
+% so, need to figure out what the general order of this paper will be. let's try the following: \\
+% stat | descrip
+% inpr | 1.0 introduction \\
+% inpr | 2.0 related work \\
+%      | 3.0 Short overview of components in stereo network \\
+%      |   3.1 psmnet and stereo estimation networks \\
+%      |   3.2 mathematics of stereo 3D reconstruction \\
+%      |   3.2 pointnet and pointnetworks \\
+%      | 4.0 general steps of spnet (stereo point net) \\
+%      |   4.1 stereo estimation (performance, results) \\
+%      |   4.2 stereo 3d reconstruction (performance, results) \\
+%      |   4.3 stereo point net (procedure, modifications, performance) \\
+%      | 5.0 results of stereo point net \\
+%      | R. references \\
+%      | A. PerformanceMetrics \\
+%      | B. scripts (?) (e.g. create own stereo ground truths)
+
 
 \subsection{Problem / Motivation}
 The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications to many processes, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving being a process that requires 3D knowledge, the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being expensive relative to the amount of information they output when compared to something like a camera image [CITATION NEEDED XX], have relatively slow refresh rates (on the order of 10 Hz for a commercial Velodyne VLP-16), requires active sensing and thus may create a high degree of noise if there are many sensors in the same area, and may not work well with some reflective surfaces, even if they are close (such as a car window not directly perpendicular to the incident laser ray). Despite this, and despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects. 
