@@ -1,9 +1,11 @@
 \section{Introduction}
-This thesis was performed alongside work and research done for the SMART3D project. This project originally started as an investigation into the feasibility of using a Photonic Mixing Device (PMD) sensor as an alternative to lidar in detecting 3D objects in specific applications. Over the course of the project, a shift was made to stereo-based object detection, and thus began the topic of this thesis. This work seeks to address and answer the how well a stereo-based 3D object detector perform, especially in comparison to other sensor setups. Stereo detection, specifically on vehicles, typically consists of a 2-camera setup, using passive color light detection to generate an estimated stereo disparity map, which may then be transformed into a pointcloud, which may then in turn be analyzed with a Pointnet object detector.
+This thesis was performed alongside work and research done for the SMART3D project. The SMART3D project originally started in 2016 as an investigation into the feasibility of using a Photonic Mixing Device (PMD) sensor as an alternative to lidar in detecting 3D objects in short-range outdoor applications. Over the course of the project, a shift was made from PMD sensors to stereo cameras, and thus began the topic of this thesis. This work seeks to address and answer the how well a stereo-based 3D object detector performs, especially in comparison to lidar, the natural and primary choice for estimating an object's location in an outdoor environment (such as detecting other cars on the highway). Stereo vision, specifically on vehicles, typically consists of a 2-camera setup using passive color light detection to generate an estimated stereo disparity map. This may then be transformed into a pointcloud and subsequently analyzed with a Pointnet object detector. In this thesis, the performance of such a system, or network as they are known, is evaluated as well as compared with that of similar detection networks. 
 
 % so, need to figure out what the general order of this paper will be. let's try the following: \\
 % stat | descrip
-% inpr | 1.0 introduction \\
+% done | 1.0 introduction \\
+% inpr | 1.1 problem / motivation
+%      | 1.2 requirements
 % inpr | 2.0 related work \\
 %      | 3.0 Short overview of components in stereo network \\
 %      |   3.1 psmnet and stereo estimation networks \\
@@ -20,7 +22,10 @@ This thesis was performed alongside work and research done for the SMART3D proje
 
 
 \subsection{Problem / Motivation}
-The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications to many processes, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving being a process that requires 3D knowledge, the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being expensive relative to the amount of information they output when compared to something like a camera image [CITATION NEEDED XX], have relatively slow refresh rates (on the order of 10 Hz for a commercial Velodyne VLP-16), requires active sensing and thus may create a high degree of noise if there are many sensors in the same area, and may not work well with some reflective surfaces, even if they are close (such as a car window not directly perpendicular to the incident laser ray). Despite this, and despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
+The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are several factors to normalize, and a more in-depth analysis of this is conducted in Appendix XX. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on active surfaces, potential interference of multiple lidars if all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidars can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
+
+
+KJG190617: need an economic comparison here of lidar!!!
 
 There are some interesting benefits that may be gained with stereo vision: stereo cameras are relatively cheap for the amount of information they provide [CITATION NEEDED XX], intuitively mimics the way that humans already perceive and navigate their world, is a passive sensor that does not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 30 Hz, "frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, which can include inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and when used to estimate position a squared error relationship to distance. This last points simply means that as the distance of an estimated point increases, the error of that value increases quadratically [CITATION NEEDED XX].
 
@@ -51,7 +56,10 @@ Pyramid Stereo Matching Network, or PSMnet, is a network that takes advantage of
 (xx include here info about competitive, ai-based stereo networks)
 
 
+kjg190617: quick note on area of sphere
+$$ A_{sphere}=R^2\theta \int_{a}^{b}\cos\phi*d\phi $$
 
+$$ A_{sphere}=R^2\theta (\sin{b} - \sin{a})$$
 
 \subsection{3D estimation with Stereo Disparity Maps}
 There is a surprisingly low amount of public research on stereo vision for use with 3D localization. \cite{li_stereo_2019} created an RCNN-based approach that currently performs best in class on the KITTI dataset, although achieving 59'th place when also compared against networks that use lidar. This paper also cites other works, such as "3DOP" by \cite{chen_3d_2016}. However, some prior information is encoded into the calculation before using regression to estimate object pose, including height above ground, object size priors, and "depth informed features", while our paper does not provide this information to the network beforehand.
@@ -116,9 +124,9 @@ After the initial evaluation, the network was prepared for and trained on KITTI 
 \begin{figure}[H]
     \centering
     \subfigure[000132\_10 from Stereo]{
-        \includegraphics[width=0.485\linewidth]{../media/similar_000132_10_stereo.png}}
+        \includegraphics[width=0.8\linewidth]{../media/similar_000132_10_stereo.png}}
     \subfigure[000286 from ObjDet]{
-        \includegraphics[width=0.485\linewidth]{../media/similar_000286_objdet.png}}
+        \includegraphics[width=0.8\linewidth]{../media/similar_000286_objdet.png}}
     \label{similarity_stereo_objdet}
     \caption{Example of how two unique records from the separate datasets have overly-similar scenes. There are multiple examples of this, which creates the motivation to generate a secondary set of disparity ground truths for the object detection dataset}
 \end{figure}
@@ -142,7 +150,14 @@ In order to transition from using the provided pre-trained model and preprocesse
 The most basic path, ADF, is simply using the given model to evaluate and achieve similar results to the official paper. Next, AEF used lidar pointclouds, but the model was trained locally. BEF required locally running the "preprocessing" step, but was still theoretically identical to the previous two paths. Finally, CEF truly deviates from the other paths by using a stereo-generated pointcloud to preprocess data, then train on that, and finally evaluate the model's detection capability. 
 
 \section{Procedure / Method}
-texthere
+Now that many of the individual steps of the network have been described above, the complete set of steps taken to produce network estimation will be described. Not every step will be described again, but any deviations from the "general" usage is clarified. However, this section shall be more detailed in describing how each step was executed.
+
+
+
+
+
+
+
 
 \section{Results}
 texthere
