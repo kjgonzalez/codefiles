@@ -1,13 +1,12 @@
 % Appendices file. here, cover all topics related to thesis.
 
 
-KJG190529: BE SURE TO TALK ABOUT (AND INCLUDE GRAPHIC OF) TRUE/FALSE POSITIVES/NEGATIVES!!!
 
 \section{Performance Metrics}
-The concept of verifying accuracy in a statistical estimate is covered in [xx source], and contains well documented techniques of knowing how well a particular heuristic performs. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, two other metrics can be derived, precision and recall. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision and mean Average Precision (mAP). The following information is primarily derived from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and "An Introduction to Information Retrieval" \cite{Manning:2008:IIR:1394399}.
+The concept of verifying accuracy in a statistical estimate is covered in [xx source], and some of this information is covered briefly below. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, precision and recall may then be calculated. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision and mean Average Precision (mAP), which are how different networks are compared. The following information is primarily taken from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and "An Introduction to Information Retrieval" \cite{Manning:2008:IIR:1394399}.
 
 \subsection{Defining a Result}
-The first step in measuring performance is categorizing a result. With a visual task such as object classification, there are 4 possible outcomes, as shown below. In general, there may be a True Positive, False Positive, True Negative, or False Negative. In practice, True Negatives are not used, and the remaining three are used to varying degrees. Each is better clarified as such:
+The first step in measuring performance is categorizing what a result may be. With a visual task such as object classification, there are 4 possible outcomes, as shown below. In general, there may be a True Positive, False Positive, True Negative, or False Negative. In practice, True Negatives are not used, and the remaining three are used to varying degrees. Each is better clarified as such:
 \begin{itemize} \itemsep=-.5em
 	\item True Positive: Correctly detecting a true object
 	\item False Positive: Incorrectly detecting something that isn't there
@@ -22,15 +21,12 @@ The first step in measuring performance is categorizing a result. With a visual 
 	\label{tp_help} %label goes last
 \end{figure}
 
-
-
-
-
+To actually classify a result in one of these categories, computer vision depends on using the overlap of a given bounding box estimate with a bounding box ground truth. If the overlap is above some threshold, the estimate is said to be a true positive. In some metrics, two estimates overlapping the same ground truth will only count the larger overlap, or the more confident estimate. Overlap is formally known as Intersection over Union, or IOU value.
 
 \subsection{Intersection Over Union}
-In image recognition, as well as other spatially-based algorithms, accuracy is needed in various forms to know "how well" a prediction matches the ground truth, or true value. If, for example, an object-detection algorithm predicts the location of a car in a photo, there may be multiple values to use, and questions to answer: ``How closely does the prediction's center of mass match the true center of mass?", ``How much overlap does the prediction have with the ground truth?", or even ``How well do the two bounding boxes align?". 
+In image recognition, as well as other spatially-based tasks, accuracy is needed in various forms to know "how well" a prediction overlaps, or matches, the ground truth. If, for example, an object-detection algorithm predicts the location of a car in a photo, one would like to know if such an estimate has any value, ideally with as few parameters as possible.
 
-In light of this, a simple metric is needed that can encompass all aspects of matching two shapes (e.g. rectangles) together. IOU enables a more granular scoring of an estimate's performance, rather than saying it is 100\% correct or incorrect. IOU is calculated as the ratio of two bounding regions' intersection over their union, as the name states. Visually, this looks something like the below in Figure \ref{iou_img}. Uniquely, the calculation of area and intersection for image boundaries is inclusive of the bounds, meaning that the length of a given difference must have ``+1" added to it. This is explained in the example below.
+In light of this, Intersection Over Union encompasses all relevant aspects of rating the overlap of two geometric shapes (e.g. rectangles) while enabling an intuive, non binary scoring of an estimate. IOU is calculated as the ratio of two bounding regions' intersection over their union, as the name states. Visually, this looks something like the below in Figure \ref{iou_img}. Uniquely, the calculation of area and intersection for image boundaries is inclusive of the bounds, meaning that the length of a given difference must have ``+1" added to it. This is explained in the example below.
 
 \begin{figure}[ht] % h = "approx here", {h,t,b}
     \includegraphics[width=1\textwidth]{../media/iou_img.png}
@@ -48,6 +44,7 @@ To assist in understanding IOU, a code snippet as well as an example are present
 All aspects of calculating the IOU (including area and intersection) are broken up into multiple pieces, but presented together below. For n-dimensions, the code (presented here in python) is as follows: 
 
 
+KJG190618: NEED TO RE-PASTE IN THIS CODE!!! XX
 \begin{figure}[H]
 \setstretch{0.84} % want code to be nice and compact
 \begin{lstlisting}
