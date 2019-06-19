@@ -52,25 +52,29 @@ import numpy as np
 
 def extent(box,inclusive=False):
     '''
-    Return the size / "extent" (length, area, volume, etc) of a given box in
+    Return the size or "extent" (length, area, volume, etc) of a given box in
         n-dimensions.
     INPUTS:
         box: n-dimensional bounds, format [x1,y1,z1, .. ,x2,y2,z2, ..]
-        inclusive: boolean. add 1 unit to each dimension, such as for images
+        inclusive: boolean. add 1 unit to calculation, such as for image area
     OUTPUT:
         extent: size of box bounds, scalar float.
+    NOTE:
+    Internal convention: [Nx2] array,
+        | x1 x2 |
+        | y1 y2 |
+        | z1 z2 |
+        | .. .. |
     '''
     o= 1 if(inclusive) else 0 # add '1' if inclusive is true
     b=np.array(box).reshape((2,-1)).T # now in internal convention
     return np.product([i[1]-i[0]+o for i in b])
-
 def intersection(box1,box2,inclusive=False):
     '''
     Return the size / "extent" of intersection between two bounds of
         n-dimension. Internal convention follows same as "extent" function.
     INPUTS:
         box1,box2: n-dimensional bounds, format [x1,y1,z1, .. ,x2,y2,z2, ..]
-        inclusive: boolean. add 1 unit to each dimension, such as for images
     OUTPUT:
         intersection: size of overlapping bounds, scalar float.
     '''
@@ -79,12 +83,15 @@ def intersection(box1,box2,inclusive=False):
     b2=np.array(box2).reshape((2,-1)).T # internal convention
     c=np.stack((b1,b2),2)
     # for each dimension, get (min(upperbound)-max(lowerbound)) and get product
-    val = np.product([np.min(c[i,1,:])-np.max(c[i,0,:])+o for i in range(len(b1))])
-    return max(val,0.0)
+    val=1
+    for i in range(len(b1)):
+        ans=np.min(c[i,1,:])-np.max(c[i,0,:])
+        val*=max(ans,0) # if have negative dimension, have no intersection
+    return val
 
 def IOU(b1,b2,inclusive=False):
     '''
-    Return generalized intersection over union for two bounding boxes of 
+    Return generalized intersection over union for two bounding boxes of
         matching n-dimension.
     INPUTS:
         b1,b2: n-dimensional bounding boxes, format [x1,y1,z1, .. ,x2,y2,z2, ..]
