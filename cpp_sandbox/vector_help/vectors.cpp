@@ -5,6 +5,7 @@ objective: do some stuff with vectors to help yourself understand them.
 */
 
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #define nl '\n'
 
@@ -24,10 +25,17 @@ int main(){
     std::cout<<"Size of first: " << int (first.size()) << '\n';
     std::cout << "first contents: "; vPrint(first);
 
+    for(int i=0;i<first.size();i++) first[i]=i+3;
+    std::cout << "new first contents: "; vPrint(first);
+
     std::vector<int> second;
     it=first.begin()+1;
     second.assign (it,first.end()-1); // the 5 central values of first
     std::cout << "second contents: "; vPrint(second);
+
+    // int x = std::max_element(first.begin(),first.end());
+    // printf("max value: %d\n",x);
+    std::cout << "max value: " << *std::min_element(first.begin(),first.end()) << nl;
 
     // for(int i=0;i<first.size();i++){
     //     std::cout << first[i] << " ";
