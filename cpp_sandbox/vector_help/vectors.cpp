@@ -2,6 +2,8 @@
 author: kris gonzalez
 date: 190618
 objective: do some stuff with vectors to help yourself understand them.
+
+compile: g++ -std=c++11 vectors.cpp
 */
 
 #include <iostream>
