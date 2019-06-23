@@ -11,6 +11,7 @@ opencv-contrib-python
 pandas
 mutagen # needed for audio metadata manipulation
 pydub # needed for audio conversion
+# note: need ffmpeg https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg
 # # requirements for thesis, not sure if needed yet
 # boltons
 # pprint
