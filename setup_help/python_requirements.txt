@@ -1,5 +1,5 @@
 # Title: Python Modules Install List
-# Usage: pip install -r FILENAME --user
+# Usage: python -m pip install -r FILENAME --user
 jupyter
 ipython
 ipdb
@@ -9,6 +9,7 @@ Pillow
 scipy
 opencv-contrib-python
 pandas
+mutagen # needed for audio metadata manipulation
 # # requirements for thesis, not sure if needed yet
 # boltons
 # pprint
