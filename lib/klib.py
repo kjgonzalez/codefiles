@@ -239,7 +239,7 @@ def getlist(rec=False,files=True,ext=''):
     ''' This function is implemented as alias for "dir". Use THAT function. '''
     return dir(rec,files,ext)
 
-def dir(rec=False,files=True,ext=''):
+def dir(path='.',rec=False,files=True,ext=''):
     '''
     Objective: Emulate ls / dir command to be cross platform and return as a
         list. Can choose to run recursively, only show folders or show all
@@ -247,6 +247,7 @@ def dir(rec=False,files=True,ext=''):
         files=False, would just show current working directory. filetypes will
         show all filetypes by default, but can be specific ones as well.
     Inputs:
+        * path: base path. Default: '.' . This arg to be verified. (kjg190622)
         * rec: Recursive check. Default: False (no recursion)
         * files: Show only files or folders. Default: True (files only)
         * ext: Which filetypes to return. Default: '' (any)
@@ -256,7 +257,8 @@ def dir(rec=False,files=True,ext=''):
     isf=os.path.isfile
     opj=os.path.join
     abp=os.path.abspath
-    paths=os.walk('.') if rec else '.' # where to check, if recursive
+    assert os.path.isdir(path),'Not a path: '+path
+    paths=os.walk(path) if rec else path # where to check, if recursive
     ext='.'+ext if ext!='' else ext # if not default, prefix '.'
 
     # for each directory, for each file/folder, append to list
