@@ -110,12 +110,13 @@ info: ncr. desc. combination of stuff
 
 '''
 # PART SIX #######################################
-from Tkinter import *
+# from Tkinter import *
+from tkinter import *
 def listContents():
 	from os import curdir, listdir
 	dirList=listdir(curdir)
 	for i in dirList:
-		print i
+		print(i)
 
 root = Tk()
 frame=Frame(root)
