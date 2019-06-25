@@ -40,93 +40,85 @@ class MainWindow:
         # control variables
         self.V=dict()
         self.V['autochk'] = tk.IntVar() # for use with C['auto']
-        self.V['fname'] = tk.StringVar() # filename
-        self.V['title'] = tk.StringVar()
-        self.V['artist'] = tk.StringVar()
-        self.V['album'] = tk.StringVar()
-        self.V['track'] = tk.StringVar()
-        self.V['year'] = tk.StringVar()
-        self.V['comment'] = tk.StringVar()
         self.V['autotxt'] = tk.StringVar()
+
+        for ifield in self._fields:
+            self.V[ifield] = tk.StringVar()
 
         # buttons
         self.B = dict() # dictionary of buttons
-        self.B['save'] = tk.Button(self.F,text='SAVE',command=self.getListboxInfo)
-        self.B['prev'] = tk.Button(self.F,text='PREV',command=self.printindex)
-        self.B['next'] = tk.Button(self.F,text='NEXT',command=self.printautotxt)
-        self.B['exit'] = tk.Button(self.F,text='EXIT',command=self.F.quit) # fg='black'
+        self.B['save'] = tk.Button(self.F,font=helv,text='SAVE',command=self.passfn)
+        self.B['prev'] = tk.Button(self.F,font=helv,text='PREV',command=self.passfn)
+        self.B['next'] = tk.Button(self.F,font=helv,text='NEXT',command=self.passfn)
+        self.B['exit'] = tk.Button(self.F,font=helv,text='EXIT',command=self.F.quit) # fg='black'
 
-        self.B['save'].grid(row=11,column=3)
-        self.B['prev'].grid(row=11,column=6)
-        self.B['next'].grid(row=11,column=9)
-        self.B['exit'].grid(row=11,column=10)
-        # [self.B[key].pack() for key in self.B.keys()]
 
         # checkmark(s)
         self.C=dict()
-        self.C['autochk'] = tk.Checkbutton(self.F,text='autocomment',variable=self.V['autochk'])
+        self.C['autochk'] = tk.Checkbutton(self.F,font=helv,text='autocomment',variable=self.V['autochk'])
 
-        self.C['autochk'].grid(row=6,column=1)
-        # [self.C[key].pack() for key in self.C.keys()]
 
         # entry forms
         self.E=dict()
-        self.E['fname'] = tk.Entry(self.F,textvariable=self.V['fname'])
-        self.E['title'] = tk.Entry(self.F,textvariable=self.V['title'])
-        self.E['artist'] = tk.Entry(self.F,textvariable=self.V['artist'])
-        self.E['album'] = tk.Entry(self.F,textvariable=self.V['album'])
-        self.E['track'] = tk.Entry(self.F,textvariable=self.V['track'])
-        self.E['year'] = tk.Entry(self.F,textvariable=self.V['year'])
-        self.E['comment'] = tk.Entry(self.F,textvariable=self.V['comment'])
-        self.E['autotxt'] = tk.Entry(self.F,textvariable=self.V['autotxt'])
+        for ifield in self._fields:
+            self.E[ifield] = tk.Entry(self.F,font=helv,textvariable=self.V[ifield])
+        self.E['autotxt'] = tk.Entry(self.F,font=helv,textvariable=self.V['autotxt'])
 
-        self.E['fname'].grid(row=1,column=14)
-        self.E['title'].grid(row=2,column=14)
-        self.E['artist'].grid(row=3,column=14)
-        self.E['album'].grid(row=4,column=14)
-        self.E['track'].grid(row=5,column=14)
-        self.E['year'].grid(row=6,column=14)
-        self.E['comment'].grid(row=7,column=14)
-        self.E['autotxt'].grid(row=7,column=1)
-        # [self.E[key].pack() for key in self.E.keys()]
+
 
         # label forms
         self.L=dict()
-        self.L['fname'] = tk.Label(self.F,text='fname')
-        self.L['title'] = tk.Label(self.F,text='title')
-        self.L['artist'] = tk.Label(self.F,text='artist')
-        self.L['album'] = tk.Label(self.F,text='album')
-        self.L['track'] = tk.Label(self.F,text='track')
-        self.L['year'] = tk.Label(self.F,text='year')
-        self.L['comment'] = tk.Label(self.F,text='comment')
-        self.L['auto'] = tk.Label(self.F,text='autocomment')
+        for ifield in self._fields:
+            self.L[ifield] = tk.Label(self.F,font=helv,text=ifield)
+        self.L['auto'] = tk.Label(self.F,font=helv,text='autocomment')
 
+        # listbox(es)
+        self.I=dict()
+        self.I['files'] = tk.Listbox(self.F,font=helv,activestyle='dotbox')
+
+        # placement of all items
+        self.B['save'].grid(row=11,column=3)
+        self.B['prev'].grid(row=11,column=6)
+        self.B['next'].grid(row=11,column=9)
+        self.B['exit'].grid(row=11,column=13)
+        self.C['autochk'].grid(row=6,column=1)
+        self.E['fname'].grid(row=1,column=11)
+        self.E['title'].grid(row=2,column=11)
+        self.E['artist'].grid(row=3,column=11)
+        self.E['album'].grid(row=4,column=11)
+        self.E['track'].grid(row=5,column=11)
+        self.E['genre'].grid(row=6,column=11)
+        self.E['year'].grid(row=7,column=11)
+        self.E['comment'].grid(row=8,column=11)
+        self.E['autotxt'].grid(row=7,column=1)
         self.L['fname'].grid(row=1,column=10)
         self.L['title'].grid(row=2,column=10)
         self.L['artist'].grid(row=3,column=10)
         self.L['album'].grid(row=4,column=10)
         self.L['track'].grid(row=5,column=10)
-        self.L['year'].grid(row=6,column=10)
-        self.L['comment'].grid(row=7,column=10)
-        # [self.L[key].pack() for key in self.L.keys()]
-
-        # listbox(es)
-        self.I=dict()
-        self.I['files'] = tk.Listbox(self.F,activestyle='dotbox')
-
+        self.L['genre'].grid(row=6,column=10)
+        self.L['year'].grid(row=7,column=10)
+        self.L['comment'].grid(row=8,column=10)
         self.I['files'].grid(row=1,column=1,columnspan=5,rowspan=4)
-        # [self.I[key].pack() for key in self.I.keys()]
+
     def populateListBox(self,items_list):
-        ''' clears anything in the list box, then populates it with
+        ''' Clears anything in the list box, then populates it with
         items_list.
         '''
-        end=max(self.I['files'].size()-1,0)
+        end=max(self.I['files'].size()-1,0) # use max in case no lines
         self.I['files'].delete(0,end)
         for item in items_list:
-            self.I['files'].insert(tk.END,item)
+            self.I['files'].insert(tk.END,item) # adds newline
 
-    def getListboxInfo(self):
-        print('number of lines:',self.I['files'].size())
+    def updateFields(self,info_dict):
+        ''' Given a dict of info, repopulate the fields in the window
+        '''
+        # first assert all, then start populating
+        for ifield in self._fields:
+            assert ifield in info_dict.keys(), ifield+' missing'
+
+        for ifield in self._fields:
+            self.V[ifield].set(info_dict[ifield])
 
     def run(self):
         self.R.mainloop()
@@ -135,4 +127,16 @@ class MainWindow:
 main = MainWindow()
 main.populateListBox('abcdefghijklmnopqrs')
 main.populateListBox('hello')
+
+x=dict()
+x['fname'] = 'Tpain - Buy you a drink.mp3'
+x['title'] = 'buy you a drink'
+x['artist'] = 'tpain'
+x['album'] = 'shawty'
+x['track'] = '3'
+x['genre'] = 'R&B'
+x['year'] = '2010'
+x['comment'] = 'memories'
+
+main.updateFields(x)
 main.run()
