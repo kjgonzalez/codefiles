@@ -1,2 +1,3 @@
 # don't want music files being uploaded
 *.mp3
+*.odp#
