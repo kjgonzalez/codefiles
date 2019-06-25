@@ -3,16 +3,17 @@ this is where i'll develop the UI form that can open a music file, edit the
     contents, save, and move to another file.
 
 things to fix:
-* control text size in all items with one variable
+* control text size in all items with one variable - done
 * have each widget perform its correct function
 * be able to load / save all data as needed
 * give root (self.R) window a title
-
+* instead of grid, may want to use place (https://www.python-course.eu/tkinter_layout_management.php)
 '''
 
 import os,sys,time
 import tkinter as tk
-
+from tkinter import font as ft
+fontSize = 12 # default font size is 9
 
 class MainWindow:
     ''' Class to contain and load main window interface. this only initializes
@@ -26,8 +27,13 @@ class MainWindow:
         self.printindex = lambda: print('selected:',self.I['files'].curselection())
         self.printautotxt = lambda:print('text:',self.V['autotxt'].get())
 
+
+        self._fields = 'fname title artist album track genre year comment'.split(' ')
         self.R = tk.Tk()
-        self.R.resizable(False,False)
+        self.R.resizable(True,False)
+        self.R.title('UI Form')
+        helv = ft.Font(self.R,family='Helvetica',size=fontSize)
+
         self.F=tk.Frame(self.R)
         self.F.pack()
 
