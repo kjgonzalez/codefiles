@@ -1,4 +1,4 @@
-# Audio Manipulation Sandbox
+# Audio Manipulation Folder
 ---
 **DateCreated**: 190507
 
@@ -7,9 +7,21 @@
 ## Applications:
 * batch metadata manipulation
 * batch audio clip editing (replace one clip with another)
-* TBD
-
+* conversion to mp3 file format
+* rapid metadata editing tool
 
 ## Useful links: 
 metadata manipulation lib: https://mutagen.readthedocs.io/en/latest/user/id3.html
 possible audio manipulation lib: https://github.com/jiaaro/pydub#installation
+
+
+## Goals (as of 190624)
+* convert all music files to mp3 - done(190624)
+* give every music file appropriate metadata (name, artist, album, etc)
+* put all album songs in respective folders
+* give every folder appropriate name (<Artist> - <Album>)
+* standardize all music genres to set list - 
+* remove unneeded comments from every music file
+* give proper filename to every song (<Track> <Artist> - <Name>.mp3)
+* ???
+* create ui to easily manipulate each file
