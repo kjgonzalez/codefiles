@@ -63,9 +63,9 @@ class MainWindow:
 
         # buttons
         self.B = dict() # dictionary of buttons
-        self.B['save'] = tk.Button(self.F,font=helv,text='SAVE',command=self.printfields)
-        self.B['prev'] = tk.Button(self.F,font=helv,text='PREV',command=self.passfn)
-        self.B['next'] = tk.Button(self.F,font=helv,text='NEXT',command=self.passfn)
+        self.B['save'] = tk.Button(self.F,font=helv,text='SAVE',command=self.saveData)
+        self.B['prev'] = tk.Button(self.F,font=helv,text='PREV',command=self.reloadFirst)
+        self.B['next'] = tk.Button(self.F,font=helv,text='NEXT',command=self.printfields)
         self.B['exit'] = tk.Button(self.F,font=helv,text='EXIT',command=self.F.quit) # fg='black'
 
         # checkmarks
