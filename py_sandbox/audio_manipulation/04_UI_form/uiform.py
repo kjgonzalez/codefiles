@@ -144,18 +144,15 @@ class MainWindow:
     def setAllFromFile(self,filename):
         ''' given a filename, populate metadata fields '''
         info = ka.MetaMP3(filename).getAllData()
+        # info['fname'] = os.path.splitext(filename)[0] # giving with ext for now
         info['fname'] = filename
-        self.setAllFromDict(info)
-
-    def setAllFromDict(self,info_dict):
-        ''' Given a dict of info, repopulate the fields in the window
-        '''
+        self.origInfo = info # replaces previous data each time a file is loaded
         # first assert all, then start populating
         for ifield in self._fields:
-            assert ifield in info_dict.keys(), 'field missing: '+ifield
-
+            assert ifield in info.keys(), 'field missing: '+ifield
         for ifield in self._fields:
-            self.V[ifield].set(info_dict[ifield])
+            self.V[ifield].set(info[ifield])
+        self.updateAutoFileName(None) # Needs input argument to run
 
     def setField(self,field,value):
         assert field in self._fields,'invalid field:'+field
