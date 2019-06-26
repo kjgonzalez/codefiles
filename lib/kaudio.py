@@ -80,10 +80,12 @@ class MetaMP3(object):
             self.dat[self._d[property]].text[0] = value
         return True
 
-    def list(self):
+    def getAllData(self):
         ''' debugging. quickly list out all values '''
-        for i in self.tags:
-            print(i,':',self.get(i))
+        res = dict()
+        for itag in self.tags:
+            res[itag] = self.get(itag)
+        return res
 
     def save(self):
         ''' Write current state to same file. CAUTION: there is no overwrite
