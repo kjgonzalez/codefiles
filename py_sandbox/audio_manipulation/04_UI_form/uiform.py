@@ -174,6 +174,35 @@ class MainWindow:
             res['fname'] = self.V['autoFNM'].get()
         return res
 
+    def saveData(self):
+        ''' write out the new metadata to file '''
+        # case 1: only metadata is changed. save that and exit
+        i1 = self.origInfo
+        i2 = self.getAllFields()
+        diff = {ifield:i1[ifield]!=i2[ifield] for ifield in self._fields}
+        ndiff = len([i for i in diff.values() if(i)])
+
+        if(ndiff==0):
+            # no diff between i1 and i2, no changes made
+            print('no changes')
+        elif(ndiff==1 and diff['fname']):
+            # only the filename was changed. rename file, update list, update "original" info
+            print('only filename change')
+            os.rename(i1['fname'],i2['fname'])
+            self.updateFileList()
+            self.populateListBox()
+            self.origInfo=i2
+        elif(not diff['fname']):
+            # only metadata was changed. update metadata, update "original" info
+            print('only metadata change')
+        else:
+            # both filename and metadata changed. rename, update list, change meta, update "original" info
+            print('metadata and filename change')
+
+        # if(dat1['fname']==i2['fname']):
+        #     # filename hasn't changed
+        #     ifile = ka.MetaMP3(i2['fname'])
+
     def run(self):
         self.R.mainloop()
         self.R.destroy()
