@@ -116,6 +116,22 @@ class MainWindow:
         self.L['comment'].grid( row= 8,column=7)
         self.I['files'].grid(   row= 1,column= 1,rowspan=6,columnspan=2) #,columnspan=3,rowspan=6)
 
+        # bind custom events
+        self.E['title'].bind( '<KeyRelease>',self.updateAutoFileName)
+        self.E['artist'].bind('<KeyRelease>',self.updateAutoFileName)
+
+    def updateFileList(self):
+        self._filelist = [ifile for ifile in os.listdir('.') if('mp3' in ifile)]
+
+    def updateAutoFileName(self,event): # perhaps "tk.Event" ?
+        ''' here, will outline the formatting for auto-filenaming, and this
+            function is to be used as a callback
+        * For now, keeping things just as <Artist> - <Title>
+        * want to run this on keypress of artist & title widgets
+        '''
+        text = '{} - {}.mp3'.format(self.V['artist'].get(),self.V['title'].get())
+        self.V['autoFNM'].set(text)
+
     def populateListBox(self):
         ''' Clears anything in the list box, then populates it with
         items_list.
