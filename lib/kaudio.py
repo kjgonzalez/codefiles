@@ -57,24 +57,28 @@ class MetaMP3(object):
         '''
         if(type(value)!=str):
             value = str(value)
-            print("WARNING: value type has been corrected to 'str'")
+            print("WARNING: value type of "+property+" has been corrected to 'str'")
 
         # ensure that property is valid
         assert property in self.tags,'Invalid property "{}"'.format(property)
 
         # check if property in object. if not, create it.
         if(self._d[property] not in self.dat.keys()):
+            # property doesn't already exist in metadata
             if(property=='title'):self.dat.add(TIT2(encoding=3,text=value))
             elif(property=='artist'): self.dat.add(TPE1(encoding=3,text=value))
             elif(property=='album'): self.dat.add(TALB(encoding=3,text=value))
             elif(property=='track'): self.dat.add(TRCK(encoding=3,text=value))
             elif(property=='genre'): self.dat.add(TCON(encoding=3,text=value))
-            elif(property=='year'): self.dat.add(TDRC(encoding=3,text=value))
+            elif(property=='year'): self.dat.add(TDRC(encoding=3,text=str(value)))
             elif(property=='comment'): self.dat.add(COMM(encoding=3,lang='eng',text=value))
             else: raise Exception('Invalid property to add')
         elif(value == ''):
             # user wants to clear the tag, so remove from object
             self.dat.pop(self._d[property])
+        elif(property=='year'):
+            # having issues with year value. will specifically use 'add'
+            self.dat.add(TDRC(encoding=3,text=str(value)))
         else:
             # simply modify the property
             self.dat[self._d[property]].text[0] = value
