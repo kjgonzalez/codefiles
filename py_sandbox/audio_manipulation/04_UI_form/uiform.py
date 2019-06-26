@@ -164,10 +164,14 @@ class MainWindow:
         for ifield in self._fields:
             res[ifield]=self.V[ifield].get()
 
-        # override comment if autocomment enabled
-        if(self.V['autochk'].get()):
-            # autocomment enabled, override current comment value
-            res['comment'] = self.V['autotxt'].get()
+        # override comment if auto-comment enabled
+        if(self.V['autochkCMT'].get()):
+            # auto-comment enabled, override current comment value
+            res['comment'] = self.V['autoCMT'].get()
+        # override filename if auto-filename enabled
+        if(self.V['autochkFNM'].get()):
+            # auto-filename enabled, override current filename.
+            res['fname'] = self.V['autoFNM'].get()
         return res
 
     def run(self):
