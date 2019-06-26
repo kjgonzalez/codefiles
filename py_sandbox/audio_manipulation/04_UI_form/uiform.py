@@ -37,23 +37,27 @@ class MainWindow:
 
     def __init__(self):
         self.passfn = lambda : print('hello world')
-        self.printstate = lambda: print('state:',self.V['autochk'].get())
+        self.printstate = lambda: print('state:',self.V['autochkCMT'].get())
         self.printindex = lambda: print('selected:',self.I['files'].curselection())
-        self.printautotxt = lambda:print('text:',self.V['autotxt'].get())
+        self.printautotxt = lambda:print('text:',self.V['autoCMT'].get())
         self.printfields = lambda:print(self.getAllFields())
+        self.reloadFirst = lambda:self.setAllFromFile(self._filelist[0])
+        self._filelist = [ifile for ifile in os.listdir('.') if('mp3' in ifile)]
         self._fields = 'fname title artist album track genre year comment'.split(' ')
+        self.origInfo = None # initialize dict variable for original metadata
         self.R = tk.Tk()
         self.R.resizable(False,False)
         self.R.title('UI Form')
         helv = ft.Font(self.R,family='Helvetica',size=fontSize)
-
         self.F=tk.Frame(self.R)
         self.F.pack()
 
         # control variables
         self.V=dict()
-        self.V['autochk'] = tk.IntVar() # for use with C['auto']
-        self.V['autotxt'] = tk.StringVar()
+        self.V['autochkCMT'] = tk.IntVar() # status for auto-Comment
+        self.V['autochkFNM'] = tk.IntVar() # status for auto-Filename
+        self.V['autoCMT'] = tk.StringVar() # text for auto-comment
+        self.V['autoFNM'] = tk.StringVar() # text for auto-filename
         for ifield in self._fields:
             self.V[ifield] = tk.StringVar()
 
@@ -64,25 +68,22 @@ class MainWindow:
         self.B['next'] = tk.Button(self.F,font=helv,text='NEXT',command=self.passfn)
         self.B['exit'] = tk.Button(self.F,font=helv,text='EXIT',command=self.F.quit) # fg='black'
 
-
-        # checkmark(s)
+        # checkmarks
         self.C=dict()
-        self.C['autochk'] = tk.Checkbutton(self.F,font=helv,text='autocomment',variable=self.V['autochk'])
-
+        self.C['autochkCMT'] = tk.Checkbutton(self.F,font=helv,text='AutoComment',variable=self.V['autochkCMT'])
+        self.C['autochkFNM'] = tk.Checkbutton(self.F,font=helv,text='AutoFilename',variable=self.V['autochkFNM'])
 
         # entry forms
         self.E=dict()
         for ifield in self._fields:
             self.E[ifield] = tk.Entry(self.F,font=helv,textvariable=self.V[ifield],width=40)
-        self.E['autotxt'] = tk.Entry(self.F,font=helv,textvariable=self.V['autotxt'])
-
-
+        self.E['autoCMT'] = tk.Entry(self.F,font=helv,textvariable=self.V['autoCMT'])
 
         # label forms
         self.L=dict()
         for ifield in self._fields:
             self.L[ifield] = tk.Label(self.F,font=helv,text=ifield)
-        self.L['auto'] = tk.Label(self.F,font=helv,text='autocomment')
+        self.L['autoFNM'] = tk.Label(self.F,font=helv,textvariable=self.V['autoFNM'])
 
         # listbox(es)
         self.I=dict()
@@ -93,7 +94,8 @@ class MainWindow:
         self.B['prev'].grid(    row=11,column= 9)
         self.B['next'].grid(    row=11,column=10)
         self.B['exit'].grid(    row=11,column=11)
-        self.C['autochk'].grid( row= 7,column= 1)
+        self.C['autochkCMT'].grid(row= 7,column= 1)
+        self.C['autochkFNM'].grid(row= 8,column= 1)
         self.E['fname'].grid(   row= 1,column=8,columnspan=4)
         self.E['title'].grid(   row= 2,column=8,columnspan=4)
         self.E['artist'].grid(  row= 3,column=8,columnspan=4)
@@ -102,7 +104,8 @@ class MainWindow:
         self.E['genre'].grid(   row= 6,column=8,columnspan=4)
         self.E['year'].grid(    row= 7,column=8,columnspan=4)
         self.E['comment'].grid( row= 8,column=8,columnspan=4)
-        self.E['autotxt'].grid( row= 7,column= 2)
+        self.E['autoCMT'].grid( row= 7,column= 2)
+        self.L['autoFNM'].grid( row= 8,column= 2)
         self.L['fname'].grid(   row= 1,column=7)
         self.L['title'].grid(   row= 2,column=7)
         self.L['artist'].grid(  row= 3,column=7)
