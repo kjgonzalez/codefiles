@@ -114,33 +114,58 @@ class MainWindow:
         for item in items_list:
             self.I['files'].insert(tk.END,item) # adds newline
 
-    def updateFields(self,info_dict):
+    def setAllFromFile(self,filename):
+        ''' given a filename, populate metadata fields '''
+        info = ka.MetaMP3(filename).getAllData()
+        info['fname'] = filename
+        self.setAllFromDict(info)
+
+    def setAllFromDict(self,info_dict):
         ''' Given a dict of info, repopulate the fields in the window
         '''
         # first assert all, then start populating
         for ifield in self._fields:
-            assert ifield in info_dict.keys(), ifield+' missing'
+            assert ifield in info_dict.keys(), 'field missing: '+ifield
 
         for ifield in self._fields:
             self.V[ifield].set(info_dict[ifield])
+
+    def setField(self,field,value):
+        assert field in self._fields,'invalid field:'+field
+        self.V[field].set(value)
+
+    def getAllFields(self):
+        ''' return dict of all fields '''
+        res = dict()
+        for ifield in self._fields:
+            res[ifield]=self.V[ifield].get()
+
+        # override comment if autocomment enabled
+        if(self.V['autochk'].get()):
+            # autocomment enabled, override current comment value
+            res['comment'] = self.V['autotxt'].get()
+        return res
 
     def run(self):
         self.R.mainloop()
         self.R.destroy()
 
+
+# print(os.getcwd())
+
+# kjg190626: ok, for the moment, will run from 00... folder
+
+listdir = [ifile for ifile in os.listdir('.') if('mp3' in ifile)]
+print(listdir)
+
+
+
 main = MainWindow()
-main.populateListBox('abcdefghijklmnopqrs')
-main.populateListBox('hello')
+main.populateListBox(listdir)
 
-x=dict()
-x['fname'] = 'Tpain - Buy you a drink.mp3'
-x['title'] = 'buy you a drink'
-x['artist'] = 'tpain'
-x['album'] = 'shawty'
-x['track'] = '3'
-x['genre'] = 'R&B'
-x['year'] = '2010'
-x['comment'] = 'memories'
 
-main.updateFields(x)
+# x = ka.MetaMP3(listdir[0]).getAllData()
+# x['fname'] = listdir[0]
+# main.setAllFromDict(x)
+main.setAllFromFile(listdir[0])
 main.run()
