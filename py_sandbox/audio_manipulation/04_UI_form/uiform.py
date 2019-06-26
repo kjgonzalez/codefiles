@@ -18,6 +18,8 @@ import os,sys,time
 import tkinter as tk
 from tkinter import font as ft
 fontSize = 12 # default font size is 9
+import kaudio as ka
+
 
 class MainWindow:
     ''' Class to contain and load main window interface. this only initializes
@@ -30,11 +32,10 @@ class MainWindow:
         self.printstate = lambda: print('state:',self.V['autochk'].get())
         self.printindex = lambda: print('selected:',self.I['files'].curselection())
         self.printautotxt = lambda:print('text:',self.V['autotxt'].get())
-
-
+        self.printfields = lambda:print(self.getAllFields())
         self._fields = 'fname title artist album track genre year comment'.split(' ')
         self.R = tk.Tk()
-        self.R.resizable(True,False)
+        self.R.resizable(False,False)
         self.R.title('UI Form')
         helv = ft.Font(self.R,family='Helvetica',size=fontSize)
 
@@ -45,13 +46,12 @@ class MainWindow:
         self.V=dict()
         self.V['autochk'] = tk.IntVar() # for use with C['auto']
         self.V['autotxt'] = tk.StringVar()
-
         for ifield in self._fields:
             self.V[ifield] = tk.StringVar()
 
         # buttons
         self.B = dict() # dictionary of buttons
-        self.B['save'] = tk.Button(self.F,font=helv,text='SAVE',command=self.passfn)
+        self.B['save'] = tk.Button(self.F,font=helv,text='SAVE',command=self.printfields)
         self.B['prev'] = tk.Button(self.F,font=helv,text='PREV',command=self.passfn)
         self.B['next'] = tk.Button(self.F,font=helv,text='NEXT',command=self.passfn)
         self.B['exit'] = tk.Button(self.F,font=helv,text='EXIT',command=self.F.quit) # fg='black'
