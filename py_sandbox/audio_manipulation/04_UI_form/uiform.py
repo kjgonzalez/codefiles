@@ -6,18 +6,14 @@ things to fix:
 * control text size in all items with one variable - done
 * give root (self.R) window a title - done
 * instead of grid, may want to use place - no, using grid. - done
-
-* be able to load one song, edit data, and save it.
+* be able to load one song, edit data, and save it. - done
+* prevent saving if no changes made - done
+===== div: in progress ===========
 * be able to go to prev / next song in a list
-* display which song is currently loaded in listbox
-* switch to a new song by clicking on it in listbox
+* highligh which song is currently loaded in listbox
+* switch to a new song by double-clicking on it in listbox (popup: save?)
 * use hotkeys like CTRL+Q for quit
-* prevent saving if no changes made
 
-* no changes: exit
-* if only metadata is changed: change metadata, save, exit. - (not diff['fname']) # implies at least one change
-* if filename and metadata are changed: rename, change, save, exit (diff['name'] and ndiff > 1)
-* if only filename is changed: rename file, exit
 
 
 '''
