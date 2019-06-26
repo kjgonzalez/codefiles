@@ -195,9 +195,22 @@ class MainWindow:
         elif(not diff['fname']):
             # only metadata was changed. update metadata, update "original" info
             print('only metadata change')
+            dat = ka.MetaMP3(i2['fname'])
+            for ifield in dat.tags:
+                dat.set(ifield,i2[ifield])
+            dat.save()
+            self.origInfo=i2
         else:
             # both filename and metadata changed. rename, update list, change meta, update "original" info
             print('metadata and filename change')
+            os.rename(i1['fname'],i2['fname'])
+            self.updateFileList()
+            self.populateListBox()
+            dat = ka.MetaMP3(i2['fname'])
+            for ifield in dat.tags:
+                dat.set(ifield,i2[ifield])
+            dat.save()
+            self.origInfo=i2
 
         # if(dat1['fname']==i2['fname']):
         #     # filename hasn't changed
