@@ -12,6 +12,14 @@ things to fix:
 * display which song is currently loaded in listbox
 * switch to a new song by clicking on it in listbox
 * use hotkeys like CTRL+Q for quit
+* prevent saving if no changes made
+
+* no changes: exit
+* if only metadata is changed: change metadata, save, exit. - (not diff['fname']) # implies at least one change
+* if filename and metadata are changed: rename, change, save, exit (diff['name'] and ndiff > 1)
+* if only filename is changed: rename file, exit
+
+
 '''
 
 import os,sys,time
