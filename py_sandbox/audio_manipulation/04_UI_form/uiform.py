@@ -204,25 +204,21 @@ class MainWindow:
         #     ifile = ka.MetaMP3(i2['fname'])
 
     def run(self):
+        ''' handle initialization of function here '''
+        self.populateListBox()
+
+        # run initial loading of metadata
+        self.setAllFromFile(self._filelist[0])
         self.R.mainloop()
         self.R.destroy()
 
 
-# print(os.getcwd())
-
 # kjg190626: ok, for the moment, will run from 00... folder
 
-listdir = [ifile for ifile in os.listdir('.') if('mp3' in ifile)]
-print(listdir)
+if(__name__=='__main__'):
+    listdir = [ifile for ifile in os.listdir('.') if('mp3' in ifile)]
 
-
-
-main = MainWindow()
-main.populateListBox(listdir)
-
-
-# x = ka.MetaMP3(listdir[0]).getAllData()
-# x['fname'] = listdir[0]
-# main.setAllFromDict(x)
-main.setAllFromFile(listdir[0])
-main.run()
+    main = MainWindow()
+    # main.populateListBox()
+    # main.setAllFromFile(listdir[0])
+    main.run()
