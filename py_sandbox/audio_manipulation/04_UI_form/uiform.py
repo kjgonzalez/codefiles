@@ -65,7 +65,7 @@ class MainWindow:
         # entry forms
         self.E=dict()
         for ifield in self._fields:
-            self.E[ifield] = tk.Entry(self.F,font=helv,textvariable=self.V[ifield])
+            self.E[ifield] = tk.Entry(self.F,font=helv,textvariable=self.V[ifield],width=40)
         self.E['autotxt'] = tk.Entry(self.F,font=helv,textvariable=self.V['autotxt'])
 
 
@@ -78,7 +78,7 @@ class MainWindow:
 
         # listbox(es)
         self.I=dict()
-        self.I['files'] = tk.Listbox(self.F,font=helv,activestyle='dotbox')
+        self.I['files'] = tk.Listbox(self.F,font=helv,activestyle='dotbox',width=40)
 
         # placement of all items
         self.B['save'].grid(row=11,column=3)
