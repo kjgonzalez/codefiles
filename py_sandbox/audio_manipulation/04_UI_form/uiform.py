@@ -4,10 +4,14 @@ this is where i'll develop the UI form that can open a music file, edit the
 
 things to fix:
 * control text size in all items with one variable - done
-* have each widget perform its correct function
-* be able to load / save all data as needed
-* give root (self.R) window a title
-* instead of grid, may want to use place (https://www.python-course.eu/tkinter_layout_management.php)
+* give root (self.R) window a title - done
+* instead of grid, may want to use place - no, using grid. - done
+
+* be able to load one song, edit data, and save it.
+* be able to go to prev / next song in a list
+* display which song is currently loaded in listbox
+* switch to a new song by clicking on it in listbox
+* use hotkeys like CTRL+Q for quit
 '''
 
 import os,sys,time
