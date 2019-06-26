@@ -116,13 +116,13 @@ class MainWindow:
         self.L['comment'].grid( row= 8,column=7)
         self.I['files'].grid(   row= 1,column= 1,rowspan=6,columnspan=2) #,columnspan=3,rowspan=6)
 
-    def populateListBox(self,items_list):
+    def populateListBox(self):
         ''' Clears anything in the list box, then populates it with
         items_list.
         '''
         end=max(self.I['files'].size()-1,0) # use max in case no lines
         self.I['files'].delete(0,end)
-        for item in items_list:
+        for item in self._filelist:
             self.I['files'].insert(tk.END,item) # adds newline
 
     def setAllFromFile(self,filename):
