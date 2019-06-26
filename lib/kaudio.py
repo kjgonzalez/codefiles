@@ -46,7 +46,7 @@ class MetaMP3(object):
         '''
         assert property in self.tags,'Invalid property "{}"'.format(property)
         try:
-            return self.dat[self._d[property]].text[0]
+            return str(self.dat[self._d[property]].text[0]) # year doesn't come back as string
         except KeyError:
             return ''
 
