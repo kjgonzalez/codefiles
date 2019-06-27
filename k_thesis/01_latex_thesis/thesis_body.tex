@@ -147,6 +147,11 @@ It was discovered at some point that the training / validation data used in the 
 \end{figure}
 
 
+KJGNOTE: here, would also like to provide a graph comparison between the training of psmnet and psmnetstar
+
+
+
+
 \subsection{Development of Stereo 3D Reconstruction Function}
 As described in Section \ref{sect_reconstruct}, the overall steps of reconstructing the resulting stereo image consisted of three general equations adapted for use with matrix operations. This also included selecting the proper constants for each calculation. To achieve all this, a specific class was created that would initialize by loading the fully trained model and use it in a non-learning "testing" mode, whereby it would take in either an image path pair or a loaded pair of image arrays. The pair would then be evaluated in PSMnet, which returns a stereo map, and finally be converted to a pointcloud using the epipolar equations in matrix form. Each record of the KITTI dataset has its own calibration file, but the baseline value remained the same. During the overall Frustum Pointnet training and evaluation, a new pointcloud would be generated in real-time.
 
