@@ -17,19 +17,20 @@ possible audio manipulation lib: https://github.com/jiaaro/pydub#installation
 
 ## Goals (as of 190624)
 * convert all music files to mp3 - done(190624)
-* consider using "album artist" instead of "contributing artist" for "artist" field
-* give every music file appropriate metadata (name, artist, album, etc)
-* put all album songs in respective folders
+* consider using "album artist" instead of "contributing artist" for "artist" field - nah, not worth (190701)
+* create ui to easily manipulate each file - almost done (190701)
+.......... div for what's done ..................
+* make metadata backup of current files - in prog
+* give every music file appropriate metadata (name, artist, album, etc) - inprog
+* put all album songs in respective folders - inprog
 * give every folder appropriate name (<Artist> - <Album>)
-* standardize all music genres to set list - 
+* standardize all music genres to set list - actually, give *appropriate* music genre
 * remove unneeded comments from every music file
 * give proper filename to every song (<Track> <Artist> - <Name>.mp3)
-* ???
-* create ui to easily manipulate each file
 
 ## Conventions
 in comment tag: 
-  Good1: all properties correct
-  Good2: filename correct
-  Good3: in appropriate folder
+  good1: all properties correct
+  good2: filename correct
+  good3: in appropriate folder
   

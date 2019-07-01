@@ -24,7 +24,7 @@ class MetaMP3(object):
     If a field is empty / missing, it is simply returned as ''
     Example:
         dat = MetaMP3(filepath)
-        dat.list()
+        dat.getAllData()
         dat.get('title')
         dat.set('artist','Tenacious D')
         dat.set('comment','')
