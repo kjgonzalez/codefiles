@@ -250,7 +250,7 @@ def dir(path='.',rec=False,files=True,ext=''):
         * path: base path. Default: '.' . This arg to be verified. (kjg190622)
         * rec: Recursive check. Default: False (no recursion)
         * files: Show only files or folders. Default: True (files only)
-        * ext: Which filetypes to return. Default: '' (any)
+        * ext: Which filetype to look for. Default: '' (any)
     Output:
         * <list>: filepaths
     '''

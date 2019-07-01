@@ -3,7 +3,7 @@ central location for audio manipulation library.
 
 requires mutagen to be installed (see pypi mutagen)
 
-kjg190622: check if LoadMetaData works with AAC or non mp3 files.
+kjg190622: check if LoadMetaData works with AAC or non mp3 files. - just mp3 (190701)
 kjg190623: gonna need to make a custom library for m4a files, in order to
     convert without issue
 '''
@@ -23,7 +23,7 @@ class MetaMP3(object):
             title / artist / artist / album / track / genre / year / comment
     If a field is empty / missing, it is simply returned as ''
     Example:
-        dat = LoadMetaData(filepath)
+        dat = MetaMP3(filepath)
         dat.list()
         dat.get('title')
         dat.set('artist','Tenacious D')

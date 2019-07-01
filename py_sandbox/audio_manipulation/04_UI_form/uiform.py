@@ -229,10 +229,6 @@ class MainWindow:
             dat.save()
             self.origInfo=i2
 
-        # if(dat1['fname']==i2['fname']):
-        #     # filename hasn't changed
-        #     ifile = ka.MetaMP3(i2['fname'])
-
     def loadNextFile(self,*kargs):
         ''' callback for use with "Next" button. load next file in list. wrap
             around to start of list if at end.
@@ -255,10 +251,8 @@ class MainWindow:
 
         # run initial loading of metadata
         self.setAllFromIndex(0) # initialize data fields
-        # self.setAllFromFile(self._filelist[0])
         self.R.mainloop()
         self.R.destroy()
-
 
 # kjg190626: ok, for the moment, will run from 00... folder
 
@@ -266,6 +260,4 @@ if(__name__=='__main__'):
     listdir = [ifile for ifile in os.listdir('.') if('mp3' in ifile)]
 
     main = MainWindow()
-    # main.populateListBox()
-    # main.setAllFromFile(listdir[0])
     main.run()
