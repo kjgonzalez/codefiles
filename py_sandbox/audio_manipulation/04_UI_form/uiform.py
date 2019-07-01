@@ -8,9 +8,9 @@ things to fix:
 * instead of grid, may want to use place - no, using grid. - done
 * be able to load one song, edit data, and save it. - done
 * prevent saving if no changes made - done
+* be able to go to prev / next song in a list - done
 ===== div: in progress ===========
-* be able to go to prev / next song in a list
-* highligh which song is currently loaded in listbox
+* highlight which song is currently loaded in listbox - doesn't really work
 * switch to a new song by double-clicking on it in listbox (popup: save?)
 * use hotkeys like CTRL+Q for quit
 
@@ -40,6 +40,7 @@ class MainWindow:
         self.reloadFirst = lambda:self.setAllFromFile(self._filelist[0])
         self._filelist = [ifile for ifile in os.listdir('.') if('mp3' in ifile)]
         self._fields = 'fname title artist album track genre year comment'.split(' ')
+        self._current = None # needs to be set at first run
         self.origInfo = None # initialize dict variable for original metadata
         self.R = tk.Tk()
         self.R.resizable(False,False)
@@ -60,8 +61,8 @@ class MainWindow:
         # buttons
         self.B = dict() # dictionary of buttons
         self.B['save'] = tk.Button(self.F,font=helv,text='SAVE',command=self.saveData)
-        self.B['prev'] = tk.Button(self.F,font=helv,text='PREV',command=self.reloadFirst)
-        self.B['next'] = tk.Button(self.F,font=helv,text='NEXT',command=self.printfields)
+        self.B['prev'] = tk.Button(self.F,font=helv,text='PREV',command=self.loadPrevFile)
+        self.B['next'] = tk.Button(self.F,font=helv,text='NEXT',command=self.loadNextFile)
         self.B['exit'] = tk.Button(self.F,font=helv,text='EXIT',command=self.F.quit) # fg='black'
 
         # checkmarks
@@ -136,6 +137,14 @@ class MainWindow:
         self.I['files'].delete(0,end)
         for item in self._filelist:
             self.I['files'].insert(tk.END,item) # adds newline
+
+    def setAllFromIndex(self,index):
+        ''' given self._filelist, load a given index and update
+            self._current
+        '''
+        self.setAllFromFile(self._filelist[index])
+        self._current = index
+
 
     def setAllFromFile(self,filename):
         ''' given a filename, populate metadata fields '''
@@ -212,12 +221,29 @@ class MainWindow:
         #     # filename hasn't changed
         #     ifile = ka.MetaMP3(i2['fname'])
 
+    def loadNextFile(self):
+        ''' callback for use with "Next" button. load next file in list. wrap
+            around to start of list if at end.
+        '''
+        ind = self._current+1
+        if(ind >=len(self._filelist)):
+            ind = 0
+        self.setAllFromIndex(ind)
+
+    def loadPrevFile(self):
+        ''' callback for use with "Prev" button. '''
+        ind = self._current - 1
+        if(ind <0):
+            ind = len(self._filelist)-1
+        self.setAllFromIndex(ind)
+
     def run(self):
         ''' handle initialization of function here '''
         self.populateListBox()
 
         # run initial loading of metadata
-        self.setAllFromFile(self._filelist[0])
+        self.setAllFromIndex(0) # initialize data fields
+        # self.setAllFromFile(self._filelist[0])
         self.R.mainloop()
         self.R.destroy()
 
