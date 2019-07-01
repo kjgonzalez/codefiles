@@ -9,10 +9,10 @@ things to fix:
 * be able to load one song, edit data, and save it. - done
 * prevent saving if no changes made - done
 * be able to go to prev / next song in a list - done
-===== div: in progress ===========
 * highlight which song is currently loaded in listbox - doesn't really work
+* use hotkeys like CTRL+Q for quit - done
+===== div: in progress ===========
 * switch to a new song by double-clicking on it in listbox (popup: save?)
-* use hotkeys like CTRL+Q for quit
 
 
 
@@ -63,7 +63,7 @@ class MainWindow:
         self.B['save'] = tk.Button(self.F,font=helv,text='SAVE',command=self.saveData)
         self.B['prev'] = tk.Button(self.F,font=helv,text='PREV',command=self.loadPrevFile)
         self.B['next'] = tk.Button(self.F,font=helv,text='NEXT',command=self.loadNextFile)
-        self.B['exit'] = tk.Button(self.F,font=helv,text='EXIT',command=self.F.quit) # fg='black'
+        self.B['quit'] = tk.Button(self.F,font=helv,text='QUIT',command=self.quit) # fg='black'
 
         # checkmarks
         self.C=dict()
@@ -90,7 +90,7 @@ class MainWindow:
         self.B['save'].grid(    row=11,column= 8)
         self.B['prev'].grid(    row=11,column= 9)
         self.B['next'].grid(    row=11,column=10)
-        self.B['exit'].grid(    row=11,column=11)
+        self.B['quit'].grid(    row=11,column=11)
         self.C['autochkCMT'].grid(row= 7,column= 1)
         self.C['autochkFNM'].grid(row= 8,column= 1)
         self.E['fname'].grid(   row= 1,column=8,columnspan=4)
@@ -116,6 +116,18 @@ class MainWindow:
         # bind custom events
         self.E['title'].bind( '<KeyRelease>',self.updateAutoFileName)
         self.E['artist'].bind('<KeyRelease>',self.updateAutoFileName)
+        self.R.bind('<Control-s>',self.saveData)
+        self.R.bind('<Control-S>',self.saveData)
+        self.R.bind('<Control-j>',self.loadPrevFile)
+        self.R.bind('<Control-J>',self.loadPrevFile)
+        self.R.bind('<Control-k>',self.loadNextFile)
+        self.R.bind('<Control-K>',self.loadNextFile)
+        self.R.bind('<Control-q>',self.quit)
+        self.R.bind('<Control-Q>',self.quit)
+
+    def quit(self,*kargs):
+        print('exiting')
+        self.F.quit()
 
     def updateFileList(self):
         self._filelist = [ifile for ifile in os.listdir('.') if('mp3' in ifile)]
@@ -179,9 +191,9 @@ class MainWindow:
             res['fname'] = self.V['autoFNM'].get()
         return res
 
-    def saveData(self):
+    def saveData(self,*kargs): # kargs needed for callback
         ''' write out the new metadata to file '''
-        # case 1: only metadata is changed. save that and exit
+        # case 1: only metadata is changed. save that and quit
         i1 = self.origInfo
         i2 = self.getAllFields()
         diff = {ifield:i1[ifield]!=i2[ifield] for ifield in self._fields}
@@ -221,7 +233,7 @@ class MainWindow:
         #     # filename hasn't changed
         #     ifile = ka.MetaMP3(i2['fname'])
 
-    def loadNextFile(self):
+    def loadNextFile(self,*kargs):
         ''' callback for use with "Next" button. load next file in list. wrap
             around to start of list if at end.
         '''
@@ -230,7 +242,7 @@ class MainWindow:
             ind = 0
         self.setAllFromIndex(ind)
 
-    def loadPrevFile(self):
+    def loadPrevFile(self,*kargs):
         ''' callback for use with "Prev" button. '''
         ind = self._current - 1
         if(ind <0):
