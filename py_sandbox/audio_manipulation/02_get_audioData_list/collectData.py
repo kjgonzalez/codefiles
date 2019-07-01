@@ -1,5 +1,7 @@
 '''
 objective: collect metadata for each song in music folder (recursively)
+
+kjgnote: has to be imported manually each time into spreadsheet, or otherwise saved as excel file
 '''
 
 import os, argparse
