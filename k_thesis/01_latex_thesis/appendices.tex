@@ -1,7 +1,7 @@
 % Appendices file. here, cover all topics related to thesis.
 
 
-
+% PERFORMANCE METRICS ==========================================================
 \section{Performance Metrics}
 The concept of verifying accuracy in a statistical estimate is covered in [xx source], and some of this information is covered briefly below. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, precision and recall may then be calculated. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision and mean Average Precision (mAP), which are how different networks are compared. The following information is primarily taken from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and "An Introduction to Information Retrieval" by \cite{manning_introduction_2008}.
 
@@ -150,8 +150,63 @@ KJG190618: NEED TO PERSONALLY RUN THROUGH A SIMPLE EXAMPLE OF PRECISION / RECALL
 % ABOUT THE KITTI DATASET ======================================================
 \newpage
 \section{About the KITTI Dataset}
-To better understand the actual data that is being worked on, the 
 
+\subsection{Introduction}
+To better understand the actual data that is being worked on, the KITTI dataset will be explained in-depth here. KITTI itself is a combination of "KIT" (Karlsruhe Institute of Technology) and "TTI" (Toyota Technical Institute, Chicago), the two cooperating institutions on the project. The very first thing to know about the KITTI dataset is that it is actually a set of datasets, each dataset specialized for some specific AI task. This means that there are some number of evaluation tasks / benchmarks, and a not-necessarily-unique dataset is used to enable completion of that task. The individual tasks are listed below with a brief description: 
+
+\begin{itemize}\itemsep=-0.5em 
+    \item Stereo, Optical Flow, Sceneflow (2012 \& 2015): An older (2012) and updated (2015) task comprised of 200 training and 200 test scenes. Each scene consists of a left and right image as well as a "multi-view extension".
+    \item Depth Completion / Estimation: A task comprised of about 93 thousand scenes containing RGB images and lidar scans.
+    \item Visual Odometry / SLAM: 11 training and 11 testing stereo sequences with relevant grayscale, color, lidar, and ground truth poses.
+    \item 2D / 3D / Bird's Eye View (BEV) Detection: 7481 training and 7518 test scenes with relevant color images, temporally preceding images, and lidar
+    \item Single-/Multi- Object Tracking: An older (single) and in-development (multi) task consisting of multiple training and test sequences with relevant image, lidar, and GPS/IMU data. 
+    \item Road / Lane Detection: Around 289 training and 290 test images used for detecting various road scenes, containing image and lidar information.
+    \item Semantic / Instance Segmentation: A task comprised of a set of stereo images like the Stereo task, but containing pixel-level localization of each class. 
+\end{itemize}
+
+Each evaluation task also brings with it a "dev kit" (a set of files that explain some of the technical information as well as helpful code), relevant camera / sensor calibration data of some kind, as well as some kind of ground truth label / file for each scene to assist with training. It should be noted that raw data of each dataset is available as well, but these are often unused and only kept as original source files for transparency. Below in figure xx is an image summary taken from the various tasks to give a quick and simple overview of the variety of datasets.
+
+\begin{figure}[H]
+    \centering
+    \subfigure[Stereo, Optical Flow, Sceneflow (2015)]{
+        \includegraphics[width=1\linewidth]{../media/kitti_1_stereo.png}}
+    \subfigure[Depth Completion, Depth Evaluation (2017)]{
+        \includegraphics[width=1\linewidth]{../media/kitti_2_depth.png}}
+    \subfigure[Visual Odometry / SLAM (2012)]{
+        \includegraphics[width=1\linewidth]{../media/kitti_3_odom.png}}
+    \subfigure[2D (2012), 3D (2017), Bird's Eye View (2017) Object Detection]{
+        \includegraphics[width=1\linewidth]{../media/kitti_4_objdet.png}}
+    \subfigure[Single Object(2012), Multi-Object (ongoing) Tracking]{
+        \includegraphics[width=1\linewidth]{../media/kitti_5_track.png}}
+    \subfigure[Road / Lane Detection (2013)]{
+        \includegraphics[width=1\linewidth]{../media/kitti_6_road.png}}
+    \subfigure[Semantic and Instance Segmentation (2015)]{
+        \includegraphics[width=1\linewidth]{../media/kitti_7_seg.png}}
+    \label{kitti_samples}
+    \caption{xx add more detail}
+\end{figure}
+
+Each task is associated with one or more papers published by KIT and TTI, but these will not all be listed here. Instead, we shall now explain two datasets, especially the most relevant one: the KITTI object detection dataset, referred to as the KITTI dataset.
+
+\subsection{The Stereo Dataset}
+The stereo dataset, specifically 2015, will be briefly covered to describe its merits as well as why it presented overlap issues with the object detection dataset. What makes the stereo dataset important is that it is the dataset that was initially used to finetune the Pyramid Stereo Matching network and also the dataset used to help it achieve such a high position in the stereo benchmark. 
+
+The dataset itself is made up primarily of 200 training scenes and 200 testing scenes. The training scenes contain ground truth disparity maps, while the testing scenes do not and are used for final evaluation and submission to the benchmark website. For the project, only the training scenes were used. Each training scene is comprised of a left-hand side (LHS) color image, a RHS color image, a calibration file (containing transformation and other matrices), and a ground truth disparity file. There is also an available "multi-view extension", containing 20 extra frames per scene, but this was not used. The 
+
+\begin{figure}[H]
+    \centering
+    \subfigure[LHS image]{
+        \includegraphics[width=0.487\linewidth]{../media/stereo_LHS_000000_10.png}}
+    \subfigure[RHS image]{
+        \includegraphics[width=0.487\linewidth]{../media/stereo_RHS_000000_10.png}}
+    \subfigure[Ground truth disparity map with a viridis colormap. The value range for the original ground truth file may lie anywhere from 1 to 33,000 or a little higher. Disparity is a measure of how far apart one pixel is relative to its matching pixel in another location. ]{
+        \includegraphics[width=1\linewidth]{../media/stereo_GTdisp_000000_10.png}}
+    \label{stereo_sampsdfle}
+    \caption{Sample scene from stereo dataset. Index 000000\_10}
+\end{figure}
+
+\subsubsection{Object Detection Dataset \& Statistics}
+one two three
 
 
 % SAMPLE =======================================================================
