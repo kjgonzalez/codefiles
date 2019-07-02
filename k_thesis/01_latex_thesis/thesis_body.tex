@@ -127,8 +127,8 @@ After the initial evaluation, the network was prepared for and trained on KITTI 
         \includegraphics[width=1\linewidth]{../media/similar_000132_10_stereo.png}}
     \subfigure[000286 from ObjDet]{
         \includegraphics[width=1\linewidth]{../media/similar_000286_objdet.png}}
-    \label{similarity_stereo_objdet}
     \caption{Example of how two unique records from the separate datasets have overly-similar scenes. There are multiple examples of this, which creates the motivation to generate a secondary set of disparity ground truths for the object detection dataset}
+    \label{similarity_stereo_objdet}
 \end{figure}
 
 In order to deal with the dataset overlap, the KITTI object detection dataset was adapted to be used for training stereo data. Lidar data was projected onto the LHS image plane, converted to integer values, then multiplied by a constant. These steps are in line with both the way that [xx] were able to generate their self-made stereo ground truths as well as how the KITTI dataset authors generated their ground truth [xx reference to devkit]. Locations in the image that have no lidar data are left alone at a value of 0.0, and finally the resulting array is saved to a PNG image file format containing integer values. Please refer to the generation script in the repository for the exact steps used to generate the pseudo ground truth stereo images.
@@ -142,8 +142,8 @@ It was discovered at some point that the training / validation data used in the 
         \includegraphics[width=1\linewidth]{../media/ind15_psmnet_v190308_AsOf190626.png}}
     \subfigure[000015 stereo estimation with new PSMnet* model]{
         \includegraphics[width=1\linewidth]{../media/ind15_psmnetstar_v190613_AsOf190626.png}}
-    \label{new_psmnet}
     \caption{Comparison of old and new model for PSMnet [xx add more detail]}
+    \label{new_psmnet}
 \end{figure}
 
 
@@ -179,6 +179,7 @@ Now that many of the individual steps of the network have been described above, 
 
 
 \section{Results}
-texthere
+xx
 
 \section{Conclusion}
+xx
