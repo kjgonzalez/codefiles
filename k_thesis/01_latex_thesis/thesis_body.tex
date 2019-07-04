@@ -172,14 +172,29 @@ The most basic path, ADF, is simply using the given model to evaluate and achiev
 Now that many of the individual steps of the network have been described above, the complete set of steps taken to produce network estimation will be described. Not every step will be described again, but any deviations from the "general" usage is clarified. However, this section shall be more detailed in describing how each step was executed.
 
 
-
-
-
-
-
-
 \section{Results}
 xx
+
+
+Listed below is the loss and validation error throughout the training of PSMnet on the object detection dataset, also known as PSMstar.
+
+
+
+\begin{figure}[H]
+    \centering
+    \subfigure[Loss vs Epochs during Training]{
+        \includegraphics[width=0.3\linewidth]{../media/info_Loss_190613_psmstar.pdf}}
+    \subfigure[Validation Error vs Epochs during Training]{
+        \includegraphics[width=0.3\linewidth]{../media/info_ValError_190613_psmstar.pdf}}
+    \caption{Loss and ValError graphs for PSMnet version "psmstar" during training. The "psmstar" version was finetuned (trained) on the object detection dataset instead of the typical stereo dataset.}
+    \label{psmnet_star_train_info}
+\end{figure}
+
+
+
+
+
+
 
 \section{Conclusion}
 xx
