@@ -53,7 +53,23 @@ c  4.16  1.73  4.54
 Fix python indentation (only) to PEP8:
 >> autopep8 path/to/file.py --select=E101,E121 --in-place
 
+- - - - - - - - - - - - -
+Updating available fonts manually for matplotlib (and ubuntu overall)
+  mkdir ~/.fonts
+  cd ~/.fonts
+  cp ~/path/to/font.ttf .
+  fc-cache -f -v
+  ipython
+  import matplotlib.font_manager as fm
+  fm._rebuild()
+  exit
+  <done>
 
+(in code)
+font = {'fontname':'Bahianita','fontsize':15}
+plt.plot(x,y)
+plt.title('hello',**font)
+- - - - - - - - - - - - -
 
 
 
