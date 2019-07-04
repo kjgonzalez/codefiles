@@ -1,0 +1,23 @@
+\documentclass{article}
+\usepackage{pgfplots}
+\usepackage{filecontents}
+\usepackage{csvsimple} % lets you import a csv file to make, say, a table
+
+\begin{document}
+kjgnote: how to compile this:
+pdflatex pgf\_plot.tex
+
+\csvreader[head to column names]{data.csv}{}% use head of csv as column names
+
+
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}
+    \addplot table [x=time, y=squared, col sep=comma] {data.csv}; % reference the filename
+    \end{axis}
+    \end{tikzpicture}
+\end{figure}
+
+end
+\end{document}
