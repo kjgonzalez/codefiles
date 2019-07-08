@@ -1,6 +1,6 @@
 '''
 created: 190320
-objective: teach yourself basis of using the argparse module. 
+objective: teach yourself basis of using the argparse module.
 
 want to learn about:
     * initialization
@@ -22,7 +22,8 @@ https://github.com/jwyang/faster-rcnn.pytorch/blob/master/trainval_net.py
 
 import argparse
 
-p=argparse.ArgumentParser()
+# p=argparse.ArgumentParser() # like this, doesn't give default values on --help
+p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 p.add_argument('-a',dest='int1',type=int,help='first int')
 p.add_argument('-b',dest='int2',type=int,help='second int')
 p.add_argument('-s',type=str,default="it's a nice day",help='string to print')
@@ -37,4 +38,3 @@ else:
     print('cuda disabled')
 
 # eof
-
