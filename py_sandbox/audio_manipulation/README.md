@@ -15,19 +15,20 @@ metadata manipulation lib: https://mutagen.readthedocs.io/en/latest/user/id3.htm
 possible audio manipulation lib: https://github.com/jiaaro/pydub#installation
 
 
-## Goals (as of 190704)
+## Goals (as of 190709)
 * convert all music files to mp3 - done(190624)
 * consider using "album artist" instead of "contributing artist" for "artist" field - nah, not worth (190701)
-* create ui to easily manipulate each file - almost done (190701)
+* create ui to easily manipulate each file - done (190709)
+* make metadata backup of current files - done (190709)
 .......... div for what's done ..................
-* make metadata backup of current files - done
 * give every music file appropriate metadata (name, artist, album, etc) - inprog
+* delete all duplicate songs
 * put all album songs in respective folders - inprog
-* give every folder appropriate name (<Artist> - <Album>)
 * standardize all music genres to set list - actually, give *appropriate* music genre
 * remove unneeded comments from every music file
 * give proper filename to every song (<Track> <Artist> - <Name>.mp3)
 * make synchronization tool between two folders (match metadata and filename)
+* give every folder appropriate name (<Artist> - <Album>)
 
 ## Conventions
 in comment tag: 
