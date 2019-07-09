@@ -315,6 +315,14 @@ std::cout << pyt(w) << nl;
 auto firstLambda = [](int a, int b) {return a+b;};
 std::cout << firstLambda(3,4) << "\n";
 
+std::vector<bool> values(3,false);
+values[1]=true;
+
+auto print3 = [](std::vector<bool> vec){std::cout<<vec[0]<<" "<<vec[1]<<" "<<vec[2]<<"\n";};
+
+print3(values);
+
+
 
 // part 7: file i/o ============================================================
 printf("%s\n",rpad("= 7: File I/O ").c_str());

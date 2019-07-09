@@ -1,8 +1,21 @@
 /*
-just want to practice structs for a moment to get a good understanding about them.
+DateCreated: 190430
+Objective: just want to practice structs for a moment to get a good
+    understanding about them.
 
-how to compile: 
+KJG190709: Have watched a video about the difference between structs and
+    classes, and from a technical perspective the ONLY difference is that
+    classes default their methods to private, and structs default to public.
+    This means that social conventions have instead developed around how to use
+    each: structs are used for clusters of data with some limited functionality,
+    and classes are used for everything else.
+
+about structs vs classes: https://www.youtube.com/watch?v=fLgTtaqqJp0
+
+how to compile:
 g++ -std=c++11 about_structs.cpp
+-OR-
+cpprun about_structs.cpp
 */
 
 #include <iostream>
