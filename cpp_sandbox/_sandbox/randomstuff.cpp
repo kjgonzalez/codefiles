@@ -8,41 +8,45 @@ GUIDELINE: when coming up with a new idea, just make a new function and call it
 #include <vector>
 #include <stdio.h>
 #include <fstream>
+#include <math.h>
 
 // using namespace std; // include on per-function  basis
 
 void vectorStuff(){
-  // created 190502
-  using namespace std;
-  vector<int> a;
-  for(int i=0;i<5;i++) a.push_back(i);
+    // created 190502
+    using namespace std;
+    vector<int> a;
+    for(int i=0;i<5;i++) a.push_back(i);
 
-  for(int i=0;i<5;i++) printf(" %d",a[i]);
-  printf("\n");
-
+    for(int i=0;i<5;i++) printf(" %d",a[i]);
+    printf("\n");
 }
 
 void vectorArray(){
-  // created 190502
-  // objective: test out an "array of vectors of ints"
-  using namespace std;
-  vector<int> x[3];
-  x[0].push_back(0);
-  x[1].push_back(1);
-  x[1].push_back(2);
-  x[2].push_back(3);
-  x[2].push_back(4);
-  x[2].push_back(5);
-  for(int ArrIndex=0;ArrIndex<3;ArrIndex++){
-    for(int VectIndex=0;VectIndex<x[ArrIndex].size();VectIndex++) {
-      cout << x[ArrIndex][VectIndex]<< " ";
-      }
-    printf("\n");
+    // created 190502
+    // objective: test out an "array of vectors of ints"
+    using namespace std;
+    vector<int> x[3];
+    x[0].push_back(0);
+    x[1].push_back(1);
+    x[1].push_back(2);
+    x[2].push_back(3);
+    x[2].push_back(4);
+    x[2].push_back(5);
+    for(int ArrIndex=0;ArrIndex<3;ArrIndex++){
+        for(int VectIndex=0;VectIndex<x[ArrIndex].size();VectIndex++) {
+            cout << x[ArrIndex][VectIndex]<< " ";
+            }
+        printf("\n");
     }
 }
 
+void pyt_anonymous(){
+    auto pyt = [](double a, double b, double c){return pow(a*a+b*b+c*c,0.5);};
+    printf("ans: %f\n",pyt(3,4,12));
+}
 
 int main(){
-  vectorArray();
-  return 0;
+    pyt_anonymous();
+    return 0;
 }
