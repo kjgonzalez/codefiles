@@ -75,6 +75,7 @@ public:
         /* close the current stream */
         if(mode=='w') fout.close();
         else if(mode=='r') fin.close();
+        else{printf("WARNING: INCORRECT MODE.\n"); return false;}
         return true;
     }//close
 
