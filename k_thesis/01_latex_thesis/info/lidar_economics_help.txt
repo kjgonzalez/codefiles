@@ -52,14 +52,14 @@ https://velodynelidar.com/lidar/hdldownloads/97-0038c%20HDL-32E%20datasheet_APR2
 https://laserscanningforum.com/forum/viewtopic.php?t=12221
 
 ================================================================================
-HDL-64E:
-range: 120 m
-pts/s: 1,000,000/s (10Hz)
-cost: $85,000 (2017)
+    HDL-64E:
+    range: 120 m
+    pts/s: 1,000,000/s (10Hz)
+    cost: $85,000 (2017)
 
-https://www.velodynelidar.com/lidar/products/manual/HDL-64E%20Manual.pdf
-https://medium.com/self-driving-cars/velodyne-lidar-price-reduction-d358f245f086
-https://driverless.wonderhowto.com/news/quanergys-new-250-solid-state-lidar-could-bring-self-driving-masses-0175790/
+    https://www.velodynelidar.com/lidar/products/manual/HDL-64E%20Manual.pdf
+    https://medium.com/self-driving-cars/velodyne-lidar-price-reduction-d358f245f086
+    https://driverless.wonderhowto.com/news/quanergys-new-250-solid-state-lidar-could-bring-self-driving-masses-0175790/
 ================================================================================
 
 About: Quanergy Products

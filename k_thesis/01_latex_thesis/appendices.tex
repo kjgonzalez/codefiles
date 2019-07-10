@@ -3,6 +3,7 @@
 
 % PERFORMANCE METRICS ==========================================================
 \section{Performance Metrics}
+\label{AppendixMetrics}
 The concept of verifying accuracy in a statistical estimate is covered in [xx source], and some of this information is covered briefly below. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, precision and recall may then be calculated. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision and mean Average Precision (mAP), which are how different networks are compared. The following information is primarily taken from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and "An Introduction to Information Retrieval" by \cite{manning_introduction_2008}.
 
 \subsection{Defining a Result}
@@ -150,6 +151,7 @@ KJG190618: NEED TO PERSONALLY RUN THROUGH A SIMPLE EXAMPLE OF PRECISION / RECALL
 % ABOUT THE KITTI DATASET ======================================================
 \newpage
 \section{About the KITTI Dataset}
+\label{AppendixKitti}
 
 \subsection{Introduction}
 To better understand the actual data that is being worked on, the KITTI dataset will be explained in-depth here. KITTI itself is a combination of "KIT" (Karlsruhe Institute of Technology) and "TTI" (Toyota Technical Institute, Chicago), the two cooperating institutions on the project. The very first thing to know about the KITTI dataset is that it is actually a set of datasets, each dataset specialized for some specific AI task. This means that there are some number of evaluation tasks / benchmarks, and a not-necessarily-unique dataset is used to enable completion of that task. The individual tasks are listed below with a brief description: 
@@ -236,29 +238,79 @@ In addition to the above lidar projection, the point cloud may be better visuali
 
 As is immediately obvious above in Figure \ref{objdet_lidar_sample} and from knowledge of the hardware itself, a lidar scan is capable of capturing points surrounding the sensor in a 360\DEG horizontal view. However, because of the nature of a typical color camera, points that are outside the camera's field of view are filtered out. 
 
-Ground truth labels are simply text files that contain an array of information about each instance of an object in the scene. An example line is given below in table xx. 
+Ground truth labels are simply text files that contain an array of information about each instance of an object in the scene. An example line is given below in table \ref{kitti_label_sample}. 
 
 
 \begin{table}[h]
 \centering
 \caption{KITTI object detection sample label from a given scene. Index 000015}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+\begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-Class & Trun & Occl & Obs  & BBx1  & BBy1   & BBx2   & BBy2   & HT & WD & DP & Cx    & Cy   & Cz   & Roty \\
+Class & Trun & Occl & Obs  & BBx1  & BBy1   & BBx2  \\
 \hline
-Car   & 0.89       & 0         & 2.29 & 0.00  & 194.70 & 414.71 & 373.00 & 1.57   & 1.67  & 4.14  & -2.75 & 1.70 & 4.10 & 1.72 \\
-
+Car   & 0.89       & 0         & 2.29 & 0.00  & 194.70 & 414.71 \\
 \hline
 \end{tabular}
-\label{Mathematical Symbols}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+BBy2   & HT   & WD   & DP   & Cx    & Cy   & Cz   & Roty \\
+\hline
+373.00 & 1.57 & 1.67 & 4.14 & -2.75 & 1.70 & 4.10 & 1.72 \\
+\hline
+\end{tabular}
+\label{kitti_label_sample}
 \end{table}
 
 
 Beyond a few samples of the dataset, some statistics about the dataset can be found in both the accompanying paper as well as by looking through the dataset itself. When observing only the training data, the count of each class can be described. 
 
 
+% LIDAR COST EFFECTIVENESS =====================================================
+\newpage
+\section{Lidar vs Other Sensors: Economic Perspective}
+\label{AppendixLidar}
+TextNeededHere
 
 
+Alright, would like to deal with a way of comparing lidar vs other sensors in the economic sense, but need some standards to actually perform a comparison. for one, how about we start with what a single frame. in a single frame, we may ask ourselves... how much information do we really have? if for example, a lidar sensor can give you 100 pts in a horizontal 360 deg and vertical 1 deg field of view, what is the ... points per area that you're getting? 
+
+
+the next thing you want to have is some kind of measure of quality. so, in order to measure quality, perhaps you want to know how much error you have. perhaps you would want to know the error at a given distance. so here, why not have a... centimeters per meter measure? 
+
+finally, in order to deal with all these things on money terms, perhaps also consider... points per dollar. ideally, you want a dense, high quality image that isn't too expensive. saying that you get x amount of data per dollar perhaps also informs someone how effectively their money is being spent. 
+
+let's take two examples from the lidar industry and give them some info. 
+
+first up is the HDL-64E, which was used for the KITTI dataset. 
+
+first, the base stats will be given: 
+
+
+HDL-64E:
+range: 120 m
+pts/s: 1,000,000/s (10Hz)
+cost: \$85,000 (2017)
+
+%https://www.velodynelidar.com/lidar/products/manual/HDL-64E%20Manual.pdf
+%https://medium.com/self-driving-cars/velodyne-lidar-price-reduction-d358f245f086
+%https://driverless.wonderhowto.com/news/quanergys-new-250-solid-state-lidar-could-bring-self-driving-masses-0175790/
+
+
+
+
+
+
+
+
+
+
+
+
+
+kjg190617: quick note on area of sphere
+$$ A_{sphere}=R^2\theta \int_{a}^{b}\cos\phi*d\phi $$
+
+$$ A_{sphere}=R^2\theta (\sin{b} - \sin{a})$$
 
 
 
@@ -268,7 +320,7 @@ Beyond a few samples of the dataset, some statistics about the dataset can be fo
 TextHere
 
 \begin{figure}[h] % h = "approx here", {h,t,b}
-    \includegraphics[width=1\textwidth]{../media/wang_pipeline.png}
+    \includegraphics[width=1\textwidth]{../media/tp_help.png}
     \caption{texthere}
     \label{delme_figure} %label goes last
 \end{figure}
@@ -285,6 +337,29 @@ def pyt(a,b):
 \caption{Python implementation of generalized IOU calculation.}
 \label{delme_code} % label goes last
 \end{figure}
+
+\begin{table}[h]
+\centering
+\caption{KITTI object detection sample label from a given scene. Index 000015}
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+Class & Trun & Occl & Obs  & BBx1  & BBy1   & BBx2  \\
+\hline
+Car   & 0.89       & 0         & 2.29 & 0.00  & 194.70 & 414.71 \\
+\hline
+\end{tabular}
+\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+BBy2   & HT   & WD   & DP   & Cx    & Cy   & Cz   & Roty \\
+\hline
+373.00 & 1.57 & 1.67 & 4.14 & -2.75 & 1.70 & 4.10 & 1.72 \\
+\hline
+\end{tabular}
+
+
+\label{SampleTable}
+\end{table}
+
 
 %\begin{enumerate}\itemsep=-0.5em
 %	\item one
