@@ -8,7 +8,8 @@ function heimdall {ssh -i C:\Users\kris\.ssh\id_rsa iki@141.69.58.223}
 
 function cpprun{
     echo "building..."
-    $res = g++ -std=c++11 $args
+    $res = g++ -std=c++11 -v $args
+    echo "result: $res"
     if($res -eq $null){
         .\a.exe
     }# if

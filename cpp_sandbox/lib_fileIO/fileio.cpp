@@ -29,11 +29,21 @@ wait   | be able to use printf formatting directly in function
 #include <stdio.h>
 #include <fstream>
 
+class FOUT{
+    std::ofstream fout;
+public:
+    std::string filename;
+    FOUT(std::string _filename){
+        filename=_filename;
+        fout.open(filename.c_str());
+    }//initialization
+}//FOUT
+
+
 
 class FileOpen{
     std::ifstream fin;
     std::ofstream fout;
-    int mode;
 public:
     std::string filename;
     char mode;
@@ -50,23 +60,45 @@ public:
         }//if-'r'
         else printf("mode not recognized\n");
     }//initialize
+
     void write(std::string text){
         /* write out a line of text to file */
-        fout << text.c_str();
+        if(mode=='w') fout << text.c_str();
+        else {
+            printf("WARNING: INCORRECT MODE.\n");
+        }
     }//write
 
     std::string readline(){
         /* read out one line of text */
         std::string line;
-        getline(fin,line);
-        line+="\n";
+        if(mode=='r'){
+            getline(fin,line);
+            line+="\n";
+        }
+        else {
+            printf("ERROR: INCORRECT MODE.\n");
+        }
         return line;
         // printf("%s",line.c_str());
     }//readline
+
     std::vector<std::string> readall(){
+        fin.seekg(0,fin.beg); // go to start of filestream
         std::vector<std::string> raw;
-        fin.seekg
+        std::string line;
+        while(!fin.eof()){
+            getline(fin,line);
+            line+="\n";
+            raw.push_back(line);
+            }
+        return raw;
     }//readall
+
+    void seek(int loc=0){
+        fin.seekg(loc, fin.beg);
+    }
+
     void close(){
         /* close the current stream */
         if(mode=='w') fout.close();
@@ -86,7 +118,21 @@ int main(){
     f.close();
     FileOpen f2("test.txt",'r');
     printf("%s",f2.readline().c_str());
-    printf("%s",f2.readline().c_str());
+    std::vector<std::string> alldata;
+    alldata = f2.readall();
+    for(int i=0;i<alldata.size();i++){
+        printf("%s",alldata[i].c_str());
+    }
+
+    // at this point, read and write are working, but what if use wrong thing?
+    FileOpen f3("test.txt",'w');
+    f3.readline();
+
+
+    FileOpen f4("test.txt",'r');
+    f4.write("test");
+
+
 
     return 0;
 
