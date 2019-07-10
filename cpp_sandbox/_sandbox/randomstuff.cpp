@@ -46,7 +46,26 @@ void pyt_anonymous(){
     printf("ans: %f\n",pyt(3,4,12));
 }
 
+int blah(){
+    printf(" blah ");
+    return 3;
+}
+
+void returnToNothing(){
+    /* want to know if it's ok t return a value but have it go to nothing. 
+    answer: yes of course it's ok. 
+    */
+    printf("value: %d\n",blah());
+    blah();
+    printf("hello world\n");
+}
+
+
+
+
+
+
 int main(){
-    pyt_anonymous();
+    returnToNothing();
     return 0;
 }
