@@ -22,6 +22,14 @@ Function HelloWorld {
   echo "Hello world! I'm a powershell function"
 }
 
-
+= Powershell: if statements ================================
+function cpprun{
+    echo "building..."
+    $res = g++ -std=c++11 $args
+    if($res -eq $null){
+    # note: -ne = "not equal"
+        .\a.exe
+    }# if
+}
 
 
