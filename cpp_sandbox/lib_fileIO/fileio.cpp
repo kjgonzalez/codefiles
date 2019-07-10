@@ -52,11 +52,8 @@ int main(){
     FileOpen f3("test.txt",'w');
     printf("first line: %s",f3.readline().c_str());
 
-
     FileOpen f4("test.txt",'r');
     f4.write("test");
-
-
 
     return 0;
 
