@@ -52,20 +52,41 @@ int blah(){
 }
 
 void returnToNothing(){
-    /* want to know if it's ok t return a value but have it go to nothing. 
-    answer: yes of course it's ok. 
+    /* want to know if it's ok t return a value but have it go to nothing.
+    answer: yes of course it's ok.
     */
     printf("value: %d\n",blah());
     blah();
     printf("hello world\n");
 }
 
+void bufferprint(){
+    // kjg190711: want to try and get the same formatting stuff as in printf
+    //  also in own strings for fileIO lib
+    //note: need <stdio.h>
+    printf("Hello world\n");
+    printf("Something %d say\n",2);
+    char buffer[512];
+    sprintf(buffer,"i like to eat %d bananas\n",3);
+    printf("%s",buffer);
 
+    sprintf(buffer,"new statement\n");
+    printf("%s",buffer);
+
+    sprintf(buffer,"shorter\n");
+    printf("%s",buffer);
+
+    sprintf(buffer,"and now way way way way way way longer\n");
+    printf("%s",buffer);
+    // all this seems to work.
+
+}
 
 
 
 
 int main(){
-    returnToNothing();
+    bufferprint();
+
     return 0;
 }
