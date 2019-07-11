@@ -55,6 +55,13 @@ int main(){
     FileOpen f4("test.txt",'r');
     f4.write("test");
 
-    return 0;
 
+    // one last example
+    FileOpen f5("test.txt",'w');
+    f5.write("hello world\n");
+    f5.write("some more stuff to save\n");
+    
+
+
+    return 0;
 }//main

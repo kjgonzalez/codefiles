@@ -29,16 +29,22 @@ public:
     char get_mode(){return mode;}
     std::string get_filename(){return filename;}
 
+
+
+
     // write functions
-    bool write(std::string text){
+    bool write(char* text){
         /* write out a line of text to file */
         if(mode!='w'){
             printf("WARNING: INCORRECT MODE.\n");
             return false;
         } //mode-check
-        fout << text.c_str();
+        fout << text;
         return true;
     }//write
+
+
+
 
     //read functions
     std::string readline(){
