@@ -22,7 +22,7 @@ This thesis was performed alongside work and research done for the SMART3D proje
 
 
 \subsection{Problem / Motivation}
-The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are several factors to normalize, and a more in-depth analysis of this is conducted in Appendix \ref{AppendixLidar}. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on active surfaces, potential interference of multiple lidars if all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidars can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
+The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are several factors to normalize, and a more in-depth analysis of this is conducted in Appendix \ref{appendix_lidar}. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on active surfaces, potential interference of multiple lidars if all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidars can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
 
 \textbf{KJG190617: need an economic comparison here of lidar!!! xx}
 
@@ -36,12 +36,6 @@ In order to develop a stereo-based 3D estimation algorithm and conduct a perform
 
 % ==============================================================================
 \section{Related Work}
-
-xx checklist: have you included info about: 
-* psmnet
-* ai-based disparity estimation networks
-* traditional disparity estimation
-
 
 \subsection{Stereo Vision Networks}
 Stereo disparity maps, which are built by the comparing the pixel distance between two similar regions of two images, have existed before the implementation of artificial intelligence to create them. Famously, \cite{scharstein_taxonomy_2002} gave a taxonomy and categorization of the various aspects of stereo vision. Out of this paper, the four main parts of conducting stereo vision have been defined as follows:
@@ -95,11 +89,11 @@ The first approach, using epipolar equations, can be described in general as fol
     \item Images are already rectified (to remove all distortion).
 \end{itemize}
 
-There must first be a given disparity map image, $D$, with indices ($u$,$v$) corresponding to the image's x-axis and y-axis (origin located at the top-left of the image). The cameras' intrinsic properties must also be known (P2 for the KITTI dataset), as well as the baseline, $b$, distance (also known as the distance between camera centers). In the KITTI dataset, Camera 2 is the LHS color camera, and thus each record's corresponding P2 matrix is used. The matrix contains the horizontal focal length $f_U$ as well as the vertical focal length $f_V$. \cite{szeliski_computer_2010} describes this in Equation 2.57 of Chapter 2: Image Formation. The camera baseline is given in multiple locations, namely \cite{geiger_are_2012}, although the value is given as "roughly 54 cm", which may reduce the overall accuracy somewhat.
+Given the above, there must first be a given disparity map image, $D$, with indices ($u$,$v$) corresponding to the image's x-axis and y-axis (origin located at the top-left of the image). The cameras' intrinsic properties must also be known (P2 for the KITTI dataset), as well as the baseline, $b$, distance (also known as the distance between camera centers). In the KITTI dataset, Camera 2 is the LHS color camera, and thus each record's corresponding P2 matrix is used. The matrix contains the horizontal focal length $f_U$ as well as the vertical focal length $f_V$. \cite{szeliski_computer_2010} describes this in Equation 2.57 of Chapter 2: Image Formation. The camera baseline is given in multiple locations, namely \cite{geiger_are_2012}, although the value is given as "roughly 54 cm", which may reduce the overall accuracy somewhat.
 
 Given this data, the depth value at each pixel location may be calculated via Equation \ref{eq1}, ignoring locations where the disparity value is 0 or Not-A-Number (NaN).
 \begin{equation}
-z(u,v) = \frac{f_U * b}{D}
+z = \frac{f_U * b}{D}
 \label{eq1}
 \end{equation}
 Next, the real-world $x$ and $y$ locations may be calculated by taking the relative coordinate location from camera center $(c_U,c_V)$, multiplying by the depth values at each pixel location. Successfully calculating this leads to an estimated metric coordinate value for every valid pixel disparity value in the image.
@@ -112,7 +106,7 @@ x = \frac{(u - c_U) * z}{f_U}
 y = \frac{(v - c_V) * z}{f_V}
 \end{equation}
 
-In reality, the calculation is performed in a series of matrix calculations rather than as an element-by-element operation. The "real" steps taken to convert a disparity map into a pointcloud are described in Appendix XX.
+In reality, the calculation is performed in a series of matrix calculations rather than as an element-by-element operation. The "real" steps taken to convert a disparity map into a pointcloud are described in Appendix \ref{appendix_reconstruct}.
 
 
 % ==============================================================================

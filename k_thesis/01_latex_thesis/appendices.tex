@@ -3,7 +3,7 @@
 
 % PERFORMANCE METRICS ==========================================================
 \section{Performance Metrics}
-\label{AppendixMetrics}
+\label{appendix_metrics}
 The concept of verifying accuracy in a statistical estimate is covered in [xx source], and some of this information is covered briefly below. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, precision and recall may then be calculated. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision and mean Average Precision (mAP), which are how different networks are compared. The following information is primarily taken from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and "An Introduction to Information Retrieval" by \cite{manning_introduction_2008}.
 
 \subsection{Defining a Result}
@@ -151,7 +151,7 @@ KJG190618: NEED TO PERSONALLY RUN THROUGH A SIMPLE EXAMPLE OF PRECISION / RECALL
 % ABOUT THE KITTI DATASET ======================================================
 \newpage
 \section{About the KITTI Dataset}
-\label{AppendixKitti}
+\label{appendix_kitti}
 
 \subsection{Introduction}
 To better understand the actual data that is being worked on, the KITTI dataset will be explained in-depth here. KITTI itself is a combination of "KIT" (Karlsruhe Institute of Technology) and "TTI" (Toyota Technical Institute, Chicago), the two cooperating institutions on the project. The very first thing to know about the KITTI dataset is that it is actually a set of datasets, each dataset specialized for some specific AI task. This means that there are some number of evaluation tasks / benchmarks, and a not-necessarily-unique dataset is used to enable completion of that task. The individual tasks are listed below with a brief description: 
@@ -226,7 +226,7 @@ The Object Detection dataset is the primary source of sensor data and media for 
     \label{objdet_sample}
 \end{figure}
 
-In addition to the above lidar projection, the point cloud may be better visualized with an isometric view, rather than one from the camera's perspective. This is provided below, with 3D bounding boxes provided for reference.
+In addition to the above lidar projection, the point cloud may be better visualized with an isometric view, rather than one from the camera's perspective. This is provided below, with white 3D bounding boxes provided for reference.
 
 \begin{figure}[H]
     \includegraphics[width=1\linewidth]{../media/objdet_lidar_BEV_000015.png}
@@ -238,7 +238,8 @@ In addition to the above lidar projection, the point cloud may be better visuali
 
 As is immediately obvious above in Figure \ref{objdet_lidar_sample} and from knowledge of the hardware itself, a lidar scan is capable of capturing points surrounding the sensor in a 360\DEG horizontal view. However, because of the nature of a typical color camera, points that are outside the camera's field of view are filtered out. 
 
-Ground truth labels are simply text files that contain an array of information about each instance of an object in the scene. An example line is given below in table \ref{kitti_label_sample}. 
+Another key piece of the object detection dataset are the label data. Ground truth labels are simply lines of text that contain an array of information about each instance of an object in the scene. An example label with value names is given below in Table \ref{kitti_label_sample}. There are 15 values in each label, and an extra 16th "Score" value for prediction labels, a decimal in range [0,1]. The raw text for this label simply looks like so: \\
+\texttt{Car 0.89 0 2.29 0.00 194.70 414.71 373.00 1.57 1.67 4.14 -2.75 1.70 4.10 1.72} \\
 
 
 \begin{table}[h]
@@ -253,7 +254,7 @@ Car   & 0.89       & 0         & 2.29 & 0.00  & 194.70 & 414.71 \\
 \end{tabular}
 \begin{tabular}{|c|c|c|c|c|c|c|c|}
 \hline
-BBy2   & HT   & WD   & DP   & Cx    & Cy   & Cz   & Roty \\
+BBy2   & HT   & WD   & DP   & Xc    & Yc   & Zc   & Roty \\
 \hline
 373.00 & 1.57 & 1.67 & 4.14 & -2.75 & 1.70 & 4.10 & 1.72 \\
 \hline
@@ -261,14 +262,126 @@ BBy2   & HT   & WD   & DP   & Cx    & Cy   & Cz   & Roty \\
 \label{kitti_label_sample}
 \end{table}
 
+In order to better understand the meaning of each value, each dataset provides a "development kit" that contains a "readme.txt" file. In the object detection devkit, the following text reproduced in Figure \ref{kitti_devkit_info}. Some of the names are different than what is used, but the order and purpose are identical. 
 
-Beyond a few samples of the dataset, some statistics about the dataset can be found in both the accompanying paper as well as by looking through the dataset itself. When observing only the training data, the count of each class can be described. 
+\begin{figure}[h] %h=here,t=top,b=bottom,H=exactlyHere
+	\setstretch{0.84} % want code to be nice and compact
+	% note: optional line numbers argument
+	\begin{lstlisting}[language=tex]
+Ct.  Name         Description
+----------------------------------------------------------------------------
+1    type         Describes the type of object: `Car', `Van', `Truck',
+                      `Pedestrian', `Person_sitting', `Cyclist', `Tram',
+                      `Misc' or `DontCare'
+1    truncated    Float from 0 (non-truncated) to 1 (truncated), where
+                      truncated refers to the object leaving image boundaries
+1    occluded     Integer (0,1,2,3) indicating occlusion state:
+                      0 = fully visible, 1 = partly occluded
+                      2 = largely occluded, 3 = unknown
+1    alpha        Observation angle of object, ranging [-pi..pi]
+4    bbox         2D bounding box of object in the image (0-based index):
+                      contains left, top, right, bottom pixel coordinates
+3    dimensions   3D object dimensions: height, width, length (in meters)
+3    location     3D object location x,y,z in camera coordinates (in meters)
+1    rotation_y   Rotation ry around Y-axis in camera coordinates [-pi..pi]
+1    score        Only for results: Float, indicating confidence in
+                      detection, needed for p/r curves, higher is better.
+	\end{lstlisting}
+	\onehalfspacing % set line spacing back to normal
+	\caption{Original text from readme.txt file of devkit\_object resources.}
+	\label{kitti_devkit_info} % label goes last
+\end{figure}
+
+
+
+
+Beyond a few samples of the dataset, some statistics about the dataset can be found in both the accompanying paper as well as by looking through the dataset itself. When observing only the training data, the count of each class can be described. A quick summary of each value across all labels in the training dataset is given below in Table \ref{kitti_label_stats}. Note that the min/max range ignores the DontCare class and its values, such as -1000 for Zc.
+
+\begin{table}[h]
+	\centering
+	\caption{KITTI dataset label statistics. NEEDS TO BE FIXED XX}
+	\begin{tabular}{|c|c|c|c|c|}%
+		\hline
+		\bfseries Name & \bfseries DataType & \bfseries Unit & \bfseries min & \bfseries max % specify table head
+		\csvreader[head to column names]{../media/TEMP_kitti_label_stats_xx.csv}{}% use head of csv as column names
+		{\\\hline\csvcoli&\csvcolii&\csvcoliii&\csvcoliv&\csvcolv} % specify your columns here
+		\\\hline
+	\end{tabular}
+	\label{kitti_label_stats}
+\end{table}
+
+
+%\begin{table}[h]
+%	\centering
+%	\caption{KITTI dataset class count. NEEDS TO BE FIXED XX}
+%	\begin{tabular}{|c|c|}%
+%		\hline
+%		\bfseries Class & \bfseries Count % specify table head
+%		\csvreader[head to column names]{../media/TEMP_kitti_class_stats_xx.csv}{}% use head of csv as column names
+%		{\\\hline\csvcoli&\csvcolii} % specify your columns here
+%		\\\hline
+%	\end{tabular}
+%	\label{kitti_class_stats}
+%\end{table}
+
+The final bit of interesting statistical information may be found by counting the number of instances of each class. This is already provided by \cite{geiger_are_2012}, but in verifying the values provided only in the training data the exact number of instances of each class are listed below in Table \ref{kitti_class_stats}. 
+
+\begin{table}[h]
+	\centering
+	\caption{KITTI object detection class count. Semi-automatically counted through only labeled training data.}
+	\begin{tabular}{|c|c|}
+		\hline
+		Class & Count\\
+		\hline
+		a & 1\\
+		\hline
+		b & 2\\
+		\hline
+		c & 3\\
+		\hline
+		d & 4\\
+		\hline
+		e & 5\\
+		\hline
+	\end{tabular}
+	\label{kitti_class_stats}
+\end{table}
+
+Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+
+% 3D RECONSTRUCTION ============================================================
+\newpage
+\section{3D Reconstruction from Stereo Data}
+\label{appendix_reconstruct}
+Reconstruction is the process of taking a series of 2D images and producing a 3D representation of that information (CITATION NEEDED XX). In this project, reconstruction is a vital part of taking the disparity map estimation of one network and creating a pointcloud that is given to the second network. This appendix will provide a more hands-on description of converting from a disparity map to a pointcloud. 
+
+A disparity map consists of a 2D matrix that may be considered analog to a normal grayscale image, but the value at each (row,column) location represents disparity, or the horizontal (normally) distance between two matching pixels in two different images. Using some basic equations, disparity may be manually calculated. Let there be two cameras, able to produce left and right color images where a ball can be seen, and are able to produce rectified images (images that have corrected the barrel / pincushion distortion). If the cameras are spaced a known distance apart, then their respective images will each contain the ball at some horizontal pixel distance from the left edge of each image. If the ball is located at 100 pixels away from the edge in the left image and 150 pixels away in the RHS image, then the disparity is 50 pixels. Thus, a disparity map may be generated by looking for matching features in two images and assigning each location a difference in the value of where one is found in reference to another (typically the LHS image is the reference).
+
+The reason for this explanation is that a disparity map must then be transformed into a pointcloud by relating the disparity value at each pixel to a depth distance and the row / column locations to vertical / horizontal distances, respectively. This is accomplished through epipolar formulas, as mentioned in \ref{sect_reconstruct}, which are as follow: 
+
+\begin{equation}
+z = \frac{f_U * b}{D}
+\label{eq1}
+\end{equation}
+
+\begin{equation}
+x = \frac{(u - c_U) * z}{f_U}
+\end{equation}
+
+\begin{equation}
+y = \frac{(v - c_V) * z}{f_V}
+\end{equation}
+
+In these equations, $D$ stands for a disparity matrix, $f_U$ and $f_V$ are for horizontal \& vertical focal lengths (respectively), ($c_U$,$c_V$) are the pixel center of the image, and $(u,v)$ represent a (column, row) coordinate location in $D$.
+
+KJGNOTE NEED TO CONTINUE THIS SECTION XX
+
 
 
 % LIDAR COST EFFECTIVENESS =====================================================
 \newpage
 \section{Lidar vs Other Sensors: Economic Perspective}
-\label{AppendixLidar}
+\label{appendix_lidar}
 TextNeededHere
 
 
@@ -329,7 +442,7 @@ TextHere
 \begin{figure}[h] %h=here,t=top,b=bottom,H=exactlyHere
 \setstretch{0.84} % want code to be nice and compact
 % note: optional line numbers argument
-\begin{lstlisting}[numbers=left]
+\begin{lstlisting}[numbers=left]  %note: 'tex' is for 
 def pyt(a,b):
     return (a**2+b**2)**0.5
 \end{lstlisting}
@@ -346,13 +459,6 @@ def pyt(a,b):
 Class & Trun & Occl & Obs  & BBx1  & BBy1   & BBx2  \\
 \hline
 Car   & 0.89       & 0         & 2.29 & 0.00  & 194.70 & 414.71 \\
-\hline
-\end{tabular}
-\begin{tabular}{|c|c|c|c|c|c|c|c|}
-\hline
-BBy2   & HT   & WD   & DP   & Cx    & Cy   & Cz   & Roty \\
-\hline
-373.00 & 1.57 & 1.67 & 4.14 & -2.75 & 1.70 & 4.10 & 1.72 \\
 \hline
 \end{tabular}
 
