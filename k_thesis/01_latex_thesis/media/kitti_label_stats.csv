@@ -1,0 +1,16 @@
+Name,DataType,Unit,Min,Max
+Class,string,...,n/a,n/a
+Truncation,float,...,0.00,1.00
+Occlusion,integer,...,0,3
+ObsAngle,float,radians,-3.14,3.14
+bbx1,float,pixels,0.00,1240.54
+bby1,float,pixels,0.00,323.98
+bbx2,float,pixels,14.71,1241.00
+bby2,float,pixels,140.79,375.00
+ht,float,meters,0.76,4.20
+wd,float,meters,0.30,3.01
+dp,float,meters,0.20,35.24
+xc,float,meters,-44.03,40.06
+yc,float,meters,-2.14,5.93
+zc,float,meters,-3.55,146.85
+roty,float,radians,-3.14,3.14
