@@ -4,6 +4,10 @@ Author: kris gonzalez
 Objective: Create simplified, easy-to-use file i/o class that can be used where
     needed.
 */
+#include <string>
+#include <vector>
+#include <stdio.h>
+#include <fstream>
 
 class FileOpen{
     std::ifstream fin;
