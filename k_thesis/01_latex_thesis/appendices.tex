@@ -4,7 +4,7 @@
 % PERFORMANCE METRICS ==========================================================
 \section{Performance Metrics}
 \label{appendix_metrics}
-The concept of verifying accuracy in a statistical estimate is covered in [xx source], and some of this information is covered briefly below. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, precision and recall may then be calculated. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision and mean Average Precision (mAP), which are how different networks are compared. The following information is primarily taken from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and "An Introduction to Information Retrieval" by \cite{manning_introduction_2008}.
+The concept of verifying accuracy in a statistical estimate is covered in \cite{manning_introduction_2008}, and some of this information is covered briefly below. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, precision and recall may then be calculated. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision and mean Average Precision (mAP), which are how different networks are compared. The following information is primarily taken from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and "An Introduction to Information Retrieval" by \cite{manning_introduction_2008}.
 
 \subsection{Defining a Result}
 The first step in measuring performance is categorizing what a result may be. With a visual task such as object classification, there are 4 possible outcomes, as shown xbelow. In general, there may be a True Positive, False Positive, True Negative, or False Negative. In practice, True Negatives are not used, and the remaining three are used to varying degrees. Each is better clarified as such:
@@ -118,8 +118,6 @@ def IOU(b1,b2,inclusive=False,criterion=-1):
 \subsubsection{Example: IOU of a Ground Truth and Prediction Label}
 Suppose there is an image, as given below, where there is a ground truth label `gt' and a prediction label `pred' with 2D bounding boxes formatted as \texttt{[x1,y1,x2,y2]}, all units in pixels. To determine the IOU of the image, the calculations are listed below. Because boxes represent pixel values, remember to add "1" to each dimension.
 
-
-
 \def \pxpx {\ [px^2]}
 \def \Asub #1{A\textsubscript{#1}}
 \begin{enumerate}\itemsep=-0.5em
@@ -150,6 +148,16 @@ Recall = \frac{TruePositives}{TruePositives + FalseNegatives}
 In practice, the precision and recall of each detection is generated procedurally as each detection is compared to ...
 
 KJG190618: NEED TO PERSONALLY RUN THROUGH A SIMPLE EXAMPLE OF PRECISION / RECALL, AND PUT THIS INTO YOUR PYTHON SANDBOX XX
+
+
+
+
+
+
+
+
+
+
 
 % ABOUT THE KITTI DATASET ======================================================
 \newpage
