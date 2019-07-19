@@ -471,5 +471,38 @@ def md5_hash(filename):
     with open(filename,'rb') as f:
         return hl.md5(f.read()).hexdigest()
 
+def IntTrap(x,y):
+    ''' Given a set of points, return trapezoidal area under curve. Below is
+        vectorized form of the general formula:
+        A_trap = sum(0,n-1, (x[i+1]-x[i])*(y[i]+y[i+1])/2 )
+    INPUTS:
+        * x, y: numpy vector arrays. must be matching length
+    OUTPUT: approximate sum
+    '''
+    x=np.array(x);y=np.array(y)     # ensure that they are numpy arrays
+    dx_arr = x[1:] - x[:-1]
+    dy_arr = y[1:] + y[:-1]
+    return np.array(dx_arr*dy_arr/2).sum()
+
+def IntRect(x,y,where='pre'):
+    ''' given a set of points, return area of curve using only rectangles. can
+        specify where each rectangle meets curve. Below is vectorized form of
+        A_rect = sum(0,n-1,dx*yi), where yi is controlled by "where" argument.
+    INPUTS:
+        * x, y: numpy vector arrays.
+        * where: string flag. 'pre','mid','post'. default= pre
+    OUTPUT: approximate sum
+    '''
+    x=np.array(x);y=np.array(y)
+    dx_arr = x[1:] - x[:-1]
+    if(where=='pre'):
+        dy_arr = y[1:]
+    elif(where=='post'):
+        dy_arr = y[:-1]
+    else:
+        assert where=='mid'
+        dy_arr = (y[1:]+y[:-1])/2
+    return np.array(dx_arr*dy_arr).sum()
+
 
 # eof
