@@ -45,7 +45,6 @@ To assist in understanding IOU, a code snippet as well as an example are present
 All aspects of calculating the IOU (including area and intersection) are broken up into multiple pieces, but presented together below. For n-dimensions, the code (presented here in python) is as follows: 
 
 
-KJG190618: NEED TO RE-PASTE IN THIS CODE!!! XX
 \begin{figure}[H]
 \setstretch{0.84} % want code to be nice and compact
 \begin{lstlisting}
@@ -90,18 +89,25 @@ def intersection(box1,box2,inclusive=False):
         val*=max(ans,0) # if have negative dimension, have no intersection
     return val
 
-def IOU(b1,b2,inclusive=False):
+def IOU(b1,b2,inclusive=False,criterion=-1):
     '''
     Return generalized intersection over union for two bounding boxes of
         matching n-dimension.
     INPUTS:
         b1,b2: n-dimensional bounding boxes, format [x1,y1,z1, .. ,x2,y2,z2, ..]
+        inclusive: boolean, whether to include +1 unit, such as for images. default=False
+        criterion: -1=div by union. 0 = div by extent(b1). 1 = div by extent(b2). default=-1
     OUTPUT:
         iou: intersection over union, scalar float, range [0,1].
     '''
     inter = intersection(b1,b2,inclusive)
     union = extent(b1,inclusive)+extent(b2,inclusive)-inter
-    return inter / union
+    if(criterion==-1):
+        return inter / union
+    elif(criterion==0):
+        return inter / extent(b1,inclusive)
+    else:
+        return inter / extent(b2,inclusive)
 
 \end{lstlisting}
 \onehalfspacing % set line spacing back to normal
@@ -114,15 +120,12 @@ Suppose there is an image, as given below, where there is a ground truth label `
 
 
 
-\def \pxpx {\; [px^2]}
+\def \pxpx {\ [px^2]}
 \def \Asub #1{A\textsubscript{#1}}
 \begin{enumerate}\itemsep=-0.5em
-
-\item Find area of each bounding box: \\ $\Asub{gt} = (x2-x1+1)*(y2-y1+1) = 16,335 \pxpx $ , $ \Asub{pr} = 12905 \pxpx $
-
-\item Find overlapping area, e.g. intersection (see \ref{code_iou} for more info): $I = 11455 \pxpx $
-
-\item Calculate IOU: $\frac{I}{\Asub{gt} + \Asub{pr} - I} = 0.644 $
+    \item Find area of each bounding box: \\ $\Asub{gt} = (x2-x1+1)*(y2-y1+1) = 16,335 \pxpx $ , $ \Asub{pr} = 12905 \pxpx $
+    \item Find overlapping area, e.g. intersection (see \ref{code_iou} for more info): $I = 11455 \pxpx $
+    \item Calculate IOU: $\frac{I}{\Asub{gt} + \Asub{pr} - I} = 0.644 $
 \end{enumerate}
 
 \begin{figure}[h] % h = "approx here", {h,t,b}
