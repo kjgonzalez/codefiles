@@ -40,6 +40,10 @@ quick targz flag help:
     x: extract archive
     z: use gzip during operation
 
+append a path to linux PATH variable (esp. for .bashrc file)
+    NOTE: put this either in .bashrc or .profile ("more" permanent & widespread)
+    export PATH="$PATH:some/new/path"
+
 update, upgrade, etc:
 https://unix.stackexchange.com/questions/361814/whats-the-difference-between-software-update-and-upgrade
 * apt-get update: updates LIST of available packages, version etc.
