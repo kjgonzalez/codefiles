@@ -15,7 +15,8 @@ pdflatex pgf\_plot.tex
     \begin{tikzpicture}
     \begin{axis}
     \addplot table [x=time, y=squared, col sep=comma] {data.csv}; % reference the filename
-    \end{axis}
+    % \addplot [mark=+,xcolor=red] table [x=time, y=squared, col sep=comma] {data.csv}; % reference the filename
+        \end{axis}
     \end{tikzpicture}
 \end{figure}
 
