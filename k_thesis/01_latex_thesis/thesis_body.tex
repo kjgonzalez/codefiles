@@ -118,8 +118,8 @@ The first task in creating a network that can take a stereo image pair and gener
 
 First, the original evaluation code was tested out. Some modification and housekeeping had to be done to ensure that it was compatible with the local installation, as well as being adapted for use with Python 3. All deprecated functionality was manually removed.
 
-\subsubsection{Using a Modified Set of Ground Truths}
-After the initial evaluation, the network was prepared for and trained on KITTI data. I first downloaded the network that was pre-trained on the Freiburg SceneFlow dataset, available from the PSMnet authors. Next, I finetuned the network by training it on KITTI data. Here, it must be clarified that there are images in the KITTI stereo dataset that overlap greatly in similarity to those in the KITTI object detection dataset. The difference between the two datasets are essentially that one has been optimized for object detection, and the other for stereo disparity map estimation. This similarity was also noted in [xx], and I took the same approach as [xx authors] to correct it, as described below.Figure xx below also demonstrates the similarity between two sample images, which leads to the problem of having a part of the network trained on what may be validation or even evaluation data.
+\subsubsection{Similarity of Ground Truths Across Datasets}
+After the initial evaluation, the network was prepared for and trained on KITTI data. I first downloaded the network that was pre-trained on the Freiburg SceneFlow dataset, available from the PSMnet authors. Next, I finetuned the network by training it on KITTI data. Here, it must be clarified that there are images in the KITTI stereo dataset that overlap greatly in similarity to those in the KITTI object detection dataset. The difference between the two datasets are essentially that one has been optimized for object detection, and the other for stereo disparity map estimation. This similarity was also noted in \cite{wang_pseudo-lidar_2019}, and I took the same approach to correct it, as described below.Figure \ref{similarity_stereo_objdet}} below also demonstrates the similarity between two sample images, which leads to the problem of having a part of the network trained on what may be validation or even evaluation data.
 
 \begin{figure}[H]
     \centering
@@ -134,21 +134,30 @@ After the initial evaluation, the network was prepared for and trained on KITTI 
 In order to deal with the dataset overlap, the KITTI object detection dataset was adapted to be used for training stereo data. Lidar data was projected onto the LHS image plane, converted to integer values, then multiplied by a constant. These steps are in line with both the way that [xx] were able to generate their self-made stereo ground truths as well as how the KITTI dataset authors generated their ground truth [xx reference to devkit]. Locations in the image that have no lidar data are left alone at a value of 0.0, and finally the resulting array is saved to a PNG image file format containing integer values. Please refer to the generation script in the repository for the exact steps used to generate the pseudo ground truth stereo images.
 
 \subsection{Retraining PSMnet with Object Detection Data}
-It was discovered at some point that the training / validation data used in the KITTI stereo image set was overlapping too much with images used in the KITTI object detection task. Thus, paper [xx] was referred to and guided the change in retraining PSMnet. The difference in training is shown below.
+It was discovered at some point that the training / validation data used in the KITTI stereo image set was overlapping too much with images used in the KITTI object detection task. Thus, \cite{wang_pseudo-lidar_2019} was referred to and guided the change in retraining PSMnet. The difference in training is shown below.
+
+Figure \ref{psmnet_star_train_info} below shows the loss throughout the training of PSMnet on the object detection dataset, also known as PSMstar (based on the similar name given in Wang et al's paper), as well as the original stereo dataset model for reference. It should be noted that validation error 
+
+
+
+\begin{figure}[H]
+    \centering
+        \includegraphics[width=0.9\linewidth]{../media/info_psmnet_comparison_Loss.pdf}
+    \caption{Loss graphs for both the original stereo-dataset PSMnet model and the retrained, object-detection-based "PSMstar" model. The average difference between the two curves is a loss of about 0.82. The higher loss for PSMstar may result from using self-made ground truth labels rather than using the more detailed stereo dataset versions.}
+    \label{psmnet_star_train_info}
+\end{figure}
+
+In addition to the quantitative difference in training, a qualitative difference in the estimation pattern may be seen below, in Figure \ref{new_psmnet}. Overall, the change in quality may be seen as a more detailed but less contrasting depth map.
 
 \begin{figure}[H]
     \centering
     \subfigure[000015 stereo estimation with original PSMnet model]{
         \includegraphics[width=1\linewidth]{../media/ind15_psmnet_v190308_AsOf190626.png}}
     \subfigure[000015 stereo estimation with new PSMnet* model]{
-        \includegraphics[width=1\linewidth]{../media/ind15_psmnetstar_v190613_AsOf190626.png}}
+        \includegraphics[width=1\linewidth]{../media/ind15_psmstar_v190613_AsOf190626.png}}
     \caption{Comparison of old and new model for PSMnet [xx add more detail]}
     \label{new_psmnet}
 \end{figure}
-
-
-KJGNOTE: here, would also like to provide a graph comparison between the training of psmnet and psmnetstar
-
 
 
 
@@ -171,24 +180,15 @@ The most basic path, ADF, is simply using the given model to evaluate and achiev
 \section{Procedure / Method}
 Now that many of the individual steps of the network have been described above, the complete set of steps taken to produce network estimation will be described. Not every step will be described again, but any deviations from the "general" usage is clarified. However, this section shall be more detailed in describing how each step was executed.
 
+1. train psmnet on object detection images\\
+2. create a preprocessed set of lidar pointclouds generated from PSMnet \\
+3. train fpnet on the preprocessed data, according to path CEF as described in Figure \ref{fp_paths} \\
+4. test fpnet on the data, specifically focusing on 3D object detection for cars. \\
+
+
 
 \section{Results}
-xx
-
-
-Listed below is the loss and validation error throughout the training of PSMnet on the object detection dataset, also known as PSMstar.
-
-
-
-\begin{figure}[H]
-    \centering
-    \subfigure[Loss vs Epochs during Training]{
-        \includegraphics[width=0.3\linewidth]{../media/info_Loss_190613_psmstar.pdf}}
-    \subfigure[Validation Error vs Epochs during Training]{
-        \includegraphics[width=0.3\linewidth]{../media/info_ValError_190613_psmstar.pdf}}
-    \caption{Loss and ValError graphs for PSMnet version "psmstar" during training. The "psmstar" version was finetuned (trained) on the object detection dataset instead of the typical stereo dataset.}
-    \label{psmnet_star_train_info}
-\end{figure}
+The results of training the network must be compared to
 
 
 
