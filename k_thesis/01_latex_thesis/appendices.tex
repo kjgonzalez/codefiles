@@ -480,7 +480,9 @@ One of the last but certainly not least important aspects of the KITTI dataset i
 
 Naturally, the ``Easy" difficulty typically earns a higher AP score than ``Moderate", and ``Moderate" in turn typically yields a higher AP score than ``Hard". The official final score that a network receives when submitted to the KITTI Leaderboard is the ``Moderate" mean AP score. This paper specifically deals with the ``Car" class, so we may be able to better understand how these difficulties affect other parameters. Specifically related to the ``Car" class, 3D bounding box is considered a detection at 70\% overlap with a ground truth. The other two classes, ``Pedestrian" and ``Cyclist", only require an overlap of 50\%. The remaining other classes are not typically included in evaluation and scoring. 
 
-In the paper \cite{wang_pseudo-lidar_2019}, the ``Easy" evaluation for the ``Car" class is said to test on car labels located mostly within 30m of the ego vehicle, which was also claimed by another group, [CITE NEEDED XX]. This was verified, and it is described below in Figure \ref{kitti_labels_easyCar}. 
+In the paper \cite{wang_pseudo-lidar_2019}, the ``Easy" evaluation for the ``Car" class is said to test on car labels located mostly within 30m of the ego vehicle, which was also claimed by another group, \cite{yang2018pixor}.
+
+ [CITE NEEDED XX]. This was verified, and it is described below in Figure \ref{kitti_labels_easyCar}. 
 
 \begin{figure}[h]
 	\centering
