@@ -19,7 +19,7 @@ The first step in measuring performance is categorizing what a result may be. Wi
 	\centering
 	\includegraphics[width=.4\textwidth]{../media/tp_help.png}
 	\caption{A visual representation of various outcomes, ground truths as solid black boxes and detections as dotted red boxes. True positives (TP) are a correct detection, FP's are a detection of no actual object, and FN's are a lack of detection of an actual object.}
-	\label{tp_help} %label goes last
+	\label{tp_help} 
 \end{figure}
 
 To actually classify a result in one of these categories, computer vision depends on using the overlap of a given bounding box estimate with a bounding box ground truth. If the overlap is above some threshold, the estimate is said to be a true positive. In some metrics, two estimates overlapping the same ground truth will only count the larger overlap, or the more confident estimate. Overlap is formally known as Intersection over Union, or IOU value.
@@ -32,7 +32,7 @@ In light of this, Intersection Over Union encompasses all relevant aspects of ra
 \begin{figure}[ht]
     \includegraphics[width=1\textwidth]{../media/iou_img.png}
     \caption{Example of ground truth bounding box (solid green) and prediction bounding box (dashed red). In this image, the overlap between the green and red regions is the intersection, while the combined area is the union. The IOU of the two boxes is 0.64. Image index: 8.}
-    \label{iou_img} %label goes last
+    \label{iou_img} 
 \end{figure}
 
 In order to formally calculate IOU, a generalized form may be generated to apply to n-dimensions. The generalized mathematical equation is simply as follows. Given a region A and a region B: 
@@ -130,7 +130,7 @@ Suppose there is an image, as given below, where there is a ground truth label `
     \centering
     \includegraphics[width=.4\textwidth]{../media/iou_example.png}
     \caption{IOU calculation example. Ground truth (green solid) has BB: [712,143,810,307]. Prediction (red dotted) has BB: [732,153,820,297]. IOU is 0.644.}
-    \label{iou_example} %label goes last
+    \label{iou_example} 
 \end{figure}
 
 
@@ -488,7 +488,7 @@ In the paper \cite{wang_pseudo-lidar_2019}, the ``Easy" evaluation for the ``Car
 	\centering
 	\includegraphics[width=0.5\textwidth]{../media/kitti_labels_easyCar.pdf}
 	\caption{Filtered set of labeled training data containing only labels with the ``Car" class and those which are defined as ``Easy" difficulty. Specifically, there are 199 labels with a distance farther than 30m, while there are a total of 5971 filtered labels, meaning just over 3\% of these filtered labels are beyond 30m, verifying the claim of other papers. An interesting observation that may be made from the pixel height / distance relationship is that they are inversely correlated.}
-	\label{kitti_labels_easyCar} %label goes last
+	\label{kitti_labels_easyCar} 
 \end{figure}
 
 
@@ -577,7 +577,7 @@ TextHere
 \begin{figure}[h] % h = "approx here", {h,t,b}
     \includegraphics[width=1\textwidth]{../media/tp_help.png}
     \caption{texthere}
-    \label{delme_figure} %label goes last
+    \label{delme_figure} 
 \end{figure}
 
 

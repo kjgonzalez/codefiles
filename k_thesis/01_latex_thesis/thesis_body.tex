@@ -55,7 +55,7 @@ Pyramid Stereo Matching Network, or PSMnet, is a network that takes advantage of
 \begin{figure}[h] % h = "approx here", {h,t,b}
     \includegraphics[width=1\textwidth]{../media/psmnet_arch.png}
     \caption{text.}
-    \label{psmnet_arch} %label goes last
+    \label{psmnet_arch} 
 \end{figure}
 
 
@@ -69,7 +69,7 @@ A recent development has been published since the start of this paper, by Wang e
 \begin{figure}[h] % h = "approx here", {h,t,b}
     \includegraphics[width=1\textwidth]{../media/pseudonet_arch.png}
     \caption{Architecture of the Pseudo-LiDAR network. Stereo (or mono) image data is used to create a disparity map, which is converted to lidar, and is then used by a 3D detector to estimate 3D bounding boxes.}
-    \label{pseudonet_arch} %label goes last
+    \label{pseudonet_arch} 
 \end{figure}
 
 In their paper, the authors argue that within a short distance, up to 30 meters away, stereo vision performs competitively with lidar.
@@ -172,7 +172,7 @@ In order to transition from using the provided pre-trained model and preprocesse
 \begin{figure}[h] % h = "approx here", {h,t,b}
     \includegraphics[width=1\textwidth]{../media/fpnet_paths_img.png}
     \caption{Various paths that were planned to simply transition from lidar-based 3D estimation to stereo-based 3D estimation. Generally, paths went chronologically as follow: ADF, AEF, BEF, and finally CEF.}
-    \label{fp_paths} %label goes last
+    \label{fp_paths} 
 \end{figure}
 
 The most basic path, ADF, is simply using the given model to evaluate and achieve similar results to the official paper. Next, AEF used lidar pointclouds, but the model was trained locally. BEF required locally running the "preprocessing" step, but was still theoretically identical to the previous two paths. Finally, CEF truly deviates from the other paths by using a stereo-generated pointcloud to preprocess data, then train on that, and finally evaluate the model's detection capability. 
