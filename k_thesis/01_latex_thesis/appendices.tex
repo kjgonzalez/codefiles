@@ -287,10 +287,10 @@ AP = \sum^{n-1}_{i=1} x_{i}
 \label{appendix_kitti}
 
 \subsection{Introduction}
-To better understand the actual data that is being worked on, the KITTI dataset will be explained in-depth here. KITTI itself is a combination of "KIT" (Karlsruhe Institute of Technology) and "TTI" (Toyota Technical Institute, Chicago), the two cooperating institutions on the project. The very first thing to know about the KITTI dataset is that it is actually a set of datasets, each dataset specialized for some specific AI task. This means that there are some number of evaluation tasks / benchmarks, and a not-necessarily-unique dataset is used to enable completion of that task. The individual tasks are listed below with a brief description: 
+To better understand the actual data that is being worked on, the KITTI dataset will be explained in-depth here. KITTI itself is a combination of ``KIT" (Karlsruhe Institute of Technology) and ``TTI" (Toyota Technical Institute, Chicago), the two cooperating institutions on the project. The very first thing to know about the KITTI dataset is that it is actually a set of datasets, each dataset specialized for some specific AI task. This means that there are some number of evaluation tasks / benchmarks, and a not-necessarily-unique dataset is used to enable completion of that task. The individual tasks are listed below with a brief description: 
 
 \begin{itemize}\itemsep=-0.5em 
-    \item Stereo, Optical Flow, Sceneflow (2012 \& 2015): An older (2012) and updated (2015) task comprised of 200 training and 200 test scenes. Each scene consists of a left and right image as well as a "multi-view extension".
+    \item Stereo, Optical Flow, Sceneflow (2012 \& 2015): An older (2012) and updated (2015) task comprised of 200 training and 200 test scenes. Each scene consists of a left and right image as well as a ``multi-view extension".
     \item Depth Completion / Estimation: A task comprised of about 93 thousand scenes containing RGB images and lidar scans.
     \item Visual Odometry / SLAM: 11 training and 11 testing stereo sequences with relevant grayscale, color, lidar, and ground truth poses.
     \item 2D / 3D / Bird's Eye View (BEV) Detection: 7481 training and 7518 test scenes with relevant color images, temporally preceding images, and lidar
@@ -299,7 +299,7 @@ To better understand the actual data that is being worked on, the KITTI dataset 
     \item Semantic / Instance Segmentation: A task comprised of a set of stereo images like the Stereo task, but containing pixel-level localization of each class. 
 \end{itemize}
 
-Each evaluation task also brings with it a "dev kit" (a set of files that explain some of the technical information as well as helpful code), relevant camera / sensor calibration data of some kind, as well as some kind of ground truth label / file for each scene to assist with training. It should be noted that raw data of each dataset is available as well, but these are often unused and only kept as original source files for transparency. Below in Figure \ref{kitti_samples} is an image summary taken from the various tasks to give a quick and simple overview of the variety of datasets.
+Each evaluation task also brings with it a ``dev kit" (a set of files that explain some of the technical information as well as helpful code), relevant camera / sensor calibration data of some kind, as well as some kind of ground truth label / file for each scene to assist with training. It should be noted that raw data of each dataset is available as well, but these are often unused and only kept as original source files for transparency. Below in Figure \ref{kitti_samples} is an image summary taken from the various tasks to give a quick and simple overview of the variety of datasets.
 
 \begin{figure}[H]
     \centering
@@ -326,7 +326,7 @@ Each task is associated with one or more papers published by KIT and TTI, but th
 \subsection{The Stereo Dataset}
 The stereo dataset, specifically 2015, will be briefly covered to describe its merits as well as why it presented overlap issues with the object detection dataset. What makes the stereo dataset important is that it is the dataset that was initially used to finetune the Pyramid Stereo Matching network and also the dataset used to help it achieve such a high position in the stereo benchmark. 
 
-The dataset itself is made up primarily of 200 training scenes and 200 testing scenes. The training scenes contain ground truth disparity maps, while the testing scenes do not and are used for final evaluation and submission to the benchmark website. For the project, only the training scenes were used. Each training scene is comprised of a left-hand side (LHS) color image, a RHS color image, a calibration file (containing transformation and other matrices), and a ground truth disparity file. There is also an available "multi-view extension", containing 20 extra frames per scene, but this was not used. Figure \ref{stereo_sample} below shows all relevant data in a single sample scene: the left and right images, as well as a disparity map ground truth.
+The dataset itself is made up primarily of 200 training scenes and 200 testing scenes. The training scenes contain ground truth disparity maps, while the testing scenes do not and are used for final evaluation and submission to the benchmark website. For the project, only the training scenes were used. Each training scene is comprised of a left-hand side (LHS) color image, a RHS color image, a calibration file (containing transformation and other matrices), and a ground truth disparity file. There is also an available ``multi-view extension", containing 20 extra frames per scene, but this was not used. Figure \ref{stereo_sample} below shows all relevant data in a single sample scene: the left and right images, as well as a disparity map ground truth.
 
 \begin{figure}[H]
     \centering
@@ -340,7 +340,7 @@ The dataset itself is made up primarily of 200 training scenes and 200 testing s
     \label{stereo_sample}
 \end{figure}
 
-The ground truth labels were generated by a "semi-automatic" process, as described by Menze and Geiger: the process was to "extract disparity maps directly from the 3D information int he laser scans and fit geometrically accurate CAD models to moving 3D point clouds" \cite{Menze_2015_CVPR}. This explains several things about the ground truth disparity map in Figure \ref{stereo_sample}(c): the image is generally sparse, has no sample values above a certain horizontal line, and has a high density of pixels in the region where a car is outlined.
+The ground truth labels were generated by a ``semi-automatic" process, as described by Menze and Geiger: the process was to ``extract disparity maps directly from the 3D information int he laser scans and fit geometrically accurate CAD models to moving 3D point clouds" \cite{Menze_2015_CVPR}. This explains several things about the ground truth disparity map in Figure \ref{stereo_sample}(c): the image is generally sparse, has no sample values above a certain horizontal line, and has a high density of pixels in the region where a car is outlined.
 
 Ultimately, however, this dataset was not used for the primary reason described by \cite{wang_pseudo-lidar_2019}: there was an unacceptable amount of overlap, also known as data leakage, between the stereo dataset training data and the similar but unrelated object detection dataset. Figure \ref{similarity_stereo_objdet}, shown in Section 3, gives an example of a scene in the stereo dataset nearly matches a scene in the object detection dataset.
 
@@ -371,7 +371,7 @@ In addition to the above lidar projection, the point cloud may be better visuali
 
 As is immediately obvious above in Figure \ref{objdet_lidar_sample} and from knowledge of the hardware itself, a lidar scan is capable of capturing points surrounding the sensor in a 360\DEG horizontal view. However, because of the nature of a typical color camera, points that are outside the camera's field of view are filtered out. 
 
-Another key piece of the object detection dataset are the label data. Ground truth labels are simply lines of text that contain an array of information about each instance of an object in the scene. An example label with value names is given below in Table \ref{kitti_label_sample}. There are 15 values in each label, and an extra 16th "Score" value for prediction labels, a decimal in range [0,1]. The raw text for this label simply looks like so: \\
+Another key piece of the object detection dataset are the label data. Ground truth labels are simply lines of text that contain an array of information about each instance of an object in the scene. An example label with value names is given below in Table \ref{kitti_label_sample}. There are 15 values in each label, and an extra 16th ``Score" value for prediction labels, a decimal in range [0,1]. The raw text for this label simply looks like so: \\
 \texttt{Car 0.89 0 2.29 0.00 194.70 414.71 373.00 1.57 1.67 4.14 -2.75 1.70 4.10 1.72} \\
 
 
@@ -395,7 +395,7 @@ BBy2   & HT   & WD   & DP   & Xc    & Yc   & Zc   & Roty \\
 \label{kitti_label_sample}
 \end{table}
 
-In order to better understand the meaning of each value, each dataset provides a "development kit" that contains a "readme.txt" file. In the object detection devkit, the following text reproduced in Figure \ref{kitti_devkit_info}. Some of the names are different than what is used, but the order and purpose are identical. 
+In order to better understand the meaning of each value, each dataset provides a ``development kit" that contains a ``readme.txt" file. In the object detection devkit, the following text reproduced in Figure \ref{kitti_devkit_info}. Some of the names are different than what is used, but the order and purpose are identical. 
 
 \begin{figure}[h] %h=here,t=top,b=bottom,H=exactlyHere
 	\setstretch{0.84} % want code to be nice and compact
@@ -478,14 +478,14 @@ One of the last but certainly not least important aspects of the KITTI dataset i
 	\item Hard: Min. bounding box height: 25 Px, Max. occlusion level: Difficult to see, Max. truncation: 50\%
 \end{enumerate}
 
-Naturally, the "Easy" difficulty typically earns a higher AP score than "Moderate", and "Moderate" in turn typically yields a higher AP score than "Hard". The official final score that a network receives when submitted to the KITTI Leaderboard is the "Moderate" mean AP score. This paper specifically deals with the "Car" class, so we may be able to better understand how these difficulties affect other parameters. Specifically related to the "Car" class, 3D bounding box is considered a detection at 70\% overlap with a ground truth. The other two classes, "Pedestrian" and "Cyclist", only require an overlap of 50\%. The remaining other classes are not typically included in evaluation and scoring. 
+Naturally, the ``Easy" difficulty typically earns a higher AP score than ``Moderate", and ``Moderate" in turn typically yields a higher AP score than ``Hard". The official final score that a network receives when submitted to the KITTI Leaderboard is the ``Moderate" mean AP score. This paper specifically deals with the ``Car" class, so we may be able to better understand how these difficulties affect other parameters. Specifically related to the ``Car" class, 3D bounding box is considered a detection at 70\% overlap with a ground truth. The other two classes, ``Pedestrian" and ``Cyclist", only require an overlap of 50\%. The remaining other classes are not typically included in evaluation and scoring. 
 
-In the paper \cite{wang_pseudo-lidar_2019}, the "Easy" evaluation for the "Car" class is said to test on car labels located mostly within 30m of the ego vehicle, which was also claimed by another group, [CITE NEEDED XX]. This was verified, and it is described below in Figure \ref{kitti_labels_easyCar}. 
+In the paper \cite{wang_pseudo-lidar_2019}, the ``Easy" evaluation for the ``Car" class is said to test on car labels located mostly within 30m of the ego vehicle, which was also claimed by another group, [CITE NEEDED XX]. This was verified, and it is described below in Figure \ref{kitti_labels_easyCar}. 
 
-\begin{figure}[h] % h = "approx here", {h,t,b}
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=0.5\textwidth]{../media/kitti_labels_easyCar.pdf}
-	\caption{Filtered set of labeled training data containing only labels with the "Car" class and those which are defined as "Easy" difficulty. Specifically, there are 199 labels with a distance farther than 30m, while there are a total of 5971 filtered labels, meaning just over 3\% of these filtered labels are beyond 30m, verifying the claim of other papers. An interesting observation that may be made from the pixel height / distance relationship is that they are inversely correlated.}
+	\caption{Filtered set of labeled training data containing only labels with the ``Car" class and those which are defined as ``Easy" difficulty. Specifically, there are 199 labels with a distance farther than 30m, while there are a total of 5971 filtered labels, meaning just over 3\% of these filtered labels are beyond 30m, verifying the claim of other papers. An interesting observation that may be made from the pixel height / distance relationship is that they are inversely correlated.}
 	\label{kitti_labels_easyCar} %label goes last
 \end{figure}
 
