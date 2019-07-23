@@ -4,10 +4,10 @@
 % PERFORMANCE METRICS ==========================================================
 \section{Performance Metrics}
 \label{appendix_metrics}
-The concept of verifying accuracy in a statistical estimate is covered in \cite{manning_introduction_2008}, and some of this information is covered briefly below. In the field of image recognition, one particularly interesting metric is "Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, precision and recall may then be calculated. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision and mean Average Precision (mAP), which are how different networks are compared. The following information is primarily taken from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and "An Introduction to Information Retrieval" by \cite{manning_introduction_2008}.
+The concept of verifying accuracy in a statistical estimate is covered in \cite{manning_introduction_2008}, and some of this information is covered briefly below. In the field of image recognition, one particularly interesting metric is ``Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, precision and recall may then be calculated. Precision and recall are fundamental in obtaining more abstracted metrics such as Average Precision (AP) and mean Average Precision (mAP), which are how different networks are compared. The following information is primarily taken from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and ``An Introduction to Information Retrieval" by \cite{manning_introduction_2008}.
 
-\subsection{Defining a Result}
-The first step in measuring performance is categorizing what a result may be. With a visual task such as object classification, there are 4 possible outcomes (all references to true/false positive/negatives in this document will be referred to as "outcomes"), which will be  as shown below. In general, there may be a True Positive, False Positive, True Negative, or False Negative outcome. In practice, True Negatives are not used, and the remaining three are used to varying degrees. Each is better clarified as such:
+\subsection{Defining an Outcome}
+The first step in measuring performance is categorizing what a result may be. With a visual task such as object classification, there are 4 possible outcomes (all references to true/false positive/negatives in this document will be referred to as ``outcomes"), which will be  as shown below. In general, there may be a True Positive, False Positive, True Negative, or False Negative outcome. In practice, True Negatives are not used, and the remaining three are used to varying degrees. Each is better clarified as such:
 \begin{itemize} \itemsep=-.5em
 	\item True Positive: Correctly detecting a true object
 	\item False Positive: Incorrectly detecting something that isn't there
@@ -15,7 +15,7 @@ The first step in measuring performance is categorizing what a result may be. Wi
 	\item True Negative: Correctly ignoring something that isn't there
 \end{itemize}
 
-\begin{figure}[h] % h = "approx here", {h,t,b}
+\begin{figure}[h]
 	\centering
 	\includegraphics[width=.4\textwidth]{../media/tp_help.png}
 	\caption{A visual representation of various outcomes, ground truths as solid black boxes and detections as dotted red boxes. True positives (TP) are a correct detection, FP's are a detection of no actual object, and FN's are a lack of detection of an actual object.}
@@ -25,11 +25,11 @@ The first step in measuring performance is categorizing what a result may be. Wi
 To actually classify a result in one of these categories, computer vision depends on using the overlap of a given bounding box estimate with a bounding box ground truth. If the overlap is above some threshold, the estimate is said to be a true positive. In some metrics, two estimates overlapping the same ground truth will only count the larger overlap, or the more confident estimate. Overlap is formally known as Intersection over Union, or IOU value.
 
 \subsection{Intersection Over Union}
-In image recognition, as well as other spatially-based tasks, accuracy is needed in various forms to know "how well" a prediction overlaps, or matches, the ground truth. If, for example, an object-detection algorithm predicts the location of a car in a photo, one would like to know if such an estimate has any value, ideally with as few parameters as possible.
+In image recognition, as well as other spatially-based tasks, accuracy is needed in various forms to know ``how well" a prediction overlaps, or matches, the ground truth. If, for example, an object-detection algorithm predicts the location of a car in a photo, one would like to know if such an estimate has any value, ideally with as few parameters as possible.
 
 In light of this, Intersection Over Union encompasses all relevant aspects of rating the overlap of two geometric shapes (e.g. rectangles) while enabling an intuitive, non binary scoring of an estimate. IOU is calculated as the ratio of two bounding regions' intersection over their union, as the name states. Visually, this looks something like the below in Figure \ref{iou_img}. Uniquely, the calculation of area and intersection for image boundaries is inclusive of the bounds, meaning that the length of a given difference must have ``+1" added to it. This is explained in the example below.
 
-\begin{figure}[ht] % h = "approx here", {h,t,b}
+\begin{figure}[ht]
     \includegraphics[width=1\textwidth]{../media/iou_img.png}
     \caption{Example of ground truth bounding box (solid green) and prediction bounding box (dashed red). In this image, the overlap between the green and red regions is the intersection, while the combined area is the union. The IOU of the two boxes is 0.64. Image index: 8.}
     \label{iou_img} %label goes last
@@ -116,7 +116,7 @@ def IOU(b1,b2,inclusive=False,criterion=-1):
 \end{figure}
 
 \subsubsection{Example: IOU of a Ground Truth and Prediction Label}
-Suppose there is an image, as given below, where there is a ground truth label `gt' and a prediction label `pred' with 2D bounding boxes formatted as \texttt{[x1,y1,x2,y2]}, all units in pixels. To determine the IOU of the image, the calculations are listed below. Because boxes represent pixel values, remember to add "1" to each dimension.
+Suppose there is an image, as given below, where there is a ground truth label `gt' and a prediction label `pred' with 2D bounding boxes formatted as \texttt{[x1,y1,x2,y2]}, all units in pixels. To determine the IOU of the image, the calculations are listed below. Because boxes represent pixel values, remember to add ``1" to each dimension.
 
 \def \pxpx {\ [px^2]}
 \def \Asub #1{A\textsubscript{#1}}
@@ -126,7 +126,7 @@ Suppose there is an image, as given below, where there is a ground truth label `
     \item Calculate IOU: $\frac{I}{\Asub{gt} + \Asub{pr} - I} = 0.644 $
 \end{enumerate}
 
-\begin{figure}[h] % h = "approx here", {h,t,b}
+\begin{figure}[h]
     \centering
     \includegraphics[width=.4\textwidth]{../media/iou_example.png}
     \caption{IOU calculation example. Ground truth (green solid) has BB: [712,143,810,307]. Prediction (red dotted) has BB: [732,153,820,297]. IOU is 0.644.}
