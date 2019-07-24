@@ -80,8 +80,10 @@ class MainWindow:
         self.L=dict()
         for ifield in self._fields:
             self.L[ifield] = tk.Label(self.F,font=helv,text=ifield)
-        self.L['autoFNM'] = tk.Label(self.F,font=helv,textvariable=self.V['autoFNM'])
+        # self.L['autoFNM'] = tk.Label(self.F,font=helv,textvariable=self.V['autoFNM'])
 
+        self.L['autoFNM'] = tk.Label(self.F,font=helv,text='<Artist> - <Title>.mp3')
+        
         # listbox(es)
         self.I=dict()
         self.I['files'] = tk.Listbox(self.F,font=helv,activestyle='dotbox',width=40)
