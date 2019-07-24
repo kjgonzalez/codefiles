@@ -37,6 +37,7 @@ With these pros and cons in mind, this paper takes the position that stereo visi
 In order to develop a stereo-based 3D estimation algorithm and conduct a performance comparison, there are multiple needs that must be met. The very first need that must be met is a dataset that contains all the necessary information for a lidar-based network to detect objects, as well as a stereo-based network. For this reason the KITTI dataset, a well-known and actively used benchmark, was selected as the source of data to compare the two technologies.
 
 % ==============================================================================
+\newpage
 \section{Related Work}
 
 \subsection{Stereo Vision Networks}
@@ -110,6 +111,7 @@ In reality, the calculation is performed in a series of matrix calculations rath
 
 
 % ==============================================================================
+\newpage
 \section{Development of 3D Estimation Network}
 At this point, we can start talking about how you have modified all the different networks to make them work for you. you should definitely catalog your troubles with each one. we can talk about this in depth. xx
 
@@ -177,6 +179,7 @@ In order to transition from using the provided pre-trained model and preprocesse
 
 The most basic path, ADF, is simply using the given model to evaluate and achieve similar results to the official paper. Next, AEF used lidar pointclouds, but the model was trained locally. BEF required locally running the "preprocessing" step, but was still theoretically identical to the previous two paths. Finally, CEF truly deviates from the other paths by using a stereo-generated pointcloud to preprocess data, then train on that, and finally evaluate the model's detection capability. 
 
+\newpage
 \section{Procedure / Method}
 Now that many of the individual steps of the network have been described above, the complete set of steps taken to produce network estimation will be described. Not every step will be described again, but any deviations from the "general" usage is clarified. However, this section shall be more detailed in describing how each step was executed.
 
@@ -186,7 +189,7 @@ Now that many of the individual steps of the network have been described above, 
 4. test fpnet on the data, specifically focusing on 3D object detection for cars. \\
 
 
-
+\newpage
 \section{Results}
 The raw results of the network training and validation are immediately presented here to quickly provide clarity on the performance of the network, and then these results are to be compared with the performance of other networks and published works. 
 
