@@ -1,4 +1,4 @@
-\section{Introduction}
+\section{Introduction} % status: need Lidar comparison, etc
 This thesis was performed alongside work and research done for the SMART3D project. The SMART3D project originally started in 2016 as an investigation into the feasibility of using a Photonic Mixing Device (PMD) sensor as an alternative to lidar in detecting 3D objects in short-range outdoor applications. Over the course of the project, a shift was made from PMD sensors to stereo cameras, and thus began the topic of this thesis. This work seeks to address and answer the how well a stereo-based 3D object detector performs, especially in comparison to lidar, the natural and primary choice for estimating an object's location in an outdoor environment (such as detecting other cars on the highway). Stereo vision, specifically on vehicles, typically consists of a 2-camera setup using passive color light detection to generate an estimated stereo disparity map. This may then be transformed into a pointcloud and subsequently analyzed with a Pointnet object detector. In this thesis, the performance of such a system, or network as they are known, is evaluated as well as compared with that of similar detection networks. 
 
 % so, need to figure out what the general order of this paper will be. let's try the following: \\
@@ -24,11 +24,39 @@ This thesis was performed alongside work and research done for the SMART3D proje
 
 
 \subsection{Motivation}
-The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are several factors to normalize, and a more in-depth analysis of this is conducted in Appendix \ref{appendix_lidar}. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on active surfaces, potential interference of multiple lidars if all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidars can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
+The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are several factors to normalize, and a more in-depth analysis of this is conducted below (xx). In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on active surfaces, potential interference of multiple lidar sensors if all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidar sensors can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
 
-\textbf{KJG190617: need an economic comparison here of lidar!!! xx}
 
-There are some interesting benefits that may be gained with stereo vision: stereo cameras are relatively cheap for the amount of information they provide, intuitively mimics the way that humans already perceive and navigate their world, is a passive sensor that does not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 30 Hz, "frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, which can include inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and when used to estimate position a squared error relationship to distance. This last points simply means that as the distance of an estimated point increases, the error of that value increases quadratically \cite{wang_pseudo-lidar_2019}.
+There are some interesting benefits that may be gained with stereo vision: stereo cameras are relatively cheap for the amount of information they provide, intuitively mimics the way that humans already perceive and navigate their world, is a passive sensor that does not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 30 Hz, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, which can include inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and when used to estimate position a squared error relationship to distance. This last points simply means that as the distance of an estimated point increases, the error of that value increases quadratically \cite{wang_pseudo-lidar_2019}.
+
+Alright, would like to deal with a way of comparing lidar vs other sensors in the economic sense, but need some standards to actually perform a comparison. for one, how about we start with what a single frame. in a single frame, we may ask ourselves... how much information do we really have? if for example, a lidar sensor can give you 100 pts in a horizontal 360 deg and vertical 1 deg field of view, what is the ... points per area that you're getting? 
+
+
+the next thing you want to have is some kind of measure of quality. so, in order to measure quality, perhaps you want to know how much error you have. perhaps you would want to know the error at a given distance. so here, why not have a... centimeters per meter measure? 
+
+finally, in order to deal with all these things on money terms, perhaps also consider... points per dollar. ideally, you want a dense, high quality image that isn't too expensive. saying that you get x amount of data per dollar perhaps also informs someone how effectively their money is being spent. 
+
+let's take two examples from the lidar industry and give them some info. 
+
+first up is the HDL-64E, which was used for the KITTI dataset. 
+
+first, the base stats will be given: 
+
+
+HDL-64E:
+range: 120 m
+pts/s: 1,000,000/s (10Hz)
+cost: \$85,000 (2017)
+
+%https://www.velodynelidar.com/lidar/products/manual/HDL-64E%20Manual.pdf
+%https://medium.com/self-driving-cars/velodyne-lidar-price-reduction-d358f245f086
+%https://driverless.wonderhowto.com/news/quanergys-new-250-solid-state-lidar-could-bring-self-driving-masses-0175790/
+
+kjg190617: quick note on area of sphere
+$$ A_{sphere}=R^2\theta \int_{a}^{b}\cos\phi*d\phi $$
+
+$$ A_{sphere}=R^2\theta (\sin{b} - \sin{a})$$
+
 
 With these pros and cons in mind, this paper takes the position that stereo vision can provide practical benefits to robotics and autonomous systems under the right conditions. Using stereo vision to estimate 3D locations of objects, specifically cars, is believed to be competitive with lidar under specific conditions.
 
@@ -38,35 +66,42 @@ In order to develop a stereo-based 3D estimation algorithm and conduct a perform
 
 % ==============================================================================
 \newpage
-\section{Related Work}
+\section{Related Work} % status: stereo vision, 3D, etc
 
-\subsection{Stereo Vision Networks}
-Stereo disparity maps, which are built by the comparing the pixel distance between two similar regions of two images, have existed before the implementation of artificial intelligence to create them. Famously, \cite{scharstein_taxonomy_2002} gave a taxonomy and categorization of the various aspects of stereo vision. Out of this paper, the four main parts of conducting stereo vision have been defined as follows:
+\subsection{Stereo Vision}
+Stereo disparity maps, which are built by the comparing the pixel distance between two similar regions of two images, have existed before the implementation of artificial intelligence to create them. Famously, \cite{scharstein_taxonomy_2002} gave a taxonomy and categorization of the various aspects of stereo vision. Out of this paper, the four main parts of conducting stereo vision have been classically defined as follows: matching cost computation, cost (support) aggregation, disparity computation and optimization, and disparity refinement. 
 
-\begin{enumerate} \itemsep=-0.5em
-    \item matching cost computation
-    \item cost (support) aggregation
-    \item disparity computation/optimization; and
-    \item disparity refinement
-\end{enumerate}
+Initially, built-in and readily available stereo disparity map computation techniques were used. In the Python OpenCV library, there is a "Semi-global Block Matching" (SGBM) algorithm, implemented based on the paper by \cite{hirschmuller2007stereo}. For an initial "rough" pass, this algorithm was cheap and fairly effective. Additionally, this algorithm is useful for fast, fairly-stable calculations and does not need a GPU to run. However, it suffers from a few key shortcomings. For one, there is a large portion of the viewport that contains no depth estimations, as can be seen below in Figure \ref{ind15_SGBM_comparison}. Next, when a set of pixels cannot be matched between images, the result is simply a NaN result, giving no information in that region. Finally, SGBM suffers from some significant lack of resolution, meaning that some objects of interest, such as the three pedestrians image, will not be seen well, or at all. For comparison, stereo images created with a neural network (NN) such as those in Figure \ref{new_psmnet} have a richer amount of information and have no missing pixels (i.e. a prediction is made at every pixel). 
 
-Notable neural network approaches to disparity estimation include psmnet, iresnet, and even some monocular-based approaches including one used by Wang et al. named DORN \cite{DBLP:journals/corr/abs-1806-02446}.
+\begin{figure}[h]
+    \centering
+    \subfigure[SGBM disparity map]{
+        \includegraphics[width=1\linewidth]{../media/ind15_SGBM_comparison.png}}
+    \subfigure[LHS image]{
+        \includegraphics[width=0.487\linewidth]{../media/objdet_LHS_000015.png}}
+    \subfigure[RHS image]{
+        \includegraphics[width=0.487\linewidth]{../media/objdet_RHS_000015.png}}
+    \caption{text here. xx}
+    \label{ind15_SGBM_comparison}
+\end{figure}
+
+With this knowledge, the next step was to find an ideal NN-based stereo disparity estimation method. Notable neural network approaches to disparity estimation include psmnet, iresnet, and even some monocular-based approaches including one used by Wang et al. named DORN \cite{DBLP:journals/corr/abs-1806-02446}.
 
 Pyramid Stereo Matching Network, or PSMnet, is a network that takes advantage of an hourglass-shaped network. It is super cool because it produces these very high quality, high resolution disparity maps. The network takes advantage of GPU processing power, depending on nVidia's GPU acceleration, similar to other networks. The network itself is written in PyTorch, a flexible and python-based network module. The use of PyTorch enabled fast, simplified debugging. PSMnet's architecture is shown below in Figure \ref{psmnet_arch}. 
 
 
-\begin{figure}[h] % h = "approx here", {h,t,b}
+\begin{figure}[h]
     \includegraphics[width=1\textwidth]{../media/psmnet_arch.png}
     \caption{text.}
     \label{psmnet_arch} 
 \end{figure}
 
 \subsection{3D estimation with Stereo Disparity Maps}
-There is a surprisingly low amount of public research on stereo vision for use with 3D localization. \cite{li_stereo_2019} created an RCNN-based approach that currently performs best in class on the KITTI dataset, although achieving 59'th place when also compared against networks that use lidar. This paper also cites other works, such as "3DOP" by \cite{chen_3d_2016}. However, some prior information is encoded into the calculation before using regression to estimate object pose, including height above ground, object size priors, and "depth informed features", while our paper does not provide this information to the network beforehand.
+There is a surprisingly low amount of public research on stereo vision for use with 3D localization. \cite{li_stereo_2019} created an RCNN-based approach that currently performs best in class on the KITTI dataset, although achieving 59'th place when also compared against networks that use lidar. This paper also cites other works, such as ``3DOP" by \cite{chen_3d_2016}. However, some prior information is encoded into the calculation before using regression to estimate object pose, including height above ground, object size priors, and ``depth informed features", while our paper does not provide this information to the network beforehand.
 
-A recent development has been published since the start of this paper, by Wang et. al. In their paper, "Pseudo-LiDAR from Visual Depth Estimation" \cite{wang_pseudo-lidar_2019}, the authors took an extremely similar approach to this paper. Their pipeline / steps, outlined below in Figure \ref{pseudonet_arch}, was to take a stereo image pair, generate a disparity map via Pyramid Stereo Matching network, convert it to a "pseudo-lidar" scan, and extract 3D bounding box estimations via Frustum Pointnet. \\
+A recent development has been published since the start of this paper, by Wang et. al. In their paper, ``Pseudo-LiDAR from Visual Depth Estimation" \cite{wang_pseudo-lidar_2019}, the authors took an extremely similar approach to this paper. Their pipeline / steps, outlined below in Figure \ref{pseudonet_arch}, was to take a stereo image pair, generate a disparity map via Pyramid Stereo Matching network, convert it to a ``pseudo-lidar" scan, and extract 3D bounding box estimations via Frustum Pointnet. \\
 
-\begin{figure}[h] % h = "approx here", {h,t,b}
+\begin{figure}[h]
     \includegraphics[width=1\textwidth]{../media/pseudonet_arch.png}
     \caption{Architecture of the Pseudo-LiDAR network. Stereo (or mono) image data is used to create a disparity map, which is converted to lidar, and is then used by a 3D detector to estimate 3D bounding boxes.}
     \label{pseudonet_arch} 
@@ -87,7 +122,7 @@ The first approach, using epipolar equations, can be described in general as fol
     \item Images are already rectified (to remove all distortion).
 \end{itemize}
 
-Given the above, there must first be a given disparity map image, $D$, with indices ($u$,$v$) corresponding to the image's x-axis and y-axis (origin located at the top-left of the image). The cameras' intrinsic properties must also be known (P2 for the KITTI dataset), as well as the baseline, $b$, distance (also known as the distance between camera centers). In the KITTI dataset, Camera 2 is the LHS color camera, and thus each record's corresponding P2 matrix is used. The matrix contains the horizontal focal length $f_U$ as well as the vertical focal length $f_V$. \cite{szeliski_computer_2010} describes this in Equation 2.57 of Chapter 2: Image Formation. The camera baseline is given in multiple locations, namely \cite{geiger_are_2012}, although the value is given as "roughly 54 cm", which may reduce the overall accuracy somewhat.
+Given the above, there must first be a given disparity map image, $D$, with indices ($u$,$v$) corresponding to the image's x-axis and y-axis (origin located at the top-left of the image). The cameras' intrinsic properties must also be known (P2 for the KITTI dataset), as well as the baseline, $b$, distance (also known as the distance between camera centers). In the KITTI dataset, Camera 2 is the LHS color camera, and thus each record's corresponding P2 matrix is used. The matrix contains the horizontal focal length $f_U$ as well as the vertical focal length $f_V$. \cite{szeliski_computer_2010} describes this in Equation 2.57 of Chapter 2: Image Formation. The camera baseline is given in multiple locations, namely \cite{geiger_are_2012}, although the value is given as ``roughly 54 cm", which may reduce the overall accuracy somewhat.
 
 Given this data, the depth value at each pixel location may be calculated via Equation \ref{eq_epi_z}, ignoring locations where the disparity value is 0 or Not-A-Number (NaN).
 \begin{equation}
@@ -104,7 +139,7 @@ x = \frac{(u - c_U) * z}{f_U}
 y = \frac{(v - c_V) * z}{f_V}
 \end{equation}
 
-In reality, the calculation is performed in a series of matrix calculations rather than as an element-by-element operation. The "real" steps taken to convert a disparity map into a pointcloud are described in Appendix \ref{appendix_reconstruct}.
+In reality, the calculation is performed in a series of matrix calculations rather than as an element-by-element operation. The ``real" steps taken to convert a disparity map into a pointcloud are described in Appendix \ref{appendix_reconstruct}.
 
 
 % ==============================================================================
@@ -115,7 +150,7 @@ The 3D object detection network can be broken up into three main sections, as sh
 
 
 \subsection{Modification of Pyramid Stereo Matching Network}
-The first task in creating a network that can take a stereo image pair and generate 3D bounding boxes, as described in figure xx above, is to have the capability of taking a stereo image pair and creating a 2.5D disparity map. To that end, a best-in-class disparity generation algorithm was searched and was selected to be the Pyramid Stereo Matching Network. Pyramid Stereo Matching Network was published by Jia-Ren Chang and Yong-Sheng Chen in March 2018. This network takes a deep learning approach to generating disparity maps from a pair of images. The network itself is near the top of the state of the art, and achieves this by the architecture of its network. (xx architecture and style need to be elaborated upon in the "related work" section). The openly-available repository provided a foundation to start on towards making a compact, easy-to-use function.
+The first task in creating a network that can take a stereo image pair and generate 3D bounding boxes, as described in figure xx above, is to have the capability of taking a stereo image pair and creating a 2.5D disparity map. To that end, a best-in-class disparity generation algorithm was searched and was selected to be the Pyramid Stereo Matching Network. Pyramid Stereo Matching Network was published by Jia-Ren Chang and Yong-Sheng Chen in March 2018. This network takes a deep learning approach to generating disparity maps from a pair of images. The network itself is near the top of the state of the art, and achieves this by the architecture of its network. (xx architecture and style need to be elaborated upon in the ``related work" section). The openly-available repository provided a foundation to start on towards making a compact, easy-to-use function.
 
 First, the original evaluation code was tested out. Some modification and housekeeping had to be done to ensure that it was compatible with the local installation, as well as being adapted for use with Python 3. All deprecated functionality was manually removed.
 
@@ -144,7 +179,7 @@ Figure \ref{psmnet_star_train_info} below shows the loss throughout the training
 \begin{figure}[H]
     \centering
         \includegraphics[width=0.9\linewidth]{../media/info_psmnet_comparison_Loss.pdf}
-    \caption{Loss graphs for both the original stereo-dataset PSMnet model and the retrained, object-detection-based "PSMstar" model. The average difference between the two curves is a loss of about 0.82. The higher loss for PSMstar may result from using self-made ground truth labels rather than using the more detailed stereo dataset versions.}
+    \caption{Loss graphs for both the original stereo-dataset PSMnet model and the retrained, object-detection-based ``PSMstar" model. The average difference between the two curves is a loss of about 0.82. The higher loss for PSMstar may result from using self-made ground truth labels rather than using the more detailed stereo dataset versions.}
     \label{psmnet_star_train_info}
 \end{figure}
 
@@ -163,24 +198,24 @@ In addition to the quantitative difference in training, a qualitative difference
 
 
 \subsection{Development of Stereo 3D Reconstruction Function}
-As described in Section \ref{sect_reconstruct}, the overall steps of reconstructing the resulting stereo image consisted of three general equations adapted for use with matrix operations. This also included selecting the proper constants for each calculation. To achieve all this, a specific class was created that would initialize by loading the fully trained model and use it in a non-learning "testing" mode, whereby it would take in either an image path pair or a loaded pair of image arrays. The pair would then be evaluated in PSMnet, which returns a stereo map, and finally be converted to a pointcloud using the epipolar equations in matrix form. Each record of the KITTI dataset has its own calibration file, but the baseline value remained the same. During the overall Frustum Pointnet training and evaluation, a new pointcloud would be generated in real-time.
+As described in Section \ref{sect_reconstruct}, the overall steps of reconstructing the resulting stereo image consisted of three general equations adapted for use with matrix operations. This also included selecting the proper constants for each calculation. To achieve all this, a specific class was created that would initialize by loading the fully trained model and use it in a non-learning ``testing" mode, whereby it would take in either an image path pair or a loaded pair of image arrays. The pair would then be evaluated in PSMnet, which returns a stereo map, and finally be converted to a pointcloud using the epipolar equations in matrix form. Each record of the KITTI dataset has its own calibration file, but the baseline value remained the same. During the overall Frustum Pointnet training and evaluation, a new pointcloud would be generated in real-time.
 
 \subsection{Modification of Frustum Point Net}
 Frustum Pointnet, being originally written for Python 2, needed to undergo some minor adaptations while being modified for usage with Python 3. For example, several modules and functions were deprecated or needed modification, and so had to be properly adapted. There are also two actively maintained versions of the frustum Pointnet code. as explained in the original paper [xx], there are two versions of the FPNet model: the first which uses standard Tensorflow libraries, and the second which uses custom Tensorflow operators that must be compiled. For the purposes of this paper, version 1 was used and will be the default version unless otherwise noted.
 
 In order to transition from using the provided pre-trained model and preprocessed data to self-made preprocessed and trained data, a set of steps and ``paths" were created to guide what was happening in each step and set of ``runs". As shown below in Figure \ref{fp_paths}, there are various steps with gradually increasing dependence on stereo-based pointcloud data.
 
-\begin{figure}[h] % h = "approx here", {h,t,b}
+\begin{figure}[h]
     \includegraphics[width=1\textwidth]{../media/fpnet_paths_img.png}
     \caption{Various paths that were planned to simply transition from lidar-based 3D estimation to stereo-based 3D estimation. Generally, paths went chronologically as follow: ADF, AEF, BEF, and finally CEF.}
     \label{fp_paths} 
 \end{figure}
 
-The most basic path, ADF, is simply using the given model to evaluate and achieve similar results to the official paper. Next, AEF used lidar pointclouds, but the model was trained locally. BEF required locally running the "preprocessing" step, but was still theoretically identical to the previous two paths. Finally, CEF truly deviates from the other paths by using a stereo-generated pointcloud to preprocess data, then train on that, and finally evaluate the model's detection capability. 
+The most basic path, ADF, is simply using the given model to evaluate and achieve similar results to the official paper. Next, AEF used lidar pointclouds, but the model was trained locally. BEF required locally running the ``preprocessing" step, but was still theoretically identical to the previous two paths. Finally, CEF truly deviates from the other paths by using a stereo-generated pointcloud to preprocess data, then train on that, and finally evaluate the model's detection capability. 
 
 \newpage
 \section{Procedure / Method}
-Now that many of the individual steps of the network have been described above, the complete set of steps taken to produce network estimation will be described. Not every step will be described again, but any deviations from the "general" usage is clarified. However, this section shall be more detailed in describing how each step was executed.
+Now that many of the individual steps of the network have been described above, the complete set of steps taken to produce network estimation will be described. Not every step will be described again, but any deviations from the ``general" usage is clarified. However, this section shall be more detailed in describing how each step was executed.
 
 1. train psmnet on object detection images\\
 2. create a preprocessed set of lidar pointclouds generated from PSMnet \\
@@ -192,11 +227,11 @@ Now that many of the individual steps of the network have been described above, 
 \section{Results}
 The raw results of the network training and validation are immediately presented here to quickly provide clarity on the performance of the network, and then these results are to be compared with the performance of other networks and published works. 
 
-Firstly, the loss during the Frustum Pointnet training is given in Figure xx. Additionally, the precision-recall curve for the "Car" class is given as well as the AP score in Figure xx. 
+Firstly, the loss during the Frustum Pointnet training is given in Figure xx. Additionally, the precision-recall curve for the ``Car" class is given as well as the AP score in Figure xx. 
  
 Training graph data is in Figure \ref{fpnet_CEFv2_loss_multi}
  
-\begin{figure}[h] % h = "approx here", {h,t,b}
+\begin{figure}[h]
     \centering
     \includegraphics[width=1\textwidth]{../media/fpnet_CEFv2_loss_multi.pdf}
     \caption{texthere xx}
@@ -205,9 +240,9 @@ Training graph data is in Figure \ref{fpnet_CEFv2_loss_multi}
 
 
 % need a precision-recall curve here...
-The precision-recall curve for the "Car" class is below, with AP values included in Figure \ref{fpnet_CEFv2_precrec}.
+The precision-recall curve for the ``Car" class is below, with AP values included in Figure \ref{fpnet_CEFv2_precrec}.
 
-\begin{figure}[h] % h = "approx here", {h,t,b}
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.6\textwidth]{../media/fpnet_CEFv2_precrec.pdf}
     \caption{texthere xx}
@@ -216,7 +251,7 @@ The precision-recall curve for the "Car" class is below, with AP values included
 
 The precision recall results are now plotted against the pseudo lidar paper. They are shown below in Figure \ref{fpnet_CEFv2_precrec_compareWang}.
 
-\begin{figure}[h] % h = "approx here", {h,t,b}
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.6\textwidth]{../media/fpnet_CEFv2_precrec_compareWang.pdf}
     \caption{texthere xx}
@@ -228,16 +263,16 @@ Comparing our own pr-curve with the results of other papers, namely \cite{wang_p
 
 
 
-\begin{figure}[h] % h = "approx here", {h,t,b}
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.6\textwidth]{../media/fpnet_CEFv2_precrec_compareMulti.pdf}
     \caption{texthere xx}
     \label{fpnet_CEFv2_precrec_compareMulti}
 \end{figure}
 
-Finally, an examination of the same pr-curves generated on "easy" criteria yields Figure \ref{fpnet_CEFv2_precrec_compareMulti_easy} below.
+Finally, an examination of the same pr-curves generated on ``easy" criteria yields Figure \ref{fpnet_CEFv2_precrec_compareMulti_easy} below.
 
-\begin{figure}[h] % h = "approx here", {h,t,b}
+\begin{figure}[h]
     \centering
     \includegraphics[width=0.6\textwidth]{../media/fpnet_CEFv2_precrec_compareMulti_easy.pdf}
     \caption{texthere xx}
@@ -249,7 +284,7 @@ As can be seen from the various graphs, it is clear that although the network do
 
 
 
-
+\newpage
 \section{Conclusion}
 
 What is Lorem Ipsum?
@@ -261,7 +296,7 @@ It is a long established fact that a reader will be distracted by the readable c
 
 Where does it come from?
 
-Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of ``de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
 
 The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
 Where can I get some?

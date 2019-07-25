@@ -520,97 +520,74 @@ KJGNOTE NEED TO CONTINUE THIS SECTION XX
 
 
 
-% LIDAR COST EFFECTIVENESS =====================================================
+%% SAMPLE =======================================================================
+%\newpage
+%\section{Sample Appendix}
+%TextHere
+%
+%\begin{figure}[h] % h = "approx here", {h,t,b}
+%    \includegraphics[width=1\textwidth]{../media/tp_help.png}
+%    \caption{texthere}
+%    \label{delme_figure} 
+%\end{figure}
+%
+%
+%\begin{figure}[h] %h=here,t=top,b=bottom,H=exactlyHere
+%\setstretch{0.84} % want code to be nice and compact
+%% note: optional line numbers argument
+%\begin{lstlisting}[numbers=left]  %note: 'tex' is for 
+%def pyt(a,b):
+%    return (a**2+b**2)**0.5
+%\end{lstlisting}
+%\onehalfspacing % set line spacing back to normal
+%\caption{Python implementation of generalized IOU calculation.}
+%\label{delme_code} % label goes last
+%\end{figure}
+%
+%\begin{table}[h]
+%\centering
+%\caption{KITTI object detection sample label from a given scene. Index 000015}
+%\begin{tabular}{|c|c|c|c|c|c|c|}
+%\hline
+%Class & Trun & Occl & Obs  & BBx1  & BBy1   & BBx2  \\
+%\hline
+%Car   & 0.89       & 0         & 2.29 & 0.00  & 194.70 & 414.71 \\
+%\hline
+%\end{tabular}
+%
+%
+%\label{SampleTable}
+%\end{table}
+%
+%
+%%\begin{enumerate}\itemsep=-0.5em
+%%	\item one
+%%	\item two
+%%	\item three
+%%\end{enumerate}
+
 \newpage
-\section{Lidar vs Other Sensors: Economic Perspective}
-\label{appendix_lidar}
-TextNeededHere
+\section{KJG Checklist}
+
+things to make sure your report properly does before you're done:\\
+1. test \\
+2. two \\
 
 
-Alright, would like to deal with a way of comparing lidar vs other sensors in the economic sense, but need some standards to actually perform a comparison. for one, how about we start with what a single frame. in a single frame, we may ask ourselves... how much information do we really have? if for example, a lidar sensor can give you 100 pts in a horizontal 360 deg and vertical 1 deg field of view, what is the ... points per area that you're getting? 
+overall status: 
+
+current composition of own paper: \\
+front matter: 4 pages - good \\
+ch1, intro: 2 pages - maybe ok? \\
+ch2, related work: 3 pages - maybe ok? \\
+ch3, about topic: 5 pages - FILL ME UP \\
+ch4, procedure / method: 1 page - MOVE TO "ABOUT TOPIC" \\
+ch5, results: 1 pages - FINISH ME  \\
+ch6, conclusion: 2 pages - FINISH ME \\
+appendix A(performance metrics): 9 - FIXME \\
+appendix B(kitti dataset): 7 pages - FIXME \\
+appendix C(3D reconstruction): 2 - FIXME \\
+appendix D(ecopnomics): 1 page - FIXME \\
+back end matter: 4 - good \\
 
 
-the next thing you want to have is some kind of measure of quality. so, in order to measure quality, perhaps you want to know how much error you have. perhaps you would want to know the error at a given distance. so here, why not have a... centimeters per meter measure? 
-
-finally, in order to deal with all these things on money terms, perhaps also consider... points per dollar. ideally, you want a dense, high quality image that isn't too expensive. saying that you get x amount of data per dollar perhaps also informs someone how effectively their money is being spent. 
-
-let's take two examples from the lidar industry and give them some info. 
-
-first up is the HDL-64E, which was used for the KITTI dataset. 
-
-first, the base stats will be given: 
-
-
-HDL-64E:
-range: 120 m
-pts/s: 1,000,000/s (10Hz)
-cost: \$85,000 (2017)
-
-%https://www.velodynelidar.com/lidar/products/manual/HDL-64E%20Manual.pdf
-%https://medium.com/self-driving-cars/velodyne-lidar-price-reduction-d358f245f086
-%https://driverless.wonderhowto.com/news/quanergys-new-250-solid-state-lidar-could-bring-self-driving-masses-0175790/
-
-
-
-
-
-
-
-
-
-
-
-
-
-kjg190617: quick note on area of sphere
-$$ A_{sphere}=R^2\theta \int_{a}^{b}\cos\phi*d\phi $$
-
-$$ A_{sphere}=R^2\theta (\sin{b} - \sin{a})$$
-
-
-
-% SAMPLE =======================================================================
-\newpage
-\section{Sample Appendix}
-TextHere
-
-\begin{figure}[h] % h = "approx here", {h,t,b}
-    \includegraphics[width=1\textwidth]{../media/tp_help.png}
-    \caption{texthere}
-    \label{delme_figure} 
-\end{figure}
-
-
-\begin{figure}[h] %h=here,t=top,b=bottom,H=exactlyHere
-\setstretch{0.84} % want code to be nice and compact
-% note: optional line numbers argument
-\begin{lstlisting}[numbers=left]  %note: 'tex' is for 
-def pyt(a,b):
-    return (a**2+b**2)**0.5
-\end{lstlisting}
-\onehalfspacing % set line spacing back to normal
-\caption{Python implementation of generalized IOU calculation.}
-\label{delme_code} % label goes last
-\end{figure}
-
-\begin{table}[h]
-\centering
-\caption{KITTI object detection sample label from a given scene. Index 000015}
-\begin{tabular}{|c|c|c|c|c|c|c|}
-\hline
-Class & Trun & Occl & Obs  & BBx1  & BBy1   & BBx2  \\
-\hline
-Car   & 0.89       & 0         & 2.29 & 0.00  & 194.70 & 414.71 \\
-\hline
-\end{tabular}
-
-
-\label{SampleTable}
-\end{table}
-
-
-%\begin{enumerate}\itemsep=-0.5em
-%	\item one
-%	\item two
-%	\item three
-%\end{enumerate}
