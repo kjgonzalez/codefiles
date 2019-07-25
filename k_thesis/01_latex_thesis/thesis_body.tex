@@ -23,7 +23,7 @@ This thesis was performed alongside work and research done for the SMART3D proje
 
 
 
-\subsection{Problem / Motivation}
+\subsection{Motivation}
 The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are several factors to normalize, and a more in-depth analysis of this is conducted in Appendix \ref{appendix_lidar}. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on active surfaces, potential interference of multiple lidars if all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidars can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
 
 \textbf{KJG190617: need an economic comparison here of lidar!!! xx}
@@ -60,9 +60,6 @@ Pyramid Stereo Matching Network, or PSMnet, is a network that takes advantage of
     \caption{text.}
     \label{psmnet_arch} 
 \end{figure}
-
-
-
 
 \subsection{3D estimation with Stereo Disparity Maps}
 There is a surprisingly low amount of public research on stereo vision for use with 3D localization. \cite{li_stereo_2019} created an RCNN-based approach that currently performs best in class on the KITTI dataset, although achieving 59'th place when also compared against networks that use lidar. This paper also cites other works, such as "3DOP" by \cite{chen_3d_2016}. However, some prior information is encoded into the calculation before using regression to estimate object pose, including height above ground, object size priors, and "depth informed features", while our paper does not provide this information to the network beforehand.
@@ -113,7 +110,9 @@ In reality, the calculation is performed in a series of matrix calculations rath
 % ==============================================================================
 \newpage
 \section{Development of 3D Estimation Network}
-At this point, we can start talking about how you have modified all the different networks to make them work for you. you should definitely catalog your troubles with each one. we can talk about this in depth. xx
+The 3D object detection network can be broken up into three main sections, as shown below in Figure xx. 
+
+
 
 \subsection{Modification of Pyramid Stereo Matching Network}
 The first task in creating a network that can take a stereo image pair and generate 3D bounding boxes, as described in figure xx above, is to have the capability of taking a stereo image pair and creating a 2.5D disparity map. To that end, a best-in-class disparity generation algorithm was searched and was selected to be the Pyramid Stereo Matching Network. Pyramid Stereo Matching Network was published by Jia-Ren Chang and Yong-Sheng Chen in March 2018. This network takes a deep learning approach to generating disparity maps from a pair of images. The network itself is near the top of the state of the art, and achieves this by the architecture of its network. (xx architecture and style need to be elaborated upon in the "related work" section). The openly-available repository provided a foundation to start on towards making a compact, easy-to-use function.
