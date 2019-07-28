@@ -504,5 +504,58 @@ def IntRect(x,y,where='pre'):
         dy_arr = (y[1:]+y[:-1])/2
     return np.array(dx_arr*dy_arr).sum()
 
+def root_bisection(function,yValue,lims,eps=1e-6,maxit=10000):
+    ''' find xValue where function is equal to yValue, or f(x)=y
+    INPUTS:
+        * function: lambda function. single-value function, ideally obeys
+            vertical rule (one y-value per x-value)
+        * yValue: scalar float. solve where function is equal to yValue
+        * lims: 2-scalar list. [xLower,xUpper] describing bounds of
+            search space
+        * eps: maximum allowable error
+        * maxit: max number of iterations before giving up
+    OUTPUT:
+        * solved root of f(x)-yValue
+        * number of iterations
+        * approximated yValue
+    '''
+    # want to minimize this function
+    g=lambda x:function(x)-yValue
 
+    xL=lims[0]
+    xU=lims[1]
+    gval=eps*2
+    iter=0
+    while(iter<maxit and abs(gval)>eps):
+        xC=(xL+xU)/2
+        gval=g(xC)
+        if(gval*g(xL)>0): xL=xC
+        else: xU=xC
+        iter+=1
+    return xC,iter,gval+yValue
+
+def root_newton(function,yValue,start_point,eps=1e-6,maxit=10000):
+    ''' find xValue where function is equal to yValue, using newton method
+    INPUTS:
+        * function: lambda function. single-value function, ideally obeys
+            vertical rule (one y-value per x-value)
+        * yValue: scalar float. solve where function is equal to yValue
+        * start_point: initial guess to begin solving from.
+        * eps: maximum allowable error
+        * maxit: max number of iterations before giving up
+    OUTPUT:
+        * solved root of f(x)-yValue
+        * number of iterations
+        * approximated yValue
+    '''
+    g=lambda x:function(x)-yValue
+    x=start_point+0
+    dfdx=lambda x:(function(x+1e-5)-function(x-1e-5)) / (2e-5) # centered
+    gval=g(x)
+    iter=0
+    while(iter<maxit and abs(gval)>eps):
+        x=x-g(x)/(dfdx(x)+1e-5)
+        gval=g(x)
+        iter+=1
+    return x,iter,gval+yValue
 # eof
