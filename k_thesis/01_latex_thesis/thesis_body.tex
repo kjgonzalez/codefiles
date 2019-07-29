@@ -1,3 +1,4 @@
+% NEWSECTION ===================================================================
 \section{Introduction} % status: need Lidar comparison, etc
 This thesis was performed alongside work and research done for the SMART3D project. The SMART3D project originally started in 2016 as an investigation into the feasibility of using a Photonic Mixing Device (PMD) sensor as an alternative to lidar in detecting 3D objects in short-range outdoor applications. Over the course of the project, a shift was made from PMD sensors to stereo cameras, and thus began the topic of this thesis. This work seeks to address and answer the how well a stereo-based 3D object detector performs, especially in comparison to lidar, the natural and primary choice for estimating an object's location in an outdoor environment (such as detecting other cars on the highway). Stereo vision, specifically on vehicles, typically consists of a 2-camera setup using passive color light detection to generate an estimated stereo disparity map. This may then be transformed into a pointcloud and subsequently analyzed with a Pointnet object detector. In this thesis, the performance of such a system, or network as they are known, is evaluated as well as compared with that of similar detection networks. 
 
@@ -70,18 +71,16 @@ In order to develop a stereo-based 3D estimation algorithm and conduct a perform
 \subsection{Project Background}
 This thesis and project was born out of the SMART3D project, and thus the two have similar but slightly different goals. It must also be noted that an important and relevant paper was published by \cite{wang_pseudo-lidar_2019} during the time the SMART3D project had already begun and before the completion of this thesis. This means that although the inspiration for stereo-based 3D object estimation came from two separate sources, this paper is technically following in similar footsteps, and indeed draws some ideas from Wang et al's "Pseudo-LiDAR from Visual Depth Estimation" paper. The overlap and inspiration from the two will be acknowledged when appropriate throughout this paper. 
 
-xx perhaps provide more info about SMART3D?
+The SMART3D project itself is an investigation into short-range, outdoor sensor alternatives to lidar, originally based around PMD sensors. However, there was eventually a switch to passive stereo vision because of the missing available dataset at the time. Thus, the desire to use stereo vision came from an initial goal of finding a reasonable alternative to lidar for short-range outdoor sensing applications. 
 
-
-
-% ==============================================================================
+% NEWSECTION ===================================================================
 \newpage
 \section{Related Work} % status: stereo vision, 3D, etc
 
 \subsection{Stereo Vision}
 Stereo disparity maps, which are built by the comparing the pixel distance between two similar regions of two images, have existed before the implementation of artificial intelligence to create them. Famously, \cite{scharstein_taxonomy_2002} gave a taxonomy and categorization of the various aspects of stereo vision. Out of this paper, the four main parts of conducting stereo vision have been classically defined as follows: matching cost computation, cost (support) aggregation, disparity computation and optimization, and disparity refinement. 
 
-Initially, built-in and readily available stereo disparity map computation techniques were used. In the Python OpenCV library, there is a "Semi-global Block Matching" (SGBM) algorithm, implemented based on the paper by \cite{hirschmuller2007stereo}. For an initial "rough" pass, this algorithm was cheap and fairly effective. Additionally, this algorithm is useful for fast, fairly-stable calculations and does not need a GPU to run. However, it suffers from a few key shortcomings. For one, there is a large portion of the viewport that contains no depth estimations, as can be seen below in Figure \ref{ind15_SGBM_comparison}. Next, when a set of pixels cannot be matched between images, the result is simply a NaN result, giving no information in that region. Finally, SGBM suffers from some significant lack of resolution, meaning that some objects of interest, such as the three pedestrians image, will not be seen well, or at all. For comparison, stereo images created with a neural network (NN) such as those in Figure \ref{new_psmnet} have a richer amount of information and have no missing pixels (i.e. a prediction is made at every pixel). 
+Initially, built-in and readily available stereo disparity map computation techniques were used. In the Python OpenCV library, there is a "Semi-global Block Matching" (SGBM) algorithm, implemented based on the paper by \cite{hirschmuller2007stereo}. For an initial "rough" pass, this algorithm was cheap and fairly effective. Additionally, this algorithm is useful for fast, fairly-stable calculations and does not need a GPU to run. However, it suffers from a few key shortcomings. For one, there is a large portion of the disparity map that contains no values, as can be seen below in Figure \ref{ind15_SGBM_comparison}. Next, when a set of pixels cannot be matched between images, the result is simply a NaN result, giving no information in that region. Finally, SGBM suffers from some significant lack of resolution, meaning that some objects of interest, such as the three pedestrians image, will not be seen well, or at all. For comparison, stereo images created with a neural network (NN) such as those in Figure \ref{new_psmnet} have a richer amount of information and have no missing pixels (i.e. a prediction is made at every pixel). 
 
 \begin{figure}[h]
     \centering
@@ -91,21 +90,19 @@ Initially, built-in and readily available stereo disparity map computation techn
         \includegraphics[width=0.487\linewidth]{../media/objdet_LHS_000015.png}}
     \subfigure[RHS image]{
         \includegraphics[width=0.487\linewidth]{../media/objdet_RHS_000015.png}}
-    \caption{text here. xx}
+    \caption{An example of a disparity map generated without a neural network approach. Though It has good merit, there are some noticable shortcomings. Disparity map generated by image pair shown below. Index 15.}
     \label{ind15_SGBM_comparison}
 \end{figure}
 
-With this knowledge, the next step was to find an ideal NN-based stereo disparity estimation method. Notable neural network approaches to disparity estimation include Pyramid Stereo Matching network (PSMnet),  iResNet, and even some monocular-based approaches including one used by Wang et al. named DORN, by  \cite{DBLP:journals/corr/abs-1806-02446}.
 
-
-
+With this knowledge, the next step was to find an ideal NN-based stereo disparity estimation method. Notable neural network approaches to disparity estimation include Pyramid Stereo Matching network (PSMnet),  iResNet, and even some monocular-based approaches including one used by Wang et al. named DORN, by  \cite{DBLP:journals/corr/abs-1806-02446}. In order to select the best candidate, multiple benchmarks were considered. The first benchmark was naturally the KITTI Stereo challenge, which contains a list of the top performing networks. At the start of this thesis writing, PSMnet stood in the top 10 of stereo networks in this list \cite{menze_kitti_2019}. 
 
 Pyramid Stereo Matching Network, or PSMnet, is a network that takes advantage of an hourglass-shaped network. It is super cool because it produces these very high quality, high resolution disparity maps. The network takes advantage of GPU processing power, depending on nVidia's GPU acceleration, similar to other networks. The network itself is written in PyTorch, a flexible and python-based network module. The use of PyTorch enabled fast, simplified debugging. PSMnet's architecture is shown below in Figure \ref{psmnet_arch}. 
 
 
 \begin{figure}[h]
     \includegraphics[width=1\textwidth]{../media/psmnet_arch.png}
-    \caption{text.}
+    \caption{Generalized network architecture for Pyramid Stereo Matching network. The 3D CNN has two available configurations, Basic and Stacked hourglass. Stacked hourglass was used here. The Spatial Pyramid Pooling Module helps describe how features at varying "zoom" levels were concatenated together. Image reproduced from \cite{chang_pyramid_2018}.}
     \label{psmnet_arch} 
 \end{figure}
 
@@ -155,7 +152,7 @@ y = \frac{(v - c_V) * z}{f_V}
 In reality, the calculation is performed in a series of matrix calculations rather than as an element-by-element operation. The ``real" steps taken to convert a disparity map into a pointcloud are described in Appendix \ref{appendix_reconstruct}.
 
 
-% ==============================================================================
+% NEWSECTION ===================================================================
 \newpage
 \section{Development of 3D Estimation Network}
 The 3D object detection network can be broken up into three main sections, as shown below in Figure xx. 
@@ -200,11 +197,11 @@ In addition to the quantitative difference in training, a qualitative difference
 
 \begin{figure}[H]
     \centering
-    \subfigure[000015 stereo estimation with original PSMnet model]{
+    \subfigure[Stereo estimation with original PSMnet model]{
         \includegraphics[width=1\linewidth]{../media/ind15_psmnet_v190308_AsOf190626.png}}
-    \subfigure[000015 stereo estimation with new PSMnet* model]{
+    \subfigure[Stereo estimation with new PSMnet* model]{
         \includegraphics[width=1\linewidth]{../media/ind15_psmstar_v190613_AsOf190626.png}}
-    \caption{Comparison of old and new model for PSMnet [xx add more detail]}
+    \caption{Comparison of old and new model for PSMnet. Index 000015. [xx add more detail]}
     \label{new_psmnet}
 \end{figure}
 
@@ -226,6 +223,8 @@ In order to transition from using the provided pre-trained model and preprocesse
 
 The most basic path, ADF, is simply using the given model to evaluate and achieve similar results to the official paper. Next, AEF used lidar pointclouds, but the model was trained locally. BEF required locally running the ``preprocessing" step, but was still theoretically identical to the previous two paths. Finally, CEF truly deviates from the other paths by using a stereo-generated pointcloud to preprocess data, then train on that, and finally evaluate the model's detection capability. 
 
+
+% NEWSECTION ===================================================================
 \newpage
 \section{Procedure / Method}
 Now that many of the individual steps of the network have been described above, the complete set of steps taken to produce network estimation will be described. Not every step will be described again, but any deviations from the ``general" usage is clarified. However, this section shall be more detailed in describing how each step was executed.
@@ -236,6 +235,7 @@ Now that many of the individual steps of the network have been described above, 
 4. test fpnet on the data, specifically focusing on 3D object detection for cars. \\
 
 
+% NEWSECTION ===================================================================
 \newpage
 \section{Results}
 The raw results of the network training and validation are immediately presented here to quickly provide clarity on the performance of the network, and then these results are to be compared with the performance of other networks and published works. 
@@ -296,7 +296,7 @@ Finally, an examination of the same pr-curves generated on ``easy" criteria yiel
 As can be seen from the various graphs, it is clear that although the network does not have the highest performance, it is relatively competitive with other networks of its class. 
 
 
-
+% NEWSECTION ===================================================================
 \newpage
 \section{Conclusion}
 

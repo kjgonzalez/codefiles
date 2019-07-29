@@ -1,9 +1,9 @@
 \documentclass{article}
 \usepackage{pgfplots}
-%\usepackage{filecontents}
-%\usepackage{csvsimple} % lets you import a csv file to make, say, a table
-%\usepackage{xcolor} % needed to control colors better
-% \usepackage{tikz} % needed for resize box
+\usepackage{filecontents}
+\usepackage{csvsimple} % lets you import a csv file to make, say, a table
+\usepackage{xcolor} % needed to control colors better
+\usepackage{tikz} % needed for resize box
 
 % want just a few simple things to be proven here: 
 % plot from csv
@@ -25,39 +25,39 @@
 \begin{document}
 kjgnote: how to compile this: \texttt{pdflatex pgf\_plot.tex}
 
-%\csvreader[head to column names]{dat_multiCols.csv}{}% use head of csv as column names
-%
-%% First plot, covering the basics
-%%\definecolor
-%\begin{figure}[h]
-%    \centering
-%    \begin{tikzpicture}
-%    \begin{axis}[
-%        width=\textwidth,
-%        height=6cm,
-%        xlabel=X Axis,
-%        ylabel={Y Axis}, % it's ok to have comma on last item, and brackets help
-%        title=Title of Plot,
-%        legend style={at={(0.25,0.9)}}, % can also include "anchor", and "at" uses (x%,y%)
-%        grid=major, % can also be "both", and perhaps "minor"
-%        ] % figure configuration
-%        \addplot+[
-%            style={densely dashed},
-%            line width = 4,
-%            color = red,
-%            mark options ={style=solid,scale=2,mark=square,color=black,line width=2} % marker needs to be reset to "solid"
-%        ] % individual curve configuration
-%            table [x=time, y=squared, col sep=comma] {dat_multiCols.csv}; % reference the filename
-%        \addlegendentry{quadratic}
-%        % \legend{one,two,three} % can also create legend on own
-%    \end{axis}
-%    \end{tikzpicture}
-%    \caption{Example plot}
-%\end{figure}
-%
-%
-%
-%
+\csvreader[head to column names]{dat_multiCols.csv}{}% use head of csv as column names
+
+% First plot, covering the basics
+%\definecolor
+\begin{figure}[h]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        width=\textwidth,
+        height=6cm,
+        xlabel=X Axis,
+        ylabel={Y Axis}, % it's ok to have comma on last item, and brackets help
+        title=Title of Plot,
+        legend style={at={(0.25,0.9)}}, % can also include "anchor", and "at" uses (x%,y%)
+        grid=major, % can also be "both", and perhaps "minor"
+        ] % figure configuration
+        \addplot+[
+            style={densely dashed},
+            line width = 4,
+            color = red,
+            mark options ={style=solid,scale=2,mark=square,color=black,line width=2} % marker needs to be reset to "solid"
+        ] % individual curve configuration
+            table [x=time, y=squared, col sep=comma] {dat_multiCols.csv}; % reference the filename
+        \addlegendentry{quadratic}
+        % \legend{one,two,three} % can also create legend on own
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Example plot}
+\end{figure}
+
+
+
+
 
 
 
