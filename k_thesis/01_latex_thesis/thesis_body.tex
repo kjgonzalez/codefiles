@@ -30,10 +30,30 @@ The field of artificial intelligence has exploded in recent years, in part due t
 
 There are some interesting benefits that may be gained with stereo vision: stereo cameras are relatively cheap for the amount of information they provide, intuitively mimics the way that humans already perceive and navigate their world, is a passive sensor that does not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 30 Hz, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, which can include inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and when used to estimate position a squared error relationship to distance. This last points simply means that as the distance of an estimated point increases, the error of that value increases quadratically \cite{wang_pseudo-lidar_2019}.
 
+
+\subsubsection{delme, lidar economics}
+\def \deg {$^{\circ}$\ } % need extra backslash for space
+
+Lidar dominates the environmental sensing space for some very good reasons. It's primary reason for being used is that it is accurate. It also is capable of sensing in a 360\deg field of view, and can continue detection during low-light conditions. However, as described by \cite{broggi_sensors_2013}, most modern lidar sensors have a rolling shutter, which causes deformation in the data to correct. They also typically cost much more than a stereo camera system, require moving parts (thus becoming sensitive to vibration), and may run the risk of interfering with other lidar sensors should there be multiple in a close area, such as a potential traffic jam. In terms of low visibility conditions, such as rain or fog, both cameras and lidar sensors suffer a performance decrease, but stereo cameras are more robust as there must be significant weather conditions to deteriorate their vision, similar to how humans may navigate through poor weather.
+
+
+In order to make a more quantitative comparison between these two ranged sensors, an example will be taken from the KITTI setup. In collecting the necessary information to create the various datasets, \cite{geiger_are_2012} used a Velodyne HDL-64E lidar and two PointGrey Flea 2 color cameras. In 2012, when the paper was first published, an HDL-64E cost in the range of 75,000 USD. Although exact price information for the cameras, which have been discontinued, is difficult to find, a similar model (FL2-03S2C-C) seems to have been priced around 700 USD for a single camera; the assumption will be made that the camera system would have had a total cost of 1,400 USD. Although this clearly demonstrates that the cameras are cheaper, an attempt to normalize for pointcloud density / quality will be made next. See Table xx below for more information on both sensor setups. 
+
+A numeric comparison may be made between sensors, in an attempt to correctly account for several features that one may have while the other may not. The first comparison is a points per unit price. However, some corrections must be made to the raw information / specifications given. Because lidar has 360\deg vision and cameras do not, the [xx] camera price and points per scan will be multiplied by four to simulate having cameras on each side of the car, thus enabling 360\deg vision of the environment and better balancing the comparison. Additionally, from scan to scan in the KITTI dataset, there is a varying number of points in the lidar pointcloud. Thus, an average was taken along with other information.
+
+
+A quick note about the camera FOV: although the stated raw FOV is 90\deg by 35\deg, there is some angular reduction due to both rectification and cropping necessary to standardize image sizes for disparity calculation. Thus, it will be assumed that although a single stereo camera system does not have it's original FOV dimensions, it may have at least 90\% of the original values. 
+
+
+
+
+
+In order to make some kind of economic comparison between different ranged sensors, there 
+
 Alright, would like to deal with a way of comparing lidar vs other sensors in the economic sense, but need some standards to actually perform a comparison. for one, how about we start with what a single frame. in a single frame, we may ask ourselves... how much information do we really have? if for example, a lidar sensor can give you 100 pts in a horizontal 360 deg and vertical 1 deg field of view, what is the ... points per area that you're getting? 
 
 
-the next thing you want to have is some kind of measure of quality. so, in order to measure quality, perhaps you want to know how much error you have. perhaps you would want to know the error at a given distance. so here, why not have a... centimeters per meter measure? 
+The next thing you want to have is some kind of measure of quality. so, in order to measure quality, perhaps you want to know how much error you have. perhaps you would want to know the error at a given distance. so here, why not have a... centimeters per meter measure? 
 
 finally, in order to deal with all these things on money terms, perhaps also consider... points per dollar. ideally, you want a dense, high quality image that isn't too expensive. saying that you get x amount of data per dollar perhaps also informs someone how effectively their money is being spent. 
 
@@ -60,6 +80,11 @@ $$ A_{sphere}=R^2\theta (\sin{b} - \sin{a})$$
 
 
 With these pros and cons in mind, this paper takes the position that stereo vision can provide practical benefits to robotics and autonomous systems under the right conditions. Using stereo vision to estimate 3D locations of objects, specifically cars, is believed to be competitive with lidar under specific conditions.
+
+
+
+
+
 
 
 
