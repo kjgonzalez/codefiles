@@ -1,7 +1,7 @@
-(empty); lidar;stereo (x1);stereo (x4)
-hFOV (deg);360;81;324
-vFOV (deg);20;31.5;31.5
-cost (USD);75000;1400;5600
+Name / thing;lidar;stereoA;stereoB
+horiz FOV (deg);360;81;324
+verti FOV (deg);20;31.5;31.5
+cost (USD);75,000;1,400;5,600
 points/scan (KITTI);476,898;453,376;1,813,504
 angular area;2.18;0.77;3.07
 points/price;6.36;1,295.36;1,295.36

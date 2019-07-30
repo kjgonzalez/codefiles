@@ -1,0 +1,8 @@
+Name,lidar,stereoA,stereoB
+horiz FOV (deg),360,81,324
+verti FOV (deg),20,31.5,31.5
+cost (USD),75000,1400,5600
+points/scan (KITTI),476898,453376,1813504
+angular area,2.18,0.77,3.07
+points/price,6.36,1295.36,1295.36
+points/area,218547,590733,590733

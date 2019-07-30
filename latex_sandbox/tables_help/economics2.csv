@@ -1,0 +1,8 @@
+Name,lidar,stereoA,stereoB,super,-2
+horiz FOV (deg),360,81,324,duper,-1
+verti FOV (deg),20,31.5,31.5,cali,0
+cost (USD),75000,1400,5600,fragi,1
+points/scan (KITTI),476898,453376,1813504,listic,2
+angular area,2.18,0.77,3.07,expi,3
+points/price,6.36,1295.36,1295.36,ali,4
+points/area,218547,590733,590733,docious,5

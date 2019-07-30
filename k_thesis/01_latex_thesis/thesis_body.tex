@@ -37,7 +37,26 @@ There are some interesting benefits that may be gained with stereo vision: stere
 Lidar dominates the environmental sensing space for some very good reasons. It's primary reason for being used is that it is accurate. It also is capable of sensing in a 360\deg field of view, and can continue detection during low-light conditions. However, as described by \cite{broggi_sensors_2013}, most modern lidar sensors have a rolling shutter, which causes deformation in the data to correct. They also typically cost much more than a stereo camera system, require moving parts (thus becoming sensitive to vibration), and may run the risk of interfering with other lidar sensors should there be multiple in a close area, such as a potential traffic jam. In terms of low visibility conditions, such as rain or fog, both cameras and lidar sensors suffer a performance decrease, but stereo cameras are more robust as there must be significant weather conditions to deteriorate their vision, similar to how humans may navigate through poor weather.
 
 
-In order to make a more quantitative comparison between these two ranged sensors, an example will be taken from the KITTI setup. In collecting the necessary information to create the various datasets, \cite{geiger_are_2012} used a Velodyne HDL-64E lidar and two PointGrey Flea 2 color cameras. In 2012, when the paper was first published, an HDL-64E cost in the range of 75,000 USD. Although exact price information for the cameras, which have been discontinued, is difficult to find, a similar model (FL2-03S2C-C) seems to have been priced around 700 USD for a single camera; the assumption will be made that the camera system would have had a total cost of 1,400 USD. Although this clearly demonstrates that the cameras are cheaper, an attempt to normalize for pointcloud density / quality will be made next. See Table xx below for more information on both sensor setups. 
+In order to make a more quantitative comparison between these two ranged sensing methods, the hardware setup used in the KITTI dataset will be analyzed. In collecting the necessary information to create the various datasets, \cite{geiger_are_2012} used a Velodyne HDL-64E lidar and two PointGrey Flea 2 color cameras. In 2012, when the paper was first published, an HDL-64E cost in the range of 75,000 USD (US dollars). Although exact price information for the cameras, which have been discontinued, is difficult to find, a similar model (FL2-03S2C-C) seems to have been priced around 700 USD for a single camera; the two-camera system will therefore be assumed to have cost 1,400 USD. Although this clearly demonstrates that the cameras are cheaper, an attempt to normalize for pointcloud density / quality will be made next. See Table \ref{economics_table} below for more information on both sensor setups. 
+
+\def \b #1{\textbf{#1}} 
+\begin{table}[h]
+	\centering
+	\caption{Economic comparison of KITTI dataset sensors, including a theoretical four-system stereo setup. hFOV refers to "horizontal field of view", vFOV for vertical, cost is in estimated US dollar price in 2012, points/scan refers to how many points a sensor provides for each index, and angular area is a unitless value describing the visible area based on a sensor's vertical and horizontal FOV's. }
+	\csvreader[tabular=|c|c|c|c|,
+	separator=semicolon,
+	table head=\hline \b{Property} & \b{Lidar} & \b{Stereo (x1)} & \b{Stereo (x4)} \\\hline,
+	late after line=\\\hline
+	]% applies to each non-header row
+	{../media/economics_table.csv}{}%
+	{\csvcoli&\csvcolii&\csvcoliii&\csvcoliv}%
+	\label{economics_table}
+\end{table}
+
+To first properly clarify the table, "angular area" will first be explained. Angular area, solid angle, square degree, etc, may is knownw 
+
+
+KJG190730: may want to consider contacting andreas geiger or someone to have a source on these prices.
 
 A numeric comparison may be made between sensors, in an attempt to correctly account for several features that one may have while the other may not. The first comparison is a points per unit price. However, some corrections must be made to the raw information / specifications given. Because lidar has 360\deg vision and cameras do not, the [xx] camera price and points per scan will be multiplied by four to simulate having cameras on each side of the car, thus enabling 360\deg vision of the environment and better balancing the comparison. Additionally, from scan to scan in the KITTI dataset, there is a varying number of points in the lidar pointcloud. Thus, an average was taken along with other information.
 

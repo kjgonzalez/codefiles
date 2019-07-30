@@ -1,0 +1,120 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{csvsimple}
+
+\makeatletter
+\csvset{
+	autotabularcenter/.style={
+		file=#1,
+		after head=\csv@pretable\begin{tabular}{|*{\csv@columncount}{c|}}\csv@tablehead,
+			table head=\hline\csvlinetotablerow\\\hline,
+			late after line=\\\hline,
+			table foot=\\\hline,
+			late after last line=\csv@tablefoot\end{tabular}\csv@posttable,
+		command=\csvlinetotablerow},
+}
+\makeatother
+\newcommand{\csvautotabularcenter}[2][]{\csvloop{autotabularcenter={#2},#1}}
+
+
+
+\begin{document}
+\def \b #1{\textbf{#1}} 
+hello world\\
+
+table type 1: 
+
+\begin{table}[h]
+	\centering
+	\caption{text}
+	\begin{tabular}{|c|c|c|}
+		\hline
+		\b{one}   & \b{two}   & \b{three} \\ \hline
+		four  & five  & six   \\ \hline
+		seven & eight & nine  \\ \hline
+	\end{tabular}
+\end{table}
+
+
+table type 2, although it provides very little formatting control: 
+
+\begin{table}[h]
+	\centering
+	\caption{text}
+	\csvautotabular{economics2.csv}
+\end{table}
+
+table type 3, but pretty annoying to use exact names with no chance to use any non-alphanumeric values: 
+
+\begin{table}[h]
+	\centering
+\begin{tabular}{|c|c|c|c|}\hline
+	\bfseries one &\bfseries two &\bfseries three &\bfseries four
+	\csvreader[head to column names]{economics.csv}{}
+	{\\\hline\Name & \lidar & \stereoA & \stereoB} %remove "\hline" for no in-between spaces
+	\\\hline
+\end{tabular}
+\end{table}
+
+
+type 4, using a csv style: \\
+\csvstyle{myTableStyle}{tabular=|r|l|c|,
+	table head=\hline& Person & Matr.~No.\\\hline\hline, % produces a detached header
+	late after line=\\\hline,
+	head to column names}
+\csvreader[myTableStyle]{grade.csv}{}{\thecsvrow&\givenname~\name&\matriculation}%
+
+type 4a, using own data\\
+\csvstyle{style2}{tabular=|c|c|c|c|,
+	table head=\hline one & two & three & four \\\hline,
+	late after line=\\\hline,
+	head to column names}
+\csvreader[style2]{economics.csv}{}{\Name & \lidar & \stereoA & \stereoB}%
+
+type 5, with column addressing (best way is with roman numerals, sadly):\\
+\csvreader[tabular=|c|c|c|c|,
+table head=\hline \b{one} & \b{two} & \b{three} & \b{four} \\\hline, % applies to header row
+late after line=\\\hline]% applies to each non-header row
+{economics.csv}{}%
+{\csvcoli&\csvcolii&\csvcoli&\csvcoliii}%
+
+\newpage
+another attempt at a simplified table\\
+\csvautotabular[]{economics.csv} \\
+
+type 6, some crazy online custom solution\\
+\csvautotabularcenter{economics2.csv} % custom, but ugly solution
+%source: https://tex.stackexchange.com/questions/292512/csvsimple-csvautotabular-and-csvautobooktabular-with-centered-columns-content
+
+and really that's kind of it. so, i suppose the ``easiest" way to get a csv table into latex is simply like so: 
+
+\begin{table}[h]
+	\centering
+	\caption{``Simplest" way to make a table. Unfortunately, need to do n*3 amount of work to specify all information, at tabular, table head, and csvcol\_x lines. requires csv simple package, of course.}
+	\csvreader[tabular=|c|c|c|c|c|,
+	table head=\hline \b{one} & \b{two} & \b{three} & \b{four} & \b{super} \\\hline,
+	late after line=\\\hline
+	]% applies to each non-header row
+	{economics2.csv}{}%
+	{\csvcoli&\csvcolii&\csvcoliii&\csvcoliv&\csvcolv}%
+	\label{labelname}
+\end{table}
+
+ok, gonna try making another table, but this one will use semicolons instead of commas: 
+\begin{table}[h]
+	\centering
+	\caption{xx}
+	\csvreader[tabular=|c|c|c|c|,
+	separator=semicolon,
+	table head=\hline \b{one} & \b{two} & \b{three} & \b{four} \\\hline,
+	late after line=\\\hline
+	]% applies to each non-header row
+	{eco3.csv}{}%
+	{\csvcoli&\csvcolii&\csvcoliii&\csvcoliv}%
+	\label{thing}
+\end{table}
+
+
+
+
+\end{document}
