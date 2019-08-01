@@ -126,6 +126,9 @@ Stereo disparity maps, which are built by the comparing the pixel distance betwe
 
 Initially, built-in and readily available stereo disparity map computation techniques were used. In the Python OpenCV library, there is a "Semi-global Block Matching" (SGBM) algorithm, implemented based on the paper by \cite{hirschmuller2007stereo}. For an initial "rough" pass, this algorithm was cheap and fairly effective. Additionally, this algorithm is useful for fast, fairly-stable calculations and does not need a GPU to run. However, it suffers from a few key shortcomings. For one, there is a large portion of the disparity map that contains no values, as can be seen below in Figure \ref{ind15_SGBM_comparison}. Next, when a set of pixels cannot be matched between images, the result is simply a NaN result, giving no information in that region. Finally, SGBM suffers from some significant lack of resolution, meaning that some objects of interest, such as the three pedestrians image, will not be seen well, or at all. For comparison, stereo images created with a neural network (NN) such as those in Figure \ref{new_psmnet} have a richer amount of information and have no missing pixels (i.e. a prediction is made at every pixel). 
 
+xx NEED TO TALK ABOUT WHY STEREO RCNN ISN'T THE BEST WAY TO GO
+
+
 \begin{figure}[h]
     \centering
     \subfigure[SGBM disparity map]{
@@ -162,6 +165,8 @@ A recent development has been published since the start of this paper, by Wang e
 \end{figure}
 
 In their paper, the authors argue that within a short distance, up to 30 meters away, stereo vision performs competitively with lidar.
+
+XX NEED TO MENTION AVOD A LITTLE BIT AND EXPLAIN WHAT IT IS
 
 \subsection{3D Estimation with Lidar}
 Performing 3D estimation and localization with lidar has been a focus for a large portion of the field, and with good reason. Thus, there are many papers which focus on using lidar sensor capabilities to estimate 3D bounding boxes, to varying degrees of success. \cite{qi_frustum_2017} paper, currently one of the best performing networks, forms a part of the work of this research paper as well.
