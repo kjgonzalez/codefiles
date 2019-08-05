@@ -24,7 +24,7 @@ This thesis was performed alongside work and research done for the SMART3D proje
 
 
 \subsection{Motivation}
-The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are several factors to normalize, and a more in-depth analysis of this is conducted below (xx). In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on active surfaces, potential interference of multiple lidar sensors if all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidar sensors can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
+The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are a few factors to normalize, and a more in-depth analysis of this is conducted below. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on active surfaces, potential interference of multiple lidar sensors if all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidar sensors can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
 
 
 There are some interesting benefits that may be gained with stereo vision: stereo cameras are relatively cheap for the amount of information they provide, intuitively mimics the way that humans already perceive and navigate their world, is a passive sensor that does not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 30 Hz, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, which can include inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and when used to estimate position a squared error relationship to distance. This last points simply means that as the distance of an estimated point increases, the error of that value increases quadratically \cite{wang_pseudo-lidar_2019}.
@@ -51,7 +51,7 @@ In order to make a more quantitative comparison between these two ranged sensing
 	\label{economics_table}
 \end{table}
 
-To first properly clarify the table, "angular area" will first be explained. Angular area, solid angle, square degree, etc, is known as a unitless value describing the visible region from a given viewpoint. Solid angle may be defined as given in Figure \ref{eq_solidangle1}.In this equation, $A$ is a spherical surface area, and $r$ represents the sphere's radius. Given that a sphere's surface area is $4\pi r^2$, the maximum theoretical solid angle any sensor may have is $4\pi$, or about 12.57 "square degrees". However, since only vertical and horizontal field of view are given, the formula to calculate solid angle is then modified to Equation \ref{eq_solidangle2}. Here, $\theta$ and $\phi$ represent the horizontal and vertical field of view (FOV), respectively. The spherical coordinate system used along with an example graphic is shown in Figure \ref{solidangle}.
+To first properly clarify the table, "angular area" will first be explained. Angular area, solid angle, square degree, etc, is known as a unitless value describing the visible region from a given viewpoint. Solid angle may be defined as given in Figure \ref{eq_solidangle1}.In this equation, $A$ is a spherical surface area, and $r$ represents the sphere's radius. Given that a sphere's surface area is $4\pi r^2$, the maximum theoretical solid angle any sensor may have is $4\pi$, or about 12.57 ``square degrees". However, since only vertical and horizontal field of view are given, the formula to calculate solid angle is then modified to Equation \ref{eq_solidangle2}. Here, $\theta$ and $\phi$ represent the horizontal and vertical field of view (FOV), respectively. The spherical coordinate system used along with an example graphic is shown in Figure \ref{solidangle}.
 
 \begin{equation}
 \Omega = \frac{A}{r^2}
@@ -65,17 +65,37 @@ To first properly clarify the table, "angular area" will first be explained. Ang
 
 \begin{figure}[h]
     \centering
-    \subfigure[one]{
+    \subfigure[Solid angle coordinate system]{
         \includegraphics[width=0.35\linewidth]{../media/solidangle_cs.pdf}}
-    \subfigure[LHS image]{
+    \subfigure[Solid angle example graphic]{
         \includegraphics[width=0.5\linewidth]{../media/solidangle_ex.pdf}}
     \caption{(a) Spherical coordinate system for Figure \ref{eq_solidangle2}. (b) Example graphic demonstrating where angle values correspond to sensor.}
     \label{solidangle}
 \end{figure}
 
 
+Finally, on the question of quality, lidar becomes the standard of measure, meaning that some comparison must then be drawn between lidar and a stereo vision system. This also means that the quality of the system itself determines how closely it matches lidar. Therefore, the quality of the stereo system used in this paper has been determined by measuring what percentage of stereo-vision-based points are within 10\% of the same value as lidar-based points. The steps to determine this are: 
 
-KJG190730: may want to consider contacting andreas geiger or someone to have a source on these prices.
+\begin{itemize} \itemsep=-0.5em
+    \item Project lidar points to image space, named $L$
+    \item Convert disparity values of stereo map to depth values, named $S$
+    \item Keep only points from stereo map that also exist in $L$
+    \item For each $(i=row,j=column)$ index, obtain the lidar distance, stereo distance, and the absolute error between them as:
+\begin{equation}
+    e = \left | \frac{S_{i,j} - L_{i,j}}{L_{i,j}} \right |
+    \label{eq_errCalc}
+\end{equation}
+
+    \item Tally how many points fall within the 10\% threshold.
+\end{itemize}
+
+After performing the following steps, Figure xx was generated: a lidar-stereo graph that merely indicates at what distance value a given stereo point has, and what value its corresponding lidar point also has. 
+
+
+
+
+
+
 
 A numeric comparison may be made between sensors, in an attempt to correctly account for several features that one may have while the other may not. The first comparison is a points per unit price. However, some corrections must be made to the raw information / specifications given. Because lidar has 360\deg vision and cameras do not, the [xx] camera price and points per scan will be multiplied by four to simulate having cameras on each side of the car, thus enabling 360\deg vision of the environment and better balancing the comparison. Additionally, from scan to scan in the KITTI dataset, there is a varying number of points in the lidar pointcloud. Thus, an average was taken along with other information.
 
