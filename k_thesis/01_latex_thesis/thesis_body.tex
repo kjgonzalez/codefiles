@@ -23,18 +23,16 @@ This thesis was performed alongside work and research done for the SMART3D proje
 % done | C. Lidar vs Other Sensors \\
 
 
-
 \subsection{Motivation}
 The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are several factors to normalize, and a more in-depth analysis of this is conducted below (xx). In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on active surfaces, potential interference of multiple lidar sensors if all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidar sensors can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
 
 
 There are some interesting benefits that may be gained with stereo vision: stereo cameras are relatively cheap for the amount of information they provide, intuitively mimics the way that humans already perceive and navigate their world, is a passive sensor that does not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 30 Hz, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, which can include inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and when used to estimate position a squared error relationship to distance. This last points simply means that as the distance of an estimated point increases, the error of that value increases quadratically \cite{wang_pseudo-lidar_2019}.
 
-
-\subsubsection{delme, lidar economics}
+% lidar economics part here
 \def \deg {$^{\circ}$\ } % need extra backslash for space
 
-Lidar dominates the environmental sensing space for some very good reasons. It's primary reason for being used is that it is accurate. It also is capable of sensing in a 360\deg field of view, and can continue detection during low-light conditions. However, as described by \cite{broggi_sensors_2013}, most modern lidar sensors have a rolling shutter, which causes deformation in the data to correct. They also typically cost much more than a stereo camera system, require moving parts (thus becoming sensitive to vibration), and may run the risk of interfering with other lidar sensors should there be multiple in a close area, such as a potential traffic jam. In terms of low visibility conditions, such as rain or fog, both cameras and lidar sensors suffer a performance decrease, but stereo cameras are more robust as there must be significant weather conditions to deteriorate their vision, similar to how humans may navigate through poor weather.
+Lidar dominates the environmental sensing space for some very good reasons. It's primary reason for being used is that it is accurate at far distances. It also is capable of sensing in a 360\deg field of view, and can continue detection during low-light conditions. However, as described by \cite{broggi_sensors_2013}, most modern lidar sensors have a rolling shutter, which causes deformation in the data to correct. They also typically cost much more than a stereo camera system, require moving parts (thus becoming sensitive to vibration), and may run the risk of interfering with other lidar sensors should there be multiple in a close area, such as a potential traffic jam. In terms of low visibility conditions, such as rain or fog, both cameras and lidar sensors suffer a performance decrease, but stereo cameras are more robust as there must be significant weather conditions to deteriorate their vision, similar to how humans may navigate through poor weather.
 
 
 In order to make a more quantitative comparison between these two ranged sensing methods, the hardware setup used in the KITTI dataset will be analyzed. In collecting the necessary information to create the various datasets, \cite{geiger_are_2012} used a Velodyne HDL-64E lidar and two PointGrey Flea 2 color cameras. In 2012, when the paper was first published, an HDL-64E cost in the range of 75,000 USD (US dollars). Although exact price information for the cameras, which have been discontinued, is difficult to find, a similar model (FL2-03S2C-C) seems to have been priced around 700 USD for a single camera; the two-camera system will therefore be assumed to have cost 1,400 USD. Although this clearly demonstrates that the cameras are cheaper, an attempt to normalize for pointcloud density / quality will be made next. See Table \ref{economics_table} below for more information on both sensor setups. 
@@ -42,18 +40,39 @@ In order to make a more quantitative comparison between these two ranged sensing
 \def \b #1{\textbf{#1}} 
 \begin{table}[h]
 	\centering
-	\caption{Economic comparison of KITTI dataset sensors, including a theoretical four-system stereo setup. hFOV refers to "horizontal field of view", vFOV for vertical, cost is in estimated US dollar price in 2012, points/scan refers to how many points a sensor provides for each index, and angular area is a unitless value describing the visible area based on a sensor's vertical and horizontal FOV's. }
+	\caption{Economic comparison of KITTI dataset sensors, including a theoretical four-system stereo setup. hFOV refers to "horizontal field of view", vFOV for vertical, cost is in estimated US dollar price in 2012, points/scan refers to how many points a sensor provides for each index, and angular area is a unitless value describing the visible area based on a sensor's vertical and horizontal FOV's. The "Stereo (x4)" column describes if the same stereo setup were to be used to obtain near-360\deg vision of the environment, imitating lidar.}
 	\csvreader[tabular=|c|c|c|c|,
 	separator=semicolon,
 	table head=\hline \b{Property} & \b{Lidar} & \b{Stereo (x1)} & \b{Stereo (x4)} \\\hline,
 	late after line=\\\hline
 	]% applies to each non-header row
-	{../media/economics_table.csv}{}%
-	{\csvcoli&\csvcolii&\csvcoliii&\csvcoliv}%
+	{../media/economics_table.csv}{}
+	{\csvcoli&\csvcolii&\csvcoliii&\csvcoliv}
 	\label{economics_table}
 \end{table}
 
-To first properly clarify the table, "angular area" will first be explained. Angular area, solid angle, square degree, etc, may is knownw 
+To first properly clarify the table, "angular area" will first be explained. Angular area, solid angle, square degree, etc, is known as a unitless value describing the visible region from a given viewpoint. Solid angle may be defined as given in Figure \ref{eq_solidangle1}.In this equation, $A$ is a spherical surface area, and $r$ represents the sphere's radius. Given that a sphere's surface area is $4\pi r^2$, the maximum theoretical solid angle any sensor may have is $4\pi$, or about 12.57 "square degrees". However, since only vertical and horizontal field of view are given, the formula to calculate solid angle is then modified to Equation \ref{eq_solidangle2}. Here, $\theta$ and $\phi$ represent the horizontal and vertical field of view (FOV), respectively. The spherical coordinate system used along with an example graphic is shown in Figure \ref{solidangle}.
+
+\begin{equation}
+\Omega = \frac{A}{r^2}
+\label{eq_solidangle1}
+\end{equation}
+
+\begin{equation}
+\Omega = \frac{1}{R^2} \int_{\theta} \int_{\phi} R^2\cos(\phi) d\theta \phi = [\theta]^{b1}_{a1} [\sin(\phi)]^{b2}_{a2}
+\label{eq_solidangle2}
+\end{equation}
+
+\begin{figure}[h]
+    \centering
+    \subfigure[one]{
+        \includegraphics[width=0.35\linewidth]{../media/solidangle_cs.pdf}}
+    \subfigure[LHS image]{
+        \includegraphics[width=0.5\linewidth]{../media/solidangle_ex.pdf}}
+    \caption{(a) Spherical coordinate system for Figure \ref{eq_solidangle2}. (b) Example graphic demonstrating where angle values correspond to sensor.}
+    \label{solidangle}
+\end{figure}
+
 
 
 KJG190730: may want to consider contacting andreas geiger or someone to have a source on these prices.
@@ -184,10 +203,12 @@ The first approach, using epipolar equations, can be described in general as fol
 Given the above, there must first be a given disparity map image, $D$, with indices ($u$,$v$) corresponding to the image's x-axis and y-axis (origin located at the top-left of the image). The cameras' intrinsic properties must also be known (P2 for the KITTI dataset), as well as the baseline, $b$, distance (also known as the distance between camera centers). In the KITTI dataset, Camera 2 is the LHS color camera, and thus each record's corresponding P2 matrix is used. The matrix contains the horizontal focal length $f_U$ as well as the vertical focal length $f_V$. \cite{szeliski_computer_2010} describes this in Equation 2.57 of Chapter 2: Image Formation. The camera baseline is given in multiple locations, namely \cite{geiger_are_2012}, although the value is given as ``roughly 54 cm", which may reduce the overall accuracy somewhat.
 
 Given this data, the depth value at each pixel location may be calculated via Equation \ref{eq_epi_z}, ignoring locations where the disparity value is 0 or Not-A-Number (NaN).
+
 \begin{equation}
 z = \frac{f_U * b}{D}
 \label{eq_epi_z}
 \end{equation}
+
 Next, the real-world $x$ and $y$ locations may be calculated by taking the relative coordinate location from camera center $(c_U,c_V)$, multiplying by the depth values at each pixel location. Successfully calculating this leads to an estimated metric coordinate value for every valid pixel disparity value in the image.
 
 \begin{equation}
@@ -348,19 +369,4 @@ As can be seen from the various graphs, it is clear that although the network do
 % NEWSECTION ===================================================================
 \newpage
 \section{Conclusion}
-
-What is Lorem Ipsum?
-
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-Why do we use it?
-
-It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).
-
-Where does it come from?
-
-Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of ``de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
-
-The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.
-Where can I get some?
-
-There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.
+TextHere xx
