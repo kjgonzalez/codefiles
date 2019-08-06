@@ -23,7 +23,7 @@
 
 
 \begin{document}
-kjgnote: how to compile this: \texttt{pdflatex pgf\_plot.tex}
+text command to compile: \texttt{pdflatex pgf\_plot.tex}
 
 \csvreader[head to column names]{dat_multiCols.csv}{}% use head of csv as column names
 
@@ -56,12 +56,42 @@ kjgnote: how to compile this: \texttt{pdflatex pgf\_plot.tex}
 \end{figure}
 
 
-
-
-
-
-
 This text only to help get a sense of page width: Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+
+
+Next, let's try a "real world" example, where the plot must be formatted nicely: 
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+	width=6cm,
+	height=6cm,
+	xlabel={Lidar [m]},
+	ylabel={Disparity [px]}, % it's ok to have comma on last item, and brackets help
+	xtick={0,10,...,80},
+	ytick={0,20,...,140},
+	legend style={at={(0.95,0.95)}}, % can also include "anchor", and "at" uses (x%,y%)
+	grid=major, % can also be "both", and perhaps "minor"
+	] % figure configuration
+	\addplot+[only marks,
+	mark options ={style=solid,scale=0.25,color=black,line width=0}
+	] % individual curve configuration
+	table [x=x, y=y1, col sep=comma] {lidar_disp.csv}; % reference the filename
+	\addplot+[
+	mark=none,
+	color=red,
+	]
+	table [x=x, y=y2, col sep=comma] {lidar_disp.csv};
+	\addlegendentry{Data}
+	\addlegendentry{Inverse Fit}
+	% \legend{one,two,three} % can also create legend on own
+	\end{axis}
+	\end{tikzpicture}
+	\caption{"real world" plot}
+\end{figure}
+
+
+
 
 end
 \end{document}
