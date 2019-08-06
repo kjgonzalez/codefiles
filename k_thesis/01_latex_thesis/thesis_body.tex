@@ -24,37 +24,42 @@ This thesis was performed alongside work and research done for the SMART3D proje
 
 
 \subsection{Motivation}
-The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this subfield. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are a few factors to normalize, and a more in-depth analysis of this is conducted below. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on active surfaces, potential interference of multiple lidar sensors if all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidar sensors can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
+The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks (CNN's) and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this sub-field. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are a few factors to normalize, and a more in-depth analysis of this is conducted below. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on reflective surfaces, potential interference of multiple lidar sensors if they're all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidar sensors can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
 
-There are some interesting benefits that may be gained with stereo vision: stereo cameras are relatively cheap for the amount of information they provide, intuitively mimics the way that humans already perceive and navigate their world, is a passive sensor that does not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 30 Hz, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, which can include inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and when used to estimate position a squared error relationship to distance. This last points simply means that as the distance of an estimated point increases, the error of that value increases quadratically \cite{wang_pseudo-lidar_2019}.
+There are some interesting benefits that may be gained with stereo vision, because stereo cameras: are relatively cheap for the amount of information they provide, intuitively mimic the way that humans already perceive and navigate their world, are passive sensors that do not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 10 FPS, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, including: inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and an error that increases quadratically with distance. This last points simply means that as the distance of an estimated point increases, the error of that value increases quadratically, as mentioned by \cite{wang_pseudo-lidar_2019} and demonstrated below in Figure xx (need correlation beteween lidar distance and stereo disparity).
 
 % lidar economics part here
 \def \deg {$ ^{\circ}$\ } % need extra backslash for space
 
-Lidar dominates the environmental sensing space for some very good reasons. It's primary reason for being used is that it is accurate at far distances. It also is capable of sensing in a 360\deg field of view, and can continue detection during low-light conditions. However, as described by \cite{broggi_sensors_2013}, most modern lidar sensors have a rolling shutter, which causes deformation in the data to correct. They also typically cost much more than a stereo camera system, require moving parts (thus becoming sensitive to vibration), and may run the risk of interfering with other lidar sensors should there be multiple in a close area, such as a potential traffic jam. In terms of low visibility conditions, such as rain or fog, both cameras and lidar sensors suffer a performance decrease, but stereo cameras are more robust as there must be significant weather conditions to deteriorate their vision, similar to how humans may navigate through poor weather.
+Lidar dominates the environmental sensing space for some very good reasons. It is primarily used for its accuracy at intermediate distances, in the 5-100 meter range. It also is capable of sensing in a 360\deg field of view, and can continue detection during low-light conditions. However, as described by \cite{broggi_sensors_2013}, most modern lidar sensors have a rolling shutter, which causes deformation in the data to correct. They also typically cost much more than a stereo camera system, require moving parts (thus becoming sensitive to vibration), and the other reasons mentioned previously. 
+% In terms of low visibility conditions, such as rain or fog, both cameras and lidar sensors suffer a performance decrease, but stereo cameras are more robust as there must be significant weather conditions to deteriorate their vision, similar to how humans may navigate through poor weather.
 
-In order to make a more quantitative comparison between these two ranged sensing methods, the hardware setup used in the KITTI dataset will be analyzed. In collecting the necessary information to create the various datasets, \cite{geiger_are_2012} used a Velodyne HDL-64E lidar and two PointGrey Flea 2 color cameras. In 2012, when the paper was first published, an HDL-64E cost in the range of 75,000 USD (US dollars). Although exact price information for the cameras, which have been discontinued, is difficult to find, a similar model (FL2-03S2C-C) seems to have been priced around 700 USD for a single camera; the two-camera system will therefore be assumed to have cost 1,400 USD. Although this clearly demonstrates that the cameras are cheaper, an attempt to normalize for pointcloud density / quality will be made next. See Table \ref{economics_table} below for more information on both sensor setups. 
+In order to make a more quantitative comparison between these two ranged sensing methods, the hardware setup used in the KITTI dataset will be analyzed. In collecting the necessary information to create the various datasets, \cite{geiger_are_2012} used a Velodyne HDL-64E lidar and two PointGrey Flea 2 color cameras. In 2012, when the paper was first published, an HDL-64E cost in the range of 75,000 USD (US dollars) xx. Although exact price information for the cameras, which have been discontinued, is difficult to find, a similar model (FL2-03S2C-C) seems to have been priced around 700 USD for a single camera; the two-camera system will therefore be assumed to have cost 1,400 USD xx. Although this clearly demonstrates that the cameras are cheaper, an attempt to normalize for point cloud density / quality will be made next. See Table \ref{economics_table} below for more information on both sensor setups. 
 
-A numeric comparison may be made between sensors, in an attempt to correctly account for several features that one may have while the other may not. The first comparison is a points per unit price. However, some corrections must be made to the raw information / specifications given. Because lidar has 360\deg vision and cameras do not, the camera price and points per scan will be multiplied by four to simulate having cameras on each side of the car, thus enabling 360\deg vision of the environment and better balancing the comparison. Additionally, from scan to scan in the KITTI dataset, there is a varying number of points in the lidar pointcloud. Thus, an average was taken along with other information.
+A numeric comparison may be made between sensors, in an attempt to correctly account for several features that one may have while the other may not. Ideally, one would want to have both a high quantity of information as well as a high quality of information. To start, the ``quantity" argument will be examined. Because lidar has 360\deg vision and cameras do not, the camera price and points per scan will be multiplied by four to simulate having cameras on each side of the car, thus simulating near-360\deg vision of the environment (although in the end this does not affect any ratios). Additionally, from scan to scan in the KITTI dataset, there is a varying number of points in the lidar point cloud. Thus, an average of the number of points in each lidar scan was obtained.
 
-
-A quick note about the camera FOV: although the stated raw FOV is 90\deg by 35\deg, there is some angular reduction due to both rectification and cropping necessary to standardize image sizes for disparity calculation. Thus, it will be assumed that although a single stereo camera system does not have it's original FOV dimensions, it may have at least 90\% of the original values. 
+A quick note about the camera FOV (field of view): although the stated raw FOV is 90\deg by 35\deg, there is some angular reduction due to both rectification and cropping necessary to standardize image sizes for disparity calculation. Thus, it will be assumed that although a single stereo camera system does not have it's original FOV dimensions, it may have at least 90\% of the original values. 
 
 \def \b #1{\textbf{#1}} 
 \begin{table}[h]
 	\centering
-	\caption{Economic comparison of KITTI dataset sensors, including a theoretical four-system stereo setup. hFOV refers to ``horizontal field of view", vFOV for vertical, cost is in estimated US dollar price in 2012, points/scan refers to how many points a sensor provides for each index, and angular area is a unitless value describing the visible area based on a sensor's vertical and horizontal FOV's. The ``Stereo (x4)" column describes if the same stereo setup were to be used to obtain near-360\deg vision of the environment, imitating lidar.}
-	\csvreader[tabular=|c|c|c|c|,
-	separator=semicolon,
-	table head=\hline \b{Property} & \b{Lidar} & \b{Stereo (x1)} & \b{Stereo (x4)} \\\hline,
-	late after line=\\\hline
-	]% applies to each non-header row
-	{../media/economics_table.csv}{}
-	{\csvcoli&\csvcolii&\csvcoliii&\csvcoliv}
-	\label{economics_table}
+	\caption{Economic comparison of KITTI dataset sensors, including a theoretical four-system stereo setup. hFOV refers to ``horizontal field of view", vFOV for vertical, cost is in estimated US dollar price in 2012, points/scan refers to how many points a sensor provides for each scan, and angular area is in ``square radians" (elaborated below), describing the visible area based on a sensor's vertical and horizontal FOV's. The ``Stereo (x4)" column simulates as-if a single stereo setup were to be used to obtain near-360\deg vision of the environment, imitating lidar.}
+	\begin{tabular}{|c|c|c|c|}
+	\hline
+	\b{Property}              & \b{Lidar} & \b{Stereo (x1)} & \b{Stereo (x4)} \\ \hline
+	hFOV (deg)                & 360       & 81              & 324      \\\hline
+	vFOV (deg)                & 20        & 31.5            & 31.5     \\\hline
+	Cost (USD)                & 75,000    & 1,400           & 5,600    \\\hline
+	Points/Scan               & 476,898   & 453,376         & 813,504  \\\hline
+	Angular Area ($rad^2$)    & 2.18      & 0.77            & 3.07     \\\hline
+	Points/Price (pts/USD)    & 6.36      & 1,295.36        & 1,295.36 \\\hline
+	Points/Area (pts/$rad^2$) & 218,547   & 590,733         & 590,733  \\\hline
+	\end{tabular}
 \end{table}
 
-To first properly clarify the table, ``angular area" will first be explained. Angular area, solid angle, square degrees, etc, is a value in ``square radians" ($rad^2$) describing the visible region from a given viewpoint. Solid angle may be defined as given in Figure \ref{eq_solidangle1}.In this equation, $A$ is a spherical surface area, and $r$ represents the sphere's radius. Given that a sphere's surface area is $4\pi \ rad^2$, the maximum theoretical solid angle any sensor may have is $4\pi$, or about 12.57 square radians. However, since only vertical and horizontal field of view are given, the formula to calculate solid angle is then modified to Equation \ref{eq_solidangle2}. Here, $\theta$ and $\phi$ represent the horizontal and vertical field of view (FOV), respectively. The spherical coordinate system used along with an example graphic is shown in Figure \ref{solidangle}. As an example, the lidar system, with hFOV (or $\theta$) of $[0,360]$ degrees and vFOV (or $\phi$) of $[-10,10]$ degrees, may thus be calculated to have an FOV of about 2.18 ${rad}^2$ (previous values automatically converted).
+
+
+To properly clarify the table, ``angular area" will be explained. Angular area, solid angle, square degrees, etc, is a value in ``square radians" ($rad^2$) describing the visible region from a given viewpoint. Solid angle may be defined as given in Figure \ref{eq_solidangle1}.In this equation, $A$ is the spherical surface area, and $r$ represents the sphere's radius. Given that a sphere's surface area is $4\pi \ rad^2$, the maximum theoretical solid angle any sensor may have is $4\pi$, or about 12.57 square radians. However, since only vertical and horizontal field of view are given, the formula to calculate solid angle is then modified to Equation \ref{eq_solidangle2}. Here, $\theta$ and $\phi$ represent the horizontal and vertical field of view (FOV), respectively. The spherical coordinate system used along with an example graphic is shown in Figure \ref{solidangle}. As an example, the lidar system, with hFOV of $[0,360]$ degrees and vFOV of $[-10,10]$ degrees, may thus be calculated to have an solid area of about 2.18 ${rad}^2$ (previous values automatically converted).
 
 \begin{equation}
 \Omega = \frac{A}{r^2}
@@ -78,8 +83,10 @@ To first properly clarify the table, ``angular area" will first be explained. An
     \label{solidangle}
 \end{figure}
 
+Given the information above, stereo sensors are the clear winner in terms of points per dollar (points/price) as well as point density (points/area).
 
-Finally, on the question of quality, lidar becomes the de facto standard of measure, meaning that some comparison must then be drawn between lidar and a stereo vision system and that stereo vision quality is derived from how closely it matches lidar. A typical engineering threshold of 10\% is used for comparison, meaning that a stereo-generated point is considered ``good" if its depth estimate is within $\pm$10\% of the absolute value of the corresponding lidar depth estimate. The horizontal and vertical distances, $x$ and $y$, are ignored due to the assumed 1:1 correspondence when projecting a point cloud onto the image plane. The steps to determine this quality are:
+On the question of quality, lidar becomes the de facto standard of measure due to its high accuracy. 
+This means that stereo vision quality is derived from how closely it matches a lidar scan. This also means that stereo vision quality is highly dependent on the system used, and can vary with both hardware and software implementation. A typical engineering threshold of 10\% is used for comparison, meaning that a single stereo-generated point is considered ``good" if its depth estimate is within $\pm$10\% of the absolute value of the corresponding lidar depth estimate. The horizontal and vertical distances, $x$ and $y$, are ignored due to the assumed 1:1 correspondence when projecting a point cloud onto the image plane. The steps to determine this quality are:
 
 \begin{itemize} \itemsep=-0.5em
     \item Project lidar points to image space, named $L$
@@ -97,36 +104,12 @@ After performing the following steps, Figure \ref{corr_disp_lidar} was generated
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=0.75\linewidth]{../media/corr_stereo_lidar.pdf}
-	\caption{A visual correlation between lidar and stereo depth values that have been projected onto the image plane, removing the need to correlate horizontal or vertical distances. The more points that lie within the $\pm$10\% limit, the better that stereo depth maps approximate lidar point clouds. Pearson correlation coefficient between Lidar and Stereo data is 0.927 .}
+	\includegraphics[width=0.6\linewidth]{../media/corr_stereo_lidar.pdf}
+	\caption{A visual correlation between lidar and stereo depth values that have been projected onto the image plane, removing the need to correlate horizontal or vertical distances. The more points that lie within the $\pm$10\% limit, the better that stereo depth maps approximate lidar point clouds. Pearson correlation coefficient between Lidar and Stereo data is 0.927. Stereo data was generated using a modified Pyramid Stereo Matching network, described in Section xx. Lidar data was taken from the KITTI Object Detection dataset.}
 	\label{corr_disp_lidar}
 \end{figure}
  
-In summary, stereo vision is an attractive alternative to lidar vision because of its much higher point density, lower price, reasonable quality approximation of lidar, and the potential to improve through further research. 
-
-
-
-
-
-
-
-
-
-In order to make some kind of economic comparison between different ranged sensors, there 
-
-Alright, would like to deal with a way of comparing lidar vs other sensors in the economic sense, but need some standards to actually perform a comparison. for one, how about we start with what a single frame. in a single frame, we may ask ourselves... how much information do we really have? if for example, a lidar sensor can give you 100 pts in a horizontal 360 deg and vertical 1 deg field of view, what is the ... points per area that you're getting? 
-
-
-The next thing you want to have is some kind of measure of quality. so, in order to measure quality, perhaps you want to know how much error you have. perhaps you would want to know the error at a given distance. so here, why not have a... centimeters per meter measure? 
-
-finally, in order to deal with all these things on money terms, perhaps also consider... points per dollar. ideally, you want a dense, high quality image that isn't too expensive. saying that you get x amount of data per dollar perhaps also informs someone how effectively their money is being spent. 
-
-let's take two examples from the lidar industry and give them some info. 
-
-first up is the HDL-64E, which was used for the KITTI dataset. 
-
-first, the base stats will be given: 
-
+In summary, stereo vision is an attractive alternative to lidar vision because of its much higher point density, lower price, reasonable quality approximation of lidar, and the potential to improve through further research. Under the correct conditions, stereo vision sensors have the potential to compete with lidar sensors in terms of both quantity and quality.
 
 HDL-64E:
 range: 120 m
@@ -136,19 +119,6 @@ cost: \$85,000 (2017)
 %https://www.velodynelidar.com/lidar/products/manual/HDL-64E%20Manual.pdf
 %https://medium.com/self-driving-cars/velodyne-lidar-price-reduction-d358f245f086
 %https://driverless.wonderhowto.com/news/quanergys-new-250-solid-state-lidar-could-bring-self-driving-masses-0175790/
-
-kjg190617: quick note on area of sphere
-$$ A_{sphere}=R^2\theta \int_{a}^{b}\cos\phi*d\phi $$
-
-$$ A_{sphere}=R^2\theta (\sin{b} - \sin{a})$$
-
-
-With these pros and cons in mind, this paper takes the position that stereo vision can provide practical benefits to robotics and autonomous systems under the right conditions. Using stereo vision to estimate 3D locations of objects, specifically cars, is believed to be competitive with lidar under specific conditions.
-
-
-
-
-
 
 
 
