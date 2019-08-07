@@ -11,12 +11,13 @@
 \usepackage{color} % enables color in document
 \usepackage{verbatim,framed} 
 \usepackage[font=small]{caption} % kjg190521:captions smaller than regular text
+\usepackage{float} % note: moving float before hyperref doesn't help
 \usepackage{hyperref} % necessary to create hyperlinks. helps with figure references
 \usepackage{appendix} % ensures appendices are recognized in table of contents
-\usepackage{float}
 \usepackage{csvsimple} % lets you import a csv file to make, say, a table
 \usepackage{fancyhdr} % enables "fancy" headers / footers
 \fancyhf{}
+\setlength{\headheight}{13.6pt} % gets rid of headheight error
 
 \usepackage{chngcntr} % enables per-section numbering of any captions
 \counterwithin{figure}{section} % per-section numbering, figures
@@ -85,12 +86,8 @@
 % BIBLIOGRAPHY =================================================================
 \newpage
 \nocite{*} % list all references for now
-%\cleardoublepage
 \bibliographystyle{apalike}
-%\bibliography{../refs_190619}
 \bibliography{../refs_190730}
-%\bibliography{../refs_alt}
-
 
 % kjgnote: not sure if will need the below, have simply commented it out.
 %\fancyhead[RO,LE]{References}
