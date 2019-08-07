@@ -1,36 +1,13 @@
 % NEWSECTION ===================================================================
 \section{Introduction} % status: need Lidar comparison, etc
-This thesis was performed alongside work and research done for the SMART3D project. The SMART3D project originally started in 2016 as an investigation into the feasibility of using a Photonic Mixing Device (PMD) sensor as an alternative to lidar in detecting 3D objects in short-range outdoor applications. Over the course of the project, a shift was made from PMD sensors to stereo cameras, and thus began the topic of this thesis. This work seeks to address and answer the how well a stereo-based 3D object detector performs, especially in comparison to lidar, the natural and primary choice for estimating an object's location in an outdoor environment (such as detecting other cars on the highway). Stereo vision, specifically on vehicles, typically consists of a 2-camera setup using passive color light detection to generate an estimated stereo disparity map. This may then be transformed into a point cloud and subsequently analyzed with a Pointnet object detector. In this thesis, the performance of such a system, or network as they are known, is evaluated as well as compared with that of similar detection networks.
-
-% so, need to figure out what the general order of this paper will be. let's try the following: \\
-% stat | descrip
-% done | 1.0 introduction \\
-% inpr | 1.1 problem / motivation
-%      | 1.2 requirements
-% inpr | 2.0 related work \\
-%      | 3.0 Short overview of components in stereo network \\
-%      |   3.1 psmnet and stereo estimation networks \\
-%      |   3.2 mathematics of stereo 3D reconstruction \\
-%      |   3.2 pointnet and pointnetworks \\
-%      | 4.0 general steps of spnet (stereo point net) \\
-%      |   4.1 stereo estimation (performance, results) \\
-%      |   4.2 stereo 3d reconstruction (performance, results) \\
-%      |   4.3 stereo point net (procedure, modifications, performance) \\
-%      | 5.0 results of stereo point net \\
-%      | R. references \\
-% done | A. PerformanceMetrics \\
-% done | B. About the KITTI Dataset \\
-% done | C. Lidar vs Other Sensors \\
-
+This thesis was performed alongside work and research done for the SMART3D project. The SMART3D project originally started in 2016 as an investigation into the feasibility of using a Photonic Mixing Device (PMD) sensor as an alternative to lidar in detecting 3D objects in short-range outdoor applications. Over the course of the project, a shift was made from PMD sensors to stereo cameras, and thus began the topic of this thesis. This work seeks to address and answer the how well a stereo-based 3D object detector performs, especially in comparison to lidar, the natural and primary choice for estimating an object's location in an outdoor environment (such as detecting other cars on the highway). Stereo vision, specifically on vehicles, typically consists of a 2-camera setup using passive color light detection to generate an estimated stereo disparity map. This may then be transformed into a point cloud and subsequently analyzed with a Pointnet object detector. In this thesis, the performance of such a system, or network as they are known, is evaluated as well as compared with that of similar detection networks. 
 
 \subsection{Motivation}
 The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks (CNN's) and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this sub-field. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are a few factors to normalize, and a more in-depth analysis of this is conducted below. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on reflective surfaces, potential interference of multiple lidar sensors if they're all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidar sensors can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
 
 There are some interesting benefits that may be gained with stereo vision, because stereo cameras: are relatively cheap for the amount of information they provide, intuitively mimic the way that humans already perceive and navigate their world, are passive sensors that do not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 10 FPS, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, including: inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and an error that increases quadratically with distance. This last points simply means that as the distance of an estimated point increases, the error of that value increases quadratically, as mentioned by \cite{wang_pseudo-lidar_2019} and visualized below in Figure xx (need correlation beteween lidar distance and stereo disparity).
 
-% lidar economics part here
 \def \deg {$ ^{\circ}$\ } % need extra backslash for space
-
 Lidar dominates the environmental sensing space for some very good reasons. It is primarily used for its accuracy at intermediate distances, in the 5-100 meter range. It also is capable of sensing in a 360\deg field of view, and can continue detection during low-light conditions. However, as described by \cite{broggi_sensors_2013}, most modern lidar sensors have a rolling shutter, which causes deformation in the data to correct. They also typically cost much more than a stereo camera system, require moving parts (thus becoming sensitive to vibration), and the other reasons mentioned previously.
 % In terms of low visibility conditions, such as rain or fog, both cameras and lidar sensors suffer a performance decrease, but stereo cameras are more robust as there must be significant weather conditions to deteriorate their vision, similar to how humans may navigate through poor weather.
 
@@ -40,7 +17,7 @@ A numeric comparison may be made between sensors, in an attempt to correctly acc
 
 A quick note about the camera FOV (field of view): although the stated raw FOV is 90\deg by 35\deg, there is some angular reduction due to both rectification and cropping necessary to standardize image sizes for disparity calculation. Thus, it will be assumed that although a single stereo camera system does not have it's original FOV dimensions, it may have at least 90\% of the original values.
 
-\def \b #1{\textbf{#1}}
+\def \b #1{\textbf{#1}} % shortcut for setting font to bold
 \begin{table}[ht]
 	\centering
 	\caption{Economic comparison of KITTI dataset sensors, including a theoretical four-system stereo setup. hFOV refers to ``horizontal field of view", vFOV for vertical, cost is in estimated US dollar price in 2012, points/scan refers to how many points a sensor provides for each scan, and angular area is in ``square radians" (elaborated below), describing the visible area based on a sensor's vertical and horizontal FOV's. The ``Stereo (x4)" column simulates as-if a single stereo setup were to be used to obtain near-360\deg vision of the environment, imitating lidar.}
@@ -57,8 +34,6 @@ A quick note about the camera FOV (field of view): although the stated raw FOV i
 	\end{tabular}
 	\label{economics_table}
 \end{table}
-
-
 
 To properly clarify the table, ``angular area" will be explained. Angular area, solid angle, square degrees, etc, is a value in ``square radians" ($rad^2$) describing the visible region from a given viewpoint. Solid angle may be defined as given in Figure \ref{eq_solidangle1}.In this equation, $A$ is the spherical surface area, and $r$ represents the sphere's radius. Given that a sphere's surface area is $4\pi \ rad^2$, the maximum theoretical solid angle any sensor may have is $4\pi$, or about 12.57 square radians. However, since only vertical and horizontal field of view are given, the formula to calculate solid angle is then modified to Equation \ref{eq_solidangle2}. Here, $\theta$ and $\phi$ represent the horizontal and vertical field of view (FOV), respectively. The spherical coordinate system used along with an example graphic is shown in Figure \ref{solidangle}. As an example, the lidar system, with hFOV of $[0,360]$ degrees and vFOV of $[-10,10]$ degrees, may thus be calculated to have an solid area of about 2.18 ${rad}^2$ (previous values automatically converted).
 
@@ -112,22 +87,6 @@ After performing the following steps, Figure \ref{corr_disp_lidar} was generated
 
 In summary, stereo vision is an attractive alternative to lidar vision because of its much higher point density, lower price, reasonable quality approximation of lidar, and the potential to improve through further research. Under the correct conditions, stereo vision sensors have the potential to compete with lidar sensors in terms of both quantity and quality.
 
-HDL-64E:
-range: 120 m
-pts/s: 1,000,000/s (10Hz)
-cost: \$85,000 (2017)
-
-%https://www.velodynelidar.com/lidar/products/manual/HDL-64E%20Manual.pdf
-%https://medium.com/self-driving-cars/velodyne-lidar-price-reduction-d358f245f086
-%https://driverless.wonderhowto.com/news/quanergys-new-250-solid-state-lidar-could-bring-self-driving-masses-0175790/
-
-
-
-
-\subsection{Requirements}
-In order to develop a stereo-based 3D estimation algorithm and conduct a performance comparison, there are multiple needs that must be met. The very first need that must be met is a dataset that contains all the necessary information for a lidar-based network to detect objects, as well as a stereo-based network. For this reason the KITTI dataset, a well-known and actively used benchmark, was selected as the source of data to compare the two technologies.
-
-
 \subsection{Project Background}
 This thesis and project was born out of the SMART3D project, and thus the two have similar but slightly different goals. It must also be noted that an important and relevant paper was published by \cite{wang_pseudo-lidar_2019} during the time the SMART3D project had already begun and before the completion of this thesis. This means that although the inspiration for stereo-based 3D object estimation came from two separate sources, this paper is technically following in similar footsteps, and indeed draws some ideas from the ``Pseudo-LiDAR from Visual Depth Estimation" paper. The overlap and inspiration from the two will be acknowledged when appropriate throughout this paper.
 
@@ -137,6 +96,7 @@ The SMART3D project itself is an investigation into short-range, outdoor sensor 
 \newpage
 \section{Related Work} % status: stereo vision, 3D, etc
 
+KJG190807: XX THIS SECTION WILL EVENTUALLY BE REMOVED, AND ALL INFORMATION HEREIN WILL BE MOVED TO THE TOPIC1(PSMNET) AND TOPIC2(FPNET) SECTIONS
 \subsection{Stereo Vision}
 Stereo disparity maps, which are built by the comparing the pixel distance between two similar regions of two images, have existed before the implementation of artificial intelligence to create them. Famously, \cite{scharstein_taxonomy_2002} gave a taxonomy and categorization of the various aspects of stereo vision. Out of this paper, the four main parts of conducting stereo vision have been classically defined as follows: matching cost computation, cost (support) aggregation, disparity computation and optimization, and disparity refinement.
 
@@ -293,7 +253,7 @@ The most basic path, ADF, is simply using the given model to evaluate and achiev
 
 % NEWSECTION ===================================================================
 \newpage
-\section{Procedure / Method}
+\section{Experiments}
 Now that many of the individual steps of the network have been described above, the complete set of steps taken to produce network estimation will be described. Not every step will be described again, but any deviations from the ``general" usage is clarified. However, this section shall be more detailed in describing how each step was executed.
 
 1. train psmnet on object detection images\\
@@ -301,6 +261,84 @@ Now that many of the individual steps of the network have been described above, 
 3. train fpnet on the preprocessed data, according to path CEF as described in Figure \ref{fp_paths} \\
 4. test fpnet on the data, specifically focusing on 3D object detection for cars. \\
 
+KJG190807: XX ADJUSTING PERFORMANCE METRICS HERE TO PROPERLY EXPLAIN THINGS, AND SEPARATING THE EXAMPLES FOR THE APPENDIX
+
+
+\subsection{Performance Metrics}
+In order to determine the quality of results obtained, a few different metrics are implemented as are standard in practice. Here, the various metrics are explained, and in Appendix \ref{appendix_metrics} examples are provided. The concept of verifying accuracy in a statistical estimate is covered in \cite{manning_introduction_2008}, and some of this information is covered briefly below. In the field of image recognition, one particularly interesting metric is ``Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, precision and recall may then be calculated. Precision and recall are fundamental in obtaining more abstracted metrics such as average precision (AP) and mean average precision (mAP), which are how different networks are compared. The following information is primarily taken from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and ``An Introduction to Information Retrieval" by \cite{manning_introduction_2008}.
+
+\subsubsection{Defining an Outcome}
+The first step in measuring performance is categorizing what a result may be. With a visual task such as object classification, there are 4 possible outcomes (all references to true/false positive/negatives in this document will be referred to as ``outcomes"), which will be  as shown below. In general, there may be a True Positive, False Positive, True Negative, or False Negative outcome. In practice, True Negatives are not used, and the remaining three are used to varying degrees. Each is better clarified as such:
+\begin{itemize} \itemsep=-.5em
+	\item True Positive: Correctly detecting a true object
+	\item False Positive: Incorrectly detecting something that isn't there
+	\item False Negative: Incorrectly ignoring a true object
+	\item True Negative: Correctly ignoring something that isn't there
+\end{itemize}
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=.4\textwidth]{../media/tp_help.png}
+	\caption{A visual representation of various outcomes, ground truths as solid black boxes and detections as dotted red boxes. True positives (TP) are a correct detection, FP's are a detection of no actual object, and FN's are a lack of detection of an actual object.}
+	\label{tp_help}
+\end{figure}
+
+To actually classify a result in one of these categories, computer vision depends on using the overlap of a given bounding box estimate with a bounding box ground truth. If the overlap is above some threshold, the estimate is said to be a true positive. In some metrics, two estimates overlapping the same ground truth will only count the larger overlap, or the more confident estimate. This overlap is formally known as an Intersection over Union (IOU) value, or a Jaccard index.
+
+\subsubsection{Intersection Over Union}
+In image recognition, as well as other spatially-based tasks, accuracy is needed in various forms to know ``how well" a prediction overlaps, or matches, the ground truth. If, for example, an object-detection algorithm predicts the location of a car in a photo, one would like to know if such an estimate has any value, ideally with as few parameters as possible.
+
+In light of this, IOU encompasses all relevant aspects of rating the overlap of two geometric shapes (e.g. rectangles) while enabling an intuitive, non-binary scoring of an estimate. IOU is calculated as two bounding regions' intersection over their union, just as the name states. Visually, this looks something like the below in Figure \ref{iou_img}. Uniquely, the calculation of area and intersection specifically for image boundaries is inclusive of the bounds, meaning that the length of a given difference must have ``+1" added to it.
+
+In order to formally calculate IOU, a generalized form may be generated to apply to n-dimensions. The generalized mathematical equation is simply as follows. Given a region A and a region B:
+\begin{equation}
+IOU = \frac{|A\cap B|}{|A\cup B|} = \frac{|A\cap B|}{|A|+|B|- |A\cap B|}
+\end{equation}
+
+\begin{figure}[ht]
+    \includegraphics[width=1\textwidth]{../media/iou_img.png}
+    \caption{Example of ground truth bounding box (solid green) and prediction bounding box (dashed red). In this image, the overlap between the green and red regions is the intersection, while the combined area is the union. The IOU of the two boxes is 0.64. Image index: 8.}
+    \label{iou_img}
+\end{figure}
+
+\subsubsection{Precision \& Recall}
+\label{subsect_precrec}
+Once all detections have been tallied and placed into their correct categories, their precision and recall may be calculated. In information retrieval, precision is defined as ``the fraction of retrieved documents that are relevant", and recall is defined as ``the fraction of relevant documents that are retrieved". Reworded for object detection: precision is the number of correct predictions divided by the total number of predictions, and recall is the number of correct predictions divided by the total number of possible answers. These two are also given as equations in terms of true positives and so on.
+
+\begin{equation}
+Precision = \frac{TruePositives}{TruePositives + FalsePositives}
+\label{eq_prec}
+\end{equation}
+
+\begin{equation}
+Recall = \frac{TruePositives}{TruePositives + FalseNegatives}
+\label{eq_rec}
+\end{equation}
+
+Theoretically, precision and recall are generated at multiple points by varying a probability threshold and graphing each result. In practice, a precision-recall curve is generated by a more complex process that involves taking the cumulative sum of the detections in order of descending confidence level (1.0,0.99, ...). The steps are outlined below. These steps are taken from the popular Python module ``scikit-learn", provided by \cite{pedregosa_scikit-learn:_2011}. Although the below example is not exactly the same as what is performed in the official KITTI evaluation code, developed by David Stutz and Bo Li [cite xx], the general steps are similar.
+
+The general steps for generating a precision-recall curve are as follow:
+\begin{enumerate}\itemsep=-0.5em
+    \item Begin with a confidence score vector and a outcomes vector
+    \item Sort scores and corresponding outcomes by descending score value
+    \item OPTIONAL: Identify unique value index locations for approximate threshold indices (done in official code, not necessary)
+    \item Create cumulative sum TP-vector and FP vectors
+    \item Calculate precision \& recall in vector form (unrefined)
+    \item Refine precision vector $pr$ and \& recall vector $re$ (OPTIONAL: remove indices after TP vector stops increasing)
+    \item OPTIONAL: Sort by descending recall value (done in official code, not necessary)
+\end{enumerate}
+
+After all steps are performed, the final precision-recall curve will appear similar to that of Figure xx in Appendix \ref{appendix_metrics}
+
+XX PUT FIGURE PRECREC\_STEPS IN APPENDIX
+
+\subsubsection{Calculating Average Precision}
+Once a set of recall and precision data has been calculated, then AP is a fast and simple calculation. Formally, average precision is defined as the area beneath a precision-recall curve. However, this metric has been calculated in various forms and often modified by the scientific community, including the previously common 11-point average precision used by the Visual Objects Challenge (VOC), used until 2009 and by several subsequent object recognition challenges. 11-point AP has been argued to be slightly more robust against very jittery curves, but also judges results rather ``crudely" and less accurately \cite{everingham_pascal_2015}. For the purposes of computer vision, AP may also be considered a weighted sum of precision, considering that the differences in recall value may be used as the weights since their sum is 1. Thus, to match the function output by \cite{pedregosa_scikit-learn:_2011}, one may simply take a rectangular numerical integration of the values in Table \ref{precrec_ans}. It must be kept in mind that the order of the values MUST be in order of ascending recall value. The mathematical formula for calculating AP is then given in \ref{eq_ap}, where 0 is the starting index and $n$ is the length of the vector:
+
+\begin{equation}
+AP = \sum^{n-2}_{i=0} ({re}_{i+1}-{re}_{i})*({pr}_{i+1})
+\label{eq_ap}
+\end{equation}
 
 % NEWSECTION ===================================================================
 \newpage
@@ -331,7 +369,7 @@ The precision-recall curve for the ``Car" class is below, with AP values include
 
 The precision recall results are now plotted against the pseudo lidar paper. They are shown below in Figure \ref{fpnet_CEFv2_precrec_compareWang}.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{../media/fpnet_CEFv2_precrec_compareWang.pdf}
     \caption{texthere xx}
@@ -343,7 +381,7 @@ Comparing our own pr-curve with the results of other papers, namely \cite{wang_p
 
 
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{../media/fpnet_CEFv2_precrec_compareMulti.pdf}
     \caption{texthere xx}
@@ -352,7 +390,7 @@ Comparing our own pr-curve with the results of other papers, namely \cite{wang_p
 
 Finally, an examination of the same pr-curves generated on ``easy" criteria yields Figure \ref{fpnet_CEFv2_precrec_compareMulti_easy} below.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.6\textwidth]{../media/fpnet_CEFv2_precrec_compareMulti_easy.pdf}
     \caption{texthere xx}
