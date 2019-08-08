@@ -35,6 +35,7 @@ A quick note about the camera FOV (field of view): although the stated raw FOV i
 	\label{economics_table}
 \end{table}
 
+
 To properly clarify the table, ``angular area" will be explained. Angular area, solid angle, square degrees, etc, is a value in ``square radians" ($rad^2$) describing the visible region from a given viewpoint. Solid angle may be defined as given in Figure \ref{eq_solidangle1}.In this equation, $A$ is the spherical surface area, and $r$ represents the sphere's radius. Given that a sphere's surface area is $4\pi \ rad^2$, the maximum theoretical solid angle any sensor may have is $4\pi$, or about 12.57 square radians. However, since only vertical and horizontal field of view are given, the formula to calculate solid angle is then modified to Equation \ref{eq_solidangle2}. Here, $\theta$ and $\phi$ represent the horizontal and vertical field of view (FOV), respectively. The spherical coordinate system used along with an example graphic is shown in Figure \ref{solidangle}. As an example, the lidar system, with hFOV of $[0,360]$ degrees and vFOV of $[-10,10]$ degrees, may thus be calculated to have an solid area of about 2.18 ${rad}^2$ (previous values automatically converted).
 
 \begin{equation}
@@ -96,7 +97,7 @@ The SMART3D project itself is an investigation into short-range, outdoor sensor 
 \newpage
 \section{Related Work} % status: stereo vision, 3D, etc
 
-KJG190807: XX THIS SECTION WILL EVENTUALLY BE REMOVED, AND ALL INFORMATION HEREIN WILL BE MOVED TO THE TOPIC1(PSMNET) AND TOPIC2(FPNET) SECTIONS
+KJG190807: XX THIS SECTION WILL EVENTUALLY BE REMOVED, AND ALL INFORMATION HEREIN WILL BE MOVED TO THE INTRO, TOPIC1(PSMNET, stereo to pointcloud) AND TOPIC2(FPNET, pointcloud to 3D object) SECTIONS
 \subsection{Stereo Vision}
 Stereo disparity maps, which are built by the comparing the pixel distance between two similar regions of two images, have existed before the implementation of artificial intelligence to create them. Famously, \cite{scharstein_taxonomy_2002} gave a taxonomy and categorization of the various aspects of stereo vision. Out of this paper, the four main parts of conducting stereo vision have been classically defined as follows: matching cost computation, cost (support) aggregation, disparity computation and optimization, and disparity refinement.
 
@@ -242,7 +243,7 @@ Frustum Pointnet, being originally written for Python 2, needed to undergo some 
 
 In order to transition from using the provided pre-trained model and preprocessed data to self-made preprocessed and trained data, a set of steps and ``paths" were created to guide what was happening in each step and set of ``runs". As shown below in Figure \ref{fp_paths}, there are various steps with gradually increasing dependence on stereo-based pointcloud data.
 
-\begin{figure}[ht]
+\begin{figure}[H]
     \includegraphics[width=1\textwidth]{../media/fpnet_paths_img.png}
     \caption{Various paths that were planned to simply transition from lidar-based 3D estimation to stereo-based 3D estimation. Generally, paths went chronologically as follow: ADF, AEF, BEF, and finally CEF.}
     \label{fp_paths}
@@ -254,15 +255,13 @@ The most basic path, ADF, is simply using the given model to evaluate and achiev
 % NEWSECTION ===================================================================
 \newpage
 \section{Experiments}
-Now that many of the individual steps of the network have been described above, the complete set of steps taken to produce network estimation will be described. Not every step will be described again, but any deviations from the ``general" usage is clarified. However, this section shall be more detailed in describing how each step was executed.
+Once the network was built and implemented, several experiments were conducted and iterated upon in order to achieve the best possible performance with the given datasets and knowledge. The first subsection is dedicated to explaining the performance metrics of 3D object detection, then moves on to describing the results of each experiment and investigation performed with the network. 
 
-1. train psmnet on object detection images\\
-2. create a preprocessed set of lidar pointclouds generated from PSMnet \\
-3. train fpnet on the preprocessed data, according to path CEF as described in Figure \ref{fp_paths} \\
-4. test fpnet on the data, specifically focusing on 3D object detection for cars. \\
-
-KJG190807: XX ADJUSTING PERFORMANCE METRICS HERE TO PROPERLY EXPLAIN THINGS, AND SEPARATING THE EXAMPLES FOR THE APPENDIX
-
+%xx kjg items to discuss (delme later): 
+% * performance metrics (only theory)
+% * experiment 1: lidar-based pointcloud generation and object detection
+% * experiment 2: stereo-based pointcloud generation and object detection
+% * experiment 3: modified stereo pointcloud and object detection
 
 \subsection{Performance Metrics}
 In order to determine the quality of results obtained, a few different metrics are implemented as are standard in practice. Here, the various metrics are explained, and in Appendix \ref{appendix_metrics} examples are provided. The concept of verifying accuracy in a statistical estimate is covered in \cite{manning_introduction_2008}, and some of this information is covered briefly below. In the field of image recognition, one particularly interesting metric is ``Intersection over Union", also referred to as IOU or Jaccard Index. From this metric, precision and recall may then be calculated. Precision and recall are fundamental in obtaining more abstracted metrics such as average precision (AP) and mean average precision (mAP), which are how different networks are compared. The following information is primarily taken from the well-known PASCAL VOC (visual objects classes) Challenge \cite{everingham_pascal_2010} and ``An Introduction to Information Retrieval" by \cite{manning_introduction_2008}.
@@ -279,7 +278,7 @@ The first step in measuring performance is categorizing what a result may be. Wi
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=.4\textwidth]{../media/tp_help.png}
-	\caption{A visual representation of various outcomes, ground truths as solid black boxes and detections as dotted red boxes. True positives (TP) are a correct detection, FP's are a detection of no actual object, and FN's are a lack of detection of an actual object.}
+	\caption{A visual representation of various outcomes, ground truths as solid black boxes and detections as dotted red boxes. True positives (TP) are a correct detection, FP's are a detection of no actual object, and FN's are a lack of detection of an actual object. TN's are correctly ignoring nothing, and are often ignored as a performance metric.}
 	\label{tp_help}
 \end{figure}
 
@@ -315,9 +314,8 @@ Recall = \frac{TruePositives}{TruePositives + FalseNegatives}
 \label{eq_rec}
 \end{equation}
 
-Theoretically, precision and recall are generated at multiple points by varying a probability threshold and graphing each result. In practice, a precision-recall curve is generated by a more complex process that involves taking the cumulative sum of the detections in order of descending confidence level (1.0,0.99, ...). The steps are outlined below. These steps are taken from the popular Python module ``scikit-learn", provided by \cite{pedregosa_scikit-learn:_2011}. Although the below example is not exactly the same as what is performed in the official KITTI evaluation code, developed by David Stutz and Bo Li [cite xx], the general steps are similar.
+Theoretically, precision and recall are generated at multiple points by varying a probability threshold and graphing each result. In practice, a precision-recall curve is generated by a more complex process that involves taking the cumulative sum of the detections in order of descending confidence level (1.0,0.99, ...). The steps are outlined below. These steps are taken from the popular Python module ``scikit-learn", provided by \cite{pedregosa_scikit-learn:_2011}. Although the below example is not exactly the same as what is performed in the official KITTI evaluation code, developed by \cite{li_github_2017}, the general steps are similar.The general steps for generating a precision-recall curve are as follow:
 
-The general steps for generating a precision-recall curve are as follow:
 \begin{enumerate}\itemsep=-0.5em
     \item Begin with a confidence score vector and a outcomes vector
     \item Sort scores and corresponding outcomes by descending score value
@@ -328,21 +326,27 @@ The general steps for generating a precision-recall curve are as follow:
     \item OPTIONAL: Sort by descending recall value (done in official code, not necessary)
 \end{enumerate}
 
-After all steps are performed, the final precision-recall curve will appear similar to that of Figure xx in Appendix \ref{appendix_metrics}
+After all steps are performed, the final precision-recall curve will appear similar to that of Figure \ref{precrec_steps} in Appendix \ref{appendix_metrics}.
 
-XX PUT FIGURE PRECREC\_STEPS IN APPENDIX
 
 \subsubsection{Calculating Average Precision}
-Once a set of recall and precision data has been calculated, then AP is a fast and simple calculation. Formally, average precision is defined as the area beneath a precision-recall curve. However, this metric has been calculated in various forms and often modified by the scientific community, including the previously common 11-point average precision used by the Visual Objects Challenge (VOC), used until 2009 and by several subsequent object recognition challenges. 11-point AP has been argued to be slightly more robust against very jittery curves, but also judges results rather ``crudely" and less accurately \cite{everingham_pascal_2015}. For the purposes of computer vision, AP may also be considered a weighted sum of precision, considering that the differences in recall value may be used as the weights since their sum is 1. Thus, to match the function output by \cite{pedregosa_scikit-learn:_2011}, one may simply take a rectangular numerical integration of the values in Table \ref{precrec_ans}. It must be kept in mind that the order of the values MUST be in order of ascending recall value. The mathematical formula for calculating AP is then given in \ref{eq_ap}, where 0 is the starting index and $n$ is the length of the vector:
+Once a set of recall and precision data has been calculated, then AP is a fast and simple calculation. Formally, average precision is defined as the area beneath a precision-recall curve. However, this metric has been calculated in various forms and often modified by the scientific community, including the previously common 11-point average precision used by the Visual Objects Challenge (VOC), used until 2009 and by several subsequent object recognition challenges. 11-point AP has been argued to be slightly more robust against very jittery curves, but also judges results rather ``crudely" and less accurately \cite{everingham_pascal_2015}. For the purposes of computer vision, AP may also be considered a weighted sum of precision, considering that the differences in recall value may be used as the weights since their sum is 1. Thus, to match the function output by \cite{pedregosa_scikit-learn:_2011}, one may simply take a rectangular numerical integration of the values in Table \ref{precrec_ans}. It must be kept in mind that the order of the values MUST be in order of ascending recall value. The mathematical formula for calculating AP is then given in \ref{eq_ap}, where 1 is the starting index and $n$ is the length of the vector:
 
 \begin{equation}
-AP = \sum^{n-2}_{i=0} ({re}_{i+1}-{re}_{i})*({pr}_{i+1})
+AP = \sum^{n-1}_{i=1} ({re}_{i+1}-{re}_{i})({pr}_{i+1})
 \label{eq_ap}
 \end{equation}
 
-% NEWSECTION ===================================================================
-\newpage
-\section{Results}
+\subsection{Experiment 1: Lidar-Based Performance as a Baseline}
+
+To first properly understand the performance capability of lidar-based 3D object detection, the typical pipeline
+
+
+
+
+
+
+experiment 1: lidar-based pointcloud generation and object detection
 The raw results of the network training and validation are immediately presented here to quickly provide clarity on the performance of the network, and then these results are to be compared with the performance of other networks and published works.
 
 Firstly, the loss during the Frustum Pointnet training is given in Figure xx. Additionally, the precision-recall curve for the ``Car" class is given as well as the AP score in Figure xx.
