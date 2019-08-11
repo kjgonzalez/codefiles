@@ -333,7 +333,14 @@ Ct.  Name         Description
 	\label{kitti_devkit_info} % label goes last
 \end{figure}
 
-Beyond a few samples of the dataset, some statistics about the dataset can be found in both the accompanying paper as well as by looking through the dataset itself. When observing only the training data, the count of each class can be described. A quick summary of each value across all labels in the training dataset is given below in Table \ref{kitti_label_stats}. Note that the min/max range ignores the DontCare class and its values, such as -1000 for $z_c$.
+Beyond a few samples of the dataset, some statistics about the dataset can be found in both the accompanying paper as well as by looking through the dataset itself. From the original 2012 paper, \cite{geiger_are_2012} provided a subfigure of the class count across both training and validation data, reproduced below in Figure \ref{kitti_graph_objectcount}. When observing only the training data, the count of each class can be described. A quick summary of each value across all labels in the training dataset is given below in Table \ref{kitti_label_stats}. Note that the min/max range ignores the DontCare class and its values, such as -1000 for $z_c$.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.5\textwidth]{../media/kitti_graph_objectcount.pdf}
+	\caption{Object class count in KITTI object detection dataset, reproduced from \cite{geiger_are_2012}.}
+	\label{kitti_graph_objectcount}
+\end{figure}
 
 \begin{table}[H]
 	\centering
@@ -410,9 +417,9 @@ In the paper \cite{wang_pseudo-lidar_2019}, the ``Easy" evaluation for the ``Car
 
 things to ensure are in the report before you're done (completed items are commented out): 
 \begin{itemize} \itemsep=-0.7em
-\item reformat general chapters to intro (incl. related work), topic1 (psmnet \& reconstruction), topic2 (fpnet), experiments, and conclusion
+\item {\color{gray}reformat general chapters to intro (incl. related work), topic1 (psmnet \& reconstruction), topic2 (fpnet), experiments, and conclusion}
 % \item move performance metrics to "experiments" and leave examples as appendices
-\item move 3D reconstruction to topic1 section
+\item {\color{gray}move 3D reconstruction to topic1 section}
 \item fill out subsection fpnet with lidar
 \item fill out subsection fpnet with stereo 1 
 \begin{itemize} \itemsep=-0.6em 
