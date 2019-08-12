@@ -5,6 +5,7 @@ objective: work on creating a depth-first search and breadth-first search
     notebook because of it's rapid prototyping capability
 '''
 
+''' INITIALIZATIONS ======================================================== '''
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -82,27 +83,6 @@ def path2coords(pathlist,gridwidth):
         coords.append( cellnum2coord(ipoint,w) )
     return coords
 
-''' create a desired map and generate accompanying adjacency list '''
-
-# grid 1
-grid=np.ones((4,4))
-grid[1,2]=0
-grid[2,2]=0
-loc_start = [0,0]
-loc_end   = [3,3]
-
-# grid 2
-grid = np.ones((2,2))
-loc_start = [0,0]
-loc_end   = [1,1]
-grid[0,1] = 0
-
-# grid 3
-grid = np.ones((3,3))
-grid[1,2]=0
-loc_start = [0,0]
-loc_end   = [2,2]
-
 # grid 4 (dungeon problem grid)
 grid = np.ones((5,7))
 grid[0,3]=0
@@ -116,14 +96,68 @@ grid[4,2]=0
 grid[4,5]=0
 loc_start=[0,0]
 loc_end  =[4,3] # row/col format
-
 print('map created')
 
+w=grid.shape[1]
+st = coord2cellnum(loc_start,w)
+en = coord2cellnum(loc_end,w)
+print('start / end locations created')
 adj=makeAdjList(grid)
 print('adjacency list created')
 
-''' define search function here '''
 
+''' BREADTH-FRIST SEARCH =================================================== '''
+def bfs(_adjlist,options,goal,history=None,oldoptions=None):
+    ''' simple attempt at bfs. added "history" to properly keep track of where things have been
+    INPUTS:
+        * _adjlist: adjacency list. list of new available paths, given current location
+        * options: starting location. internally, list of current options
+        * goal: end point to reach.
+        * history: internal variable. remembers all visited notes, prevents infinite loops
+        * oldoptions: internal variable. key to remembering previous path taken
+    '''
+    if(type(options)!=list):
+        # first iteration
+        history=[options] # prevent infinite loops
+        options=[options] # aka current location
+    else:
+        history+=options
+    newoptions=[]
+    prevoptions=[]
+    for i,ioption in enumerate(options): # for each currently known option...
+        if(ioption==goal):
+            print('solved!')
+            print('prev loc:',oldoptions[i])
+            return [ioption] # return solution
+        # while generating new paths, remember old ones
+        for inew in _adjlist[ioption]:
+            if(inew not in history):
+                newoptions.append(inew)
+                prevoptions.append(ioption)
+    if(len(newoptions)>0):
+        # can continue
+        path = bfs(_adjlist,newoptions,goal,history.copy(),prevoptions.copy())
+        # if a solution is found, path represents correct item in newoptions
+        # finding the index of that option leads to the right previous option
+        iloc=newoptions.index(path[0])
+        path.insert(0,prevoptions[iloc])
+        return path
+    else:
+        print('no solution found')
+        return None
+
+# solve and plot everything
+path = bfs(adj,st,en)
+print('path:',path)
+
+coords=np.array(path2coords(path,grid.shape[1]))
+f,p=plotgrid(grid,8)
+p.plot(*loc_start[::-1],'ro')
+p.plot(*loc_end[::-1],'rx')
+p.plot(coords[:,1],coords[:,0],'g-')
+plt.show() # necessary when running as a script and not in notebook
+
+''' DEPTH-FIRST SEARCH ===================================================== '''
 def dfs(_adjlist,curr,goal,_path=None):
     ''' depth-first search. runs recursively. note: need to simplify this code and understand better. '''
     status=False
@@ -143,26 +177,13 @@ def dfs(_adjlist,curr,goal,_path=None):
     return status,_path
 
 
-''' alright, with an adjancency list now created, will iterate through each
-    node (number) '''
-# # grid 3
-# grid = np.ones((3,3))
-# grid[1,2]=0
-# loc_start = [0,0]
-# loc_end   = [2,2]
-w=grid.shape[1]
-st = coord2cellnum(loc_start,w)
-en = coord2cellnum(loc_end,w)
-
+# solve and plot everything
 path = dfs(adj,st,en)[1]
-print(path)
+print('path:',path)
 
 coords=np.array(path2coords(path,grid.shape[1]))
-x=coords[:,1]
-y=coords[:,0]
 f,p=plotgrid(grid,8)
-
 p.plot(*loc_start[::-1],'ro')
 p.plot(*loc_end[::-1],'rx')
-p.plot(x,y,'g-')
+p.plot(coords[:,1],coords[:,0],'g-')
 plt.show() # necessary when running as a script and not in notebook
