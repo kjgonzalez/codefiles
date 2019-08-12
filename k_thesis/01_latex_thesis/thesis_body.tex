@@ -347,37 +347,45 @@ To first properly understand the performance capability of lidar-based 3D object
 	\item BEF (prepare preprocessed data, train network, and evaluate)
 \end{itemize}
 
-Aside from path ADF, which of course features no training component, the training loss of each path is visualized below in Figure \ref{train_lidar_loss}. Taking a slightly closer look at the training data, the lowest value loss that the network achieved while training was xx under 5,0 . The rate at which loss was changing also seemed to decrease to zero, indicating that the network was quite stable in its weights by the end of the training.
+Aside from path ADF, which of course features no training component, the training loss of each path is visualized below in Figure \ref{fpnet_loss1}. path "AEF" was performed twice (revision 0 and revision 1), during different times in the project; The performance remained relatively consistent, however.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.4\linewidth]{../media/xx_needimg.png}
+	\includegraphics[width=0.6\linewidth]{../media/fpnet_loss1.pdf}
 	\caption{xx}
-	\label{train_lidar_loss}
+	\label{fpnet_loss1}
 \end{figure}
+
+Taking a slightly closer look at the training data, the lowest value loss that the network achieved while training was 4,1. The rate at which loss was changing also seemed to decrease to zero, indicating that the network was quite stable in its weights by the end of the training. For future reference, path BEF will be used to compare to other networks since it performed reasonably "average".
 
 Additionally, the precision-recall curve of each path for the ``Car" class is also shown in Figure xx. The curves generally indicate that the lidar-based point clouds were quite robust, and the AP score for the three paths are as follow.
 
 \begin{table}[ht]
 	\centering
 	\caption{xx need table here.}
-	\begin{tabular}{|c|c|}
+	\begin{tabular}{|c|c|c|c|}
 		\hline
-		\b{Path} & \b{Average Precision} \\ \hline
-		  ADF    &    one                \\ \hline
-		  AEF    &    two                \\ \hline
-		  BEF    &    three              \\ \hline
+		\b{Path} & \b{AP\_Easy} & \b{AP\_Med} & \b{AP\_Hard} \\ \hline
+		  ADF    &    84.07     &    71.28    &    63.35     \\ \hline
+		  AEF0   &    82.59     &    68.72    &    61.25     \\ \hline
+		  AEF1   &    83.51     &    68.99    &    61.04     \\ \hline
+		  BEF    &    84.12     &    71.00    &    63.27     \\ \hline
 	\end{tabular}
-	\label{test_lidar_ap}
+	\label{fpnet_ap1}
 \end{table}
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.4\linewidth]{../media/xx_needimg.png}
+	\subfigure[text1]{
+	\includegraphics[width=0.4\linewidth]{../media/fpnet_pr1_multi.pdf}}
+	\subfigure[text2]{
+	\includegraphics[width=0.4\linewidth]{../media/fpnet_pr1_bef.pdf}}
 	\caption{xx}
-	\label{test_lidar_pr}
+	\label{fpnet_pr1}
 \end{figure}
+
+
 
 
 Given that these are results from a lidar-based network, they are therefore the benchmark against which performance was then measured. 
@@ -390,9 +398,9 @@ The training loss is provided below in Figure xx, with a comparison to previous 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.4\linewidth]{../media/xx_needimg.png}
+	\includegraphics[width=0.4\linewidth]{../media/fpnet_loss2.pdf}
 	\caption{xx}
-	\label{train_stereo1_loss}
+	\label{fpnet_loss2}
 \end{figure}
 
 As can be seen from the figure, the training loss also reached a point of equilibrium and ceased decreasing after some time, but at a higher value than path BEF. CEFv0's error instead settled closer to a value of xx. 
