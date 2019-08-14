@@ -391,11 +391,11 @@ One of the last but certainly not least important aspects of the KITTI dataset i
 
 \begin{enumerate}\itemsep=-0.5em
 	\item Easy: Min. bounding box height: 40 Px, Max. occlusion level: Fully visible, Max. truncation: 15\%
-	\item Moderate: Min. bounding box height: 25 Px, Max. occlusion level: Partly occluded, Max. truncation: 30\%
+	\item Moderate: (also called "medium" in this paper) Min. bounding box height: 25 Px, Max. occlusion level: Partly occluded, Max. truncation: 30\%
 	\item Hard: Min. bounding box height: 25 Px, Max. occlusion level: Difficult to see, Max. truncation: 50\%
 \end{enumerate}
 
-Naturally, the ``Easy" difficulty typically earns a higher AP score than ``Moderate", and ``Moderate" in turn typically yields a higher AP score than ``Hard". The official final score that a network receives when submitted to the KITTI Leaderboard is the ``Moderate" mean AP score. This paper specifically deals with the ``Car" class, so we may be able to better understand how these difficulties affect other parameters. Specifically related to the ``Car" class, 3D bounding box is considered a detection at 70\% overlap with a ground truth. The other two classes, ``Pedestrian" and ``Cyclist", only require an overlap of 50\%. The remaining other classes are not typically included in evaluation and scoring.
+Naturally, the ``Easy" difficulty typically earns a higher AP score than ``Moderate" (or ``Medium"), and ``Moderate" in turn typically yields a higher AP score than ``Hard". The official final score that a network receives when submitted to the KITTI Leaderboard is the ``Moderate" mean AP score. This paper specifically deals with the ``Car" class, so we may be able to better understand how these difficulties affect other parameters. Specifically related to the ``Car" class, 3D bounding box is considered a detection at 70\% overlap with a ground truth. The other two classes, ``Pedestrian" and ``Cyclist", only require an overlap of 50\%. The remaining other classes are not typically included in evaluation and scoring.
 
 In the paper \cite{wang_pseudo-lidar_2019}, the ``Easy" evaluation for the ``Car" class is said to test on car labels located mostly within 30m of the ego vehicle, which was also claimed by another group, \cite{yang_pixor:_2018}. This was verified, and it is shown below in Figure \ref{kitti_labels_easyCar}.
 
@@ -437,7 +437,7 @@ things to ensure are in the report before you're done (completed items are comme
 \item cite everything correctly
 \item no more 'xx' items
 \item no missing references, has a question mark "?"
-\item use european convention on ',' and '.' (e.g. 75.000,00 euros)
+\item USE AMERICAN NOTATION, COMMAS AND PERIODS WHERE YOU'RE USED TO.
 \item ensure double quotes are properly marked with ``, not "
 \item replace (where possible) png images with high res pdf images. ex: figure 4.1 on different outcomes
 
