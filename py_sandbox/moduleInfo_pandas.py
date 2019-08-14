@@ -2,6 +2,8 @@
 dateCreated: 190518
 objective: how to make a nice table with pandas from numpy. in this example,
     will generate a dummy table with count & AP values for 9 different classes
+
+KJG190814: perhaps also want to look into how to get a csv file via pandas? 
 '''
 
 
