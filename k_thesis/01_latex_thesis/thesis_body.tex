@@ -555,3 +555,17 @@ The best performing iteration of SPCLnet, CEF\_r2, while not performing the outr
 4. This sensor has great potential in the service robot industry, where short-medium range perception is needed, with the bonus of being a passive sensor, capable of working outdoors, and 
 
 xx put in conclusion: better reconstruction with fuller understanding of kitti dataset might help with slight AP improvement
+
+
+The primary conclusion of this paper has found that stereo data indeed has great potential to compete with or extend the capabilities of a lidar based detection system. There are large strides being made in the field, from pure stereo approaches (zeng, rt3d xx) to macro-networks that draw inspiration from lidar based approaches \cite{wang_pseudo-lidar_2019}. Throughout the duration of this paper's writing, there have already been a few new submissions to the KITTI dataset, indicating a growing interest in this subfield. Additionally, the KITTI dataset itself is already beginning to show its age, given that the image data itself is now nearly 7 years old since its initial publishing \cite{geiger_are_2012}, as well as the apparent need to generate one's own set of ground truth data from the object detection dataset in order to even train a stereo network on it. New datasets are showing some level of promise, such as the Apolloscape dataset \cite{huang_apolloscape_2018} or even moderately aged datasets such as \cite{cordts_cityscapes_2016}.
+
+This paper also finds that system setup is key to stereo vision performance. Minor inaccuracies at even a few pixels can degrade system performance, and thus more investigation is needed into generating the most accurate disparity map and subsequent point cloud possible. Clearly, the latter half of SPCLnet and the pseudo-point cloud network by \cite{wang_pseudo-lidar_2019}, Frustum Pointnets by \cite{qi_frustum_2017}, can achieve near state-of-the-art results when given the right information, i.e. accurate point cloud. This indicates that both an improvement in the stereo pipeline is needed as well as an improvement on the data itself, as mentioned above.
+
+The final conclusion of this paper is that a real-time may indeed be within reach, and the crux of achieving this real-time system is to unify and streamline the training process between disparity estimation and 
+
+
+
+
+
+
+
