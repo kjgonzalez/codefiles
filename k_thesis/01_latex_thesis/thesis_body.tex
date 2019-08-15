@@ -73,13 +73,13 @@ Given the information above, stereo sensors are the clear winner in terms of poi
 On the question of quality, lidar becomes the de facto standard of measure due to its high accuracy.
 This means that stereo vision quality is derived from how closely it matches a lidar scan. This also means that stereo vision quality is highly dependent on the system used, and can vary with both hardware and software implementation. A typical engineering threshold of 10\% is used for comparison, meaning that a single stereo-generated point is considered ``good" if its depth estimate is within $\pm$10\% of the absolute value of the corresponding lidar depth estimate. The horizontal and vertical distances, $x$ and $y$, are ignored due to the assumed 1:1 correspondence when projecting a point cloud onto the image plane. The steps to determine this quality are:
 
-\begin{itemize} \itemsep=-0.5em
-    \item Project lidar points to image space, named $L$
+\begin{enumerate} \itemsep=-0.5em
+    \item Project lidar points to image space, the resulting matrix named $L$
     \item Convert disparity values of stereo map to depth values, named $S$
     \item Keep only points from stereo map that also exist in $L$
     \item For each $(i=row,j=column)$ index, obtain the lidar distance, stereo distance, and the absolute error between them as in Equation \ref{eq_errCalc} below.
     \item Tally how many points fall within the $\pm$ 10\% threshold as a percentage of the total points.
-\end{itemize}
+\end{enumerate}
 \begin{equation}
     e = \left | \frac{S_{i,j} - L_{i,j}}{L_{i,j}} \right |
     \label{eq_errCalc}
@@ -90,7 +90,7 @@ After performing the following steps, Figure \ref{corr_disp_lidar} was generated
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.6\linewidth]{../media/corr_stereo_lidar.pdf}
-	\caption{A visual correlation between lidar and stereo depth values that have been projected onto the image plane, removing the need to correlate horizontal or vertical distances. The more points that lie within the $\pm$10\% limit, the better that stereo depth maps approximate lidar point clouds. Pearson correlation coefficient between Lidar and Stereo data is 0.927. Stereo data was generated using a modified Pyramid Stereo Matching network, described in Section \ref{sect_psmnet}. Lidar data was taken from the KITTI Object Detection dataset.}
+	\caption{A visual correlation between lidar and stereo depth values that have been projected onto the image plane, removing the need to correlate horizontal or vertical distances. The more points that lie within the $\pm$10\% limit, the better that stereo depth maps approximate lidar point clouds. Pearson correlation coefficient between Lidar and Stereo data is 0.927. Stereo data was generated using a modified Pyramid Stereo Matching network, described in Section \ref{sect_psmnet}. Lidar data was taken from the KITTI Object Detection dataset.} % xx make the text in this figure larger, aka use smaller figsize 
 	\label{corr_disp_lidar}
 \end{figure}
 
@@ -224,6 +224,9 @@ It is important to note that $D$ stands for a disparity matrix, $f_U$ and $f_V$ 
 In practice, the calculation is performed in a series of matrix calculations rather than as an element-by-element operation. These steps are covered below with accompanying Python code. This code assumes the usage of the Numpy module and that the disparity map has already been generated and saved.
 
 The first step in the reconstruction process is determining the baseline $b$, horizontal focal length $f_U$, vertical focal length $f_V$, and image center $(C_U,C_V)$. The baseline is quickly obtained from KITTI development kit files, which list it as a fixed value of 0.54 meters. The accuracy of this measurement is not known beyond that. For each scene, the focal lengths are determined directly from the left color camera calibration matrix $P_2$, where $f_U=P_2[0,0]$ and $f_V=P_2[1,1]$. The image centers are found by dividing the disparity dimensions by half of the image dimensions, which corrects for non-standardized image dimensions present throughout the dataset. The depth array $Z$ is calculated via matrix operations in nearly the same way as given in Equation \ref{eq_epi_z}: 
+
+% xx need to give slightly darker background in order for code to properly appear as a block
+% xx need to list actual code source in case someone in rwu wants to read it
 \begin{lstlisting}
 import numpy as np
 # STEP 1: generate / load a disparity map
@@ -267,7 +270,7 @@ Once each matrix has been created, they may be combined to form a vector of thre
         \includegraphics[width=0.487\linewidth]{../media/ind15_disp2depth.png}}
     \subfigure[final point cloud result]{
         \includegraphics[width=\linewidth]{../media/ind15_disp2pcl.png}}
-    \caption{xx}
+    \caption{xx} % xx be sure to describe the edge of the FOV shown in (e)
     \label{reconstruction}
 \end{figure}
 
@@ -307,11 +310,11 @@ The general architecture of FPnet is described below in Figure \ref{fpnet_arch},
 \end{figure}
 
 The network itself works in three separate but closely related steps: 
-\begin{itemize}
+\begin{enumerate}
     \item Frustum Proposal: A 2D CNN takes an RGB image and localizes a set of detections as region proposals, also generating a "one-hot" class vector that determines which classes are searched for in the next step.
     \item 3D Instance Segmentation: For each region proposal, a cone or ``frustum" is cut out from the point cloud, a and a 3D instance segmentation is performed, and a masking step removes both needless foreground and background points.
     \item Amodal 3D Box Estimation: Each filtered subset of the point cloud is then subjected to amodal 3D box estimation, meaning that the incomplete set of points are then used to estimate a final set of 3D bounds defining the estimate for each detection.
-\end{itemize}
+\end{enumerate}
 
 
 
@@ -612,10 +615,10 @@ The best performing iteration of SPCLnet, CEF\_r2, while not performing the outr
 \newpage
 \section{Conclusions and Future Work}
 \label{sect_conclusions}
-1. there is potential to make a real-time system
-2. in the short range, stereo vision does perform closer to lidar, with potential to be at least a supporting sensor. 
-3. the quality of a point cloud primarily dependent on both the quality of the data as well as the quality of the neural networks trained to generate it. 
-4. This sensor has great potential in the service robot industry, where short-medium range perception is needed, with the bonus of being a passive sensor, capable of working outdoors, and 
+%1. there is potential to make a real-time system
+%2. in the short range, stereo vision does perform closer to lidar, with potential to be at least a supporting sensor. 
+%3. the quality of a point cloud primarily dependent on both the quality of the data as well as the quality of the neural networks trained to generate it. 
+%4. This sensor has great potential in the service robot industry, where short-medium range perception is needed, with the bonus of being a passive sensor, capable of working outdoors, and 
 
 The primary conclusion of this paper has found that stereo data indeed has great potential to compete with or extend the capabilities of a lidar based detection system. There are large strides being made in the field, from pure stereo approaches (\cite{zeng2018rt3d}, \cite{li_stereo_2019}) to macro-networks that draw inspiration from lidar based approaches (\cite{wang_pseudo-lidar_2019}). Throughout the duration of this paper's writing, there have already been a few new submissions to the KITTI dataset, indicating a growing interest in this subfield. Additionally, the KITTI dataset itself is already beginning to show its age, given that the image data itself is now nearly 7 years old since its initial publishing \cite{geiger_are_2012}, as well as the apparent need to generate one's own set of ground truth data from the object detection dataset in order to even train a stereo network on it. New datasets are showing some level of promise, such as the Apolloscape dataset \cite{huang_apolloscape_2018} or even moderately aged datasets such as \cite{cordts_cityscapes_2016}.
 
