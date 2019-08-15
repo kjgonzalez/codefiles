@@ -11,13 +11,15 @@ The SMART3D project itself is an investigation into short-range, outdoor sensor 
 \subsection{Motivation}
 The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks (CNN's) and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this sub-field. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are a few factors to normalize, and a more in-depth analysis of this is conducted below. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on reflective surfaces, potential interference of multiple lidar sensors if they're all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidar sensors can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
 
-There are some interesting benefits that may be gained with stereo vision, because stereo cameras: are relatively cheap for the amount of information they provide, intuitively mimic the way that humans already perceive and navigate their world, are passive sensors that do not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 10 FPS, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, including: inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and an error that increases quadratically with distance. This last points simply means that as the distance of an estimated point increases, the error of that value increases quadratically, as mentioned by \cite{wang_pseudo-lidar_2019} and visualized below in Figure xx (need correlation beteween lidar distance and stereo disparity).
+There are some interesting benefits that may be gained with stereo vision, because stereo cameras: are relatively cheap for the amount of information they provide, intuitively mimic the way that humans already perceive and navigate their world, are passive sensors that do not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 10 FPS, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, including: inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and an error that increases with distance. As described by \cite{wang_pseudo-lidar_2019} and visualized below in Figure \ref{corr_disp_lidar}, the error in a stereo estimate increases as the reference distance (such as with lidar) increases.
 
 \def \deg {$ ^{\circ}$\ } % need extra backslash for space
 Lidar dominates the environmental sensing space for some very good reasons. It is primarily used for its accuracy at intermediate distances, in the 5-100 meter range. It also is capable of sensing in a 360\deg field of view, and can continue detection during low-light conditions. However, as described by \cite{broggi_sensors_2013}, most modern lidar sensors have a rolling shutter, which causes deformation in the data to correct. They also typically cost much more than a stereo camera system, require moving parts (thus becoming sensitive to vibration), and the other reasons mentioned previously.
 % In terms of low visibility conditions, such as rain or fog, both cameras and lidar sensors suffer a performance decrease, but stereo cameras are more robust as there must be significant weather conditions to deteriorate their vision, similar to how humans may navigate through poor weather.
 
-In order to make a more quantitative comparison between these two ranged sensing methods, the hardware setup used in the KITTI dataset will be analyzed. In collecting the necessary information to create the various datasets, \cite{geiger_are_2012} used a Velodyne HDL-64E lidar and two PointGrey Flea 2 color cameras. In 2012, when the paper was first published, an HDL-64E cost in the range of 75.000 USD (US dollars) xx. Although exact price information for the cameras, which have been discontinued, is difficult to find, a similar model (FL2-03S2C-C) seems to have been priced around 700 USD for a single camera; the two-camera system will therefore be assumed to have cost 1,400 USD xx. Although this clearly demonstrates that the cameras are cheaper, an attempt to normalize for point cloud density / quality will be made next. See Table \ref{economics_table} below for more information on both sensor setups.
+In order to make a more quantitative comparison between these two ranged sensing methods, the hardware setup used in the KITTI dataset will be analyzed. In collecting the necessary information to create the various datasets, \cite{geiger_are_2012} used a Velodyne HDL-64E lidar and two PointGrey Flea 2 color cameras. In 2012, when the paper was first published, an HDL-64E typically cost in the range of 75,000 USD (US dollars) and above. %xx
+Although exact price information for the cameras, which have been discontinued, is difficult to find, a similar model (FL2-03S2C-C) seems to have been priced around 700 USD for a single camera; the two-camera system will therefore be assumed to have cost 1,400 USD. %xx
+Next, these prices will be normalized for point cloud density and quality. See Table \ref{economics_table} below for more information on both sensor setups.
 
 A numeric comparison may be made between sensors, in an attempt to correctly account for several features that one may have while the other may not. Ideally, one would want to have both a high quantity of information as well as a high quality of information. To start, the ``quantity" argument will be examined. Because lidar has 360\deg vision and cameras do not, the camera price and points per scan will be multiplied by four to simulate having cameras on each side of the car, thus simulating near-360\deg vision of the environment (although in the end this does not affect any ratios). Additionally, from scan to scan in the KITTI dataset, there is a varying number of points in the lidar point cloud. Thus, an average of the number of points in each lidar scan was obtained.
 
@@ -75,20 +77,20 @@ This means that stereo vision quality is derived from how closely it matches a l
     \item Project lidar points to image space, named $L$
     \item Convert disparity values of stereo map to depth values, named $S$
     \item Keep only points from stereo map that also exist in $L$
-    \item For each $(i=row,j=column)$ index, obtain the lidar distance, stereo distance, and the absolute error between them as:
+    \item For each $(i=row,j=column)$ index, obtain the lidar distance, stereo distance, and the absolute error between them as in Equation \ref{eq_errCalc} below.
+    \item Tally how many points fall within the $\pm$ 10\% threshold as a percentage of the total points.
+\end{itemize}
 \begin{equation}
     e = \left | \frac{S_{i,j} - L_{i,j}}{L_{i,j}} \right |
     \label{eq_errCalc}
 \end{equation}
-    \item Tally how many points fall within the $\pm$ 10\% threshold as a percentage of the total points.
-\end{itemize}
 
 After performing the following steps, Figure \ref{corr_disp_lidar} was generated: A lidar-stereo graph that merely indicates at what distance value a given stereo point has, and what value its corresponding lidar point also has.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.6\linewidth]{../media/corr_stereo_lidar.pdf}
-	\caption{A visual correlation between lidar and stereo depth values that have been projected onto the image plane, removing the need to correlate horizontal or vertical distances. The more points that lie within the $\pm$10\% limit, the better that stereo depth maps approximate lidar point clouds. Pearson correlation coefficient between Lidar and Stereo data is 0.927. Stereo data was generated using a modified Pyramid Stereo Matching network, described in Section xx. Lidar data was taken from the KITTI Object Detection dataset.}
+	\caption{A visual correlation between lidar and stereo depth values that have been projected onto the image plane, removing the need to correlate horizontal or vertical distances. The more points that lie within the $\pm$10\% limit, the better that stereo depth maps approximate lidar point clouds. Pearson correlation coefficient between Lidar and Stereo data is 0.927. Stereo data was generated using a modified Pyramid Stereo Matching network, described in Section \ref{sect_psmnet}. Lidar data was taken from the KITTI Object Detection dataset.}
 	\label{corr_disp_lidar}
 \end{figure}
 
@@ -118,14 +120,11 @@ Initially, built-in and readily available stereo disparity map computation techn
     \label{ind15_SGBM_comparison}
 \end{figure}
 
-
 With this knowledge, the next step was to find an ideal NN-based stereo disparity estimation method. Notable neural network approaches to disparity estimation include Pyramid Stereo Matching network (PSMnet),  iResNet, and even some monocular-based approaches including one used by Wang et al. named DORN, by  \cite{fu_deep_2018}. In order to select the best candidate, multiple benchmarks were considered. The first benchmark was naturally the KITTI Stereo challenge, which contains a list of the top performing networks. At the start of this thesis writing, PSMnet stood in the top 10 of stereo networks in this list \cite{menze_kitti_2019}.
 
 \subsubsection{3D estimation with Stereo Disparity Maps}
-
-xx NEED TO TALK ABOUT WHY STEREO RCNN ISN'T THE BEST WAY TO GO
-
 There is a surprisingly low amount of public research on stereo vision for use with 3D localization. \cite{li_stereo_2019} created an RCNN-based approach that currently performs best in class on the KITTI dataset, although achieving 59'th place when also compared against networks that use lidar. This paper also cites other works, such as ``3DOP" by \cite{chen_3d_2016}. However, some prior information is encoded into the calculation before using regression to estimate object pose, including height above ground, object size priors, and ``depth informed features", while our paper does not provide this information to the network beforehand.
+% xx NEED TO TALK ABOUT WHY STEREO RCNN ISN'T THE BEST WAY TO GO
 
 A recent development has been published since the start of this paper, by Wang et. al. In their paper, ``Pseudo-LiDAR from Visual Depth Estimation" \cite{wang_pseudo-lidar_2019}, the authors took an extremely similar approach to this paper. Their pipeline / steps, outlined below in Figure \ref{pseudonet_arch}, was to take a stereo image pair, generate a disparity map via Pyramid Stereo Matching network, convert it to a ``pseudo-lidar" scan, and extract 3D bounding box estimations via Frustum Pointnet. \\
 
@@ -142,14 +141,13 @@ In their paper, the authors argue that within a short distance, up to 30 meters 
 \subsubsection{3D Estimation with Lidar}
 Performing 3D estimation and localization with lidar has been a focus for a large portion of the field, and with good reason. Thus, there are many papers which focus on using lidar sensor capabilities to estimate 3D bounding boxes, to varying degrees of success. \cite{qi_frustum_2017} paper, currently one of the best performing networks, forms a part of the work of this research paper as well.
 
-XX NEED TO MENTION AVOD A LITTLE BIT AND EXPLAIN WHAT IT IS
+% xx NEED TO MENTION AVOD A LITTLE BIT AND EXPLAIN WHAT IT IS
 
 % NEWSECTION ===================================================================
 \newpage
 \section{Pyramid Stereo Network and Disparity Map Reconstruction} % topic1
+\label{sect_psmnet}
 The network developed over the course of this thesis, called Stereo Point Cloud Network (SPCLnet) can be broken up into two main sub-networks, as shown below in Figure \ref{spcl_arch}. The first sub-network is explained here, and the second sub-network is explained in the next section.
-
-
 
 \begin{figure}[ht]
 	\centering
@@ -161,11 +159,11 @@ The network developed over the course of this thesis, called Stereo Point Cloud 
 The first sub-network is used to generate a stereo-based point cloud from a disparity map estimation network, created by \cite{chang_pyramid_2018}. The majority of the following information is derived from their work. This sub-network consists primarily of a "Spatial Pyramid Pooling module" to look for matching information at various levels of detail, as well as a "stacked hourglass module for cost volume regularization". After the sub-network is described, a brief explanation of reconstruction is also provided. 
 
 \subsection{Pyramid Stereo Matching Network}
-The first task in creating a network that can take a stereo image pair and generate 3D bounding boxes, as described in figure \ref{spcl_arch} above, is to have the capability of taking a stereo image pair and creating a 2.5D disparity map. To that end, a best-in-class disparity generation algorithm was searched for and selected to be the Pyramid Stereo Matching Network (PSMnet). PSMnet was published by Jia-Ren Chang and Yong-Sheng Chen in March 2018. This network takes a deep learning approach to generating disparity maps from a pair of images. The network itself is near the top of the state of the art, and achieves this by the architecture of its network. (xx architecture and style need to be elaborated upon in the ``related work" section). The openly-available repository provided a foundation to start on towards making a compact, easy-to-use function.
+The first task in creating a network that can take a stereo image pair and generate 3D bounding boxes, as described in figure \ref{spcl_arch} above, is to have the capability of taking a stereo image pair and creating a 2.5D disparity map. To that end, a best-in-class disparity generation algorithm was searched for and selected to be the Pyramid Stereo Matching Network (PSMnet). PSMnet was published by Jia-Ren Chang and Yong-Sheng Chen in March 2018. This network takes a deep learning approach to generating disparity maps from a pair of images. The network itself is near the top of the state of the art, and achieves this by the architecture of its network. The openly-available repository provided a foundation to start on towards making a compact, easy-to-use function.
 
 First, the original evaluation code was tested out. Some modification and housekeeping had to be done to ensure that it was compatible with the local installation, as well as being adapted for use with Python 3. All deprecated functionality was manually removed.
 
-Pyramid Stereo Matching Network, or PSMnet, is a network that takes advantage of an hourglass-shaped network. It is super cool because it produces these very high quality, high resolution disparity maps. The network takes advantage of GPU processing power, depending on nVidia's GPU acceleration, similar to other networks. The network itself is written in PyTorch, a flexible and python-based network module. The use of PyTorch enabled fast, simplified debugging. PSMnet's architecture is shown below in Figure \ref{psmnet_arch}.
+Pyramid Stereo Matching Network, or PSMnet, is a network that takes advantage of an hourglass-shaped network. The result are very high quality, high resolution disparity maps. The network takes advantage of GPU processing power, depending on nVidia's GPU acceleration, similar to other networks. The network itself is written in PyTorch, a flexible and python-based network module. The use of PyTorch enabled fast, simplified debugging. PSMnet's architecture is shown below in Figure \ref{psmnet_arch}.
 
 
 \begin{figure}[ht]
@@ -176,77 +174,122 @@ Pyramid Stereo Matching Network, or PSMnet, is a network that takes advantage of
 
 \subsection{3D Reconstruction from Stereo Data}
 \label{sect_reconstruct}
-Reconstruction is the process of taking a series of 2D images and producing a 3D representation of that information (CITATION NEEDED XX). In this project, reconstruction is a vital part of taking the disparity map estimation of one network and creating a pointcloud that is given to the second network. This appendix will provide a more hands-on description of converting from a disparity map to a pointcloud.
+%things to cover: 
+%1. introduction to reconstruction and methods
+%2. where explained and referenced
+%3. start with simple image describing the initial problem
+%4. give equations, with explanation of variables
+%5. give more concrete example of how one performs this, with both a disparity image and a given point cloud.
+Reconstruction is the process of taking a series of 2D images and producing a 3D representation of that information \cite{szeliski_computer_2010}. In this project, reconstruction is a vital part of taking the disparity map estimation of one network and creating a pointcloud that is given to the second network. The main goal is to end up with a pointcloud, an unordered set of metric coordinates. Epipolar equations allow one to perform these conversions, which are explained below. The main sources for these equations come from both \cite{szeliski_computer_2010} as well as the mention of their usage in the paper by \cite{wang_pseudo-lidar_2019}. 
 
-A disparity map consists of a 2D matrix that may be considered analog to a normal grayscale image, but the value at each (row,column) location represents disparity, or the horizontal (normally) distance between two matching pixels in two different images. Using some basic equations, disparity may be manually calculated. Let there be two cameras, able to produce left and right color images where a ball can be seen, and are able to produce rectified images (images that have corrected the barrel / pincushion distortion). If the cameras are spaced a known distance apart, then their respective images will each contain the ball at some horizontal pixel distance from the left edge of each image. If the ball is located at 100 pixels away from the edge in the left image and 150 pixels away in the RHS image, then the disparity is 50 pixels. Thus, a disparity map may be generated by looking for matching features in two images and assigning each location a difference in the value of where one is found in reference to another (typically the LHS image is the reference).
+To begin describing how the transformation is done, a simple problem is presented with the following assumptions. Let there be two cameras in a scene, both facing the same direction and able to see an object at point $P$, such as a ball. The following assumptions are made: 
 
-The reason for this explanation is that a disparity map must then be transformed into a pointcloud by relating the disparity value at each pixel to a depth distance and the row / column locations to vertical / horizontal distances, respectively. This is accomplished through epipolar formulas, which are as follow:
-
-\begin{equation}
-z = \frac{f_U * b}{D}
-\end{equation}
-
-\begin{equation}
-x = \frac{(u - c_U) * z}{f_U}
-\end{equation}
-
-\begin{equation}
-y = \frac{(v - c_V) * z}{f_V}
-\end{equation}
-
-In these equations, $D$ stands for a disparity matrix, $f_U$ and $f_V$ are for horizontal \& vertical focal lengths (respectively), ($c_U$,$c_V$) are the pixel center of the image, and $(u,v)$ represent a (column, row) coordinate location in $D$.
-
-KJGNOTE NEED TO CONTINUE THIS SECTION XX
-3D reconstruction from a disparity map can be performed multiple similar but slightly different approaches. Regardless of the approach, the goal is to end up with a pointcloud, an unordered set of metric coordinates. The first approach, working with epipolar equations, is the most intuitive. The second, remapping the projected 2D points back into 3D space, is equally effective, but only used to map lidar points onto the image plane (the reverse of reconstruction). \cite{szeliski_computer_2010} goes into some detail over the first method, which principally deals with the high level equations necessary to generate each (x,y,z) coordinate.
-
-The first approach, using epipolar equations, can be described in general as follows. First, some necessary assumptions:
 \begin{itemize} \itemsep=-0.5em
+	\item The two cameras are identical in performance, producing equal quality images at the same point in time.
 	\item The camera centers are aligned (for simplified rectification).
-	\item Images are already rectified (to remove all distortion).
+	\item Images produced are already rectified (to remove all distortion).
+	\item The camera centers $O_i$ are separated by a baseline distance $b$.
+	\item The two cameras have identical horizontal focal lengths $f_U$.
+	\item The ball appears at some horizontal distance $x_i$, whether the origin is measured from the left side of the image or the center.
 \end{itemize}
 
-Given the above, there must first be a given disparity map image, $D$, with indices ($u$,$v$) corresponding to the image's x-axis and y-axis (origin located at the top-left of the image). The cameras' intrinsic properties must also be known (P2 for the KITTI dataset), as well as the baseline, $b$, distance (also known as the distance between camera centers). In the KITTI dataset, Camera 2 is the LHS color camera, and thus each record's corresponding P2 matrix is used. The matrix contains the horizontal focal length $f_U$ as well as the vertical focal length $f_V$. \cite{szeliski_computer_2010} describes this in Equation 2.57 of Chapter 2: Image Formation. The camera baseline is given in multiple locations, namely \cite{geiger_are_2012}, although the value is given as ``roughly 54 cm", which may reduce the overall accuracy somewhat.
+When the two cameras take an image of the ball, the light rays they capture may be drawn as given in Figure \ref{epipolar}. The figure gives a top-down view of what both cameras capture, and the horizontal pixel location at which the light ray comes into contact with each camera center. 
 
-Given this data, the depth value at each pixel location may be calculated via Equation \ref{eq_epi_z}, ignoring locations where the disparity value is 0 or Not-A-Number (NaN).
+\begin{figure}[ht]
+    \centering
+	\includegraphics[width=0.4\textwidth]{../media/epipolar.pdf}
+	\caption{xx}
+	\label{epipolar}
+\end{figure}
 
+Given the above physical setup, the equation describing the relationship between disparity and depth $z$ may be found. When an entire array of disparity points is given, denoted as $D$, the resulting equation is then: 
 \begin{equation}
-z = \frac{f_U * b}{D}
+z = \frac{f_U b}{D}
 \label{eq_epi_z}
 \end{equation}
 
-Next, the real-world $x$ and $y$ locations may be calculated by taking the relative coordinate location from camera center $(c_U,c_V)$, multiplying by the depth values at each pixel location. Successfully calculating this leads to an estimated metric coordinate value for every valid pixel disparity value in the image.
+For example, if the ball is located at 100 pixels away from the edge in the left image and 150 pixels away in the right image, then the disparity is 50 pixels. Thus, a disparity map may be generated by looking for matching features in two images and assigning each location a difference in the value of where one is found in reference to another (typically the left image is the reference).
 
+The process of determining horizontal distance $x$ and vertical distance $y$ merely requires further application of the system in three dimensions rather than two, and may be calculated then as: 
 \begin{equation}
-x = \frac{(u - c_U) * z}{f_U}
+x = \frac{z (u - c_U)}{f_U}
 \end{equation}
 
 \begin{equation}
-y = \frac{(v - c_V) * z}{f_V}
+y = \frac{z(v - c_V)}{f_V}
 \end{equation}
 
-In reality, the calculation is performed in a series of matrix calculations rather than as an element-by-element operation. These steps are covered below.
- 
-XX FILL WITH ACTUAL STEPS ON CONVERTING TO POINT CLOUD.
+It is important to note that $D$ stands for a disparity matrix, $f_U$ and $f_V$ are for horizontal and vertical focal lengths (respectively), ($c_U$,$c_V$) are the pixel center of the image, and $(u,v)$ represent a (column, row) coordinate location in $D$. 
+
+In practice, the calculation is performed in a series of matrix calculations rather than as an element-by-element operation. These steps are covered below with accompanying Python code. This code assumes the usage of the Numpy module and that the disparity map has already been generated and saved.
+
+The first step in the reconstruction process is determining the baseline $b$, horizontal focal length $f_U$, vertical focal length $f_V$, and image center $(C_U,C_V)$. The baseline is quickly obtained from KITTI development kit files, which list it as a fixed value of 0.54 meters. The accuracy of this measurement is not known beyond that. For each scene, the focal lengths are determined directly from the left color camera calibration matrix $P_2$, where $f_U=P_2[0,0]$ and $f_V=P_2[1,1]$. The image centers are found by dividing the disparity dimensions by half of the image dimensions, which corrects for non-standardized image dimensions present throughout the dataset. The depth array $Z$ is calculated via matrix operations in nearly the same way as given in Equation \ref{eq_epi_z}: 
+\begin{lstlisting}
+import numpy as np
+# STEP 1: generate / load a disparity map
+disp=np.load(dpath)
+
+# STEP 2: obtain parameters
+P2 = rec.P2 # pre-existing object that parses calibration file
+fHoriz = P2[0,0]
+fVert= P2[1,1]
+Baseline = 0.54 # meters. Obtained from devkit
+imH,imW = np.array(pil.open(lpath).convert('RGB')).shape
+Cu=disp.shape[1]-imW/2 # Cu = imW/2 - (imW - dispW)
+Cv=disp.shape[0]-imH/2 # Cv = imH/2 - (imH - dispH)
+
+# STEP 3: Calculate depth from disparity values
+zvals = fHoriz*baseline/disp
+\end{lstlisting}
+
+Once this has been performed, the $X$ and $Y$ matrices are generated by creating a vectorized forms of their corresponding theoretical equations: 
+\begin{lstlisting}
+# STEP 4: Convert x_px & y_px to metric
+xpos=np.arange(0,zvals.shape[1])-Cu
+ypos=np.arange(0,zvals.shape[0])-Cv
+ulocs=np.tile(xpos*-1,(zvals.shape[0],1))
+vlocs=np.tile(ypos*-1,(zvals.shape[1],1)).T
+xvals = ulocs*zvals/fHoriz
+yvals = vlocs*zvals/fVert
+\end{lstlisting}
+
+Once each matrix has been created, they may be combined to form a vector of three dimensional coordinates, as shown below in Figure \ref{reconstruction}(e). 
+
+\begin{figure}[H]
+    \centering
+    \subfigure[left image]{
+        \includegraphics[width=0.487\linewidth]{../media/objdet_LHS_000015.png}}
+    \subfigure[right image]{
+        \includegraphics[width=0.487\linewidth]{../media/objdet_RHS_000015.png}}
+    \subfigure[disparity map]{
+        \includegraphics[width=0.487\linewidth]{../media/ind15_psmstar_v190613_AsOf190626.png}}
+    \subfigure[depth map]{
+        \includegraphics[width=0.487\linewidth]{../media/ind15_disp2depth.png}}
+    \subfigure[final point cloud result]{
+        \includegraphics[width=\linewidth]{../media/ind15_disp2pcl.png}}
+    \caption{xx}
+    \label{reconstruction}
+\end{figure}
+
+
+
+
+
 
 % NEWSECTION ===================================================================
 \newpage
 \section{Point Clouds and Frustum Pointnet} % topic2
-textHere
-
-% NEWSECTION ===================================================================
-
-
-
-
+\label{sect_fpnet}
 \subsection{Development of Stereo 3D Reconstruction Function}
 As described in Section \ref{sect_reconstruct}, the overall steps of reconstructing the resulting stereo image consisted of three general equations adapted for use with matrix operations. This also included selecting the proper constants for each calculation. To achieve all this, a specific class was created that would initialize by loading the fully trained model and use it in a non-learning ``testing" mode, whereby it would take in either an image path pair or a loaded pair of image arrays. The pair would then be evaluated in PSMnet, which returns a stereo map, and finally be converted to a pointcloud using the epipolar equations in matrix form. Each record of the KITTI dataset has its own calibration file, but the baseline value remained the same. During the overall Frustum Pointnet training and evaluation, a new pointcloud would be generated in real-time.
 
 \subsection{Modification of Frustum Point Net}
-Frustum Pointnet, being originally written for Python 2, needed to undergo some minor adaptations while being modified for usage with Python 3. For example, several modules and functions were deprecated or needed modification, and so had to be properly adapted. There are also two actively maintained versions of the frustum Pointnet code. as explained in the original paper [xx], there are two versions of the FPNet model: the first which uses standard Tensorflow libraries, and the second which uses custom Tensorflow operators that must be compiled. For the purposes of this paper, version 1 was used and will be the default version unless otherwise noted.
+Frustum Pointnet, being originally written for Python 2, needed to undergo some minor adaptations while being modified for usage with Python 3. For example, several modules and functions were deprecated or needed modification, and so had to be properly adapted. There are also two actively maintained versions of the frustum Pointnet code. as explained in the original paper \cite{qi_frustum_2017}, there are two versions of the FPNet model: the first which uses standard Tensorflow libraries, and the second which uses custom Tensorflow operators that must be compiled. For the purposes of this paper, version 1 was used and will be the default version unless otherwise noted.
 
 In order to transition from using the provided pre-trained model and preprocessed data to self-made preprocessed and trained data, a set of steps and ``paths" were created to guide what was happening in each step and set of ``runs". As shown below in Figure \ref{fp_paths}, there are various steps with gradually increasing dependence on stereo-based pointcloud data.
 
 \begin{figure}[H]
+    \centering
     \includegraphics[width=1\textwidth]{../media/fpnet_paths_img.png}
     \caption{Various paths that were planned to simply transition from lidar-based 3D estimation to stereo-based 3D estimation. Generally, paths went chronologically as follow: ADF, AEF, BEF, and finally CEF.}
     \label{fp_paths}
@@ -254,13 +297,32 @@ In order to transition from using the provided pre-trained model and preprocesse
 
 The most basic path, ADF, is simply using the given model to evaluate and achieve similar results to the official paper. Next, AEF used lidar pointclouds, but the model was trained locally. BEF required locally running the ``preprocessing" step, but was still theoretically identical to the previous two paths. Finally, CEF truly deviates from the other paths by using a stereo-generated pointcloud to preprocess data, then train on that, and finally evaluate the model's detection capability.
 
-XX KJG NEED TO ACTUALLY DESCRIBE HOW FRUSTUM POINT NET WORKS HERE!!
+The general architecture of FPnet is described below in Figure \ref{fpnet_arch}, reproduced from the original paper by \cite{qi_frustum_2017}. 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{../media/fpnet_arch.png}
+    \caption{xx}
+    \label{fpnet_arch}
+\end{figure}
+
+The network itself works in three separate but closely related steps: 
+\begin{itemize}
+    \item Frustum Proposal: A 2D CNN takes an RGB image and localizes a set of detections as region proposals, also generating a "one-hot" class vector that determines which classes are searched for in the next step.
+    \item 3D Instance Segmentation: For each region proposal, a cone or ``frustum" is cut out from the point cloud, a and a 3D instance segmentation is performed, and a masking step removes both needless foreground and background points.
+    \item Amodal 3D Box Estimation: Each filtered subset of the point cloud is then subjected to amodal 3D box estimation, meaning that the incomplete set of points are then used to estimate a final set of 3D bounds defining the estimate for each detection.
+\end{itemize}
+
+
+
+
 
 
 
 % NEWSECTION ===================================================================
 \newpage
 \section{Experiments}
+\label{sect_experiments}
 Once the network was built and implemented, several experiments were conducted and iterated upon in order to achieve the best possible performance with the given datasets and knowledge. The first subsection is dedicated to explaining the performance metrics of 3D object detection, then moves on to describing the results of each experiment and investigation performed with the network. As noted below and in the results of each experiment, the class "Car" is the sole class that is examined. Other classes, such as Cyclist and Pedestrian, have evaluation code and even good ground truth labeling for them, but not in the sheer volume that the Car class has. See Appendix \ref{appendix_kitti} for more information.
 
 %xx kjg items to discuss (delme later): 
@@ -358,7 +420,7 @@ Aside from path ADF, which of course features no training component, the trainin
 
 Taking a slightly closer look at the training data, the lowest value loss that the network achieved while training was 4,1. The rate at which loss was changing also seemed to decrease to zero, indicating that the network was quite stable in its weights by the end of the training. For future reference, path BEF will be used to compare to other networks since it performed reasonably "average".
 
-Additionally, the precision-recall curve of each path for the ``Car" class is also shown in Figure xx. The curves generally indicate that the lidar-based point clouds were quite robust, and the AP score for the three paths are as follow.
+Additionally, the precision-recall curve of each path for the ``Car" class is also shown in Figure \ref{fpnet_pr1}. The curves generally indicate that the lidar-based point clouds were quite robust, and the AP score for the three paths are as follow.
 
 \begin{table}[ht]
 	\centering
@@ -407,7 +469,7 @@ As can be seen from the figure, the training loss also reached a point of equili
 
 In the evaluation, CEF\_r0 performed at a significantly lower level than BEF, indicating a need to further refine the model. However, there is some promise in this result, as it indicates that the system does perform well in the ``Easy" mode, when cars are generally within 30 meters of the sensor. The results from this experiment, as well as further reading, motivated the next experiment conducted. This is shown below, in Figure \ref{fpnet_pr2}.
 
-After the initial results CEF\_r0, the 3D reconstruction step was reexamined for any possible errors. It was then discovered that PSMnet internally crops stereo image pairs into a standardized size, a significant piece of previously unmentioned information. The primary cause of non-standardized image sizes in the object detection dataset is due to the rectification performed on each raw image. This means that the images, after being rectified, are then cropped in a non-standardized way to remove the resulting non-image regions. PSMnet itself only works on a standardized image size, so it therefore takes the smallest dimensions across the dataset and crops all image pairs to that size, [1232,368] pixels. The PSMnet crop is anchored at the bottom-right corner of each image, which provides some consistency but may still contribute to a source of error, since the exact method of cropping both rectified data and images for stereo processing are not totally aligned. A second and lesser source of possible error that was corrected in CEF\_r1 was the method of reconstruction used. This updated method is reflected in \ref{sect_reconstruct}. The constant being used for all disparity-to-depth transformations was consistent, rather than being the product of baseline and $F_U$, horizontal focus length. Thus, Figure \ref{fpnet_pr2} and Table xx show the improvement from CEF\_r0 to CEF\_r1. 
+After the initial results CEF\_r0, the 3D reconstruction step was reexamined for any possible errors. It was then discovered that PSMnet internally crops stereo image pairs into a standardized size, a significant piece of previously unmentioned information. The primary cause of non-standardized image sizes in the object detection dataset is due to the rectification performed on each raw image. This means that the images, after being rectified, are then cropped in a non-standardized way to remove the resulting non-image regions. PSMnet itself only works on a standardized image size, so it therefore takes the smallest dimensions across the dataset and crops all image pairs to that size, [1232,368] pixels. The PSMnet crop is anchored at the bottom-right corner of each image, which provides some consistency but may still contribute to a source of error, since the exact method of cropping both rectified data and images for stereo processing are not totally aligned. A second and lesser source of possible error that was corrected in CEF\_r1 was the method of reconstruction used. This updated method is reflected in \ref{sect_reconstruct}. The constant being used for all disparity-to-depth transformations was consistent, rather than being the product of baseline and $F_U$, horizontal focus length. Thus, Figure \ref{fpnet_pr2} and Table \ref{fpnet_ap2} show the improvement from CEF\_r0 to CEF\_r1. 
 
 \begin{table}[ht]
 	\centering
@@ -447,7 +509,7 @@ After the initial evaluation, the network was prepared for and trained on KITTI 
 	\label{similarity_stereo_objdet}
 \end{figure}
 
-In order to deal with the dataset overlap, the KITTI object detection dataset was adapted to be used for training stereo data. Lidar data was projected onto the LHS image plane, converted to integer values, then multiplied by a constant. These steps are in line with both the way that [xx] were able to generate their self-made stereo ground truths as well as how the KITTI dataset authors generated their ground truth [xx reference to devkit]. Locations in the image that have no lidar data are left alone at a value of 0.0, and finally the resulting array is saved to a PNG image file format containing integer values. Please refer to the generation script in the repository for the exact steps used to generate the pseudo ground truth stereo images.
+In order to deal with the dataset overlap, the KITTI object detection dataset was adapted to be used for training stereo data. Lidar data was projected onto the LHS image plane, converted to integer values, then multiplied by a constant. These steps are in line with both the way that \cite{wang_pseudo-lidar_2019} were able to generate their self-made stereo ground truths as well as how the KITTI dataset authors generated their ground truth, as described in the stereo development kit. Locations in the image that have no lidar data are left alone at a value of 0.0, and finally the resulting array is saved to a PNG image file format containing integer values. Please refer to the generation script in the repository for the exact steps used to generate the pseudo ground truth stereo images.
 
 \subsubsection{Results of Modification}
 It was discovered at some point that the training / validation data used in the KITTI stereo image set was overlapping too much with images used in the KITTI object detection task. Thus, \cite{wang_pseudo-lidar_2019} was referred to and guided the change in retraining PSMnet. The difference in training is shown below.
@@ -469,12 +531,12 @@ In addition to the quantitative difference in training, a qualitative difference
 		\includegraphics[width=1\linewidth]{../media/ind15_psmnet_v190308_AsOf190626.png}}
 	\subfigure[Stereo estimation with new PSMnet* model]{
 		\includegraphics[width=1\linewidth]{../media/ind15_psmstar_v190613_AsOf190626.png}}
-	\caption{Comparison of old and new model for PSMnet. Index 000015. [xx add more detail]}
+	\caption{Comparison of old and new model for PSMnet. Index 000015. xx}
 	\label{new_psmnet}
 \end{figure}
 
 
-The training loss of the modified FPnet is provided below in Figure xx, once again with run BEF plotted for reference. Runs CEF\_r2 and CEF\_r3 are nearly identical, although a slight modification was tested out with CEF\_r3: removing all points in the stereo-generated point cloud that were 1 meter above the sensor vertical height. However, the decrease of information, whatever its quality, seems to have had a very slight negative impact rather than positive one on the overall result.
+The training loss of the modified FPnet is provided below in Figure \ref{fpnet_loss3}, once again with run BEF plotted for reference. Runs CEF\_r2 and CEF\_r3 are nearly identical, although a slight modification was tested out with CEF\_r3: removing all points in the stereo-generated point cloud that were 1 meter above the sensor vertical height. However, the decrease of information, whatever its quality, seems to have had a very slight negative impact rather than positive one on the overall result.
 
 \begin{figure}[ht]
 	\centering
@@ -484,7 +546,7 @@ The training loss of the modified FPnet is provided below in Figure xx, once aga
 \end{figure}
 
 
-The precision-recall curves for the ``Car" class is given below in Figure \ref{fpnet_pr3}, including one only for CEF\_r3, as well as the AP scores for the various difficulties in Table xx.
+The precision-recall curves for the ``Car" class is given below in Figure \ref{fpnet_pr3}, including one only for CEF\_r3, as well as the AP scores for the various difficulties in Table \ref{fpnet_ap3}.
 
 \begin{table}[ht]
 	\centering
@@ -515,9 +577,9 @@ Although the results still lag behind lidar-based performance, Table \ref{fpnet_
 In addition to both developing and testing ``SPCLnet", I graphed and compared the official performance of other networks on the dataset. In addition to the self-made network, I took networks that include: 
 \begin{itemize}
 	\item Pseudo-Point Cloud network, by \cite{wang_pseudo-lidar_2019}
-	\item Std, by ??
+	\item STD: Sparse-to-Dense 3D Object Detector for Point Cloud, \cite{yang2019std}
 	\item RCNN Stereo Network, by \cite{li_stereo_2019}
-	\item RT3D, by xx ???
+	\item RT3D: Real-time 3D vehicle detection, by \cite{zeng2018rt3d}
 \end{itemize}
 
 \begin{table}[ht]
@@ -531,7 +593,7 @@ In addition to both developing and testing ``SPCLnet", I graphed and compared th
 		  RCNN   &    49.23     &    34.05    &    28.39     \\ \hline
 		  RT3D   &    28.50     &    24.10    &    20.32     \\ \hline
 	\end{tabular}
-	\label{fpnet_ap3}
+	\label{fpnet_ap4}
 \end{table}
 
 \begin{figure}[H]
@@ -549,19 +611,17 @@ The best performing iteration of SPCLnet, CEF\_r2, while not performing the outr
 % NEWSECTION ===================================================================
 \newpage
 \section{Conclusions and Future Work}
+\label{sect_conclusions}
 1. there is potential to make a real-time system
 2. in the short range, stereo vision does perform closer to lidar, with potential to be at least a supporting sensor. 
 3. the quality of a point cloud primarily dependent on both the quality of the data as well as the quality of the neural networks trained to generate it. 
 4. This sensor has great potential in the service robot industry, where short-medium range perception is needed, with the bonus of being a passive sensor, capable of working outdoors, and 
 
-xx put in conclusion: better reconstruction with fuller understanding of kitti dataset might help with slight AP improvement
-
-
-The primary conclusion of this paper has found that stereo data indeed has great potential to compete with or extend the capabilities of a lidar based detection system. There are large strides being made in the field, from pure stereo approaches (zeng, rt3d xx) to macro-networks that draw inspiration from lidar based approaches \cite{wang_pseudo-lidar_2019}. Throughout the duration of this paper's writing, there have already been a few new submissions to the KITTI dataset, indicating a growing interest in this subfield. Additionally, the KITTI dataset itself is already beginning to show its age, given that the image data itself is now nearly 7 years old since its initial publishing \cite{geiger_are_2012}, as well as the apparent need to generate one's own set of ground truth data from the object detection dataset in order to even train a stereo network on it. New datasets are showing some level of promise, such as the Apolloscape dataset \cite{huang_apolloscape_2018} or even moderately aged datasets such as \cite{cordts_cityscapes_2016}.
+The primary conclusion of this paper has found that stereo data indeed has great potential to compete with or extend the capabilities of a lidar based detection system. There are large strides being made in the field, from pure stereo approaches (\cite{zeng2018rt3d}, \cite{li_stereo_2019}) to macro-networks that draw inspiration from lidar based approaches (\cite{wang_pseudo-lidar_2019}). Throughout the duration of this paper's writing, there have already been a few new submissions to the KITTI dataset, indicating a growing interest in this subfield. Additionally, the KITTI dataset itself is already beginning to show its age, given that the image data itself is now nearly 7 years old since its initial publishing \cite{geiger_are_2012}, as well as the apparent need to generate one's own set of ground truth data from the object detection dataset in order to even train a stereo network on it. New datasets are showing some level of promise, such as the Apolloscape dataset \cite{huang_apolloscape_2018} or even moderately aged datasets such as \cite{cordts_cityscapes_2016}.
 
 This paper also finds that system setup is key to stereo vision performance. Minor inaccuracies at even a few pixels can degrade system performance, and thus more investigation is needed into generating the most accurate disparity map and subsequent point cloud possible. Clearly, the latter half of SPCLnet and the pseudo-point cloud network by \cite{wang_pseudo-lidar_2019}, Frustum Pointnets by \cite{qi_frustum_2017}, can achieve near state-of-the-art results when given the right information, i.e. accurate point cloud. This indicates that both an improvement in the stereo pipeline is needed as well as an improvement on the data itself, as mentioned above.
 
-The final conclusion of this paper is that a real-time may indeed be within reach, and the crux of achieving this real-time system is to unify and streamline the training process between disparity estimation and 
+The final conclusion of this paper is that a real-time may indeed be within reach, and the crux of achieving this real-time system is to unify and streamline the training process between disparity estimation and and point cloud manipulation. 
 
 
 
