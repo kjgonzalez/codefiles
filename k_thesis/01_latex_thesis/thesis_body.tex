@@ -11,7 +11,7 @@ The SMART3D project itself is an investigation into short-range, outdoor sensor 
 \subsection{Motivation}
 The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks (CNN's) and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this sub-field. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are a few factors to normalize, and a more in-depth analysis of this is conducted below. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on reflective surfaces, potential interference of multiple lidar sensors if they're all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidar sensors can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
 
-There are some interesting benefits that may be gained with stereo vision, because stereo cameras: are relatively cheap for the amount of information they provide, intuitively mimic the way that humans already perceive and navigate their world, are passive sensors that do not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 10 FPS, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, including: inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and an error that increases with distance. As described by \cite{wang_pseudo-lidar_2019} and visualized below in Figure \ref{corr_disp_lidar}, the error in a stereo estimate increases as the reference distance (such as with lidar) increases.
+There are some interesting benefits that may be gained with stereo vision, because stereo cameras: are relatively cheap for the amount of information they provide, intuitively mimic the way that humans already perceive and navigate their world, are passive sensors that do not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 10 FPS, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, including: inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and an error that increases with distance. As described by \cite{wang_pseudo-lidar_2019} and visualized below in Figure \ref{corr_stereo_lidar}, the error in a stereo estimate increases as the reference distance (such as with lidar) increases.
 
 \def \deg {$ ^{\circ}$\ } % need extra backslash for space
 Lidar dominates the environmental sensing space for some very good reasons. It is primarily used for its accuracy at intermediate distances, in the 5-100 meter range. It also is capable of sensing in a 360\deg field of view, and can continue detection during low-light conditions. However, as described by \cite{broggi_sensors_2013}, most modern lidar sensors have a rolling shutter, which causes deformation in the data to correct. They also typically cost much more than a stereo camera system, require moving parts (thus becoming sensitive to vibration), and the other reasons mentioned previously.
@@ -121,10 +121,10 @@ Initially, built-in and readily available stereo disparity map computation techn
 With this knowledge, the next step was to find an ideal NN-based stereo disparity estimation method. Notable neural network approaches to disparity estimation include Pyramid Stereo Matching network (PSMnet),  iResNet, and even some monocular-based approaches including one used by Wang et al. named DORN, by  \cite{fu_deep_2018}. In order to select the best candidate, multiple benchmarks were considered. The first benchmark was naturally the KITTI Stereo challenge, which contains a list of the top performing networks. At the start of this thesis writing, PSMnet stood in the top 10 of stereo networks in this list \cite{menze_kitti_2019}.
 
 \subsubsection{3D estimation with Stereo Disparity Maps}
-There is currently a low amount of public research on stereo vision for use with 3D localization. Most approaches are typically derived from a lidar-based approach. \cite{zeng2018rt3d} produced a stereo alternative to their original "Real-Time 3D Vehicle Detection" network, yet had a difficult time adjusting the performance to account for the noise present in a stereo-generated point cloud, as their approach first transformed points into a bird's eye view (BEV), then performed detections. This approach essentially works on a 2D image of the desired area, using well-established 2D localization methods, but from a top-down view. Also working in 2D, but with a more traditional approach, \cite{li_stereo_2019} takes the left and right images from each scene and obtains region proposals for both sides, eventually taking each proposal pair and estimating semantic information like ``object class, stereo bounding boxes, dimension", and so on. This approach does have its benefits, being deeply rooted in more traditional 2D localization techniques, such as those provided by \cite{ren_faster_2015}, but still experiences shortcomings due to working with three-dimensional data in a two-dimensional space. Additionally, some prior information is required, named as being a ``pre-set dimension prior" that is used for ``dimension prediction". In contrast, this paper and the state of the art approaches avoid the need to have prior information about the world. Overall, the network seemingly has some difficulty learning to estimate information in at least one of the dimensions. In contrast to these previous approaches, the state of the art is currently provided by \cite{wang_pseudo-lidar_2019} in an approach that reconstructs a stereo image into a point cloud, then manipulating the data in a three-dimensional space. Since the start of this paper, it became public knowledge, and was then published before this paper was completed. In their paper, ``Pseudo-LiDAR from Visual Depth Estimation", the authors took an extremely similar approach to this paper. Their network architecture, outlined below in Figure \ref{pseudonet_arch}, utilizes a stereo image pair, generates a disparity map via Pyramid Stereo Matching network, converts it to a ``pseudo-lidar" scan, and extracts 3D bounding box estimations via Frustum Pointnet. This development unfortunately has a strong overlap with the contents of this paper, yet did not have origins in short-range detection of objects. However, in their paper, the authors argue that within a short distance, up to 30 meters away, stereo vision performs competitively with lidar, which is encouraging for the work performed here.
+There is currently a low amount of public research on stereo vision for use with 3D localization. Most approaches are typically derived from a lidar-based approach. \cite{zeng2018rt3d} produced a stereo alternative to their original "Real-Time 3D Vehicle Detection" network, yet had a difficult time adjusting the performance to account for the noise present in a stereo-generated point cloud, as their approach first transformed points into a bird's eye view (BEV), then performed detections. This approach essentially works on a 2D image of the desired area, using well-established 2D localization methods, but from a top-down view. Also working in 2D, but with a more traditional approach, \cite{li_stereo_2019} takes the left and right images from each scene and obtains region proposals for both sides, eventually taking each proposal pair and estimating semantic information like ``object class, stereo bounding boxes, dimension", and so on. This approach does have its benefits, being deeply rooted in more traditional 2D localization techniques, such as those provided by \cite{ren_faster_2015}, but still experiences shortcomings due to working with three-dimensional data in a two-dimensional space. Additionally, some prior information is required, named as being a ``pre-set dimension prior" that is used for ``dimension prediction". In contrast, this paper and the state of the art approaches avoid the need to have prior information about the world. Overall, the network seemingly has some difficulty learning to estimate information in at least one of the dimensions. In contrast to these previous approaches, the state of the art is currently provided by \cite{wang_pseudo-lidar_2019} in an approach that reconstructs a stereo image into a point cloud, then manipulating the data in a three-dimensional space. Since the start of this paper, it became public knowledge, and was then published before this paper was completed. In their paper, ``Pseudo-LiDAR from Visual Depth Estimation", the authors took an extremely similar approach to this paper. Their network architecture takes a stereo image pair, generates a disparity map via Pyramid Stereo Matching network, converts it to a ``pseudo-lidar" scan, and extracts 3D bounding box estimations via Frustum Pointnet. This development unfortunately has a strong overlap with the contents of this paper, yet did not have origins in short-range detection of objects. However, in their paper, the authors argue that within a short distance, up to 30 meters away, stereo vision performs competitively with lidar, which is encouraging for the work performed here.
 
 \subsubsection{3D Estimation with Lidar}
-Performing 3D estimation and localization with lidar has been a focus for a large portion of the field, and with good reason. Lidar data, while expensive to obtain, currently provides the best option for 3D information. Thus, there are many papers which focus on using lidar sensor capabilities to estimate 3D bounding boxes, to varying degrees of success. As mentioned previously, \cite{zeng2018rt3d} attempted to use lidar information with a novel 2D BEV approach, yet fell short of really taking advantage of the new dimension that lidar provided. The greatest breakthroughs have indeed been by networks that manipulate the information directly in the 3D space. Notably, Volumetric CNN's such as those by (xx cite here) made the first leap from 2D space to 3D space, using voxels created by the 3D information provided. However, this approach ultimately struggles with data sparsity and the massive computational cost of 3D convolution. Similar to the first two approaches named, multiview CNN's such as (xx) attempt to use multiple 2D projections of the 3D space to estimate object locations. These also fail, namely when attempting to perform finer operations such as shape classification. One of the major successes in 3D object detection has been by \cite{qi_pointnet:_2017} in the development of Pointnets, e a network that could directly and scalably ``summarize an input point cloud by a sparse set of key points". This had a built-in level of robustness, because the network was designed to operate on an orderless set of points, with less-than-complete knowledge of the 3D shape. However, an improvement came by the same authors when ``Frustum Pointnet", by \cite{qi_frustum_2017}, was introduced. This network simplified the classification process by first using a 2D object detector as a filter to isolate a region of the point cloud. This cone, or ``frustum", then allowed the Pointnet network to operate on a substantially smaller set of points, reducing computation time. This paper takes advantage of this capability to great effect.
+Performing 3D estimation and localization with lidar has been a focus for a large portion of the field, and with good reason. Lidar data, while expensive to obtain, currently provides the best option for 3D information. Thus, there are many papers which focus on using lidar sensor capabilities to estimate 3D bounding boxes, to varying degrees of success. As mentioned previously, \cite{zeng2018rt3d} attempted to use lidar information with a novel 2D BEV approach, yet fell short of really taking advantage of the new dimension that lidar provided. The greatest breakthroughs have indeed been by networks that manipulate the information directly in the 3D space. Notably, Volumetric CNN's such as by \cite{wu20153d} were one of the first leaps from 2D space to 3D space, using voxels created by the 3D information provided. However, this approach ultimately struggles with data sparsity and the massive computational cost of 3D convolution. Similar to the first two approaches named, multiview CNN's such as that by \cite{su2015multi} attempt to use multiple 2D projections of the 3D space to estimate object locations. These also fail, namely when attempting to perform finer operations such as shape classification. One of the major successes in 3D object detection has been by \cite{qi_pointnet:_2017} in the development of Pointnets, e a network that could directly and scalably ``summarize an input point cloud by a sparse set of key points". This had a built-in level of robustness, because the network was designed to operate on an orderless set of points, with less-than-complete knowledge of the 3D shape. However, an improvement came by the same authors when ``Frustum Pointnet", by \cite{qi_frustum_2017}, was introduced. This network simplified the classification process by first using a 2D object detector as a filter to isolate a region of the point cloud. This cone, or ``frustum", then allowed the Pointnet network to operate on a substantially smaller set of points, reducing computation time. This paper takes advantage of this capability to great effect.
 
 % NEWSECTION ===================================================================
 \newpage
@@ -135,7 +135,7 @@ The network developed over the course of this thesis, called Stereo Point Cloud 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=1\linewidth]{../media/spcl_arch.pdf}
-	\caption{General architecture of Stereo-Pointcloud network. A stereo image pair is fed to a disparity estimation network, specifically PSMnet, which then also reconstructs the disparity map into a 3D point cloud. The point cloud is then fed into a pointnet (along with the original left image), specifically Frustum Pointnet, which finally returns a 3D bounding box estimation. Images taken from \cite{geiger_are_2012}, \cite{chang_pyramid_2018}, and \cite{qi_frustum_2017}.}
+	\caption{General architecture of Stereo-Pointcloud network. A stereo image pair is fed to a disparity estimation network, specifically PSMnet, which then also reconstructs the disparity map into a 3D point cloud. The point cloud is then fed into a pointnet (along with the original left image), specifically Frustum Pointnet, which finally returns a 3D bounding box estimation. Images reproduced from \cite{geiger_are_2012}, \cite{chang_pyramid_2018}, and \cite{qi_frustum_2017}.}
 	\label{spcl_arch}
 \end{figure}
 
@@ -417,9 +417,9 @@ Additionally, the precision-recall curve of each path for the ``Car" class is al
 
 \begin{figure}[H]
 	\centering
-	\subfigure{
+	\subfigure[]{
 	\includegraphics[width=0.4\linewidth]{../media/fpnet_pr1_multi.pdf}}
-	\subfigure{
+	\subfigure[]{
 	\includegraphics[width=0.4\linewidth]{../media/fpnet_pr1_bef.pdf}}
 	\caption{Precision recall curves for Experiment 1. Subfigure (a) shows various runs at compared medium difficulty, while Subfigure (b) shows the best-performing run BEF at Easy, Moderate, and Hard difficulties.}
 	\label{fpnet_pr1}
@@ -463,9 +463,9 @@ After the initial results CEF\_r0, the 3D reconstruction step was reexamined for
 
 \begin{figure}[H]
 	\centering
-	\subfigure{
+	\subfigure[]{
 		\includegraphics[width=0.4\linewidth]{../media/fpnet_pr2_multi.pdf}}
-	\subfigure{
+	\subfigure[]{
 		\includegraphics[width=0.4\linewidth]{../media/fpnet_pr2_cef01.pdf}}
 	\caption{Precision-recall graphs for both CEF\_r0 and CEF\_r1, with lidar-based result BEF also shown for reference. In (a), the improvement between r0 and r1 manifests in an $AP_M$ increase of 5 percentage points, and at ``Easy" difficulty, the best curve in (b) has an AP of 42.57.}
 	\label{fpnet_pr2}
@@ -475,7 +475,7 @@ After the initial results CEF\_r0, the 3D reconstruction step was reexamined for
 Upon reviewing the most closely related paper, by \cite{wang_pseudo-lidar_2019}, the suggestion of changing the training dataset for PSMnet was taken. A pretrained stereo model was once again taken, directly from the authors, and finetuned exclusively on the same training split used by FPnet. This is in contrast to the original KITTI stereo dataset, used by the authors. The reasons for this are given below as well as further clarified in Appendix \ref{appendix_kitti}.
 
 \subsubsection{Similarity of Ground Truths Across Datasets}
-After the initial evaluation, the network was prepared for and trained on KITTI data. I first downloaded the network that was pre-trained on the Freiburg SceneFlow dataset, available from the PSMnet authors. Next, I finetuned the network by training it on KITTI data. Here, it must be clarified that there are images in the KITTI stereo dataset that overlap greatly in similarity to those in the KITTI object detection dataset. The difference between the two datasets are essentially that one has been optimized for object detection, and the other for stereo disparity map estimation. This similarity was also noted in \cite{wang_pseudo-lidar_2019}, and I took the same approach to correct it, as described below.Figure \ref{similarity_stereo_objdet} below also demonstrates the similarity between two sample images, which leads to the problem of having a part of the network trained on what may be validation or even evaluation data.
+After the initial evaluation, the network was prepared and trained on KITTI data. The original authors of PSMnet provide a model pre-trained on the Freiburg SceneFlow dataset; this model was also used. After this step, however, it must be clarified that there are images in the KITTI stereo dataset that overlap greatly in similarity to those in the KITTI object detection dataset. The difference between the two datasets are essentially that one has been optimized for object detection, and the other for stereo disparity map estimation. This similarity was also noted in \cite{wang_pseudo-lidar_2019}, and this paper took the same approach to make corrections, as described below. Figure \ref{similarity_stereo_objdet} below also demonstrates the similarity between two sample images, which points to the risk of having a part of the network trained on what may be validation or even evaluation data. This would result in data leakage and thus put the validity of the results into question.
 
 \begin{figure}[ht]
 	\centering
@@ -509,7 +509,7 @@ In addition to the quantitative difference in training, a qualitative difference
 		\includegraphics[width=1\linewidth]{../media/ind15_psmnet_v190308_AsOf190626.png}}
 	\subfigure[Stereo estimation with new PSMnet* model]{
 		\includegraphics[width=1\linewidth]{../media/ind15_psmstar_v190613_AsOf190626.png}}
-	\caption{Comparison of old and new model for PSMnet. Index 000015. xx}
+	\caption{Comparison of old and new model for PSMnet. Index 000015. There are typically less extreme values, yet also some higher contrast in the low (distant) values, as visible by a more clear outline of two pedestrians in the center of the image. See Figure \ref{reconstruction}(a) for photo reference.}
 	\label{new_psmnet}
 \end{figure}
 
@@ -519,7 +519,7 @@ The training loss of the modified FPnet is provided below in Figure \ref{fpnet_l
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.6\linewidth]{../media/fpnet_loss3.pdf}
-	\caption{xx}
+	\caption{Loss over epochs graph for Experiment 3. Run CEF\_r2 and r3 both ended training with a final loss of about 12.0. However, this value is still much higher than the reference BEF training loss.}
 	\label{fpnet_loss3}
 \end{figure}
 
@@ -528,7 +528,7 @@ The precision-recall curves for the ``Car" class is given below in Figure \ref{f
 
 \begin{table}[ht]
 	\centering
-	\caption{xx FPNet stereo-based results,runs r2 and r3, across varying difficulties.}
+	\caption{Experiment 3 results, with FPNet stereo-based results. Runs r2 and r3 shown across varying difficulties.}
 	\begin{tabular}{|c|c|c|c|}
 		\hline
 		\b{Path} & \b{AP\_Easy} & \b{AP\_Med} & \b{AP\_Hard} \\ \hline
@@ -540,19 +540,19 @@ The precision-recall curves for the ``Car" class is given below in Figure \ref{f
 
 \begin{figure}[H]
 	\centering
-	\subfigure[xx1]{
+	\subfigure[]{
 		\includegraphics[width=0.4\linewidth]{../media/fpnet_pr3_multi.pdf}}
-	\subfigure[xx2]{
+	\subfigure[]{
 		\includegraphics[width=0.4\linewidth]{../media/fpnet_pr3_cef23.pdf}}
-	\caption{Precision-recall graphs for both CEF\_r2 and CEF\_r3, with lidar-based result BEF also shown for reference.}
+	\caption{Precision-recall graphs for both CEF\_r2 and CEF\_r3 in (a), with lidar-based result BEF also shown for reference. Subfigure (b) further shows both across the Easy, Moderate, and Hard difficulties.}
 	\label{fpnet_pr3}
 \end{figure}
 
 Although the results still lag behind lidar-based performance, Table \ref{fpnet_ap3} shows yet another improvement in AP from CEF\_r1 to CEF\_r2, improving by about 5 percentage points on ``Easy", 2 points on ``Medium", and 1 point on ``Hard".
 
 
-\subsection{Comparison with Other Networks}
-In addition to both developing and testing ``SPCLnet", I graphed and compared the official performance of other networks on the dataset. In addition to the self-made network, I took networks that include: 
+\subsection{Comparison with Other Networks} 
+In addition to both developing and testing ``SPCLnet", the official performance data of other networks was downloaded, graphed, and compared. In addition to the self-made network, the following networks were compared: 
 \begin{itemize}
 	\item Pseudo-Point Cloud network, by \cite{wang_pseudo-lidar_2019}
 	\item STD: Sparse-to-Dense 3D Object Detector for Point Cloud, \cite{yang2019std}
@@ -562,7 +562,7 @@ In addition to both developing and testing ``SPCLnet", I graphed and compared th
 
 \begin{table}[ht]
 	\centering
-	\caption{xx FPNet stereo-based results,runs r2 and r3, across varying difficulties.}
+	\caption{Results achieved by other notable networks on the KITTI dataset.}
 	\begin{tabular}{|c|c|c|c|}
 		\hline
 		\b{Path} & \b{AP\_Easy} & \b{AP\_Med} & \b{AP\_Hard} \\ \hline
@@ -576,11 +576,11 @@ In addition to both developing and testing ``SPCLnet", I graphed and compared th
 
 \begin{figure}[H]
 	\centering
-	\subfigure[xx1]{
+	\subfigure[]{
 		\includegraphics[width=0.487\linewidth]{../media/fpnet_pr4_multi_e.pdf}}
-	\subfigure[xx2]{
+	\subfigure[]{
 		\includegraphics[width=0.487\linewidth]{../media/fpnet_pr4_multi_m.pdf}}
-	\caption{Precision-recall graphs. xx}
+	\caption{Precision-recall graphs. Subfigure (a) compares run CEF\_r2 to other notable networks at Easy  difficulty. Subfigure (b) compares the same set at Moderate difficulty.}
 	\label{fpnet_pr4}
 \end{figure}
 
@@ -600,7 +600,6 @@ The primary conclusion of this paper has found that stereo data indeed has great
 This paper also finds that system setup is key to stereo vision performance. Minor inaccuracies at even a few pixels can degrade system performance, and thus more investigation is needed into generating the most accurate disparity map and subsequent point cloud possible. Clearly, the latter half of SPCLnet and the pseudo-point cloud network by \cite{wang_pseudo-lidar_2019}, Frustum Pointnets by \cite{qi_frustum_2017}, can achieve near state-of-the-art results when given the right information, i.e. accurate point cloud. This indicates that both an improvement in the stereo pipeline is needed as well as an improvement on the data itself, as mentioned above.
 
 The final conclusion of this paper is that a real-time may indeed be within reach, and the crux of achieving this real-time system is to unify and streamline the training process between disparity estimation and and point cloud manipulation. 
-
 
 
 
