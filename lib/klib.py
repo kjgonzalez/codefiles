@@ -419,7 +419,7 @@ def wordCount(arr):
     return n
 # def wordCount
 
-def getprimes(integer):
+def factorize(integer):
     assert type(integer)==int, "Given value needs to be an integer"
     curr=int(integer+0)
     div=2
