@@ -15,7 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="epipolar.svg">
+   sodipodi:docname="epipolar.svg"
+   inkscape:export-filename="/home/iki/codefiles/k_thesis/01_latex_thesis/media/epipolar.png"
+   inkscape:export-xdpi="150"
+   inkscape:export-ydpi="150">
   <defs
      id="defs4">
     <marker
@@ -163,10 +166,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="158.10728"
+     inkscape:cx="97.928709"
      inkscape:cy="145.46211"
      inkscape:document-units="px"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="g6904"
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -200,81 +203,120 @@
          cy="834.79083"
          cx="147.43793"
          style="fill:#000000;stroke:none"
-         id="path4406-7" />
+         id="path4406-7"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <circle
          id="circle4408"
          style="fill:#000000;stroke:none"
          cx="212.81738"
          cy="1031.8193"
-         r="3.1644216" />
+         r="3.1644216"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <circle
          r="3.1644216"
          cy="1031.663"
          cx="71.486549"
          style="fill:#000000;stroke:none"
-         id="path4406" />
+         id="path4406"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <path
          inkscape:connector-curvature="0"
          id="path4377"
          d="m 15.871577,988.81031 112.733793,0"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.66480875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.66480875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <path
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:2.66480875;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          d="m 157.2662,988.81031 112.73379,0"
          id="path4388"
-         inkscape:connector-curvature="0" />
+         inkscape:connector-curvature="0"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <path
          sodipodi:nodetypes="ccc"
          inkscape:connector-curvature="0"
          id="path4404"
          d="M 71.473306,1031.6229 147.47935,835.71094 213.28324,1031.6229"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <path
          inkscape:connector-curvature="0"
          id="path4410"
          d="m 207.04213,1031.8611 -127.327305,0"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker5004);marker-end:url(#marker5130)" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker5004);marker-end:url(#marker5130)"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <path
          sodipodi:nodetypes="cc"
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3.55307833, 1.77653917, 0.88826958, 1.77653917;stroke-dashoffset:0;stroke-opacity:1"
          d="m 61.607658,1031.8611 -61.607658075337596,0"
          id="path4412"
-         inkscape:connector-curvature="0" />
+         inkscape:connector-curvature="0"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <path
          inkscape:connector-curvature="0"
          id="path4414"
          d="m 16.051172,986.24225 0,-13.3927"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <path
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
          id="path4416"
          d="m 16.051172,978.98788 73.763269,0"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker4702)" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker4702)"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <path
          sodipodi:nodetypes="cc"
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          d="m 157.44579,986.24225 0,-13.3927"
          id="path4698"
-         inkscape:connector-curvature="0" />
+         inkscape:connector-curvature="0"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <path
          sodipodi:nodetypes="cc"
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#Arrow2Mend)"
          d="m 157.44579,978.98788 35.92578,0"
          id="path4700"
-         inkscape:connector-curvature="0" />
+         inkscape:connector-curvature="0"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <text
          sodipodi:linespacing="125%"
          id="text4221-6"
          y="972.67627"
          x="46.916512"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
+         xml:space="preserve"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150"><tspan
            style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
            y="972.67627"
            x="46.916512"
            id="tspan4223-07"
-           sodipodi:role="line">x<tspan
+           sodipodi:role="line">u<tspan
    id="tspan4268-0"
    style="font-style:italic;font-size:11.78454685px;baseline-shift:sub">0</tspan></tspan></text>
       <text
@@ -283,12 +325,15 @@
          y="974.11908"
          x="169.95053"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
+         xml:space="preserve"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150"><tspan
            style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
            y="974.11908"
            x="169.95053"
            id="tspan4223-01"
-           sodipodi:role="line">x<tspan
+           sodipodi:role="line">u<tspan
    id="tspan4268-3"
    style="font-style:italic;font-size:11.78454685px;baseline-shift:sub">1</tspan></tspan></text>
       <path
@@ -296,14 +341,20 @@
          inkscape:connector-curvature="0"
          id="path4824"
          d="m 27.348999,1030.0604 0,-38.70114"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow2Mstart);marker-end:url(#marker4858)" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow2Mstart);marker-end:url(#marker4858)"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <text
          sodipodi:linespacing="125%"
          id="text4221-6-7"
          y="1015.1627"
          x="30.261299"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
+         xml:space="preserve"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150"><tspan
            style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
            y="1015.1627"
            x="30.261299"
@@ -317,7 +368,10 @@
          y="1047.4186"
          x="138.78398"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
+         xml:space="preserve"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150"><tspan
            style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
            y="1047.4186"
            x="138.78398"
@@ -330,20 +384,29 @@
          inkscape:connector-curvature="0"
          id="path4410-9"
          d="m 5.7712083,836.80211 0,192.96639"
-         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker5004-2);marker-end:url(#marker5130-0)" />
+         style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-start:url(#marker5004-2);marker-end:url(#marker5130-0)"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <path
          sodipodi:nodetypes="cc"
          style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.8882696;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:3.55307833, 1.77653917, 0.88826958, 1.77653917;stroke-dashoffset:0;stroke-opacity:1"
          d="m 139.51898,834.87691 -139.518980075337594,0"
          id="path4412-45"
-         inkscape:connector-curvature="0" />
+         inkscape:connector-curvature="0"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150" />
       <text
          sodipodi:linespacing="125%"
          id="text4221-6-1"
          y="937.44604"
          x="9.8124752"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
+         xml:space="preserve"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150"><tspan
            style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
            y="937.44604"
            x="9.8124752"
@@ -357,7 +420,10 @@
          y="846.83533"
          x="156.84818"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
+         xml:space="preserve"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150"><tspan
            style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
            y="846.83533"
            x="156.84818"
@@ -369,7 +435,10 @@
          y="1048.6211"
          x="74.327827"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
+         xml:space="preserve"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150"><tspan
            style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
            y="1048.6211"
            x="74.327827"
@@ -383,7 +452,10 @@
          y="1046.8176"
          x="216.80455"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-         xml:space="preserve"><tspan
+         xml:space="preserve"
+         inkscape:export-filename="/home/iki/codefiles/k_thesis/02_presentation/media/epipolar.png"
+         inkscape:export-xdpi="150"
+         inkscape:export-ydpi="150"><tspan
            style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:18.13007355px;line-height:125%;font-family:'Liberation Serif';-inkscape-font-specification:'Liberation Serif, Normal';text-align:start;writing-mode:lr-tb;text-anchor:start"
            y="1046.8176"
            x="216.80455"
