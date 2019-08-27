@@ -1,11 +1,11 @@
-tarron family / close friends: 
+Tarron family / close friends: 
 
 note: assuming typical human lifespans (90) and elf ones (600), using ratio ElfAge = 600/90*HumanAge. e.g. Tarron, being ~130, is just under 20 years old in human years
 
 Almer: 
 relationship: father
 height: 5'11"
-weight: xx (originally lean and full of muscle, some slight potbelly beginning to show)
+weight: ?? (originally lean and full of muscle, some slight potbelly beginning to show)
 age: ~370 (55 in human years)
 skin color: dark copper
 hair color: dark brown, shoulder length hair
@@ -15,7 +15,7 @@ description: as Tarron's father, Almer has worked and built a life for his famil
 Jandar: 
 relationship: older brother
 height: 6'0"
-weight: xx (stocky, muscled, works in the family trade tirelessly)
+weight: ?? (stocky, muscled, works in the family trade tirelessly)
 age: ~200 (30 in human years)
 skin color: dark copper
 hair color: long brown hair, tied into ponytail
@@ -25,9 +25,9 @@ description: When he was young, Jandar thought of nothing but adventure and expl
 Talindra: 
 relationship: younger sister
 height: 5'3"
-weight: xx
-age: ~101 (15-16 in human years)
-skin color: light copper, 
+weight: ??
+age: ~101 (15-16 in human years) (just a year older than the Sundering)
+skin color: light copper
 hair color: brunette
 eye color: hazel
 description: Talindra is the youngest of the Oakroot family, and therefore the most cared for. She was born nearly a year after the Sundering, and ended up having to grow up without her mother entirely. It affected her early in childhood, but over time she came to accept it, since she had never known the pain of losing her mothehr in the first place. She has a natural curiosity of the world, and has spent much of her childhood studying art, drawing, and the like. She frequently plays in the woods with her friends, sometimes bringing home dinner with her bow or others a new sketch of some place in the forest. She is still considered a child, and thus has not chosen a name for herself yet. In the time that Tarron has been gone, studying in the temple, she has grown close with Jandar and helps with simple day-to-day tasks around the workshop. 
@@ -35,7 +35,7 @@ description: Talindra is the youngest of the Oakroot family, and therefore the m
 Osona: 
 relationship: mother (assumed deceased)
 height: 5'8"
-weight: xx (slender, agile build)
+weight: ?? (slender, agile build)
 age: ~330 (50 in human years)
 skin color: light copper
 hair color: brunette, light brown
@@ -45,10 +45,9 @@ description: In her youth, Osona had been known as a talented healer, and travel
 Kasula Riverstone
 relationship: childhood friend
 height: 5'7"
-weight: xx (lean, limber, lightfooted)
-age: ~145 (22 in human years)
+weight: ?? (lean, limber, lightfooted)
+age: ~150 (22 in human years)
 skin color: copper, some tattoos from the temple
 hair color: black, with some light green tint scattered throughout
 eye color: one yellow, one green
 description: Kasula came to Avamandor an orphaned child, having wandered from town to town, stealing and begging to get by. She was arrested by the guard, and given the choice to join the temple or face imprisonment for her crimes. She chose the former, and gained discipline through rigorous training and meditation. She had few friends at the temple, but met Tarron and connected with him after he had lost his mother in the Sundering. They soon became friends, neither having much interest in the day-long meditations, but finding thrill in the practice of martial arts. Being a little older, Kasula had slightly more practice than Tarron, fostering some friendly competition. She was also chosen and sent on her journey 10 years before him, with the goal of learning to control her impulses and headstrong mind. The temple masters, while controlled in their outward behavior, were noticably more at ease after her departure. She talked little about her past, but claimed to have been part of a nomadic band of elves that, according to her, roamed throughout the continent freely. She always seemed to have more passion than the typical elf, a likely result of a nomadic lifestyle being pent-up in a monastic lifestyle for so long. She did not tell Tarron she had been assigned a journey, and was gone before he could ask. He found out from the temple masters, but they did not share where she was headed.
-
