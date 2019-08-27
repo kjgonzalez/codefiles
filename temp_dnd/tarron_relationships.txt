@@ -1,0 +1,53 @@
+tarron family / close friends: 
+
+note: assuming typical human lifespans (90) and elf ones (600), using ratio ElfAge = 600/90*HumanAge. e.g. Tarron, being ~130, is just under 20 years old in human years
+
+Almer: 
+relationship: father
+height: 5'11"
+weight: xx (originally lean and full of muscle, some slight potbelly beginning to show)
+age: ~370 (55 in human years)
+skin color: dark copper
+hair color: 
+eye color: 
+description: as Tarron's father, Almer has worked and built a life for his family with carpentry and woodworking. himself the youngest of several children, he grew up around the flower forest and eventually gained his apprenticeship in carpentry after some time volunteering in the town guard. over his long career, he has become one of the most sought after master craftsmen in Avamandor, building exotic furniture and building design pieces. He's got rough hands from working his whole life, but enjoys the arts through his experience with musical instruments that he's built in his off-time. In middle-age, he's passed most of his trade down to his oldest son, Jandar. Through the years, he's also become an incredible cook, experimenting and learning from years of practice feeding his family.
+
+Jandar: 
+relationship: older brother
+height: 6'0"
+weight: xx (stocky, muscled, works in the family trade tirelessly)
+age: ~200 (30 in human years)
+skin color: dark copper
+hair color: 
+eye color: 
+description: When he was young, Jandar thought of nothing but adventure and exploration. Even before he became an adult, he would run through the forests with his friends. His small band of friends eventually all grew up, some joining the temple, others becoming scholars. One night, however, during the Sundering, his friends had slipped by one of the areas that would be affected. He lost one of his closest friends that night, and it forever left him with a sour taste for adventure from then on. This and the sudden loss of his mother put his life into perspective, and he focused on inheriting his father's trade and ensuring the family would be prosperous. Out of all the family, Jandar worries most about Tarron having been sent out on his mission.
+
+Talindra: 
+relationship: younger sister
+height: 5'3"
+weight: xx
+age: ~101 (15-16 in human years)
+skin color: light copper, 
+hair color: 
+eye color: 
+description: Talindra is the youngest of the Oakroot family, and therefore the most cared for. She was born nearly a year after the Sundering, and ended up having to grow up without her mother entirely. It affected her early in childhood, but over time she came to accept it, since she had never known the pain of losing her mothehr in the first place. She has a natural curiosity of the world, and has spent much of her childhood studying art, drawing, and the like. She frequently plays in the woods with her friends, sometimes bringing home dinner with her bow or others a new sketch of some place in the forest. She is still considered a child, and thus has not chosen a name for herself yet. In the time that Tarron has been gone, studying in the temple, she has grown close with Jandar and helps with simple day-to-day tasks around the workshop. 
+
+Osona: 
+relationship: mother (assumed deceased)
+height: 5'8"
+weight: xx (slender, agile build)
+age: ~330 (50 in human years)
+skin color: light copper
+hair color: 
+eye color: 
+description:
+
+Kasula Riverstone
+relationship: childhood friend
+height: 5'7"
+weight: xx (??)
+age: 
+skin color: 
+hair color: 
+eye color: 
+description: 
