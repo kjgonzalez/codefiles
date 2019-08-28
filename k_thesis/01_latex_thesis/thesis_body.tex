@@ -87,7 +87,7 @@ After performing the following steps, Figure \ref{corr_stereo_lidar} was generat
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.8\linewidth]{../media/corr_pct_within.pdf}
-	\caption{A bar chart describing what percentage of points lie within the given depth range. As an example, about 95\% of stereo depth values greater than 10 meters but less than or equal to 20 meters are within $\pm$10\% of the corresponding lidar depth value. The first 1000 indices of the KITTI dataset were used, altogether comprising 17,134,011 point comparisons between stereo and lidar. The dotted line indicates a 1st order polynomial fit, with the slope equal to about -0.03 percentage points per range (i.e. every 10 meters, there's about -0.03 change in percentage of points within bounds). In the smallest subset of points, the (70,80] range, there are 75,224 points.}
+	\caption{A bar chart describing what percentage of points lie within the given depth range. As an example, about 95\% of stereo depth values greater than 10 meters but less than or equal to 20 meters are within $\pm$10\% of the corresponding lidar depth value. The first 1000 indices of the KITTI dataset were used, altogether comprising 17,134,011 point comparisons between stereo and lidar. The dotted line indicates a 1st order polynomial fit, with the slope equal to about -0.03 percentage points per range (i.e. every 10 meters, there's about -0.03 change in percentage of points within bounds). In the smallest subset of points, the (70,80] range, there are 75,224 points. The fully developed Pyramid Stereo Matching network for use in Experiment 3 was used to generate part of the data.}
 	\label{corr_stereo_lidar}
 \end{figure}
 
@@ -147,9 +147,51 @@ Pyramid Stereo Matching Network, or PSMnet, is a network that takes advantage of
 
 \begin{figure}[ht]
 	\includegraphics[width=1\textwidth]{../media/psmnet_arch.png}
-	\caption{Generalized network architecture for Pyramid Stereo Matching network. The 3D CNN has two available configurations, Basic and Stacked hourglass. Stacked hourglass was used here. The Spatial Pyramid Pooling Module helps describe how features at varying ``zoom" levels were concatenated together. Image reproduced from \cite{chang_pyramid_2018}.}
+	\caption{Generalized network architecture for Pyramid Stereo Matching network. The 3D CNN has two available configurations, Basic and Stacked hourglass. Stacked hourglass was used here. The Spatial Pyramid Pooling Module helps describe how features at varying magnification levels were concatenated together. Image reproduced from \cite{chang_pyramid_2018}.}
 	\label{psmnet_arch}
 \end{figure}
+
+
+To properly understand PSMnet, the network will be explained in three general steps, as described by the original authors Jia-Ren Chang and Yong-Scheng Chen \cite{chang_pyramid_2018}. 
+
+\begin{enumerate}\itemsep=-0.5em
+    \item Initial 2D convolution into Spatial Pyramid Pooling 
+    \item Aggregate all data into a cost volume
+    \item Perform 3D convolution and ``deconvolution" on the cost volume until a final prediction is reached.
+\end{enumerate}
+
+\textbf{{\large Step 1: Spatial Pyramid Pooling (SPP) Module}} \\
+To begin finding a disparity map from an image pair, the images each fed into a 2D CNN with weight sharing (meaning that the two CNN's have identical weights). The two images are thus changed from
+color images with dimensions (Height, Weight, Channel=3) to feature maps with dimensions (H/4, W/4, Features=32). These two maps which are then each fed into a SPP module, which uses average pooling to capture details of each map at various scales. In effect, the SPP module ``zooms" at various magnifications in order to capture different levels of detail in the same image, all of which are then concatenated together, along with the original feature map, into an aggregated feature map. At this point, there feature dimension is rather large, expanded to 320 from 32. Additional convolution with a 1x1 filter size helps reduce the number of features back down to 32, and each aggregated feature map is sent into the cost volume to be further combined.
+
+The primary reason for the SPP module is to take advantage of ``image features rich with object context information" \cite{chang_pyramid_2018} while addressing the fixed-size constraint of CNN's. By looking at the image at various magnifications, the network learns to ``incorporate hierarchical context information", such as an object like a car and its sub-objects like tires, windows, and so on. At this point, the network is not yet calculating anything like disparities, but rather learning the relationships between sub-regions that may later play a part in determining distance relationships between them.
+
+\textbf{{\large Step 2: Cost Volume}} \\
+Next, the two aggregate feature maps are combined into a single 4-dimensional matrix known as a cost volume. As described by Chang and Chen, the left and right feature maps are concatenated, resulting in a 4D ``volume", with dimensions (Height, Width, Disparity, Features). The disparity level is created from the various scales at which features are concatenated, or ``levels" as the paper describes. Later on, these disparity values will be refined into a final estimate via regression. The usage of a cost volume will later necessitate the use of a 3D convolution, to deal with the extra dimension generated. At this point, the cost volume has a general shape of (D/4, H/4, W/4, 64), as described by Table 1 in the original paper \cite{chang_pyramid_2018}.
+
+\textbf{{\large Step 3: 3D Convolutional Neural Network}} \\
+The last major step of PSMnet is to take the cost volume and perform stereo matching. At this point, the task has been somewhat simplified by using an SPP module at the start in order to involve ``different levels of features" \cite{chang_pyramid_2018}. There are two 3D CNN architectures that the authors developed, a ``Basic" and ``Stacked Hourglass" architecture. This thesis used the ``Stacked Hourglass" network for its improved performance. In brief summary, the Basic 3D CNN is comprised solely of residual blocks that convolve the cost volume. This reduced cost volume is then upsampled up to a shape of (Height, Width, Disparity), and finally regression is used to ``calculate the disparity map with size H x W".
+
+The Stacked Hourglass architecture, in contrast to the Basic architecture, uses two kinds of convolutional layers along with complimentary transposed convolutional layers to repeatedly reduce and upsample the cost volume. Figure \ref{psmnet_hourglass} below reproduces just the Stacked Hourglass network from Figure \ref{psmnet_arch} above. 
+
+
+\begin{figure}[ht]
+	\includegraphics[width=1\textwidth]{../media/psmnet_hourglass.pdf}
+	\caption{Detailed view of Stacked Hourglass architecture from PSMnet. Image reproduced from the PSMnet paper \cite{chang_pyramid_2018}.}
+	\label{psmnet_hourglass}
+\end{figure}
+
+The first four layers (marked in blue) are 3D convolutional layers with a stride of 1. The disparity, height, and width dimensions don't change, but the number of features are reduced from 64 to 32. Next, the network actually begins its "hourglass" portion, with a 3D convolutional layer of stride 2 (marked red) halving the Disparity, Height, and Width dimensions (by half) while doubling the Features. This step is again repeated (without changing the Features size), bringing the dimensions to (H/16, W/16, D/16, Features=64). 
+
+This is the "smallest" that the cost volume will be, and it is next upsampled via 3D transposed convolution, or 3D ``deconvolution" as it is also known. The simple reason that this network is upsampled using deconvolution is to reconstruction predictions about the disparity at a higher resolution. This is similar to how a low-resolution image may be upsampled into a higher resolution, requiring some kind of calculation to estimate the true value of unknown pixels. In the same way, deconvolution expands the cost volume again to correct the shrinking that happens with convolution. However, in order to recover some information about the values lost from the hi-res cost volume, a ``skip layer" is also implemented. Skip layers, in a practical sense, are an operation to take the weights from a previous layer and add them element-wise to a future layer later on. This is best exemplified by the green arrows in Figure \ref{psmnet_hourglass}, although the orange and red arrows are also skip layers. Thus, features that may have been lost during convolution are partially restored during deconvolution. 
+
+Once the cost volume has been reduced and then upsampled in size, a single hourglass step has been taken. This hourglass shape is also known as an encoder-decoder architecture, popularized by SegNet, an architecture for image segmentation by Badrinarayanan et al. \cite{badrinarayanan_segnet:_2017}. In their paper, the authors argue that the key component is ``the decoder network which consists of a hierarchy of decoders one corresponding to each encoder", enabling the ability to perform non-linear upsampling while still being memory efficient. The ``stacked" nature of PSMnet comes from repeating this hourglass network multiple times, three in total. 
+
+Each time the network is upsampled, it outputs a new cost volume. Each of these cost volumes, eventually becoming disparity maps, are optimized during training. In testing, the final cost volume is used. This cost volume is then upsampled bilinearly, and finally the continuous disparity map is calculated via ``disparity regression". The authors of PSMnet utilize this as described by Kendall et al. \cite{kendall_end--end_2017}: in contrast to estimating disparity with an argmin operation, Kendall defined a differentiable ``soft argmin" function and capable of creating sub-pixel disparity estimates. Although the details of this operation will not be explained here, Chang implements this in PSMnet to collapse the four-dimensional cost volume into a two-dimensional disparity map. 
+
+
+
+
 
 \subsection{3D Reconstruction from Stereo Data}
 \label{sect_reconstruct}
@@ -187,9 +229,7 @@ z = \frac{f_U b}{D}
 \label{eq_epi_z}
 \end{equation}
 
-For example, if the ball is located at 100 pixels away from the edge in the left image and 150 pixels away in the right image, then the disparity is 50 pixels. Thus, a disparity map may be generated by looking for matching features in two images and assigning each location a difference in the value of where one is found in reference to another (typically the left image is the reference).
-
-The process of determining horizontal distance $x$ and vertical distance $y$ merely requires further application of the system in three dimensions rather than two, and may be calculated then as: 
+Thus, a depth map may be generated by using this equation on each disparity value. The process of determining horizontal distance $x$ and vertical distance $y$ merely requires further application of the system in three dimensions rather than two, and may be calculated then as: 
 \begin{equation}
 x = \frac{z (u - c_U)}{f_U}
 \end{equation}
