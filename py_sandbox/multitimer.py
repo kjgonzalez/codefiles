@@ -17,84 +17,85 @@ import numpy as np
 
 # for python 3.x use 'tkinter' rather than 'Tkinter'
 
+class MainWindow():
+    def __init__(self):
+        self.r = tk.Tk()
+        self.f=tk.Frame(self.r)
+        self.f.pack()
+        # names
+        names='dmself dmchar vax vex grog scanlan percy kiki none'.split(' ')
+        alts ='q,a,w,e,r,s,d,f, '.split(',')
+        self.n={alts[i]:names[i] for i in range(len(alts))}
+        self.names=names[:-1]
+        self.target='none'
 
-r = tk.Tk()
-f=tk.Frame(r)
-f.pack()
+        # control variables
+        self.v=dict()
+        for iname in names:
+            self.v[iname]=tk.DoubleVar()
+        self.v['total']=tk.DoubleVar()
 
-# names
-names='dmself dmchar vax vex grog scanlan percy kiki none'.split(' ')
-alts ='q,a,w,e,r,s,d,f, '.split(',')
-n={alts[i]:names[i] for i in range(len(alts))}
+        # label forms
+        self.l=dict()
+        for iname in names:
+            self.l[iname]=tk.Label(self.f,textvariable=self.v[iname])
+            self.l['_'+iname]=tk.Label(self.f,text=iname)
+        self.l['_total']=tk.Label(self.f,text='total')
+        self.l['total']=tk.Label(self.f,textvariable=self.v['total'])
+        self.l['spacer']=tk.Label(self.f,text=' '*100)
+        self.l['_total'].configure(font=('Helvetica', 10, 'bold'))
+        self.l['_total'].configure(font=('Helvetica', 10, ''))
 
-names=names[:-1]
-# control variables
-v=dict()
-for iname in names:
-    v[iname]=tk.DoubleVar()
-v['total']=tk.DoubleVar()
+        # initialize variables
+        for iname in names:
+            self.v[iname].set(0)
 
-# label forms
-l=dict()
-for iname in names:
-    l[iname]=tk.Label(f,textvariable=v[iname])
-    l['_'+iname]=tk.Label(f,text=iname)
-l['_total']=tk.Label(f,text='total')
-l['total']=tk.Label(f,textvariable=v['total'])
-l['spacer']=tk.Label(f,text=' '*100)
-l['_total'].configure(font=('Helvetica', 10, 'bold'))
-l['_total'].configure(font=('Helvetica', 10, ''))
-# font=('Helvetica', 10, 'bold')
+        for i,iname in enumerate(names):
+            self.l['_'+iname].grid(row=i,column=0)
+            self.l[iname].grid(    row=i,column=1)
+        self.l['_total'].grid(row=20,column=0)
+        self.l['total'].grid(row=20,column=1)
+        self.l['spacer'].grid(row=21,column=1)
 
-# initialize variables
-for iname in names:
-    v[iname].set(0)
+        # need one for each person, plus a stop
+        self.r.bind('q',lambda event:self.focus('q'))
+        self.r.bind('w',lambda event:self.focus('w'))
+        self.r.bind('e',lambda event:self.focus('e'))
+        self.r.bind('r',lambda event:self.focus('r'))
+        self.r.bind('a',lambda event:self.focus('a'))
+        self.r.bind('s',lambda event:self.focus('s'))
+        self.r.bind('d',lambda event:self.focus('d'))
+        self.r.bind('f',lambda event:self.focus('f'))
+        self.r.bind('<space>',lambda event:self.focus(' '))
+        self.r.bind('<Control-q>',self.quit)
 
-for i,iname in enumerate(names):
-    l['_'+iname].grid(row=i,column=0)
-    l[iname].grid(    row=i,column=1)
-l['_total'].grid(row=20,column=0)
-l['total'].grid(row=20,column=1)
-l['spacer'].grid(row=21,column=1)
+    def run(self):
+        self.updater()
+        self.r.mainloop()
 
-target='none'
-def focus(key):
-    ''' given a certain key, change focus '''
-    global target
-    target=n[key]
-    # change look of the label and ensure others are to original look
-    for iname in names:
-        l[iname].configure(font=('Helvetica', 10, ''))
-        l['_'+iname].configure(font=('Helvetica', 10, ''))
-    if(target!='none'):
-        l[target].configure(font=('Helvetica', 10, 'bold'))
-        l['_'+target].configure(font=('Helvetica', 10, 'bold'))
+    def focus(self,key):
+        ''' given a certain key, change focus '''
+        self.target=self.n[key]
+        # change look of the label and ensure others are to original look
+        for iname in self.names:
+            self.l[iname].configure(font=('Helvetica', 10, ''))
+            self.l['_'+iname].configure(font=('Helvetica', 10, ''))
+        if(self.target!='none'):
+            self.l[self.target].configure(font=('Helvetica', 10, 'bold'))
+            self.l['_'+self.target].configure(font=('Helvetica', 10, 'bold'))
 
-def updater(event=None):
-    if(target!='none'):
-        v[target].set(v[target].get()+0.1)
-    v['total'].set(sum([v[iname].get() for iname in names]))
-    r.after(100,updater) # time in milliseconds
+    def updater(self,event=None):
+        if(self.target!='none'):
+            self.v[self.target].set(self.v[self.target].get()+0.1)
+        self.v['total'].set(sum([self.v[iname].get() for iname in self.names]))
+        self.r.after(100,self.updater) # time in milliseconds
 
+    def quit(self,event):
+        self.f.quit()
 
-def quit(event):
-    f.quit()
-# need one for each person, plus a stop
-r.bind('q',lambda event:focus('q'))
-r.bind('w',lambda event:focus('w'))
-r.bind('e',lambda event:focus('e'))
-r.bind('r',lambda event:focus('r'))
-r.bind('a',lambda event:focus('a'))
-r.bind('s',lambda event:focus('s'))
-r.bind('d',lambda event:focus('d'))
-r.bind('f',lambda event:focus('f'))
-r.bind('<space>',lambda event:focus(' '))
-r.bind('<Control-q>',quit)
-
-updater()
-r.mainloop()
-r.destroy()
-
+# r.destroy()
+obj=MainWindow()
+obj.run()
 
 
 
