@@ -11,7 +11,7 @@ The SMART3D project itself is an investigation into short-range, outdoor sensor 
 \subsection{Motivation}
 The field of artificial intelligence has exploded in recent years, in part due to the usage of convolutional neural networks (CNN's) and the usage of graphics processing units, GPU's. This has enabled further research into systems that can quickly understand their surroundings, having applications in other fields, one of which is autonomous driving. The subfield of autonomous driving has seen great success in the application of camera data for 2D localization. However, driving is a process that requires some 3D knowledge, which means the usage of lidar has followed the growth of this sub-field. To its credit, lidar is a technology with multiple benefits: a lidar scan is precise, works outside, works in darkness, and provides immediate metric information about the world. Unfortunately, lidar sensors also have the disadvantage of being rather expensive when compared to passive sensors such as cameras. In this context, expensive means the relative amount of usable information that is output at a standardized rate per amount of money spent. There are a few factors to normalize, and a more in-depth analysis of this is conducted below. In addition to the high cost, there may be other hidden disadvantages of using lidar, such as a weaker or missing return signal on reflective surfaces, potential interference of multiple lidar sensors if they're all in the same area (e.g. multiple autonomous vehicles at an intersection), and the relatively slow refresh rate lidar sensors can achieve when compared to passive sensing cameras. Therefore, despite lidar being a worthy technology of use, this paper seeks to explore an alternative technology, stereo vision, to estimate the 3D positions of objects.
 
-There are some interesting benefits that may be gained with stereo vision, because stereo cameras are relatively cheap for the amount of information they provide, intuitively mimic the way that humans already perceive and navigate their world, are passive sensors that do not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 10 FPS, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, including: inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and an error that increases with distance. This increasing error is described by Wang et al. \cite{wang_pseudo-lidar_2019} and visualized below in Figure \ref{corr_stereo_lidar}.
+There are some interesting benefits that may be gained with stereo vision, because stereo cameras are relatively cheap for the amount of information they provide, intuitively mimic the way that humans already perceive and navigate their world, are passive sensors that do not interfere with other sensors, and have a high refresh rate (dependent on the camera system, but 10 FPS, ``frames per second", is around the lowest value for any camera). Of course, using a stereo vision system is not without downsides, including: inability to function at night without adequate lighting, difficulty understanding large texture-less surfaces, and an error that increases with distance. This increasing error is described by Wang et al. \cite{wang_pseudo-lidar_2019} and visualized below in Figure \ref{corr_pct_within}.
 
 \def \deg {$ ^{\circ}$\ } % need extra backslash for space
 Lidar dominates the environmental sensing space for some very good reasons. It is primarily used for its accuracy at intermediate distances, in the 5-100 meter range. It also is capable of sensing in a 360\deg field of view, and can continue detection during low-light conditions. However, most modern lidar sensors have a rolling shutter; when the lidar is moving and collecting data, each scan becomes deformed and must be corrected. They also typically cost much more than a stereo camera system, require moving parts (thus becoming sensitive to vibration), and the other reasons mentioned previously.
@@ -84,13 +84,13 @@ This means that stereo vision quality is derived from how closely it matches a l
     \label{eq_errCalc}
 \end{equation}
 
-After performing the following steps, Figure \ref{corr_stereo_lidar} was generated: A bar graph of binned ranges and the fraction of stereo points in each range that within error tolerance of the reference lidar value.
+After performing the following steps, Figure \ref{corr_pct_within} was generated: A bar graph of binned ranges and the fraction of stereo points in each range that within error tolerance of the reference lidar value.
 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.8\linewidth]{../media/corr_pct_within.pdf}
 	\caption{A bar chart describing what percentage of points lie within the given depth range. As an example, about 95\% of stereo depth values greater than 10 meters but less than or equal to 20 meters are within $\pm$10\% of the corresponding lidar depth value. The first 1000 indices of the KITTI dataset were used, altogether comprising 17,134,011 point comparisons between stereo and lidar. The dashed line indicates a 1st order polynomial fit, with the slope equal to about -0.03 percentage points per range (i.e. every 10 meters, there's about -0.03 change in percentage of points within bounds). In the smallest subset of points, the (70,80] range, there are 75,224 points. The fully developed Pyramid Stereo Matching network for use in Experiment 3 was used to generate part of the data.}
-	\label{corr_stereo_lidar}
+	\label{corr_pct_within}
 \end{figure}
 
 In summary, stereo vision is an attractive alternative to lidar vision because of its much higher point density, lower price, reasonable quality approximation of lidar, and the potential to improve through further research. Under the correct conditions, stereo vision sensors have the potential to compete with lidar sensors in terms of both quantity and quality.
@@ -144,7 +144,7 @@ The first task in creating a network that can take a stereo image pair and gener
 
 First, the original evaluation code was tested out. Some modification and housekeeping had to be done to ensure that it was compatible with the local installation, as well as being adapted for use with Python 3. All deprecated functionality was manually removed.
 
-Pyramid Stereo Matching Network, or PSMnet, is a network that takes advantage of an hourglass-shaped network. The result are very high quality, high resolution disparity maps. The network takes advantage of GPU processing power, depending on nVidia's GPU acceleration, similar to other networks. The network itself is written in PyTorch, a flexible and python-based network module. The use of PyTorch enabled fast, simplified debugging. PSMnet's architecture is shown below in Figure \ref{psmnet_arch}.
+Pyramid Stereo Matching Network, or PSMnet, is a network that takes advantage of an hourglass-shaped network. The result are very high quality, high resolution disparity maps. The network takes advantage of GPU processing power, depending on NVIDIA's GPU acceleration, similar to other networks. The network itself is written in PyTorch, a flexible and python-based network module which enabled simplified debugging. PSMnet's architecture is shown below in Figure \ref{psmnet_arch}.
 
 
 \begin{figure}[ht]
@@ -199,19 +199,19 @@ Each time the network is upsampled, it outputs a new cost volume. Each of these 
 %3. start with simple image describing the initial problem
 %4. give equations, with explanation of variables
 %5. give more concrete example of how one performs this, with both a disparity image and a given point cloud.
-Reconstruction is the process of taking a series of 2D images and producing a 3D representation of that information \cite{szeliski_computer_2010}. In this project, reconstruction is a vital part of taking the disparity map estimation of one network and creating a pointcloud that is given to the second network. The main goal is to end up with a pointcloud, an unordered set of metric coordinates. Epipolar equations allow one to perform these conversions, which are explained below. The main sources for these equations come from both \cite{szeliski_computer_2010} as well as the mention of their usage in the paper by \cite{wang_pseudo-lidar_2019}. 
+Reconstruction is the process of taking a series of 2D images and producing a 3D representation of that information, as explained by Szeliski \cite{szeliski_computer_2010}. Here, the main goal is to end up with a point cloud, an unordered set of metric coordinates. Epipolar equations, equations derived from the geometrical relationship two cameras viewing a single scene, allow one to perform these conversions, which are explained below.
 
-xx fixme: As described in Section \ref{sect_reconstruct}, the overall steps of reconstructing the resulting stereo image consisted of three general equations adapted for use with matrix operations. This also included selecting the proper constants for each calculation. To achieve all this, a specific class was created that would initialize by loading the fully trained model and use it in a non-learning ``testing" mode, whereby it would take in either an image path pair or a loaded pair of image arrays. The pair would then be evaluated in PSMnet, which returns a stereo map, and finally be converted to a pointcloud using the epipolar equations in matrix form. Each record of the KITTI dataset has its own calibration file, but the baseline value remained the same. During the overall Frustum Pointnet training and evaluation, a new pointcloud would be generated in real-time.
+The overall steps of reconstructing the resulting stereo image consists of three general equations adapted for use with matrix operations\cite{szeliski_computer_2010, wang_pseudo-lidar_2019}. This also includes selecting the proper constants for each calculation. To achieve all this, a specific Python class was created that would initialize by loading the fully trained model and use it in a non-learning ``testing" mode, whereby it would take in either an image path pair or a loaded pair of image arrays. The pair would then be evaluated in PSMnet, and the resulting disparity map would be converted to a point cloud using the epipolar equations in matrix form. Each record of the KITTI dataset has its own calibration file, but the baseline value remains the same.
 
 To begin describing how the transformation is done, a simple problem is presented with the following assumptions. Let there be two cameras in a scene, both facing the same direction and able to see an object at point $P$, such as a ball. The following assumptions are made: 
 
 \begin{itemize} \itemsep=-0.5em
 	\item The two cameras are identical in performance, producing equal quality images at the same point in time.
 	\item The camera centers are aligned (for simplified rectification).
-	\item Images produced are already rectified (to remove all distortion).
+	\item Images produced are already rectified (to remove all distortion). Rectification involves using the camera's intrinsic properties in order to correct lens distortion, specifically barrel distortion.
 	\item The camera centers $O_i$ are separated by a baseline distance $b$.
 	\item The two cameras have identical horizontal focal lengths $f_U$.
-	\item The ball appears at some horizontal distance $x_i$, whether the origin is measured from the left side of the image or the center.
+	\item The ball appears at some horizontal distance $u_i$, whether the origin is measured from the left side of the image or the center.
 \end{itemize}
 
 When the two cameras take an image of the ball, the light rays they capture may be drawn as given in Figure \ref{epipolar}. The figure gives a top-down view of what both cameras capture, and the horizontal pixel location at which the light ray comes into contact with each camera center. 
@@ -219,17 +219,17 @@ When the two cameras take an image of the ball, the light rays they capture may 
 \begin{figure}[ht]
     \centering
 	\includegraphics[width=0.4\textwidth]{../media/epipolar.pdf}
-	\caption{Simplified graphic demonstrating how disparity may be derived from two cameras. The images the cameras produce must first be rectified and calibrated.}
+	\caption{Simplified graphic demonstrating how disparity may be derived from two cameras. The images the cameras produce must first be rectified.}
 	\label{epipolar}
 \end{figure}
 
-Given the above physical setup, the equation describing the relationship between disparity and depth $z$ may be found. When an entire array of disparity points is given, denoted as $D$, the resulting equation is then: 
+Given the above physical setup, the equation describing the relationship between disparity and depth $z$ may be found. When a matrix of disparity points is given, denoted as $D$, the resulting equation is then: 
 \begin{equation}
 z = \frac{f_U b}{D}
 \label{eq_epi_z}
 \end{equation}
 
-Thus, a depth map may be generated by using this equation on each disparity value. The process of determining horizontal distance $x$ and vertical distance $y$ merely requires further application of the system in three dimensions rather than two, and may be calculated then as: 
+Thus, a depth map may be generated by using this equation on each disparity value. The process of determining horizontal distance $x$ and vertical distance $y$ requires further exploitation of the camera geometry, and may be calculated then as: 
 \begin{equation}
 x = \frac{z (u - c_U)}{f_U}
 \end{equation}
@@ -238,11 +238,11 @@ x = \frac{z (u - c_U)}{f_U}
 y = \frac{z(v - c_V)}{f_V}
 \end{equation}
 
-It is important to note that $D$ stands for a disparity matrix, $f_U$ and $f_V$ are for horizontal and vertical focal lengths (respectively), ($c_U$,$c_V$) are the pixel center of the image, and $(u,v)$ represent a (column, row) coordinate location in $D$. 
+It is important to note that $f_U$ and $f_V$ are for horizontal and vertical focal lengths (respectively), ($c_U$,$c_V$) are the pixel center of the image, and $(u,v)$ represent a (column, row) coordinate location in $D$ with the origin at the image's top-left corner.
 
 In practice, the calculation is performed in a series of matrix calculations rather than as an element-by-element operation. These steps are covered below with accompanying Python code. This code assumes the usage of the Numpy module and that the disparity map has already been generated and saved.
 
-The first step in the reconstruction process is determining the baseline $b$, horizontal focal length $f_U$, vertical focal length $f_V$, and image center $(C_U,C_V)$. The baseline is quickly obtained from KITTI development kit files, which list it as a fixed value of 0.54 meters. The accuracy of this measurement is not known beyond that. For each scene, the focal lengths are determined directly from the left color camera calibration matrix $P_2$, where $f_U=P_2[0,0]$ and $f_V=P_2[1,1]$. The image centers are found by dividing the disparity dimensions by half of the image dimensions, which corrects for non-standardized image dimensions present throughout the dataset. The depth array $Z$ is calculated via matrix operations in nearly the same way as given in Equation \ref{eq_epi_z}. All code used for both producing this work as well as the graphics can be found in the repository by \cite{gonzalez_smart3d_2019}. 
+The first step in the reconstruction process is determining the baseline, focal lengths, and image center. The baseline is a given constant from the KITTI development kit, listed as a fixed value of 0.54 meters. The accuracy of this measurement is not known beyond that. For each scene, the focal lengths are determined directly from the left color camera calibration matrix $P_2$, where $f_U=P_2[0,0]$ and $f_V=P_2[1,1]$. The image centers are found by dividing the disparity dimensions by half of the image dimensions, which corrects for non-standardized image dimensions present throughout the dataset. The depth matrix $Z$ is calculated via matrix operations in nearly the same way as given in Equation \ref{eq_epi_z}. All code used below and throughout this work can be found in the thesis Gitlab repository \cite{gonzalez_smart3d_2019}. 
 
 \begin{lstlisting}
 import numpy as np
@@ -262,7 +262,7 @@ Cv=disp.shape[0]-imH/2 # Cv = imH/2 - (imH - dispH)
 zvals = fHoriz*baseline/disp
 \end{lstlisting}
 
-Once this has been performed, the $X$ and $Y$ matrices are generated by creating a vectorized forms of their corresponding theoretical equations: 
+Next, the $X$ and $Y$ matrices are generated by creating a vectorized forms of their corresponding theoretical equations: 
 \begin{lstlisting}
 # STEP 4: Convert x_px & y_px to metric
 xpos=np.arange(0,zvals.shape[1])-Cu
@@ -273,7 +273,7 @@ xvals = ulocs*zvals/fHoriz
 yvals = vlocs*zvals/fVert
 \end{lstlisting}
 
-Once each matrix has been created, they may be combined to form a vector of three dimensional coordinates, as shown below in Figure \ref{reconstruction}(e). 
+Once each matrix has been created, they may be combined to form a set of three dimensional coordinates, as shown below in Figure \ref{reconstruction}(e). 
 
 \begin{figure}[H]
     \centering
@@ -361,9 +361,9 @@ The need to change the residual center stems from empirical proof that the netwo
 
 
 \subsection{Modification of Frustum Point Net}
-Frustum Pointnet, being originally written for Python 2, needed to undergo some minor adaptations while being modified for usage with Python 3. For example, several modules and functions were deprecated or needed modification, and so had to be properly adapted. There are also two actively maintained versions of the frustum Pointnet code. as explained in the original paper \cite{qi_frustum_2017}, there are two versions of the FPNet model: the first which uses standard Tensorflow libraries, and the second which uses custom Tensorflow operators that must be compiled. For the purposes of this paper, version 1 was used and will be the default version unless otherwise noted.
+Frustum Pointnet, being originally written for Python 2, needed to undergo some minor adaptations for usage with Python 3. Additionally, several modules and functions were deprecated or needed modification, and so had to be properly adapted. There are also two actively maintained versions of the Frustum Pointnet code. as explained in the original paper \cite{qi_frustum_2017}: the first which uses standard Tensorflow libraries and is based off Pointnets \cite{qi_pointnet:_2017}, and the second which uses custom Tensorflow operators that must be compiled, based off Pointnets++ \cite{qi_pointnet++:_2017}. For the purposes of this paper, version 1 was used.
 
-In order to transition from using the provided pre-trained model and preprocessed data to self-made preprocessed and trained data, a set of steps and ``paths" were created to guide what was happening in each step and set of ``runs". As shown below in Figure \ref{fp_paths}, there are various steps with gradually increasing dependence on stereo-based point cloud data.
+In order to transition from using the provided pre-trained model and preprocessed data to self-made preprocessed and trained data, a set of steps and ``paths" were created to guide what was happening in each step and set of ``runs". As shown below in Figure \ref{fp_paths}, there are various steps with a gradual transition to stereo-based point cloud data.
 
 \begin{figure}[H]
     \centering
@@ -372,7 +372,7 @@ In order to transition from using the provided pre-trained model and preprocesse
     \label{fp_paths}
 \end{figure}
 
-The most basic path, ADF, is simply using the given model to evaluate and achieve similar results to the official paper. Next, AEF used lidar pointclouds, but the model was trained locally. BEF required locally running the ``preprocessing" step, but was still theoretically identical to the previous two paths. Finally, CEF truly deviates from the other paths by using a stereo-generated pointcloud to preprocess data, then train on that, and finally evaluate the model's detection capability.
+The most basic path, ADF, is simply using the given model to evaluate and achieve similar results to the official paper. Next, AEF used lidar pointclouds, but the model was trained locally. BEF required locally running the ``preprocessing" step, but was still functionally similar to the previous two paths. Finally, CEF truly deviates from the other paths by using a stereo-generated point cloud to preprocess data, then train on that, and finally evaluate the model's detection capability.
 
 % NEWSECTION ===================================================================
 \newpage
@@ -652,18 +652,26 @@ In addition to both developing and testing ``SPCLnet", the official performance 
 	\label{fpnet_pr4}
 \end{figure}
 
-The best performing iteration of SPCLnet, CEF\_r2, while not performing the outright best, shares some interesting characteristics with the other stereo networks. For one, there is a sharp decline at the top-left of the curve, a trait that the RCNN curve also shares. This is typically caused when the threshold to determine outcomes is higher, occurring at higher precision and lower recall values. Next, all of the stereo algorithms reach 0.0 precision before 0.5 recall. This would indicate that even when the threshold is nearly nonexistent, there simply aren't enough valid detections to outweigh the number of False Negatives. 
+The best performing iteration of SPCLnet, CEF\_r2, while not performing the outright best, shares some interesting characteristics with the other stereo networks. For one, there is a sharp decline at the top-left of the curve, a trait that the RCNN curve also shares. This is typically caused when the threshold to determine outcomes is higher, occurring at higher precision and lower recall values. In addition to this, all stereo algorithms reach 0.0 precision at approximately the same recall value, at each given difficulty (0.5 recall at Moderate, 0.7 at Easy). This would indicate that even when the threshold is nearly nonexistent, there simply aren't enough valid detections to outweigh the number of False Negatives. 
 
 % NEWSECTION ===================================================================
 \newpage
 \section{Conclusions and Future Work}
 \label{sect_conclusions}
-%1. there is potential to make a real-time system
-%2. in the short range, stereo vision does perform closer to lidar, with potential to be at least a supporting sensor. 
-%3. the quality of a point cloud primarily dependent on both the quality of the data as well as the quality of the neural networks trained to generate it. 
-%4. This sensor has great potential in the service robot industry, where short-medium range perception is needed, with the bonus of being a passive sensor, capable of working outdoors, and 
+%1. stereo vision can compete with lidar, in near-range applications
+%2. KITTI dataset not enough today
+%3. the quality of a disparity map is key
+%4. real-time stereo is approaching, but not without simplification and optimization
 
-The primary conclusion of this paper has found that stereo data indeed has great potential to compete with or extend the capabilities of a lidar based detection system. There are large strides being made in the field, from pure stereo approaches (\cite{zeng2018rt3d}, \cite{li_stereo_2019}) to macro-networks that draw inspiration from lidar based approaches (\cite{wang_pseudo-lidar_2019}). Throughout the duration of this paper's writing, there have already been a few new submissions to the KITTI dataset, indicating a growing interest in this subfield. Additionally, the KITTI dataset itself is already beginning to show its age, given that the image data itself is now nearly 7 years old since its initial publishing \cite{geiger_are_2012}, as well as the apparent need to generate one's own set of ground truth data from the object detection dataset in order to even train a stereo network on it. New datasets are showing some level of promise, such as the Apolloscape dataset \cite{huang_apolloscape_2018} or even moderately aged datasets such as \cite{cordts_cityscapes_2016}.
+The main body of effort in this thesis has gone towards asking one general question: can stereo vision reasonably provide an alternative to lidar sensors in the realm of 3D detection? There are two specific conclusions that have been drawn from the literature as well as this work, specifically: Stereo vision can potentially compete with lidar as a viable distance sensor at relatively short distances and the quality of the input data may have a strong impact on the final results (and is a source of possible future work). Additional future work lies in real-time applications, which may be within reach. 
+
+Stereo vision cameras may always trail a lidar sensors in terms of quality, but there is a cost-quality tradeoff that becomes appealing under certain circumstances. As can be seen by the results in Table \ref{fpnet_ap3} and Table \ref{fpnet_ap4}, stereo-based networks suffer a larger decrease in performance when compared between the ``Easy" and ``Moderate" difficulties (corresponding to objects located within 30 meters and objects located beyond 30 meters, respectively). Figure \ref{corr_pct_within} also demonstrates that as lidar reference distance increases, the fraction of stereo points correctly within error bounds decreases. 
+
+There are several sources and explanations for the disparity in accuracy, the most prominent being the quality of the disparity map estimator itself. This paper and Wang et al. \cite{wang_pseudo-lidar_2019} both utilized PSMnet, but the likelihood of small differences in configuration between the two may have resulted in significant performance differences. The second major source of stereo camera error may lie in the KITTI dataset source images. Looking at Figure \ref{fpnet_pr4}, all stereo networks seem to have an upper limit on performance: none perform beyond a certain recall level, such as 0.5 at Moderate difficulty. This presents an opportunity to explore new datasets that include both lidar and stereo image data. As of now, the KITTI object detection dataset, initially published in 2012 \cite{geiger_are_2012}, is roughly 7 years old, and most of the images on this dataset are about 0.5 megapixels (MP) in resolution. This is simply not enough to provide adequate information for generating a disparity map.
+
+The last conclusion, real-time stereo vision, is easily within reach of the next year or two: there are already real-time stereo disparity map estimators and commercial products, although their 
+
+The primary conclusion of this paper has found that stereo data indeed has great potential to compete with or extend the capabilities of a lidar based detection system. There are large strides being made in the field, from pure stereo approaches \cite{zeng2018rt3d,li_stereo_2019} to macro-networks that draw inspiration from lidar based approaches \cite{wang_pseudo-lidar_2019}. Throughout the duration of this paper's writing, there have already been a few new submissions to the KITTI dataset, indicating a growing interest in this subfield. Unfortunately, the KITTI dataset itself is already beginning to show its age, given that the image data itself is now nearly 7 years old since its initial publishing \cite{geiger_are_2012}, as well as the apparent need to generate one's own set of ground truth data from the object detection dataset in order to even train a stereo network on it. New datasets are showing some level of promise, such as the Apolloscape dataset \cite{huang_apolloscape_2018} or even moderately aged datasets such as \cite{cordts_cityscapes_2016}.
 
 This paper also finds that system setup is key to stereo vision performance. Minor inaccuracies at even a few pixels can degrade system performance, and thus more investigation is needed into generating the most accurate disparity map and subsequent point cloud possible. Clearly, the latter half of SPCLnet and the pseudo-point cloud network by \cite{wang_pseudo-lidar_2019}, Frustum Pointnets by \cite{qi_frustum_2017}, can achieve near state-of-the-art results when given the right information, i.e. accurate point cloud. This indicates that both an improvement in the stereo pipeline is needed as well as an improvement on the data itself, as mentioned above.
 
