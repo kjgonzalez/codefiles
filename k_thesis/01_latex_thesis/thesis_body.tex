@@ -243,7 +243,6 @@ It is important to note that $f_U$ and $f_V$ are for horizontal and vertical foc
 In practice, the calculation is performed in a series of matrix calculations rather than as an element-by-element operation. These steps are covered below with accompanying Python code. This code assumes the usage of the Numpy module and that the disparity map has already been generated and saved.
 
 The first step in the reconstruction process is determining the baseline, focal lengths, and image center. The baseline is a given constant from the KITTI development kit, listed as a fixed value of 0.54 meters. The accuracy of this measurement is not known beyond that. For each scene, the focal lengths are determined directly from the left color camera calibration matrix $P_2$, where $f_U=P_2[0,0]$ (row 0, col 0) and $f_V=P_2[1,1]$. The image centers are found by dividing the disparity dimensions by half of the image dimensions, which corrects for non-standardized image dimensions present throughout the dataset. The depth matrix $Z$ is calculated via matrix operations in nearly the same way as given in Equation \ref{eq_epi_z}. All code used below and throughout this work can be found in the thesis Gitlab repository \cite{gonzalez_smart3d_2019}. 
-
 \begin{lstlisting}
 import numpy as np
 # STEP 1: generate / load a disparity map
