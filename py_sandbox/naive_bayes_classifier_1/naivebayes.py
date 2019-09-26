@@ -8,10 +8,7 @@ source: https://www.youtube.com/watch?v=CPqOCI0ahss
 '''
 
 import numpy as np
-import matplotlib.pyplot as plt
-
-def filt(column,condition,arr=dat):
-    return arr[:,column]==condition
+# import matplotlib.pyplot as plt
 
 # pseudo dataset: probability to play golf, given variables
 # outlook: sunny,overcast,rainy = 0,1,2
@@ -38,6 +35,11 @@ dat=np.array(
 [2,1,1,1,0]
 ])
 
+
+def filt(arr,column,condition):
+    return arr[arr[:,column]==condition,:]
+
+
 # first, get p(yes) and p(no):
 ntot = dat.shape[0]
 nyes = dat[:,-1].sum()
@@ -53,7 +55,7 @@ print(p_yes,p_no)
 # outlook table
 # should have as seen in temp.png
 
-# sunny    2,3,2/9,3/5
+# sunny    2,3,2/9,3/5 -- p(sunny|golf)
 # overcast 4,0,4/9,0/5
 # rainy    3,2,3/9,2/5
 
