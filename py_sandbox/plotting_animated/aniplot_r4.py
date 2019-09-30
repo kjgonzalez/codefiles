@@ -88,10 +88,10 @@ while(True):
     # print(temp)
     cv2.circle(bkgd,center.get(),10,BLU)
     cv2.circle(bkgd,(400,300),10,RED)
-
+    cv2.rectangle(bkgd,(30,50),(90,60))
     # alright, try drawing a rectangle with polygon
 
-
+    # def rect2(img,center,dims,angle)
 
 
     # pts = np.array([[10,5],[20,30],[70,20],[50,10]], np.int32)
