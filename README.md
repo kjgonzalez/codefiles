@@ -19,7 +19,7 @@ git remote set-url origin [updated link url https://........git]
 
 src: https://stackoverflow.com/questions/30443333/error-with-renamed-repo-in-github-remote-this-repository-moved-please-use-th
 
-a
+ab
 
 
 
