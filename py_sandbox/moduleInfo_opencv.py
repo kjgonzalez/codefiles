@@ -33,6 +33,34 @@ def qs(img,title='CLOSE WITH KEYBOARD'):
     cv2.imshow(title,img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+def rect2(img, center,dims,angle, color,*kargs):
+    ''' general steps:
+    1. take in parameters
+    2. rotate rectangle centered at origin
+    3. translate to given spot.
+
+     '''
+    xc,yc=center
+    w,h=dims
+    theta = np.radians(angle)
+    c,s=np.cos(theta),np.sin(theta)
+    R=np.array([
+        [c,-s,0],
+        [s,c,0],
+        [0,0,1]]) # 3x3
+    pts=np.array([
+        [-w,h,1],
+        [w,h,1],
+        [w,-h,1],
+        [-w,-h,1],
+        [-w,h,1]   ])/2
+
+    # rotate points
+    pts2=pts@R
+    pts2[:,0]+=xc
+    pts2[:,1]+=yc
+    pts2=pts2[:,:2].reshape((-1,1,2)).astype(int)
+    cv2.polylines(img,[pts2],True,RED)
 
 ## delete last script's output file(s)
 #for ifile in os.listdir('.'):
