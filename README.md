@@ -13,7 +13,11 @@ Objective: unify all code in all locations, and enable simple way to have all co
 3. set rebase: git config --global pull.rebase true
 
 
-abc
+KJGNOTE: moving repo / user a to a new location:
+if get this message: "remote: This repository moved. Please use the new location", then simply do this:
+git remote set-url origin [updated link url https://........git]
+
+src: https://stackoverflow.com/questions/30443333/error-with-renamed-repo-in-github-remote-this-repository-moved-please-use-th
 
 
 
