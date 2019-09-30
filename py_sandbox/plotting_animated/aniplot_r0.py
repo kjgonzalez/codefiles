@@ -33,6 +33,7 @@ def init():
 
 # animation function.  This is called sequentially
 def animate(i):
+    print(i)
     x = np.linspace(0, 2, 1000)
     y = np.sin(2 * np.pi * (x - 0.01 * i))
     line.set_data(x, y)
@@ -42,7 +43,7 @@ def animate(i):
 # anim = animation.FuncAnimation(fig, animate, init_func=init,
 #                                frames=200, interval=20, blit=True, repeat=False)
 anim = animation.FuncAnimation(fig, animate, init_func=init,
-interval=20, blit=True, repeat=False)
+interval=50, blit=True, repeat=False)
 # kjgnote: removing the 'frames' argument means that the plot runs until stopped
 
 
