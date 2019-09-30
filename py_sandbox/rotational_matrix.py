@@ -44,8 +44,6 @@ rot2=rot2@R2
 rot2[:,0]+=xcent
 rot2[:,1]+=ycent
 
-
-
 # plot everything
 f,p=plt.subplots()
 p.set_aspect('equal')
@@ -55,6 +53,6 @@ p.plot([-3,3],[0,0],'k--') # x-axis line
 p.plot([0,0],[-3,3],'k--') # y-axis line
 
 p.plot(orig[:,0],orig[:,1],'b') # original, unrotated rectangle
-p.plot(rot1[:,0],rot1[:,1],'g') # original, unrotated rectangle
-p.plot(rot2[:,0],rot2[:,1],'r') # original, unrotated rectangle
+p.plot(rot1[:,0],rot1[:,1],'g') # rotation about origin
+p.plot(rot2[:,0],rot2[:,1],'r') # rotation about any point
 plt.show()
