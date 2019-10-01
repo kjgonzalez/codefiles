@@ -2,6 +2,7 @@
 datecreated: 190930
 objective: want to use opencv to make some kind of animated plotting tool.
 note: using cv2 is MUCH MUCH faster, will use this instead of matplotlib
+* at this point, will use tkinter to try and control the rectangle
 applications:
     * animated plot
     * live updating
@@ -32,8 +33,8 @@ done   | use polygons instead of "rect", in custom function
 
 '''
 
-# import matplotlib.pyplot as plt
-# import matplotlib.animation as ani
+import threading # handling two different sequences at once (getting frames, displaying them)
+import tkinter as tk # keyboard control
 import cv2
 import time
 import numpy as np
@@ -45,6 +46,34 @@ BLK = (0,0,0)
 CVFONT = cv2.FONT_HERSHEY_SIMPLEX
 IMW=400
 IMH=300
+
+
+class Streamer:
+    def __init__(self,stream):
+        self.stream = stream
+        self.frame = None
+        self.thread = None
+        self.stopEvent = None
+        self.root = tk.Tk()
+        self.panel = None
+        self.stopEvent = threading.Event()
+        self.thread = threading.Thread(target=self.videoLoop,args=())
+        self.thread.start()
+
+        self.root.wm_title('photobooth?')
+        self.root.wm_protocol("WM_DELETE_WINDOW",self.onClose
+        
+
+
+
+
+
+
+
+
+
+
+
 def qs(img,title='CLOSE WITH KEYBOARD'):
     cv2.imshow(title,img)
     cv2.waitKey(0)
