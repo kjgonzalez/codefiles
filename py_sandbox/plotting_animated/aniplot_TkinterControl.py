@@ -27,7 +27,7 @@ done   | have a rotating rectangle
 done   | use polygons instead of "rect", in custom function
 ???    | overlay simple image on top of background (deal with alpha)
 ???    | have item follow a path
-???    | be able to control item with keyboard
+done   | be able to control item with keyboard
 ???    |
 
 
@@ -137,6 +137,41 @@ class Timer:
     def now(self):
         ''' return time since start of program '''
         return time.time()-self.t0
+class KBControl:
+    def __init__(self):
+        ''' user note: tkinter should only be used in main thread and has issues
+            working with threading module. do not put this class in separate
+            thread
+        src: https://stackoverflow.com/questions/45799121/runtimeerror-calling-tcl-from-different-appartment-tkinter-and-threading
+        '''
+        self.R = tk.Tk()
+        self.F = tk.Frame(self.R, width=100, height=100)
+        self.F.bind('a',self.leftKey)
+        self.F.bind('d',self.rightKey)
+        self.F.bind('q',self.quit)
+        self.F.focus_set()
+        self.F.pack()
+        self.var_dir=tk.IntVar()
+
+    def getstatus(self):
+        print('value:',self.var_dir.get()) # may simplify later
+
+    def leftKey(self,event):
+        self.var_dir.set(0)
+        gvar.var = 0
+
+
+    def rightKey(self,event):
+        self.var_dir.set(1)
+        gvar.var = 1
+
+    def quit(self,event):
+        self.R.quit()
+    def run(self):
+        self.R.mainloop()
+
+
+
 timer = Timer()
 NOW=timer.now
 
