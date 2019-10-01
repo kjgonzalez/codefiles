@@ -133,26 +133,29 @@ class KBControl:
 
 
 
+
+class DisplayWindow:
+    ''' should be capable of putting everything into a thread '''
+    def __init__(self):
+        self.xc=IMW/2
+        self.yc=IMH/2
+        self.w=50
+        self.h=100
+    def run(self):
+        while(True):
+            lap = timer.lap()
+            bkgd = np.ones((IMH,IMW,3))*255 # follows image format
+            cv2.putText(bkgd,str(round(lap,3)),(50,30),CVFONT,1,BLU)
+            cv2.putText(bkgd,str(round(timer.now(),3)),(50,60),CVFONT,1,BLU)
+            cv2.putText(bkgd,str(gvar.var),(50,90),CVFONT,1,BLU)
+            cv2.circle(bkgd,(int(IMW/2),int(IMH/2)),10,GRN)
+            rect2(bkgd,(self.xc,self.yc),(self.w,self.h),timer.now()*180,RED)
+            pts = np.array([[10,5],[20,30],[70,20],[50,10]], np.int32)
+            pts = pts.reshape((-1,1,2)) # critical for drawing a polygon
+
+            cv2.imshow("press 'q' to exit",bkgd)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
 timer = Timer()
-NOW=timer.now
 
-xc=IMW/2
-yc=IMH/2
-w=50
-h=100
-
-while(True):
-    t1=time.time()-t0
-    t0=time.time()
-    bkgd = np.ones((IMH,IMW,3))*255 # follows image format
-    cv2.putText(bkgd,str(round(t1,3)),(50,30),CVFONT,1,BLU)
-    cv2.putText(bkgd,str(round(NOW(),3)),(50,60),CVFONT,1,BLU)
-    cv2.putText(bkgd,str('text'),(50,90),CVFONT,1,BLU)
-    cv2.circle(bkgd,(int(IMW/2),int(IMH/2)),10,GRN)
-    rect2(bkgd,(xc,yc),(w,h),NOW()*180,RED)
-    pts = np.array([[10,5],[20,30],[70,20],[50,10]], np.int32)
-    pts = pts.reshape((-1,1,2)) # critical for drawing a polygon
-
-    cv2.imshow('frame',bkgd)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
