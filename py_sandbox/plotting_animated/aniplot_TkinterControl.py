@@ -48,22 +48,43 @@ IMW=400
 IMH=300
 
 
-class Streamer:
-    def __init__(self,stream):
-        self.stream = stream
-        self.frame = None
-        self.thread = None
-        self.stopEvent = None
-        self.root = tk.Tk()
-        self.panel = None
-        self.stopEvent = threading.Event()
-        self.thread = threading.Thread(target=self.videoLoop,args=())
-        self.thread.start()
+# ==============================================================================
 
-        self.root.wm_title('photobooth?')
-        self.root.wm_protocol("WM_DELETE_WINDOW",self.onClose
-        
+class KBControl:
+    def __init__(self):
+        ''' user note: tkinter should only be used in main thread and has issues
+            working with threading module. do not put this class in separate
+            thread
+        src: https://stackoverflow.com/questions/45799121/runtimeerror-calling-tcl-from-different-appartment-tkinter-and-threading
+        '''
+        self.R = tk.Tk()
+        self.F = tk.Frame(self.R, width=100, height=100)
+        self.F.bind('a',self.leftKey)
+        self.F.bind('d',self.rightKey)
+        self.F.bind('q',self.quit)
+        self.F.focus_set()
+        self.F.pack()
+        self.var_dir=tk.IntVar()
 
+    def getstatus(self):
+        print('value:',self.var_dir.get()) # may simplify later
+
+    def leftKey(self,event):
+        self.var_dir.set(0)
+        self.getstatus()
+
+    def rightKey(self,event):
+        self.var_dir.set(1)
+        self.getstatus()
+
+    def quit(self,event):
+        self.R.quit()
+    def run(self):
+        self.R.mainloop()
+
+print('program ready to exit')
+
+# ==============================================================================
 
 
 
@@ -130,6 +151,7 @@ while(True):
     bkgd = np.ones((IMH,IMW,3))*255 # follows image format
     cv2.putText(bkgd,str(round(t1,3)),(50,30),CVFONT,1,BLU)
     cv2.putText(bkgd,str(round(NOW(),3)),(50,60),CVFONT,1,BLU)
+    cv2.putText(bkgd,str('text'),(50,90),CVFONT,1,BLU)
     cv2.circle(bkgd,(int(IMW/2),int(IMH/2)),10,GRN)
     rect2(bkgd,(xc,yc),(w,h),NOW()*180,RED)
     pts = np.array([[10,5],[20,30],[70,20],[50,10]], np.int32)
