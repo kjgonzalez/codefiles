@@ -47,54 +47,6 @@ CVFONT = cv2.FONT_HERSHEY_SIMPLEX
 IMW=400
 IMH=300
 
-
-# ==============================================================================
-
-class KBControl:
-    def __init__(self):
-        ''' user note: tkinter should only be used in main thread and has issues
-            working with threading module. do not put this class in separate
-            thread
-        src: https://stackoverflow.com/questions/45799121/runtimeerror-calling-tcl-from-different-appartment-tkinter-and-threading
-        '''
-        self.R = tk.Tk()
-        self.F = tk.Frame(self.R, width=100, height=100)
-        self.F.bind('a',self.leftKey)
-        self.F.bind('d',self.rightKey)
-        self.F.bind('q',self.quit)
-        self.F.focus_set()
-        self.F.pack()
-        self.var_dir=tk.IntVar()
-
-    def getstatus(self):
-        print('value:',self.var_dir.get()) # may simplify later
-
-    def leftKey(self,event):
-        self.var_dir.set(0)
-        self.getstatus()
-
-    def rightKey(self,event):
-        self.var_dir.set(1)
-        self.getstatus()
-
-    def quit(self,event):
-        self.R.quit()
-    def run(self):
-        self.R.mainloop()
-
-print('program ready to exit')
-
-# ==============================================================================
-
-
-
-
-
-
-
-
-
-
 def qs(img,title='CLOSE WITH KEYBOARD'):
     cv2.imshow(title,img)
     cv2.waitKey(0)
@@ -129,14 +81,23 @@ def rect2(img, center,dims,angle, color,*kargs):
     pts2=pts2[:,:2].reshape((-1,1,2)).astype(int)
     cv2.polylines(img,[pts2],True,RED)
 
-t0=time.time()
-
 class Timer:
     def __init__(self):
         self.t0=time.time() # start time
+        self._lap = time.time()
     def now(self):
         ''' return time since start of program '''
         return time.time()-self.t0
+    def lap(self):
+        ''' get lap time and reset timer '''
+        elapsed = time.time() - self._lap
+        self._lap = time.time()
+        return elapsed
+class Global:
+    def __init__(self):
+        self.var=0
+gvar = Global()
+
 class KBControl:
     def __init__(self):
         ''' user note: tkinter should only be used in main thread and has issues
