@@ -159,3 +159,12 @@ class DisplayWindow:
 
 timer = Timer()
 
+dw = DisplayWindow()
+kbc = KBControl()
+
+thread_dw=threading.Thread(target=dw.run,daemon=True) # kill this window if tkinter closes
+thread_dw.start()
+
+
+# print('ready to exit')
+kbc.run() # tkinter thing, should be final thing to run
