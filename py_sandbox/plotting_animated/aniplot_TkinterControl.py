@@ -87,7 +87,7 @@ class Global:
         self.var=0
 gvar = Global()
 
-class KBControl:
+class KBControl_r0:
     def __init__(self):
         ''' user note: tkinter should only be used in main thread and has issues
             working with threading module. do not put this class in separate
@@ -120,6 +120,82 @@ class KBControl:
     def run(self):
         self.R.mainloop()
 
+class KBControl_r1:
+    def __init__(self):
+        self.R = tk.Tk()
+        self.V = tk.StringVar()
+        self.V.set('0')        # initial value
+        self.a_label = tk.Label(self.R,textvariable = self.V ).pack() # create label object
+        self.history = []            # create empty list
+        self.v_dir = ''
+        self.F = tk.Frame(self.R, width=200, height=200)    #create self.F in main window
+        self.F.bind("<KeyPress>", self.keydown)    # bind "keydown" fn to keyPRESS
+        self.F.bind("<KeyRelease>", self.keyup)    # bind "keyup" fn to keyRELEASE
+        self.F.bind('q',self.quit)
+        self.F.pack()            # activate self.F
+        self.F.focus_set()        # set self.F in focus
+
+    def keyup(self,e):
+        # print e.char        # when a key is un-pressed, print to screen
+        if  e.char in self.history :
+            self.history.pop(self.history.index(e.char)) #remove it from the list
+            # NOTE: LIST IS NOW UPDATED
+            self.v_dir = self.direction(self.history)
+            gvar.var = self.v_dir
+            self.V.set(self.v_dir)    # convert current state of history into string
+            # here, would send the updated command to the serial port.
+
+    def keydown(self,e):
+        if not e.char in self.history :    # if key isn't alrdy in list...
+            self.history.append(e.char)    # add key to END(!) of list
+            # NOTE: LIST IS NOW UPDATED
+            self.v_dir = self.direction(self.history)
+            gvar.var = self.v_dir
+            self.V.set(self.v_dir)        # convert current state of list into string
+            # here, would send updated command to the serial port
+
+    def direction(self,e):
+        ''' Take in list of currently pressed keys, return direction. General
+            steps:
+            1. receive list
+            2. check if list has more than two elements
+            3. check which two elements active
+            4. return direction
+            NOTE: keypad:
+            1 2 3
+            4 5 6
+            7 8 9
+              0        '''
+        if(len(e)==1):
+            # only one button pressed
+            if('w' in e):
+                return '2'                # NORTH
+            elif('a' in e):
+                return '4'                # WEST
+            elif('s' in e):
+                return '8'                # SOUTH
+            elif('d' in e):
+                return '6'                # EAST
+            else:
+                return '0'
+        elif(len(e)==2):
+            if('w' in e and 'a' in e):
+                return '1'                # NWEST
+            elif('w' in e and 'd' in e):
+                return '3'                # NEAST
+            elif('s' in e and 'a' in e):
+                return '7'                # SWEST
+            elif('s' in e and 'd' in e):
+                return '9'                # SEAST
+            else:
+                return '0'
+        else:
+            return '0'
+
+    def quit(self,e):
+        self.R.quit()
+    def run(self):
+        self.R.mainloop()            # activate whole program
 
 
 
@@ -149,11 +225,11 @@ class DisplayWindow:
 timer = Timer()
 
 dw = DisplayWindow()
-kbc = KBControl()
-
+kbc = KBControl_r1()
+#
 thread_dw=threading.Thread(target=dw.run,daemon=True) # kill this window if tkinter closes
 thread_dw.start()
-
-
-# print('ready to exit')
+#
+#
+# # print('ready to exit')
 kbc.run() # tkinter thing, should be final thing to run
