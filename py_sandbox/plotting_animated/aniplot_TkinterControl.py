@@ -1,34 +1,23 @@
 '''
 datecreated: 190930
 objective: want to use opencv to make some kind of animated plotting tool.
-note: using cv2 is MUCH MUCH faster, will use this instead of matplotlib
-* at this point, will use tkinter to try and control the rectangle
+KJG190930: using cv2 is MUCH MUCH faster, will use this instead of matplotlib
+KJG190930: at this point, will use tkinter to try and control the rectangle
+KJG191001: tkinter now functional, with multi-key input. now capable of having
+    high-quality graphing window along with manual input control
+
 applications:
     * animated plot
     * live updating
     * user / computer controlled animation
-
-alright, idea:
-1. have a object move around in a circle constantly, perpetually
-2. show item, updating position
-3. also be able to plot static items like walls, etc
-
-
-steps:
-1. have a window with shapes
-2. have those shapes move around
-3. have those shapes move with tkinter control
-4. have those shapes move with computer control
+    * computer controlled demo
 
 THINGS TO IMPLEMENT
-status | want
+status | description
 done   | plot fast-updating (60Hz+) plot area
 done   | have a rotating rectangle
 done   | use polygons instead of "rect", in custom function
-???    | overlay simple image on top of background (deal with alpha)
-???    | have item follow a path
-done   | be able to control item with keyboard
-???    |
+done   | be able to control item with keyboard (one key)
 
 
 '''
