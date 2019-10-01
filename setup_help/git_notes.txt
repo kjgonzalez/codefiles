@@ -21,3 +21,8 @@ MERGING A BRANCH ===========================================
 
 MENTIONING AN ISSUE IN A COMMIT ============================
 commit <item> -m "#ISSUE_NUM: working on this thing"
+
+UPDATE LOCATION OF REPO FOR GITHUB =========================
+issue: get this message: "remote: This repository moved. 
+    Please use the new location"
+git remote set-url origin [https://...git]
