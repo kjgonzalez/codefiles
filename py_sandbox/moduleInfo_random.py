@@ -19,8 +19,8 @@ print('numpy:   choosing',k,'random elements from set:',np.random.choice(np.arra
 
 print(
 '''NOTE: when dealing with a 2D array (or higher), need to actually use
-    shuffling, because np.random.choice does not pick k unique random values,
-    only k random values. example: ''')
+    np.random.shuffle, because np.random.choice DOES NOT pick k UNIQUE random
+    values, only k random values. example: ''')
 x2=np.array(np.random.rand(5,3)*10,int)
 print(x2)
 
