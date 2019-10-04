@@ -45,8 +45,8 @@ class NeuralNetwork:
     def train_one(self,inputs_list,targets_list):
         # train network
         # prepare input arguments
-        inputs = np.array(inputs_list,ndmin=2).T # not sure why T or ndmin
-        targets = np.array(targets_list,ndmin=2).T # not sure why T or ndmin
+        inputs = np.array(inputs_list,ndmin=2).T
+        targets = np.array(targets_list,ndmin=2).T
 
 
         # signals into hidden layer

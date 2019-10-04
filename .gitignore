@@ -10,4 +10,4 @@ catkin_ws/devel/
 # linux-side pdf
 py_sandbox/book_MakeYourOwnNeuralNetwork/BOOK_TariqRashid-MakeYourOwnNeuralNetwork.pdf
 # windows links
-py_sandbox/book_MakeYourOwnNeuralNetwork/TariqRashid-MakeYourOwnNeuralNetwork.pdf - Shortcut.lnk
+*.lnk
