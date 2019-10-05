@@ -11,13 +11,17 @@ Overall goals:
     * get more data on model train/test phases
     * add sliding window capability for basic detection, not just classification.
 
-NOTES:
-    * sigmoid function: y = 1/(1+exp(-x))
+things to add:
+STATUS | DESCRIPTION
+done   | basic network working based on book
+done   | network contained in a class
+done   | able to load and save weights
+????   | network can be forced to retrain
+????   | network can have a desired number of layers
+????   | network can be configured as wanted (based on given input)
 '''
 import numpy as np
-import os
-# import matplotlib.pyplot as plt
-import time
+import os, argparse, time
 
 class NeuralNetwork:
     def __init__(self,inputnodes,hiddennodes,outputnodes,learningrate):
@@ -25,8 +29,8 @@ class NeuralNetwork:
         self.hnodes = hiddennodes
         self.onodes = outputnodes
         self.lr = learningrate
-        self.wih = np.random.rand(self.hnodes,self.inodes)-0.5
-        self.who = np.random.rand(self.onodes,self.hnodes)-0.5
+        self.wih = np.random.rand(self.hnodes,self.inodes)-0.5 # xx needs to be generalized
+        self.who = np.random.rand(self.onodes,self.hnodes)-0.5 # xx needs to be generalized
 
         # scipy.special.expit replacement
         self.activation_function = lambda x:1/(1+np.exp(-np.array(x)))
@@ -106,11 +110,18 @@ class NeuralNetwork:
 # run if main program
 if(__name__=='__main__'):
 
+    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    p.add_argument('-a',dest='int1',type=int,help='first int')
+    p.add_argument('-b',dest='int2',type=int,help='second int')
+    p.add_argument('-s',type=str,default="it's a nice day",help='string to print')
+    p.add_argument('-cuda',default=False,action='store_true',help='enable cuda')
+    args=p.parse_args()
+    
     # NETWORK INITIALIZATION ===============================
     print('Starting network')
-    i_n=784 # affected by input data
-    h_n=200 # this value is arbitrary
-    o_n=10  # affected by output data
+    i_n=784 # affected by input data # xx needs to be generalized
+    h_n=200 # this value is arbitrary # xx needs to be generalized
+    o_n=10  # affected by output data # xx needs to be generalized
     LR=0.1  # this value is arbitrary
     nn=NeuralNetwork(i_n,h_n,o_n,LR)
 
