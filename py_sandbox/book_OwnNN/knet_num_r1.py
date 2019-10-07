@@ -16,7 +16,7 @@ STATUS | DESCRIPTION
 done   | basic network working based on book
 done   | network contained in a class
 done   | able to load and save weights
-????   | network can be forced to retrain
+done   | network can be forced to retrain
 ????   | network can have a desired number of layers
 ????   | network can be configured as wanted (based on given input)
 '''
@@ -24,10 +24,10 @@ import numpy as np
 import os, argparse, time
 
 class NeuralNetwork:
-    def __init__(self,inputnodes,hiddennodes,outputnodes,learningrate):
-        self.inodes = inputnodes
-        self.hnodes = hiddennodes
-        self.onodes = outputnodes
+    def __init__(self,LayerList,learningrate):
+        self.inodes = LayerList[0]
+        self.hnodes = LayerList[1]
+        self.onodes = LayerList[2]
         self.lr = learningrate
         self.wih = np.random.rand(self.hnodes,self.inodes)-0.5 # xx needs to be generalized
         self.who = np.random.rand(self.onodes,self.hnodes)-0.5 # xx needs to be generalized
@@ -52,18 +52,28 @@ class NeuralNetwork:
     def train_one(self,inputs_list,targets_list):
         # train network
         # prepare input arguments
+        ''' quick note:
+        input: (784,1)
+        wih: (200,784)
+        woh: (10,200)
+        hidden_outputs: (200,1)
+        final_outputs: (10,1)
+        ----
+        hidden_outputs = wih @ input >>>>>>>  should be called h0 (hidden outputs 0)
+        final_outputs  = woh @ hidden_outputs >> should be called out (output final)
+
+        '''
+
+
+
         inputs = np.array(inputs_list,ndmin=2).T
         targets = np.array(targets_list,ndmin=2).T
 
-
-        # signals into hidden layer
-        hidden_inputs  = np.dot(self.wih,inputs)
         #signals leaving hidden layer
-        hidden_outputs = self.activation_function(hidden_inputs)
+        hidden_outputs = self.activation_function(np.dot(self.wih,inputs)) # used for training
 
-        # signals into output layer
-        final_inputs = np.dot(self.who,hidden_outputs)
-        final_outputs = self.activation_function(final_inputs)
+        # estimates to compare with errors
+        final_outputs = self.activation_function(np.dot(self.who,hidden_outputs)) # used for training
 
         # do some backpropagation / SGD solving:
         # error is (target-actual)
@@ -111,19 +121,17 @@ class NeuralNetwork:
 if(__name__=='__main__'):
 
     p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    p.add_argument('-a',dest='int1',type=int,help='first int')
-    p.add_argument('-b',dest='int2',type=int,help='second int')
-    p.add_argument('-s',type=str,default="it's a nice day",help='string to print')
-    p.add_argument('-cuda',default=False,action='store_true',help='enable cuda')
+    p.add_argument('--retrain',default=False,action='store_true',help='Force network to retrain, even if weights exist')
     args=p.parse_args()
-    
+
     # NETWORK INITIALIZATION ===============================
     print('Starting network')
     i_n=784 # affected by input data # xx needs to be generalized
     h_n=200 # this value is arbitrary # xx needs to be generalized
     o_n=10  # affected by output data # xx needs to be generalized
+    layers=[i_n,h_n,o_n]
     LR=0.1  # this value is arbitrary
-    nn=NeuralNetwork(i_n,h_n,o_n,LR)
+    nn=NeuralNetwork(layers,LR)
 
     # DATA LOADING =========================================
     print('will load data')
@@ -148,11 +156,9 @@ if(__name__=='__main__'):
     # TRAINING PHASE =======================================
     # start of training (note: about 1130samples/second at 100 hidden nodes.
     #   about 54s to train 60k)
-    if(os.path.exists('wts.npz')):
-        print('loading pretrained model')
-        nn.loadWeights()
-    else:
-        print("weights don't exist, training")
+
+    def retrain_fn():
+        # simple workaround to retrain in case of various conditions
         t0=time.time()
         nn.train_full(ds_train)
         time_train=time.time()-t0
@@ -161,6 +167,16 @@ if(__name__=='__main__'):
         print('samples/second in training:',len(ds_train)/time_train)
         nn.saveWeights()
 
+    if(os.path.exists('wts.npz')):
+        if(args.retrain):
+            # override weights, retrain
+            print('user override. retraining')
+            retrain_fn()
+        print('loading pretrained model')
+        nn.loadWeights()
+    else:
+        print("weights don't exist, training")
+        retrain_fn()
     # TESTING PHASE ========================================
     # at this point, need to actually "score" the networkn=0
     t0=time.time()
