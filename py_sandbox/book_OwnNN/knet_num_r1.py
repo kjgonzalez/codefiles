@@ -24,13 +24,23 @@ import numpy as np
 import os, argparse, time
 
 class NeuralNetwork:
+    ''' Generate an n-layer, arbitrarily shaped fully-connected network
+    '''
     def __init__(self,LayerList,learningrate):
+        '''
+        LayerList expected structure: [inode,hnode0,...,hnodeN,outnode]
+        '''
         self.inodes = LayerList[0]
         self.hnodes = LayerList[1]
         self.onodes = LayerList[2]
         self.lr = learningrate
-        self.wih = np.random.rand(self.hnodes,self.inodes)-0.5 # xx needs to be generalized
-        self.who = np.random.rand(self.onodes,self.hnodes)-0.5 # xx needs to be generalized
+        # self.wih = np.random.rand(self.hnodes,self.inodes)-0.5 # xx needs to be generalized # L[0]
+        # self.who = np.random.rand(self.onodes,self.hnodes)-0.5 # xx needs to be generalized # L[1]
+
+        self.L=[] # now able to make as many layers as desired
+        for i in range(len(LayerList)-1):
+            self.L+=[ np.random.rand(LayerList[i+1],LayerList[i])-0.5 ]
+        # at this point, should have n-1 layers
 
         # scipy.special.expit replacement
         self.activation_function = lambda x:1/(1+np.exp(-np.array(x)))
@@ -38,15 +48,18 @@ class NeuralNetwork:
     def saveWeights(self,filename='wts.npz'):
         ''' Save weights to binary file. Will use numpy for simplicity and
             convenience.
+            KJG191008: need to modify this to handle a list of arrays
             '''
-        np.savez(filename,wih=self.wih,who=self.who)
+        np.savez(filename,wih=self.L[0],who=self.L[1])
         print('weights saved.')
 
     def loadWeights(self,filename='wts.npz'):
-        ''' Load weights from binary file. Using numpy. '''
+        ''' Load weights from binary file. Using numpy.
+            KJG191008: need to modify this to handle a list of arrays
+        '''
         z=np.load(filename)
-        self.wih=z['wih']
-        self.who=z['who']
+        self.L[0]=z['wih']
+        self.L[1]=z['who']
         print('weights loaded.')
 
     def train_one(self,inputs_list,targets_list):
@@ -64,29 +77,27 @@ class NeuralNetwork:
 
         '''
 
-
-
         inputs = np.array(inputs_list,ndmin=2).T
         targets = np.array(targets_list,ndmin=2).T
 
         #signals leaving hidden layer
-        hidden_outputs = self.activation_function(np.dot(self.wih,inputs)) # used for training
+        hidden_outputs = self.activation_function(np.dot(self.L[0],inputs)) # used for training
 
         # estimates to compare with errors
-        final_outputs = self.activation_function(np.dot(self.who,hidden_outputs)) # used for training
+        final_outputs = self.activation_function(np.dot(self.L[1],hidden_outputs)) # used for training
 
         # do some backpropagation / SGD solving:
         # error is (target-actual)
         output_errors=targets-final_outputs
 
         # hidden layer error gets split by weights
-        hidden_errors = np.dot(self.who.T,output_errors)
+        hidden_errors = np.dot(self.L[1].T,output_errors)
 
         # update weights for links between hidden and output layers
         # kjg190304: remember, THIS IS THE KEY LINE
-        self.who +=self.lr*np.dot( (output_errors * final_outputs * (1.0-final_outputs) ), np.transpose(hidden_outputs) )
+        self.L[1] +=self.lr*np.dot( (output_errors * final_outputs * (1.0-final_outputs) ), np.transpose(hidden_outputs) )
         # update weights for links between input and hidden layers
-        self.wih +=self.lr*np.dot( (hidden_errors * hidden_outputs *(1.0-hidden_outputs)), np.transpose(inputs))
+        self.L[0] +=self.lr*np.dot( (hidden_errors * hidden_outputs *(1.0-hidden_outputs)), np.transpose(inputs))
 
     def train_full(self,dataset,epochs=1):
         ''' Run complete training phase '''
@@ -98,21 +109,14 @@ class NeuralNetwork:
         print('training complete')
 
     def query(self,inputs_list):
-        # test network on something
-
-        # prepare input arguments
-        inputs = np.array(inputs_list,ndmin=2).T # not sure why T or ndmin
-
-        # signals into hidden layer
-
-        hidden_inputs  = np.dot(self.wih,inputs)
-        #signals leaving hidden layer
-        hidden_outputs = self.activation_function(hidden_inputs)
-
-        # signals into output layer
-        final_inputs = np.dot(self.who,hidden_outputs)
-        final_outputs = self.activation_function(final_inputs)
-        return final_outputs
+        ''' test network on a single input
+        KJG191008: works with a forloop
+        '''
+        # use loop to go through "all" layers
+        data = np.array(inputs_list,ndmin=2).T # make into (N,1)
+        for ilayer in self.L:
+            data = self.activation_function(np.dot( ilayer , data ))
+        return data
 
 # class NeuralNetwork
 
