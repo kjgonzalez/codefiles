@@ -77,27 +77,22 @@ class NeuralNetwork:
 
         '''
 
-        inputs = np.array(inputs_list,ndmin=2).T
         targets = np.array(targets_list,ndmin=2).T
+        arr=[]
+        arr+= [ np.array(inputs_list,ndmin=2).T ]
+        arr+= [ self.activation_function(np.dot(self.L[0],arr[0])) ]
+        arr+= [ self.activation_function(np.dot(self.L[1],arr[1])) ]
 
-        #signals leaving hidden layer
-        hidden_outputs = self.activation_function(np.dot(self.L[0],inputs)) # used for training
+        error=[None]*(len(arr)-1)
+        error[1] = targets-arr[2]
+        error[0] = np.dot(self.L[1].T,error[1])
 
-        # estimates to compare with errors
-        final_outputs = self.activation_function(np.dot(self.L[1],hidden_outputs)) # used for training
-
-        # do some backpropagation / SGD solving:
-        # error is (target-actual)
-        output_errors=targets-final_outputs
-
-        # hidden layer error gets split by weights
-        hidden_errors = np.dot(self.L[1].T,output_errors)
-
-        # update weights for links between hidden and output layers
-        # kjg190304: remember, THIS IS THE KEY LINE
-        self.L[1] +=self.lr*np.dot( (output_errors * final_outputs * (1.0-final_outputs) ), np.transpose(hidden_outputs) )
+        self.L[1] +=self.lr*np.dot( (error[1] * arr[2] * (1.0-arr[2]) ), np.transpose(arr[1]) )
         # update weights for links between input and hidden layers
-        self.L[0] +=self.lr*np.dot( (hidden_errors * hidden_outputs *(1.0-hidden_outputs)), np.transpose(inputs))
+        self.L[0] +=self.lr*np.dot( (error[0] * arr[1] *(1.0-arr[1])), np.transpose(arr[0]))
+
+        return None
+
 
     def train_full(self,dataset,epochs=1):
         ''' Run complete training phase '''
@@ -169,7 +164,7 @@ if(__name__=='__main__'):
         print('time to train:',time_train)
         print('number of training samples:',len(ds_train))
         print('samples/second in training:',len(ds_train)/time_train)
-        nn.saveWeights()
+        # nn.saveWeights()
 
     if(os.path.exists('wts.npz')):
         if(args.retrain):
@@ -177,7 +172,7 @@ if(__name__=='__main__'):
             print('user override. retraining')
             retrain_fn()
         print('loading pretrained model')
-        nn.loadWeights()
+        # nn.loadWeights()
     else:
         print("weights don't exist, training")
         retrain_fn()
