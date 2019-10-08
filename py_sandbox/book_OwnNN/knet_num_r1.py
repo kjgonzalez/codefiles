@@ -48,15 +48,14 @@ class NeuralNetwork:
         self.activation_function = lambda x:1/(1+np.exp(-np.array(x)))
 
     def saveWeights(self,filename='wts.npz'):
-        np.savez(filename,wih=self.L[0],who=self.L[1])
         ''' Save weights to binary file. '''
+        np.savez(filename,*self.L) # save for n items in list of layer arrays
         print('weights saved.')
 
     def loadWeights(self,filename='wts.npz'):
-        z=np.load(filename)
-        self.L[0]=z['wih']
-        self.L[1]=z['who']
         ''' Load weights from binary file. '''
+        loader=np.load(filename)
+        self.L = [loader[i] for i in loader]
         print('weights loaded.')
 
     def train_one(self,inputs_list,targets_list):
@@ -141,7 +140,7 @@ if(__name__=='__main__'):
         print('time to train:',time_train)
         print('number of training samples:',len(ds_train))
         print('samples/second in training:',len(ds_train)/time_train)
-        # nn.saveWeights()
+        nn.saveWeights()
 
     if(os.path.exists('wts.npz')):
         if(args.retrain):
@@ -149,7 +148,7 @@ if(__name__=='__main__'):
             print('user override. retraining')
             retrain_fn()
         print('loading pretrained model')
-        # nn.loadWeights()
+        nn.loadWeights()
     else:
         print("weights don't exist, training")
         retrain_fn()
