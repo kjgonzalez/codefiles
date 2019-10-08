@@ -24,59 +24,43 @@ import numpy as np
 import os, argparse, time
 
 class NeuralNetwork:
-    ''' Generate an n-layer, arbitrarily shaped fully-connected network
+    ''' Generate an n-layer, arbitrarily shaped fully-connected neural network.
+        The main objective of this network is to simply be able to do some basic
+        supervised learning task with fully connected layers, using the CPU. By
+        default, network uses sigmoid activation function, but may be modified
+            for any other.
     '''
     def __init__(self,LayerList,learningrate):
+        ''' initialize network, given a layer list and learning rate
+        INPUTS:
+        * LayerList expected structure: [inode,hnode0,...,hnodeN,outnode]
+            inode should be size of input data, outnode should be size of
+            desired output data (and MUST match labeled data)
+        * learningrate: scalar float, alpha value of network.
         '''
-        LayerList expected structure: [inode,hnode0,...,hnodeN,outnode]
-        '''
-        self.inodes = LayerList[0]
-        self.hnodes = LayerList[1]
-        self.onodes = LayerList[2]
         self.lr = learningrate
-        # self.wih = np.random.rand(self.hnodes,self.inodes)-0.5 # xx needs to be generalized # L[0]
-        # self.who = np.random.rand(self.onodes,self.hnodes)-0.5 # xx needs to be generalized # L[1]
 
-        self.L=[] # now able to make as many layers as desired
+        self.L=[]
         for i in range(len(LayerList)-1):
             self.L+=[ np.random.rand(LayerList[i+1],LayerList[i])-0.5 ]
-        # at this point, should have n-1 layers
 
         # scipy.special.expit replacement
         self.activation_function = lambda x:1/(1+np.exp(-np.array(x)))
 
     def saveWeights(self,filename='wts.npz'):
-        ''' Save weights to binary file. Will use numpy for simplicity and
-            convenience.
-            KJG191008: need to modify this to handle a list of arrays
-            '''
         np.savez(filename,wih=self.L[0],who=self.L[1])
+        ''' Save weights to binary file. '''
         print('weights saved.')
 
     def loadWeights(self,filename='wts.npz'):
-        ''' Load weights from binary file. Using numpy.
-            KJG191008: need to modify this to handle a list of arrays
-        '''
         z=np.load(filename)
         self.L[0]=z['wih']
         self.L[1]=z['who']
+        ''' Load weights from binary file. '''
         print('weights loaded.')
 
     def train_one(self,inputs_list,targets_list):
-        # train network
-        # prepare input arguments
-        ''' quick note:
-        input: (784,1)
-        wih: (200,784)
-        woh: (10,200)
-        hidden_outputs: (200,1)
-        final_outputs: (10,1)
-        ----
-        hidden_outputs = wih @ input >>>>>>>  should be called h0 (hidden outputs 0)
-        final_outputs  = woh @ hidden_outputs >> should be called out (output final)
-
-        '''
-
+        ''' Train network once on a single input. '''
         targets = np.array(targets_list,ndmin=2).T
         arr=[]
         arr+= [ np.array(inputs_list,ndmin=2).T ]
@@ -104,9 +88,7 @@ class NeuralNetwork:
         print('training complete')
 
     def query(self,inputs_list):
-        ''' test network on a single input
-        KJG191008: works with a forloop
-        '''
+        ''' test network on a single input '''
         # use loop to go through "all" layers
         data = np.array(inputs_list,ndmin=2).T # make into (N,1)
         for ilayer in self.L:
@@ -125,10 +107,7 @@ if(__name__=='__main__'):
 
     # NETWORK INITIALIZATION ===============================
     print('Starting network')
-    i_n=784 # affected by input data # xx needs to be generalized
-    h_n=200 # this value is arbitrary # xx needs to be generalized
-    o_n=10  # affected by output data # xx needs to be generalized
-    layers=[i_n,h_n,o_n]
+    layers=[784,300,150,10] # input, (hidden), output dimensions
     LR=0.1  # this value is arbitrary
     nn=NeuralNetwork(layers,LR)
 
