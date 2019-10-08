@@ -64,19 +64,17 @@ class NeuralNetwork:
         targets = np.array(targets_list,ndmin=2).T
         arr=[]
         arr+= [ np.array(inputs_list,ndmin=2).T ]
-        arr+= [ self.activation_function(np.dot(self.L[0],arr[0])) ]
-        arr+= [ self.activation_function(np.dot(self.L[1],arr[1])) ]
+        for i in range(len(self.L)):
+            arr+= [ self.activation_function(np.dot(self.L[i],arr[i])) ]
 
         error=[None]*(len(arr)-1)
-        error[1] = targets-arr[2]
-        error[0] = np.dot(self.L[1].T,error[1])
+        error[2] = targets-arr[3]
+        for i in range(len(self.L)-1,0,-1): # if len=3 >> [2,1]
+            error[i-1] = np.dot(self.L[i].T,error[i])
+            error[i-1] = np.dot(self.L[i].T,error[i])
 
-        self.L[1] +=self.lr*np.dot( (error[1] * arr[2] * (1.0-arr[2]) ), np.transpose(arr[1]) )
-        # update weights for links between input and hidden layers
-        self.L[0] +=self.lr*np.dot( (error[0] * arr[1] *(1.0-arr[1])), np.transpose(arr[0]))
-
-        return None
-
+        for i in range(len(self.L)-1,-1,-1): # if len=3 >> [2,1,0]
+            self.L[i] +=self.lr*np.dot( (error[i] * arr[i+1] * (1.0-arr[i+1]) ), arr[i].T )
 
     def train_full(self,dataset,epochs=1):
         ''' Run complete training phase '''
