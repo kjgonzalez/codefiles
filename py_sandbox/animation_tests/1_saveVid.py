@@ -6,8 +6,7 @@ objective: try to create random animation, then save that to file
 
 import threading # handling two different sequences at once (getting frames, displaying them)
 import tkinter as tk # keyboard control
-import cv2
-import time
+import cv2, time, argparse
 import numpy as np
 RED = (0,0,255) # for use with opencv (BGR)
 BLU = (255,0,0)
@@ -191,16 +190,20 @@ class DisplayWindow:
         if(self.save):
             self.out.release()
 
+if(__name__=='__main__'):
+    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    p.add_argument('--save',default=False,action='store_true',help='save to video file')
+    args=p.parse_args()
 
-timer = Timer()
+    timer = Timer()
 
-dw = DisplayWindow(save=True)
-dw.run()
-# kbc = KBControl_r1()
-# #
-# thread_dw=threading.Thread(target=dw.run,daemon=True) # kill this window if tkinter closes
-# thread_dw.start()
-# #
-# #
-# # # print('ready to exit')
-# kbc.run() # tkinter thing, should be final thing to run
+    dw = DisplayWindow(save=args.save)
+    dw.run()
+    # kbc = KBControl_r1()
+    # #
+    # thread_dw=threading.Thread(target=dw.run,daemon=True) # kill this window if tkinter closes
+    # thread_dw.start()
+    # #
+    # #
+    # # # print('ready to exit')
+    # kbc.run() # tkinter thing, should be final thing to run
