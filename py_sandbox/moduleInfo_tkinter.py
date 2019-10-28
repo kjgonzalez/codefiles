@@ -20,6 +20,9 @@ things to demonstrate:
 
 import tkinter as tk
 from tkinter import font as ft # optional: control fonts used in tkinter
+import klib
+dh=klib.DataHelp()
+img=dh.jpgimg
 class MainWindow:
     def __init__(self):
         pass
@@ -43,6 +46,9 @@ class MainWindow:
         self.C=dict()
         self.C['print'] = tk.Checkbutton(self.F,text='print?',variable=self.V['print'])
 
+        self.A=tk.Canvas(self.F,width=400,height=300,borderwidth=10,background='white')
+        self.A.create_rectangle(10,10,50,50,fill='black')
+
         self.L=dict()
         self.L['static'] = tk.Label(self.F,text='SomeText')
         self.L['n'] = tk.Label(self.F,textvariable=self.V['n'])
@@ -54,9 +60,11 @@ class MainWindow:
         self.L['static'].grid(row=0,column=0) # only integers 0 or greater
         self.L['n'].grid(row=2,column=1)
         self.C['print'].grid(row=2,column=0)
+        self.A.grid(row=3,column=3)
+
         # bind custom events here, after laying out all GUI elements
-        self.R.bind('<Control-q>',self.cb_quit) # case sensitive
-        self.R.bind('<Control-Q>',self.cb_quit) # case sensitive
+        self.R.bind('<q>',self.cb_quit) # case sensitive
+        self.R.bind('<Q>',self.cb_quit) # case sensitive
         self.R.bind('<Down>',self.cb_vardn) # case sensitive
         self.R.bind('<Up>',self.cb_varup) # case sensitive
         self.R.bind("<KeyPress>", self.keydown)    # bind "keydown" fn to keyPRESS
