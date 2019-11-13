@@ -171,7 +171,9 @@ class Stopwatch:
 # class Stopwatch
 
 class DataHelp(object):
-    ''' Call this object when want to use a binary such as an image. This saves
+    ''' Please do not use this class directly, instead use "data" variable.
+
+    Call this object when want to use a binary such as an image. This saves
         space and effort on binaries on the repo without having to constantly
         copy/paste new data in.
         KJG190320: uses non-standard module, may not work on all platforms.
@@ -209,6 +211,20 @@ class DataHelp(object):
         '''
         import PIL.Image as pil
         return np.array(pil.open(self.pngpath))
+    @property
+    def mnistpath(self):
+        ''' absolute path to mnist dataset '''
+        path=os.path.abspath(os.path.join(self.basedir,'data','mnist_5k.csv'))
+        assert os.path.exists(path),'error,missing file: '+path
+        return path
+
+    @property
+    def irispath(self):
+        ''' absolute path to iris dataset '''
+        path=os.path.abspath(os.path.join(self.basedir,'data','iris.csv'))
+        assert os.path.exists(path),'error,missing file: '+path
+        return path
+
 data=DataHelp()
 # class Data
 
