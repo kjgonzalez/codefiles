@@ -22,7 +22,7 @@ done   | network can be forced to retrain
 '''
 import numpy as np
 import os, argparse, time
-
+# note: random seed controlled below in main
 class NeuralNetwork:
     ''' Generate an n-layer, arbitrarily shaped fully-connected neural network.
         The main objective of this network is to simply be able to do some basic
@@ -62,16 +62,19 @@ class NeuralNetwork:
         ''' Train network once on a single input. '''
         targets = np.array(targets_list,ndmin=2).T
         arr=[]
+        # fwd pass
         arr+= [ np.array(inputs_list,ndmin=2).T ]
         for i in range(len(self.L)):
             arr+= [ self.activation_function(np.dot(self.L[i],arr[i])) ]
 
+        # error
         error=[None]*(len(arr)-1)
-        error[2] = targets-arr[3]
+        error[len(arr)-2] = targets-arr[len(arr)-1]
         for i in range(len(self.L)-1,0,-1): # if len=3 >> [2,1]
             error[i-1] = np.dot(self.L[i].T,error[i])
             error[i-1] = np.dot(self.L[i].T,error[i])
 
+        # bwd pass
         for i in range(len(self.L)-1,-1,-1): # if len=3 >> [2,1,0]
             self.L[i] +=self.lr*np.dot( (error[i] * arr[i+1] * (1.0-arr[i+1]) ), arr[i].T )
 
@@ -79,7 +82,7 @@ class NeuralNetwork:
         ''' Run complete training phase '''
         for iepoch in range(epochs):
             for idat in dataset:
-                nn.train_one(*idat)
+                self.train_one(*idat)
             # idat_loop
         # iepoch_loop
         print('training complete')
@@ -100,9 +103,13 @@ if(__name__=='__main__'):
 
     p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     p.add_argument('--retrain',default=False,action='store_true',help='Force network to retrain, even if weights exist')
+    p.add_argument('--random',default=False,action='store_true',help='Disable randomness control')
     args=p.parse_args()
 
     # NETWORK INITIALIZATION ===============================
+    if(not args.random):
+        np.random.seed(0) # hold randomness fixed unless otherwise wanted
+        print('seed controlled')
     print('Starting network')
     layers=[784,300,150,10] # input, (hidden), output dimensions
     LR=0.1  # this value is arbitrary
