@@ -1,13 +1,15 @@
 '''
 Author: Kris Gonzalez
 DateCreated: 190325
+KJG191118: maybe want to delete, not needed anymore
+
 Objective: use self built network for another task: approximating a cubic function in given range.
 
-Overall goals: 
+Overall goals:
     * save model to avoid retraining
     * get more data on model train/test phases
     * add sliding window capability for basic detection, not just classification.
-    
+
 NOTES:
     * sigmoid function: y = 1/(1+exp(-x))
 '''
@@ -24,57 +26,57 @@ class NeuralNetwork:
         self.lr = learningrate
         self.wih = np.random.rand(self.hnodes,self.inodes)-0.5
         self.who = np.random.rand(self.onodes,self.hnodes)-0.5
-        
+
         # scipy.special.expit replacement
-        self.activation_function = lambda x:1/(1+np.exp(-np.array(x))) 
+        self.activation_function = lambda x:1/(1+np.exp(-np.array(x)))
 
     def saveWeights(self,filename='wts.npz'):
-        ''' Save weights to binary file. Will use numpy for simplicity and 
-            convenience. 
+        ''' Save weights to binary file. Will use numpy for simplicity and
+            convenience.
             '''
         np.savez(filename,wih=self.wih,who=self.who)
         print('weights saved.')
-        
+
     def loadWeights(self,filename='wts.npz'):
         ''' Load weights from binary file. Using numpy. '''
         z=np.load(filename)
         self.wih=z['wih']
         self.who=z['who']
         print('weights loaded.')
-        
+
     def train_one(self,inputs_list,targets_list):
         # train network
         # prepare input arguments
         inputs = np.array(list(inputs_list),ndmin=2).T # not sure why T or ndmin
         targets = np.array(list(targets_list),ndmin=2).T # not sure why T or ndmin
-        
-        
+
+
         # signals into hidden layer
         hidden_inputs  = np.dot(self.wih,inputs)
         #signals leaving hidden layer
         hidden_outputs = self.activation_function(hidden_inputs)
-        
+
         # signals into output layer
         final_inputs = np.dot(self.who,hidden_outputs)
-        final_outputs = self.activation_function(final_inputs)      
-        
+        final_outputs = self.activation_function(final_inputs)
+
         # do some backpropagation / SGD solving:
         # error is (target-actual)
         output_errors=targets-final_outputs
-        
+
         # hidden layer error gets split by weights
         hidden_errors = np.dot(self.who.T,output_errors)
-        
+
         # update weights for links between hidden and output layers
         # kjg190304: remember, THIS IS THE KEY LINE
         self.who +=self.lr*np.dot( (output_errors * final_outputs * (1.0-final_outputs) ), np.transpose(hidden_outputs) )
         # update weights for links between input and hidden layers
-        self.wih +=self.lr*np.dot( (hidden_errors * hidden_outputs *(1.0-hidden_outputs)), np.transpose(inputs)) 
-    
+        self.wih +=self.lr*np.dot( (hidden_errors * hidden_outputs *(1.0-hidden_outputs)), np.transpose(inputs))
+
     def train_full(self,dataset,epochs=1):
-        ''' Run complete training phase. dataset must be a list of 2-item lists containing the input and the answer. 
+        ''' Run complete training phase. dataset must be a list of 2-item lists containing the input and the answer.
         INPUTS:
-            * dataset: [N][TYPE] array, where N is number of samples, and TYPE 
+            * dataset: [N][TYPE] array, where N is number of samples, and TYPE
                 is 0=input, 1=answer.
             * epochs: number of epochs to train, default = 1.
         '''
@@ -84,24 +86,24 @@ class NeuralNetwork:
             # idat_loop
         # iepoch_loop
         print('training complete')
-    
+
     def query(self,inputs_list):
         # test network on something
-        
+
         # prepare input arguments
         inputs = np.array(list(inputs_list),ndmin=2).T # not sure why T or ndmin
-        
+
         # signals into hidden layer
-        
+
         hidden_inputs  = np.dot(self.wih,inputs)
         #signals leaving hidden layer
         hidden_outputs = self.activation_function(hidden_inputs)
-        
+
         # signals into output layer
         final_inputs = np.dot(self.who,hidden_outputs)
         final_outputs = self.activation_function(final_inputs)
         return final_outputs
-        
+
 # class NeuralNetwork
 
 
@@ -111,7 +113,7 @@ if(__name__=='__main__'):
     base=os.path.abspath(os.path.join(os.getcwd(),'..','..'))
     base=os.path.join(base,'py_sandbox/book_MakeYourOwnNeuralNetwork')
     assert os.path.exists(base),'error:'+base
-    
+
 
     # NETWORK INITIALIZATION ===============================
     print('Starting network')
@@ -120,7 +122,7 @@ if(__name__=='__main__'):
     o_n=10  # affected by output data
     LR=0.1  # this value is arbitrary
     nn=NeuralNetwork(i_n,h_n,o_n,LR)
-    
+
     # DATA LOADING =========================================
     print('will load data')
     # format labels and answers as needed to be read by network
@@ -129,9 +131,9 @@ if(__name__=='__main__'):
     for irow in open(fp_dat):
         iraw=irow.strip().split(',')
         ival=int(iraw[0])
-        
+
         # don't need to reshape, but do need to remap to 0.01-0.99
-        iimg=(.98/255)*(np.array(iraw[1:]).astype(float))+.01 
+        iimg=(.98/255)*(np.array(iraw[1:]).astype(float))+.01
         ians=np.zeros(10)+0.01 # initialize all values as "low"
         ians[ival]=0.99 # set location of answer to be the "high" value
         dataset.append([iimg,ians]) # aka inputs and targets
@@ -140,10 +142,10 @@ if(__name__=='__main__'):
     # split dataset into training and validation
     ntrain=4500
     ds_train=dataset[:ntrain]
-    ds_test =dataset[ntrain:] 
+    ds_test =dataset[ntrain:]
 
     # TRAINING PHASE =======================================
-    # start of training (note: about 1130samples/second at 100 hidden nodes. 
+    # start of training (note: about 1130samples/second at 100 hidden nodes.
     #   about 54s to train 60k)
     fp_wts=os.path.join(base,'wts.npz')
     assert os.path.exists(fp_wts)
@@ -159,7 +161,7 @@ if(__name__=='__main__'):
         print('number of training samples:',len(ds_train))
         print('samples/second in training:',len(ds_train)/time_train)
         nn.saveWeights(fp_wts)
-    
+
     # TESTING PHASE ========================================
     # at this point, need to actually "score" the network
     t0=time.time()

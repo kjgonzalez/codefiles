@@ -30,6 +30,10 @@ import numpy as np
 np.random.seed(0) # for now, control randomness seed
 from klib import data as da
 import argparse, time
+import os, sys
+sys.path.append(os.path.abspath('../../book_OwnNN'))
+from knet_nn import NeuralNetwork
+
 def npshuffle(nparr):
     # enable random shuffling of array without being in-place
     npa2=np.copy(nparr)
@@ -63,18 +67,34 @@ print('training:')
 for i in ds_train: print(i)
 print('testing')
 for i in ds_test: print(i)
+
 # TRAINING PHASE ===============================================================
+print('initializing network')
+layers=[4,20,3]
+LR=0.01 # this value is arbitrary, remember
+nn=NeuralNetwork(layers,LR)
+
+# presumably, training would happen here
 
 
+# TESTING PHASE ================================================================
+scorecard=[]
+for idat in ds_test:
+    answer=np.argmax(idat[1])
+    pred=np.argmax(nn.query(idat[0]))
+    print(answer,'|',pred)
+    scorecard+=[1] if(answer==pred) else [0]
+print(scorecard)
+print('performance:',sum(scorecard)/len(scorecard))
 
 
 
 if(__name__=='__main__'):
     p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     p.add_argument('--random',default=False,action='store_true',help='Disable randomness control')
-    # ideas: n epochs? split size? 
+    # ideas: n epochs? split size?
     args=p.parse_args()
-
+    print('done')
 
 
 
