@@ -4,9 +4,9 @@ objective: use neural network to identify flowers in iris dataset based on 4
     parameters (sepalL,sepalW,petalL,petalW) to identify species
 
 general steps:
-1. data loading / data prep
-2. training
-3. testing for accuracy
+1. data loading / data prep - done
+2. training                 - waiting
+3. testing for accuracy     - waiting
 
 NOTES:
 * there are 150 samples, so will make a 20% datasplit (30 test samples)
@@ -22,42 +22,62 @@ NOTES:
     setosa = 0
     versicolor = 1
     virginica = 2
-
-* could either rescale min/max values to be maximum, or attempt to future-proof
-    against possible larger or smaller values. will do latter. min/max scale
-    will simply be set to 0 and 10 cm
+* will simply min/max between 0/10cm instead of relative scaling
 
 '''
-
-# initialization / dataloading =================================================
-
+# INITIALIZATION ===============================================================
 import numpy as np
+np.random.seed(0) # for now, control randomness seed
 from klib import data as da
+import argparse, time
+def npshuffle(nparr):
+    # enable random shuffling of array without being in-place
+    npa2=np.copy(nparr)
+    np.random.shuffle(npa2)
+    return npa2
 
-lookup = dict()
-lookup[0]='setosa'
-lookup['setosa'] = 0
-lookup[1] = 'versicolor'
-lookup['versicolor'] = 1
-lookup[2] = 'virginica'
-lookup['virginica'] = 2
+# DATALOADING ==================================================================
+
+print("loading data ...")
+dataset=[]
+for irow in open(da.irispath):
+    iraw = irow.strip().split(',') # 1x5 data
+    idat = (0.98/10)*(np.array(iraw[:-1],dtype=float))+0.01 # 0-10 to 0.01-0.99
+    ival = iraw[-1]
+    if('setosa' in ival): ival=0
+    elif('versicolor' in ival): ival=1
+    elif('virginica' in ival): ival=2
+    else: raise Exception('error, species not recognized')
+    ians = np.zeros(3)+0.01
+    ians[ival] = 0.99
+    dataset.append([idat,ians])
+# at this point, have a 150x5 array of data
+dataset=npshuffle(dataset) # shuffle data
+
+print("data loaded")
+ntrain = 120
+ds_train=dataset[:ntrain]
+ds_test =dataset[ntrain:]
+
+print('training:')
+for i in ds_train: print(i)
+print('testing')
+for i in ds_test: print(i)
+# TRAINING PHASE ===============================================================
 
 
-raw=[i.strip().split(',') for i in open(da.irispath)]
 
-for i in range(len(raw)):
-    # replace each species with a number instead
-    if('setosa') in raw[i][-1]:
-        raw[i][-1]=0
-    elif('versicolor') in raw[i][-1]:
-        raw[i][-1]=1
-    elif('virginica') in raw[i][-1]:
-        raw[i][-1]=2
-    else:
-        raise Exception ("error, species not recognized")
-raw2=np.array(raw,dtype=float)
 
-# create input data (complete set at the moment)
-# note: dataset has shape: dataset[i] = [input,answer]
 
-# create ground truths
+if(__name__=='__main__'):
+    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    p.add_argument('--random',default=False,action='store_true',help='Disable randomness control')
+    # ideas: n epochs? split size? 
+    args=p.parse_args()
+
+
+
+
+
+
+# eof
