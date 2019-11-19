@@ -49,7 +49,6 @@ if(__name__=='__main__'):
     p.add_argument('--layers',type=str,default='4-4-3',help='nn layer composition')
     # ideas: n epochs? split size?
     args=p.parse_args()
-    print('done')
 
     if(not args.random):
         np.random.seed(0) # for now, control randomness seed
@@ -57,7 +56,7 @@ if(__name__=='__main__'):
     nepochs = args.epochs
 
     layers=[int(i) for i in args.layers.split('-')]
-    # DATALOADING ==================================================================
+    # DATALOADING ==============================================================
     print("loading data...")
     dataset=[]
     for irow in open(da.irispath):
@@ -80,7 +79,7 @@ if(__name__=='__main__'):
     ds_train=dataset[:ntrain]
     ds_test =dataset[ntrain:]
 
-    # TRAINING PHASE ===============================================================
+    # TRAINING PHASE ===========================================================
     print('initializing network...')
     LR=0.1 # this value is arbitrary, remember
     nn=NeuralNetwork(layers,LR)
@@ -88,7 +87,7 @@ if(__name__=='__main__'):
     # presumably, training would happen here
     nn.train_full(ds_train,nepochs)
 
-    # TESTING PHASE ================================================================
+    # TESTING PHASE ============================================================
     scorecard=[]
     for idat in ds_test:
         answer=np.argmax(idat[1])

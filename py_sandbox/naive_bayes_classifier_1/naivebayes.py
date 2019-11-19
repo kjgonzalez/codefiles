@@ -2,7 +2,7 @@
 datecreated: 190926
 objective: first practice with naive bayes classification
 source: https://www.youtube.com/watch?v=CPqOCI0ahss
-
+KJG191119: use this to prep for bayes with iris dataset
 
 
 '''
