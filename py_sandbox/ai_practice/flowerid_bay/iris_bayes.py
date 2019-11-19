@@ -8,8 +8,8 @@ objective: use naive bayes classifier to ID flowers in iris dataset based on 4
     - multinomial NB
 
 General Steps:
-1. dataloading                  - inProgress
-2. class initialization         - waiting
+1. dataloading                  - done
+2. class initialization         - inProgress
 3. querying / performance check - waiting
 
 NOTES:
@@ -32,12 +32,64 @@ def npshuffle(nparr):
     np.random.shuffle(npa2)
     return npa2
 
+class GaussianNaiveBayes:
+    ''' Gaussian Naive Bayes classifier. initially developed for use with iris
+        dataset.
+
+    In order to initialize this class, must have the dataset already prepared
+        in the correct manner, similar to training for NeuralNetwork class:
+        ds_train[i] = [data,answer] for each i in dataset
+        data = array of m values, [0.01-0.99]
+        answer = array of n values, [0.01 or 0.99], where
+    '''
+    def __init__(self,ds_train):
+        '''
+        General Steps:
+        1. get dataset
+        2. identify how many parameters "i" there are
+        3. identify how many classes "j" there are
+        4. split dataset for each class, and get parameter means & variances
+        5. for each class, each parameter, fill out avg and var arrays
+        6. get P(iclass), and fill out pcl array
+        get dataset, separate for each class, get mean and variance, then place into appropriate locations
+        '''
+        pass
+
+    def gpdf(self,x,mu,variance):
+        ''' given a sample, mu, and variance, return gaussian probability
+            density function
+        '''
+        pass
+
+    @property
+    def means(self):
+        pass
+        # return self.avg
+
+    @property
+    def variances(self):
+        pass
+        # return self.var
+
+    def Pclass(self):
+        pass
+        # return self.pcl
+
+
+
+
+
+
+
+
+
+
+
 
 if(__name__=='__main__'):
     p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     p.add_argument('--random',default=False,action='store_true',help='Enable randomness')
     args=p.parse_args()
-    print('hello world')
 
     if(not args.random):
         np.random.seed(0) # for now, control randomness seed
@@ -66,4 +118,5 @@ if(__name__=='__main__'):
     ds_train=dataset[:ntrain]
     ds_test =dataset[ntrain:]
 
+    print(ds_test)
 # eof
