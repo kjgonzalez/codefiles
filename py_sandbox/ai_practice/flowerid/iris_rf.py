@@ -7,9 +7,12 @@ NOTES:
 * there's a lot of non-matrix operations to do, so will need to break things
     down in pieces
 * seems like some use ordered dicts to generate random forests
+* realized that binary data is a subset of discrete data, and discrete is a
+    subset of continuous data, and have unified mask function
+
 General Steps:
 1. create simple, small binary dataset (e.g. heart disease from src)
-2. create data boostrapping function / bagging function
+2. create data boostrappig function / bagging function
 3. create gini impurity calculator (generalized both for leaves and nodes)
 4. create continuous data node?
 4. generate a randomized decision tree?
@@ -18,21 +21,51 @@ General Steps:
 
 
 Current Goals
-Stat | Descrip
-wait | create a random forest
-wait | create a single decision tree automatically
-wait | create a single decision node
-wait | create decision node with child
-wait | automatically determine best node to add
+STAT | DESCRIPTION
+--------------------------------------------------
+done | be able to get gini / entropy score for a given set of data / parameter
+done | create node for binary data
+done | create node for continuous data
+done | create node for discrete data?
+done | unify masking function for binary, discrete, and continuous data
+???? | create a single decision node
+???? | be able auto-generate a single decision node
+???? | perhaps create tool that helps split everything, like in book
+???? | create a single decision tree automatically
+???? | create decision node with child
+???? | automatically determine best node to add
+???? | create a random forest
 ???? | ??
 ???? | ??
 ???? | ??
 ???? | ??
-???? | ??
-???? | ??
+
+want to create a tree based on an format, such as:
+treedef=dict()
+treedef[0]=[[props],[children]] # root node
+treedef[1]=[[props],[children]]
+
+
+for partitioning help, want a function that:
+    0. given a dataset in matrix form
+    1. looks at each parameter
+    2. determines if binary, discrete, or continuous
+    3. check entropy across all parameters / thresholds
+    4. print results (or return best option)
+
 
 
 '''
+
+def findsplit(data):
+    ''' Given an input array (assume last parameter is ground truth), determine
+        type of parameter, check entropy for each combination, and return
+        results.
+    '''
+    nparams = len(data[0])-1
+    print(nparams)
+
+
 # 0/1/2 = junior / mid / senior
 # 0/1/2 = java / python / r
 # 0/1 = False / True
@@ -55,44 +88,48 @@ selfdat=[ # taken from DataScienceFromScratch, p221
 [0, 1, 0, 1, 0]
 ]
 
-
 # first, work on getting a decision tree to work (with a single node)
 import numpy as np
 from klib import data as da
 from klib import listContents as lc
 dat=np.array(selfdat)
-
+findsplit(dat)
+exit()
 class Node:
-    _CONDS='bin thresh'.split(' ')
+    _CONDS='bin disc cont multi'.split(' ') # binary, continuous, discrete / ranked data
     _METRICS='gini entropy'.split(' ')
     def __init__(self,param=0,cond='bin',thresh=0.5,metric='gini'):
         assert cond in self._CONDS,"invalid condition specified: "+cond
         assert metric in self._METRICS,"invalid condition specified: "+metric
+        if(cond=='bin'):
+            assert thresh==0.5,"Error, threshold specified when using binary classification"
         self.param=param # index, 0...n
         self.cond = cond # 0=binary, 1=threshold
         self._thresh = thresh # req if cond=thresh
         self.parent=None
-        self.kids=[]
-        if(metric='entropy'):
+        self.kids=[] # don't want to spell "children" out, or shorten it
+        if(metric=='entropy'):
             self.metric=self.entropy
         else:
             self.metric=self.gini
 
     def getmask(self,input):
         ''' based on condition to check, get mask '''
-        if(cond=='bin'):
-            return input[:,self.param]==True # assume cond=0
-        if(cond=='thresh'):
+        if(self.cond in self._CONDS[:3]): # using binary, discrete, or continuous
             return input[:,self.param]>self._thresh
+        elif(self.cond==self._CONDS[3]):
+            raise Exception('multichoice condition not implemented yet')
+        else:
+            raise Exception('invalid condition being used')
 
     def eval(self,input):
-
-        mask=input[:,self.param]==True # assume cond=0
+        ''' get mask and obtain separated result arrays and metrices (3-values) '''
+        mask=self.getmask(input)
         res0=input[np.logical_not(mask)]
         res1=input[mask]
-        gini=self.gini(res0,res1)
+        resMetric=self.metric(res0,res1)
         # get gini score
-        return res0,res1,gini
+        return res0,res1,resMetric
 
     def gini(self,res0,res1=None):
         ''' Get the gini impurity based on the output of an entire node (both
@@ -111,58 +148,36 @@ class Node:
         gini1=1-sum([(summary1[i,-1]/len(res1))**2 for i in range(nclasses)])
         s01=len(res0)+len(res1)
         giniN = (len(res0)/s01)*gini0+(len(res1)/s01)*gini1
+        print('calculating gini')
         return giniN,gini0,gini1
 
     def entropy(self,res0,res1=None):
         ''' Another way to find how "pure" a list of classes are. based on
             example from Data Science from Scratch
         '''
-        summary0=lc(res0[:-1],True) # get summary of classes in results
+        summary0=lc(res0[:,-1],True) # get summary of classes in results
         # get class probabilities
         pcls0=summary0[:,1]/summary0[:,1].sum()
         ent0=sum([-ip*np.log(ip) for ip in pcls0 if(ip>0)]) # per book, ignore '0'
         if(type(res1)==type(None)):
             return ent0
         # otherwise get weighted sum of combined entropy if have both results
-        summary1=lc(res1[:-1],True) # get summary of classes in results
+        summary1=lc(res1[:,-1],True) # get summary of classes in results
         # get class probabilities
         pcls1=summary1[:,1]/summary1[:,1].sum()
         ent1=sum([-ip*np.log(ip) for ip in pcls1 if(ip>0)]) # per book, ignore '0'
         entN = ( ent0*len(res0) + ent1*len(res1) )/( len(res0) + len(res1) )
+        print('calculating entropy')
         return entN, ent0, ent1
-# perhaps create a tool that helps us split everything
 
-def getgini(data,p):
-    temp=Node(param=p)
-    return temp.eval(data)[2]
+print('gini based metrics:')
+a=Node(param=2) # binary data, gini
+print('bin',a.eval(dat)[2])
+b=Node(param=2,cond='disc')
+print('dis',a.eval(dat)[2])
+c=Node(param=2,cond='cont')
+print('con',a.eval(dat)[2])
 
-def getentropy(data,p):
-    temp=Node(param=p)
-    return temp.
-import ipdb; ipdb.set_trace()
-
-'''
-want to create a tree somehow
-perhaps based on an instruction
-
-n0:[n1:[],n2]
-
-treedef=dict()
-treedef[0]=[[props],[children]] # root node
-treedef[1]=[[props],[children]]
-
-
-
-'''
-dat=np.array([i.strip().split(',') for i in open('delme.csv')],dtype=int)
-
-n=Node(param=0,cond='bin')
-res=n.eval(dat)
-print('gini:\n',res[2])
-
-m=Node(param=0,cond='thresh',thresh=0.5)
-res=m.eval(dat)
-print('gini:\n',res[2])
 
 
 
