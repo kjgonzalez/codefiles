@@ -64,6 +64,13 @@ def findsplit(data):
     '''
     nparams = len(data[0])-1
     print(nparams)
+    # determine nature of each parameter
+    ptype=[]
+    for i in range(nparams):
+        imax=data[:,i].max()
+        imin=data[:,i].min()
+
+        if()
 
 
 # 0/1/2 = junior / mid / senior
