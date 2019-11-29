@@ -114,7 +114,7 @@ def findsplit(data):
         threshs=findthresholds(data[:,iparam])
         for ithresh in threshs:
             inode = Node(iparam,thresh=ithresh,metric=desmetric)
-            score=round(inode.eval(data)[2][0],3)
+            score=round(inode.check(data)[2][0],3)
             arr.append([iparam,ithresh,score])
     return np.array(arr)
 
@@ -138,7 +138,7 @@ class Node:
         else:
             self.metric=self.gini
 
-    def eval(self,input):
+    def check(self,input):
         ''' get mask and obtain separated result arrays and metrices (3-values) '''
         mask=input[:,self.param]>self._thresh # bin/disc/cont all calculate mask same way
         res0=input[np.logical_not(mask)]
