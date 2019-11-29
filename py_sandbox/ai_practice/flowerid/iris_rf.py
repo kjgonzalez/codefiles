@@ -184,76 +184,32 @@ class Node:
         entN = ( ent0*len(res0) + ent1*len(res1) )/( len(res0) + len(res1) )
         return entN, ent0, ent1
 
-def findthresholds(data):
-    ''' find thresholds, and assume that data is a vector '''
-    temp=data[np.argsort(data)]
-    inds=np.where(temp[1:]-temp[:-1])[0]
-    threshs=[temp[i:i+2].mean() for i in inds]
-    return threshs
-
-def findsplit(data):
-    ''' Given an input array (assume last parameter is ground truth), determine
-        type of parameter, check entropy for each combination, and return
-        results.
+class DecisionTree:
+    ''' a decision tree will hold the structure of each node (parents /
+        children each has) and will contain all the nodes themselves as well.
+        this object also traverses the "tree" to each final classification
+    NOTE:
+    * should have train function (take in data and save final scores at each leaf)
+    * should have eval function (traverse tree)
     '''
-    assert data.dtype =='O',"Dataset not loaded as dtype=object, param types might be ambiguous"
-    nparams = len(data[0])-1
-    print('nparams:',nparams)
-    # determine nature of each parameter
-    ptype=[] # 0=binary,1=discrete,2=continuous
-    for i in range(nparams):
-        if(type(data[:,i].max())==float):
-            # non-integer: continuous data
-            ptype.append(2)
-        elif(data[:,i].max()>1):
-            # int, larger than 1: discrete
-            ptype.append(1)
-        else:
-            ptype.append(0)
-    print('ptypes:',ptype)
-
-    alias=dict()
-    alias[0]='bin'
-    alias[1]='disc'
-    alias[2]='cont'
-    # check each parameter's thresholds and report all combos
-    print('note: using entropy score')
-    arr=[]
-    for iparam in range(nparams):
-        if(ptype[iparam]==0):
-            # just check 0.5 threshold and go on to next
-            thresh=0.5
-            inode = Node(iparam,alias[ptype[iparam]],thresh=thresh,metric='entropy')
-            score=round(inode.eval(data)[2][0],3)
-            arr.append([iparam,thresh,score])
-            # print('p:{} | t:{} | s:{}'.format(iparam,thresh,score))
-        elif(ptype[iparam]==1):
-            # need to determine thresholds
-            threshs=findthresholds(data[:,iparam])
-            for ithresh in threshs:
-                inode = Node(iparam,alias[ptype[iparam]],thresh=ithresh,metric='entropy')
-                score=round(inode.eval(data)[2][0],3)
-                arr.append([iparam,ithresh,score])
-                # print('p:{} | t:{} | s:{}'.format(iparam,ithresh,score))
-    print('results:')
-    for irow in arr:print('p:{} | t:{} | s:{}'.format(*irow))
-# need to create function that determines splits for a set of data
-
-dat2=dat[dat[:,0]==0]
+    def __init__(self):
+        pass
 
 
-findsplit(dat2)
-exit()
+nodes = dict()
+# nodes[index] = [param,thresh,parent]
+nodes[0]=[0,0.5,None] # root node has no parent
+nodes[1]=[2,0.5,0]
+nodes[2]=[0,1.5,0]
+nodes[3]=[3,0.5,2]
 
-print('gini based metrics:')
-a=Node(param=2) # binary data, gini
-print('bin',a.eval(dat)[2])
-b=Node(param=2,cond='disc')
-print('dis',a.eval(dat)[2])
-c=Node(param=2,cond='cont')
-print('con',a.eval(dat)[2])
-
-
+# tree=dict()
+# for i in nodes.keys():    #def __init__(self,param=0,cond=0,thresh=0.5,metric=0):
+#
+#     tree[i]=Node()
+# print(tree)
+# print(dat)
+print(findsplit(dat))
 
 
 # eof
