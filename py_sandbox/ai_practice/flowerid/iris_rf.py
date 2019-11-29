@@ -196,6 +196,7 @@ class DecisionTree:
         pass
 
 
+# will instead create trees based on what children they have, not what parents
 nodes = dict()
 # nodes[index] = [param,thresh,parent]
 nodes[0]=[0,0.5,None] # root node has no parent
