@@ -80,6 +80,44 @@ import numpy as np
 from klib import data as da
 from klib import listContents as lc
 dat=np.array(selfdat,dtype=object) # using this type keeps ints as ints
+def findthresholds(data):
+    ''' find thresholds, and assume that data is a vector '''
+    temp=data[np.argsort(data)]
+    inds=np.where(temp[1:]-temp[:-1])[0]
+    threshs=[temp[i:i+2].mean() for i in inds]
+    return threshs
+def findsplit(data):
+    ''' Given an input array (assume last parameter is ground truth), determine
+        type of parameter, check entropy for each combination, and return
+        results.
+    '''
+    assert data.dtype =='O',"Dataset not loaded as dtype=object, param types might be ambiguous"
+    nparams = len(data[0])-1
+    # determine nature of each parameter
+    ptype=[] # 0=binary,1=discrete,2=continuous
+    for i in range(nparams):
+        if(type(data[:,i].max())==float):
+            # non-integer: continuous data
+            ptype.append(2)
+        elif(data[:,i].max()>1):
+            # int, larger than 1: discrete
+            ptype.append(1)
+        else:
+            ptype.append(0)
+
+    # check each parameter's thresholds and report all combos
+    # print('note: using entropy score')
+    arr=[]
+    desmetric=1 # 0=gini, 1 = entropy
+    for iparam in range(nparams):
+        # for now, will not worry about continuous data and massive number of splits there can be...
+        threshs=findthresholds(data[:,iparam])
+        for ithresh in threshs:
+            inode = Node(iparam,thresh=ithresh,metric=desmetric)
+            score=round(inode.eval(data)[2][0],3)
+            arr.append([iparam,ithresh,score])
+    return np.array(arr)
+
 class Node:
     '''
     INITIALIZATION INPUTS:
