@@ -30,12 +30,12 @@ done | create node for discrete data?
 done | unify masking function for binary, discrete, and continuous data
 done | create a single decision node
 done | automatically determine best node to add (function)
+inpr | get rid of condition argument, not needed
 ???? | be able auto-generate a single decision node
 ???? | perhaps create tool that helps split everything, like in book
 ???? | create a single node decision tree automatically
 ???? | create decision node with children
 ???? | create a random forest
-???? | ??
 ???? | ??
 ???? | ??
 ???? | ??
@@ -122,19 +122,14 @@ class Node:
     '''
     INITIALIZATION INPUTS:
     * param: parameter index (0,1,2,...). default=0
-    * cond: condition to test on. 0=binary, 1=discrete, 2=continuous, 3=mc (not
-        implemented). default=0
     * thresh: threshold to test condition default=0
     * metric: metric to identify best separation of values. 0=gini, 1=entropy.
         default=0
     '''
-    _CONDS=[0,1,2,3] # binary, discrete, continuous, multichoice
     _METRICS=[0,1] # gini, entropy
-    def __init__(self,param=0,cond=0,thresh=0.5,metric=0):
-        assert cond in self._CONDS,"invalid condition specified: "+cond
-        assert metric in self._METRICS,"invalid condition specified: "+metric
+    def __init__(self,param=0,thresh=0.5,metric=0):
+        assert metric in self._METRICS,"invalid metric specified: "+metric
         self.param=param # index, 0...n
-        self.cond = cond # 0=binary, 1=threshold
         self._thresh = thresh # req if cond=thresh
         self.parent=None
         self.kids=[] # don't want to spell "children" out, or shorten it
@@ -143,18 +138,9 @@ class Node:
         else:
             self.metric=self.gini
 
-    def getmask(self,input):
-        ''' based on condition to check, get mask '''
-        if(self.cond in self._CONDS[:3]): # using binary, discrete, or continuous
-            return input[:,self.param]>self._thresh
-        elif(self.cond==self._CONDS[3]):
-            raise Exception('multichoice condition not implemented yet')
-        else:
-            raise Exception('invalid condition being used')
-
     def eval(self,input):
         ''' get mask and obtain separated result arrays and metrices (3-values) '''
-        mask=self.getmask(input)
+        mask=input[:,self.param]>self._thresh # bin/disc/cont all calculate mask same way
         res0=input[np.logical_not(mask)]
         res1=input[mask]
         resMetric=self.metric(res0,res1)
