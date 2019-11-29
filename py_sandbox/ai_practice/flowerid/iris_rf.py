@@ -79,23 +79,28 @@ selfdat=[ # taken from DataScienceFromScratch, p221
 import numpy as np
 from klib import data as da
 from klib import listContents as lc
-dat=np.array(selfdat)
-findsplit(dat)
-exit()
+dat=np.array(selfdat,dtype=object) # using this type keeps ints as ints
 class Node:
-    _CONDS='bin disc cont multi'.split(' ') # binary, continuous, discrete / ranked data
-    _METRICS='gini entropy'.split(' ')
-    def __init__(self,param=0,cond='bin',thresh=0.5,metric='gini'):
+    '''
+    INITIALIZATION INPUTS:
+    * param: parameter index (0,1,2,...). default=0
+    * cond: condition to test on. 0=binary, 1=discrete, 2=continuous, 3=mc (not
+        implemented). default=0
+    * thresh: threshold to test condition default=0
+    * metric: metric to identify best separation of values. 0=gini, 1=entropy.
+        default=0
+    '''
+    _CONDS=[0,1,2,3] # binary, discrete, continuous, multichoice
+    _METRICS=[0,1] # gini, entropy
+    def __init__(self,param=0,cond=0,thresh=0.5,metric=0):
         assert cond in self._CONDS,"invalid condition specified: "+cond
         assert metric in self._METRICS,"invalid condition specified: "+metric
-        if(cond=='bin'):
-            assert thresh==0.5,"Error, threshold specified when using binary classification"
         self.param=param # index, 0...n
         self.cond = cond # 0=binary, 1=threshold
         self._thresh = thresh # req if cond=thresh
         self.parent=None
         self.kids=[] # don't want to spell "children" out, or shorten it
-        if(metric=='entropy'):
+        if(metric==self._METRICS[1]):
             self.metric=self.entropy
         else:
             self.metric=self.gini
@@ -135,7 +140,6 @@ class Node:
         gini1=1-sum([(summary1[i,-1]/len(res1))**2 for i in range(nclasses)])
         s01=len(res0)+len(res1)
         giniN = (len(res0)/s01)*gini0+(len(res1)/s01)*gini1
-        print('calculating gini')
         return giniN,gini0,gini1
 
     def entropy(self,res0,res1=None):
@@ -154,7 +158,6 @@ class Node:
         pcls1=summary1[:,1]/summary1[:,1].sum()
         ent1=sum([-ip*np.log(ip) for ip in pcls1 if(ip>0)]) # per book, ignore '0'
         entN = ( ent0*len(res0) + ent1*len(res1) )/( len(res0) + len(res1) )
-        print('calculating entropy')
         return entN, ent0, ent1
 
 def findthresholds(data):
