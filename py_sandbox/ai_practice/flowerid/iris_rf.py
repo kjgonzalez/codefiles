@@ -28,12 +28,12 @@ done | create node for binary data
 done | create node for continuous data
 done | create node for discrete data?
 done | unify masking function for binary, discrete, and continuous data
-???? | create a single decision node
+done | create a single decision node
+done | automatically determine best node to add (function)
 ???? | be able auto-generate a single decision node
 ???? | perhaps create tool that helps split everything, like in book
-???? | create a single decision tree automatically
-???? | create decision node with child
-???? | automatically determine best node to add
+???? | create a single node decision tree automatically
+???? | create decision node with children
 ???? | create a random forest
 ???? | ??
 ???? | ??
@@ -57,32 +57,12 @@ for partitioning help, want a function that:
 
 '''
 
-def findsplit(data):
-    ''' Given an input array (assume last parameter is ground truth), determine
-        type of parameter, check entropy for each combination, and return
-        results.
-    '''
-    nparams = len(data[0])-1
-    print(nparams)
-    # determine nature of each parameter
-    ptype=[]
-    for i in range(nparams):
-        imax=data[:,i].max()
-        imin=data[:,i].min()
-
-        if()
-
-
-# 0/1/2 = junior / mid / senior
-# 0/1/2 = java / python / r
-# 0/1 = False / True
-# parameters: level / language / tweets / has phd / did well
 selfdat=[ # taken from DataScienceFromScratch, p221
 #Lv La Tw Ph dw
-[2, 0, 0, 0, 0],
-[2, 0, 0, 1, 0],
-[1, 1, 0, 0, 1],
-[0, 1, 0, 0, 1],
+[2, 0, 0, 0, 0], # parameters: level / language / tweets / has phd / did well
+[2, 0, 0, 1, 0], # 0/1/2 = junior / mid / senior
+[1, 1, 0, 0, 1], # 0/1/2 = java / python / r
+[0, 1, 0, 0, 1], # 0/1 = False / True
 [0, 2, 1, 0, 1],
 [0, 2, 1, 1, 0],
 [1, 2, 1, 1, 1],
@@ -176,6 +156,27 @@ class Node:
         entN = ( ent0*len(res0) + ent1*len(res1) )/( len(res0) + len(res1) )
         print('calculating entropy')
         return entN, ent0, ent1
+
+def findsplit(data):
+    ''' Given an input array (assume last parameter is ground truth), determine
+        type of parameter, check entropy for each combination, and return
+        results.
+    '''
+    assert data.dtype =='O',"Dataset not loaded as dtype=object, param types might be ambiguous"
+    nparams = len(data[0])-1
+    print('nparams:',nparams)
+    # determine nature of each parameter
+    ptype=[] # 0=binary,1=discrete,2=continuous
+    for i in range(nparams):
+        if(type(data[:,i].max())==float):
+            # non-integer: continuous data
+            ptype.append(2)
+        elif(data[:,i].max()>1):
+            # int, larger than 1: discrete
+            ptype.append(1)
+        else:
+            ptype.append(0)
+    print('ptypes:',ptype)
 
 print('gini based metrics:')
 a=Node(param=2) # binary data, gini
