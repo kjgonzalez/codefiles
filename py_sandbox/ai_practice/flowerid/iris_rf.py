@@ -157,6 +157,13 @@ class Node:
         print('calculating entropy')
         return entN, ent0, ent1
 
+def findthresholds(data):
+    ''' find thresholds, and assume that data is a vector '''
+    temp=data[np.argsort(data)]
+    inds=np.where(temp[1:]-temp[:-1])[0]
+    threshs=[temp[i:i+2].mean() for i in inds]
+    return threshs
+
 def findsplit(data):
     ''' Given an input array (assume last parameter is ground truth), determine
         type of parameter, check entropy for each combination, and return
@@ -177,6 +184,39 @@ def findsplit(data):
         else:
             ptype.append(0)
     print('ptypes:',ptype)
+
+    alias=dict()
+    alias[0]='bin'
+    alias[1]='disc'
+    alias[2]='cont'
+    # check each parameter's thresholds and report all combos
+    print('note: using entropy score')
+    arr=[]
+    for iparam in range(nparams):
+        if(ptype[iparam]==0):
+            # just check 0.5 threshold and go on to next
+            thresh=0.5
+            inode = Node(iparam,alias[ptype[iparam]],thresh=thresh,metric='entropy')
+            score=round(inode.eval(data)[2][0],3)
+            arr.append([iparam,thresh,score])
+            # print('p:{} | t:{} | s:{}'.format(iparam,thresh,score))
+        elif(ptype[iparam]==1):
+            # need to determine thresholds
+            threshs=findthresholds(data[:,iparam])
+            for ithresh in threshs:
+                inode = Node(iparam,alias[ptype[iparam]],thresh=ithresh,metric='entropy')
+                score=round(inode.eval(data)[2][0],3)
+                arr.append([iparam,ithresh,score])
+                # print('p:{} | t:{} | s:{}'.format(iparam,ithresh,score))
+    print('results:')
+    for irow in arr:print('p:{} | t:{} | s:{}'.format(*irow))
+# need to create function that determines splits for a set of data
+
+dat2=dat[dat[:,0]==0]
+
+
+findsplit(dat2)
+exit()
 
 print('gini based metrics:')
 a=Node(param=2) # binary data, gini
