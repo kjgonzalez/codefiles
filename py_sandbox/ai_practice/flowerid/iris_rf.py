@@ -30,7 +30,13 @@ done | create node for discrete data?
 done | unify masking function for binary, discrete, and continuous data
 done | create a single decision node
 done | automatically determine best node to add (function)
-inpr | get rid of condition argument, not needed
+done | get rid of condition argument, not needed
+done | single-node decision tree, capable of train and eval
+wait | make custom counting function, based on number of classes given
+wait | make tree node, with given functionality:
+        * tree=DecisionTree(dict_format,nclasses)
+        * tree.train(data) # take output from training one node, give it to children, etc
+        * tree.query(idat) # if result is integer, go to node. if list, give result
 ???? | be able auto-generate a single decision node
 ???? | perhaps create tool that helps split everything, like in book
 ???? | create a single node decision tree automatically
@@ -113,7 +119,7 @@ def findsplit(data):
         # for now, will not worry about continuous data and massive number of splits there can be...
         threshs=findthresholds(data[:,iparam])
         for ithresh in threshs:
-            inode = Node(iparam,thresh=ithresh,metric=desmetric)
+            inode = Node(iparam,thresh=ithresh,met=desmetric)
             score=round(inode.check(data)[2][0],3)
             arr.append([iparam,ithresh,score])
     return np.array(arr)
@@ -127,13 +133,17 @@ class Node:
         default=0
     '''
     _METRICS=[0,1] # gini, entropy
-    def __init__(self,param=0,thresh=0.5,metric=0):
-        assert metric in self._METRICS,"invalid metric specified: "+metric
+    def __init__(self,param=0,thresh=0.5,nclasses=2,met=0):
+        assert met in self._METRICS,"invalid metric specified: "+met
         self.param=param # index, 0...n
         self._thresh = thresh # req if cond=thresh
+        self._metric = met
         self.parent=None
-        self.kids=[] # don't want to spell "children" out, or shorten it
-        if(metric==self._METRICS[1]):
+        self.yes_kid=None # index of child branch for "yes" (True) answer
+        self.no_kid=None
+        self.yes_ans=None # index of child branch for "no" (False) answer
+        self.no_ans=None
+        if(self._metric==self._METRICS[1]):
             self.metric=self.entropy
         else:
             self.metric=self.gini
@@ -222,22 +232,27 @@ class DecisionTree:
     def __init__(self):
         pass
 
+node=Node(0,1.5)
+node.train(dat)
+print(node.query(dat[0]))
+print(node.query(dat[2]))
+import ipdb; ipdb.set_trace()
 
+exit()
 # will instead create trees based on what children they have, not what parents
 nodes = dict()
-# nodes[index] = [param,thresh,parent]
-nodes[0]=[0,0.5,None] # root node has no parent
-nodes[1]=[2,0.5,0]
-nodes[2]=[0,1.5,0]
-nodes[3]=[3,0.5,2]
+# nodes[index] = [param,thresh,[yes_child,no_child]]
+nodes[0]=[0,0.5,[1,2]] # root node usually has children
+nodes[1]=[2,0.5,[None,None]] # node either has 0, 1, or 2 children
+nodes[2]=[0,1.5,[None,3]] #
+nodes[3]=[3,0.5,[None,None]] # for now, will use double none to denote no children
+# assumption: if child is None, then use metric to determine solution
 
-# tree=dict()
-# for i in nodes.keys():    #def __init__(self,param=0,cond=0,thresh=0.5,metric=0):
-#
-#     tree[i]=Node()
-# print(tree)
-# print(dat)
-print(findsplit(dat))
+
+tree=dict()
+for i in nodes.keys():    #def __init__(self,param=0,cond=0,thresh=0.5,metric=0):
+    tree[i]=Node(*nodes[i][:2])
+    # tree[i].
 
 
 # eof
