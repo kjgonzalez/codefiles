@@ -35,8 +35,8 @@ done | single-node decision tree, capable of train and eval
 done | make custom counting function, based on number of classes given
 inpr | make tree node with all functions:
 done | tree=DecisionTree(dict_format,nclasses)
-inpr | tree.train(data) # take output from training one node, give it to children, etc
-inpr | tree.query(idat) # if result is integer, go to node. if list, give result
+done | tree.train(data) # take output from training one node, give it to children, etc
+done | tree.query(idat) # if result is integer, go to node. if list, give result
 ???? | be able auto-generate a single decision node
 ???? | perhaps create tool that helps split everything, like in book
 ???? | create a single node decision tree automatically
@@ -86,6 +86,14 @@ import numpy as np
 from klib import data as da
 from klib import listContents as lc
 dat=np.array(selfdat,dtype=object) # using this type keeps ints as ints
+# will now modify data to match how iris dataset is loaded, to see if the decision tree behaves properly
+ds=[]
+for irow in dat:
+    idat=irow[:-1]
+    ians=np.zeros(2)+0.01
+    ians[irow[-1]] = 0.99
+    ds.append([idat,ians])
+
 def findthresholds(data):
     ''' find thresholds, and assume that data is a vector '''
     temp=data[np.argsort(data)]
@@ -112,7 +120,6 @@ def findsplit(data):
             ptype.append(0)
 
     # check each parameter's thresholds and report all combos
-    # print('note: using entropy score')
     arr=[]
     desmetric=1 # 0=gini, 1 = entropy
     for iparam in range(nparams):
@@ -163,11 +170,13 @@ class Node:
     @property
     def children(self):
         return self.yes_kid,self.no_kid
+
     def _addchildren(self,children):
         ''' Give a 2-item list of either None or some index value for another
             node. only intended to be used by DecisionTree class '''
         self.yes_kid=children[0]
         self.no_kid = children[1]
+
     def check(self,input):
         ''' get mask and obtain separated result arrays and metrices (3-values) '''
         mask=input[:,self.param]>self._thresh # bin/disc/cont all calculate mask same way
@@ -177,15 +186,32 @@ class Node:
         # get gini score
         return res0,res1,resMetric
 
-    def train(self,data):
-        ''' given a set of input data, decide what the outcome of a node would be '''
+    def train(self,data,_nodes=None):
+        ''' given a set of input data, decide what the outcome of a node would be
+        variable _nodes only intended for use by DecisionTree class
+
+        first, transform data from local convention to more usual array
+        local convention: ds_train[0] = [input_array_normalized,ans_array]
+            input_array = [0.01,0.43,0.99,...]
+            ans_array   = [0.01,0.01,0.99] # 3-class example
+        usual array:
+            ds_train[0] = [*input_array,2]
+        '''
         res0,res1=self.check(data)[:2]
         count0=countClasses(res0[:,-1],self.ncls)
         count1=countClasses(res1[:,-1],self.ncls)
 
         self.yes_ans=count0/count0.sum()
         self.no_ans =count1/count1.sum()
-        return res0,res1
+
+        if(type(_nodes)==type(None)):
+            # no need to recursively train
+            return res0,res1
+        # otherwise, will then tell children to train as well
+        if(self.yes_kid != None):
+            _nodes[self.yes_kid].train(res0,_nodes)
+        if(self.no_kid != None):
+            _nodes[self.no_kid].train(res1,_nodes)
 
     def query(self,idat):
         ''' given a single sample, return what node thinks classification would be '''
@@ -252,19 +278,32 @@ class DecisionTree:
             self.node[ind] = Node(p,t,self.ncls,met=metric)
             # here, need to create connection to children
             self.node[ind]._addchildren(kids)
-
+        # import ipdb; ipdb.set_trace()
+    def train(self,data):
+        ''' will train recursively (depth first) by having any node that
+        has children to tell its children to train on that data as well. this is
+        done by the root node access to both the data as well as the dict of
+        nodes, which all nodes will use as a guide during training. '''
+        # need to change data back to slightly more typical array
+        inp = []
+        for idat in data:
+            inp.append( np.append( idat[0],np.argmax(idat[1]) ) )
+        inp=np.array(inp)
         import ipdb; ipdb.set_trace()
 
+        self.node[0].train(inp,self.node)
+        # import ipdb; ipdb.set_trace()
 
-# observe behavior of a single node
-# node=Node(0,1.5,met=0)
-# node.train(dat)
-# print(node.query(dat[0]))
-# print(node.query(dat[2]))
-# import ipdb; ipdb.set_trace()
-# exit()
+    def query(self,idat):
+        ''' traverse branches of tree based on given input data '''
+        res=tree.node[0].query(idat)
+        # if a list, then has returned answer. if an integer, then has returned index to a child
+        while(type(res)==int):
+            res = tree.node[res].query(idat)
+        return res
+
+
 # will instead create trees based on what children they have, not which parents
-
 # struct[index] = [param,thresh,[yes_child,no_child]]
 struct = dict()
 struct[0]=[0,1.5,[1,2]] # root node usually has children
@@ -274,5 +313,9 @@ struct[3]=[3,0.5,[None,None]] # for now, will use double none to denote no child
 # assumption: if child is None, then use metric to determine solution
 
 tree = DecisionTree(struct,2)
+tree.train(ds)
+tree.query(ds[0][0])
+
+import ipdb; ipdb.set_trace()
 
 # eof
