@@ -33,16 +33,14 @@ done | automatically determine best node to add (function)
 done | get rid of condition argument, not needed
 done | single-node decision tree, capable of train and eval
 done | make custom counting function, based on number of classes given
-inpr | make tree node with all functions:
+done | create decision node with children
+done | make tree node with all functions:
 done | tree=DecisionTree(dict_format,nclasses)
 done | tree.train(data) # take output from training one node, give it to children, etc
 done | tree.query(idat) # if result is integer, go to node. if list, give result
-???? | be able auto-generate a single decision node
-???? | perhaps create tool that helps split everything, like in book
 ???? | create a single node decision tree automatically
-???? | create decision node with children
 ???? | create a random forest
-???? | ??
+???? | bootstrap a dataset
 ???? | ??
 ???? | ??
 
@@ -87,12 +85,17 @@ from klib import data as da
 from klib import listContents as lc
 dat=np.array(selfdat,dtype=object) # using this type keeps ints as ints
 # will now modify data to match how iris dataset is loaded, to see if the decision tree behaves properly
-ds=[]
-for irow in dat:
-    idat=irow[:-1]
-    ians=np.zeros(2)+0.01
-    ians[irow[-1]] = 0.99
-    ds.append([idat,ians])
+
+def convertToDS(data):
+    ''' take an input array with ians at final column and convert to local convention '''
+    ds = []
+    for irow in data:
+        idat=irow[:=1]
+        ians=np.zeros(2)+0.01
+        ians[irow[-1]]=0.99
+        ds.append([idat,ians])
+    return ds
+ds = convertToDS(dat)
 
 def findthresholds(data):
     ''' find thresholds, and assume that data is a vector '''
@@ -266,6 +269,10 @@ class DecisionTree:
     NOTE:
     * should have train function (take in data and save final scores at each leaf)
     * should have eval function (traverse tree)
+    Typical Usage:
+    tree = DecisionTree(struct,2) # struct=(premade dict of nodes)
+    tree.train(ds) # "train" on a dataset
+    tree.query(ds[0][0]) # test on sample data
     '''
     def __init__(self,structure,numclasses,metric=0):
         self.node=dict()
@@ -311,11 +318,19 @@ struct[1]=[2,0.5,[None,None]] # node either has 0, 1, or 2 children
 struct[2]=[0,0.5,[None,3]] #
 struct[3]=[3,0.5,[None,None]] # for now, will use double none to denote no children
 # assumption: if child is None, then use metric to determine solution
-
 tree = DecisionTree(struct,2)
 tree.train(ds)
 tree.query(ds[0][0])
 
-import ipdb; ipdb.set_trace()
+'''
+KJG191130: at this point, have very good control over a single decision tree and
+    manually generating one. now will work on bootstrapping and randomly
+    generating a tree, which can then lead to making a forest
+'''
+
+
+
+
+
 
 # eof
