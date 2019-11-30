@@ -32,11 +32,11 @@ done | create a single decision node
 done | automatically determine best node to add (function)
 done | get rid of condition argument, not needed
 done | single-node decision tree, capable of train and eval
-wait | make custom counting function, based on number of classes given
-wait | make tree node, with given functionality:
-        * tree=DecisionTree(dict_format,nclasses)
-        * tree.train(data) # take output from training one node, give it to children, etc
-        * tree.query(idat) # if result is integer, go to node. if list, give result
+done | make custom counting function, based on number of classes given
+inpr | make tree node with all functions:
+done | tree=DecisionTree(dict_format,nclasses)
+inpr | tree.train(data) # take output from training one node, give it to children, etc
+inpr | tree.query(idat) # if result is integer, go to node. if list, give result
 ???? | be able auto-generate a single decision node
 ???? | perhaps create tool that helps split everything, like in book
 ???? | create a single node decision tree automatically
@@ -160,6 +160,14 @@ class Node:
         else:
             self.metric=self.gini
 
+    @property
+    def children(self):
+        return self.yes_kid,self.no_kid
+    def _addchildren(self,children):
+        ''' Give a 2-item list of either None or some index value for another
+            node. only intended to be used by DecisionTree class '''
+        self.yes_kid=children[0]
+        self.no_kid = children[1]
     def check(self,input):
         ''' get mask and obtain separated result arrays and metrices (3-values) '''
         mask=input[:,self.param]>self._thresh # bin/disc/cont all calculate mask same way
@@ -174,7 +182,6 @@ class Node:
         res0,res1=self.check(data)[:2]
         count0=countClasses(res0[:,-1],self.ncls)
         count1=countClasses(res1[:,-1],self.ncls)
-        # import ipdb; ipdb.set_trace()
 
         self.yes_ans=count0/count0.sum()
         self.no_ans =count1/count1.sum()
@@ -234,8 +241,17 @@ class DecisionTree:
     * should have train function (take in data and save final scores at each leaf)
     * should have eval function (traverse tree)
     '''
-    def __init__(self):
-        pass
+    def __init__(self,structure,numclasses,metric=0):
+        self.node=dict()
+        self.ncls = numclasses
+        self._origStruct=structure
+        self.metric=metric # 0=gini, 1 = entropy
+        # will create structure of tree based on given structure (dict)
+        for ind in structure.keys():
+            p,t,kids=structure[ind]
+            self.node[ind] = Node(p,t,self.ncls,met=metric)
+            # here, need to create connection to children
+            self.node[ind]._addchildren(kids)
 
 node=Node(0,1.5,met=0)
 node.train(dat)
