@@ -124,6 +124,17 @@ def findsplit(data):
             arr.append([iparam,ithresh,score])
     return np.array(arr)
 
+def countClasses(data,nclasses):
+    ''' given some data and set of classes, count each class out
+    ASSUMPTIONS:
+        * classes range from 0 to n
+        * data is a 1-D array of integers
+    '''
+    s=np.zeros(nclasses)
+    for i in data:
+        s[i]+=1
+    return s
+
 class Node:
     '''
     INITIALIZATION INPUTS:
@@ -139,6 +150,7 @@ class Node:
         self._thresh = thresh # req if cond=thresh
         self._metric = met
         self.parent=None
+        self.ncls = nclasses # will simply receive number of classes (such as from Tree object)
         self.yes_kid=None # index of child branch for "yes" (True) answer
         self.no_kid=None
         self.yes_ans=None # index of child branch for "no" (False) answer
