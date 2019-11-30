@@ -172,12 +172,9 @@ class Node:
     def train(self,data):
         ''' given a set of input data, decide what the outcome of a node would be '''
         res0,res1=self.check(data)[:2]
-        summary0=lc(res0[:,-1],True)
-        summary0=summary0[np.argsort(summary0[:,0])] # have to ensure lc function is sorted properly
-        count0=summary0[:,-1]
-        summary1=lc(res1[:,-1],True)
-        summary1=summary1[np.argsort(summary1[:,0])]
-        count1=summary1[:,-1]
+        count0=countClasses(res0[:,-1],self.ncls)
+        count1=countClasses(res1[:,-1],self.ncls)
+        # import ipdb; ipdb.set_trace()
 
         self.yes_ans=count0/count0.sum()
         self.no_ans =count1/count1.sum()
@@ -202,33 +199,29 @@ class Node:
             determined when running. If only one result is given, then gini
             score of just that result is given (leaf?)
         '''
-        summary0=lc(res0[:,-1],True) # get summary of classes in results
-        nclasses = len(summary0)
-        gini0=1-sum([(summary0[i,-1]/len(res0))**2 for i in range(nclasses)])
+        count0=countClasses(res0[:,-1],self.ncls)
+        gini0=1-sum( (count0/count0.sum())**2 )
         if(type(res1)==type(None)):
             return gini0
         # otherwise, continue and return complete gini score
-        summary1=lc(res1[:,-1],True) # get summary of classes in results
-        nclasses = len(summary1)
-        gini1=1-sum([(summary1[i,-1]/len(res1))**2 for i in range(nclasses)])
-        s01=len(res0)+len(res1)
-        giniN = (len(res0)/s01)*gini0+(len(res1)/s01)*gini1
+        count1=countClasses(res1[:,-1],self.ncls)
+        gini1=1-sum( (count1/count1.sum())**2 )
+        sum01=len(res0)+len(res1)
+        giniN = (len(res0)/sum01)*gini0+(len(res1)/sum01)*gini1
         return giniN,gini0,gini1
 
     def entropy(self,res0,res1=None):
         ''' Another way to find how "pure" a list of classes are. based on
             example from Data Science from Scratch
         '''
-        summary0=lc(res0[:,-1],True) # get summary of classes in results
-        # get class probabilities
-        pcls0=summary0[:,1]/summary0[:,1].sum()
+        s0=countClasses(res0[:,-1],self.ncls)
+        pcls0=s0/s0.sum()
         ent0=sum([-ip*np.log(ip) for ip in pcls0 if(ip>0)]) # per book, ignore '0'
         if(type(res1)==type(None)):
             return ent0
         # otherwise get weighted sum of combined entropy if have both results
-        summary1=lc(res1[:,-1],True) # get summary of classes in results
-        # get class probabilities
-        pcls1=summary1[:,1]/summary1[:,1].sum()
+        s1=countClasses(res1[:,-1],self.ncls)
+        pcls1=s1/s1.sum()
         ent1=sum([-ip*np.log(ip) for ip in pcls1 if(ip>0)]) # per book, ignore '0'
         entN = ( ent0*len(res0) + ent1*len(res1) )/( len(res0) + len(res1) )
         return entN, ent0, ent1
@@ -244,7 +237,7 @@ class DecisionTree:
     def __init__(self):
         pass
 
-node=Node(0,1.5)
+node=Node(0,1.5,met=0)
 node.train(dat)
 print(node.query(dat[0]))
 print(node.query(dat[2]))
