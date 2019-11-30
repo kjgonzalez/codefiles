@@ -141,11 +141,38 @@ class Node:
     def check(self,input):
         ''' get mask and obtain separated result arrays and metrices (3-values) '''
         mask=input[:,self.param]>self._thresh # bin/disc/cont all calculate mask same way
-        res0=input[np.logical_not(mask)]
-        res1=input[mask]
+        res0=input[mask] # first check yes, then no...
+        res1=input[np.logical_not(mask)]
         resMetric=self.metric(res0,res1)
         # get gini score
         return res0,res1,resMetric
+
+    def train(self,data):
+        ''' given a set of input data, decide what the outcome of a node would be '''
+        res0,res1=self.check(data)[:2]
+        summary0=lc(res0[:,-1],True)
+        summary0=summary0[np.argsort(summary0[:,0])] # have to ensure lc function is sorted properly
+        count0=summary0[:,-1]
+        summary1=lc(res1[:,-1],True)
+        summary1=summary1[np.argsort(summary1[:,0])]
+        count1=summary1[:,-1]
+
+        self.yes_ans=count0/count0.sum()
+        self.no_ans =count1/count1.sum()
+        return res0,res1
+
+    def query(self,idat):
+        ''' given a single sample, return what node thinks classification would be '''
+        if(idat[self.param]>self._thresh):
+            if(self.yes_kid==None):
+                return self.yes_ans
+            else:
+                return self.yes_kid # should be an integer
+        else:
+            if(self.no_kid==None):
+                return self.no_ans
+            else:
+                return self.no_kid # should be an integer
 
     def gini(self,res0,res1=None):
         ''' Get the gini impurity based on the output of an entire node (both
