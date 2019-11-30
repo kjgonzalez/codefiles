@@ -9,7 +9,8 @@ NOTES:
 * seems like some use ordered dicts to generate random forests
 * realized that binary data is a subset of discrete data, and discrete is a
     subset of continuous data, and have unified mask function
-
+* bootstrapping: randomly selecting samples of a dataset, including multiples of a single one
+* bagging: "bootstrap aggregation",
 General Steps:
 1. create simple, small binary dataset (e.g. heart disease from src)
 2. create data boostrappig function / bagging function
@@ -38,9 +39,10 @@ done | make tree node with all functions:
 done | tree=DecisionTree(dict_format,nclasses)
 done | tree.train(data) # take output from training one node, give it to children, etc
 done | tree.query(idat) # if result is integer, go to node. if list, give result
-???? | create a single node decision tree automatically
-???? | create a random forest
+???? | create a single node decision tree automatically (optimal)
+???? | create a single node decision tree automatically (randomized)
 ???? | bootstrap a dataset
+???? | create a random forest
 ???? | ??
 ???? | ??
 
@@ -90,7 +92,7 @@ def convertToDS(data):
     ''' take an input array with ians at final column and convert to local convention '''
     ds = []
     for irow in data:
-        idat=irow[:=1]
+        idat=irow[:-1]
         ians=np.zeros(2)+0.01
         ians[irow[-1]]=0.99
         ds.append([idat,ians])
@@ -103,7 +105,7 @@ def findthresholds(data):
     inds=np.where(temp[1:]-temp[:-1])[0]
     threshs=[temp[i:i+2].mean() for i in inds]
     return threshs
-def findsplit(data):
+def bestsplit(data,desmetric=0):
     ''' Given an input array (assume last parameter is ground truth), determine
         type of parameter, check entropy for each combination, and return
         results.
@@ -124,13 +126,12 @@ def findsplit(data):
 
     # check each parameter's thresholds and report all combos
     arr=[]
-    desmetric=1 # 0=gini, 1 = entropy
     for iparam in range(nparams):
         # for now, will not worry about continuous data and massive number of splits there can be...
         threshs=findthresholds(data[:,iparam])
         for ithresh in threshs:
             inode = Node(iparam,thresh=ithresh,met=desmetric)
-            score=round(inode.check(data)[2][0],3)
+            score=round(inode.check(data)[2][0],5) # rounding for readability
             arr.append([iparam,ithresh,score])
     return np.array(arr)
 
@@ -274,32 +275,53 @@ class DecisionTree:
     tree.train(ds) # "train" on a dataset
     tree.query(ds[0][0]) # test on sample data
     '''
-    def __init__(self,structure,numclasses,metric=0):
+    def __init__(self,numclasses,metric=0):
         self.node=dict()
         self.ncls = numclasses
-        self._origStruct=structure
+        self._origStruct=None
         self.metric=metric # 0=gini, 1 = entropy
-        # will create structure of tree based on given structure (dict)
+
+    def generateManual(self,structure):
+        ''' will create structure of tree based on given structure (dict) '''
+        self._origStruct=structure
         for ind in structure.keys():
             p,t,kids=structure[ind]
-            self.node[ind] = Node(p,t,self.ncls,met=metric)
+            self.node[ind] = Node(p,t,self.ncls,met=self.metric)
             # here, need to create connection to children
             self.node[ind]._addchildren(kids)
-        # import ipdb; ipdb.set_trace()
+
+    def generateAuto(self,data,optimal=True):
+        ''' Based on given data and whether to be optimal or not, automatically
+            generate a decision tree
+            note: at each step, must determine best move available
+            1.
+        '''
+        struct=dict() # want to track what structure will become
+        options=bestsplit(data) # returns list of [param,thresh, gini]
+        print(options)
+        ind_bestOption=np.argmin(options[:,-1]) # lowest entropy option
+        bestOption = options[ind_bestOption]
+        struct[0] = [*bestOption[:2],[None,None]] # children unknown so far
+        # given that this is the root node, this one is done outside a loop
+        flag_done=False
+        while(not flag_done):
+            # generate new nodes until no good options left
+            flag_done=True
+        import ipdb; ipdb.set_trace()
+
     def train(self,data):
         ''' will train recursively (depth first) by having any node that
         has children to tell its children to train on that data as well. this is
         done by the root node access to both the data as well as the dict of
         nodes, which all nodes will use as a guide during training. '''
+        # KJG191130: for now, won't use "local convention", takes too much effort to convert between
         # need to change data back to slightly more typical array
-        inp = []
-        for idat in data:
-            inp.append( np.append( idat[0],np.argmax(idat[1]) ) )
-        inp=np.array(inp)
-        import ipdb; ipdb.set_trace()
+        # inp = []
+        # for idat in data:
+        #     inp.append( np.append( idat[0],np.argmax(idat[1]) ) )
+        # inp=np.array(inp)
 
-        self.node[0].train(inp,self.node)
-        # import ipdb; ipdb.set_trace()
+        self.node[0].train(data,self.node)
 
     def query(self,idat):
         ''' traverse branches of tree based on given input data '''
@@ -318,19 +340,27 @@ struct[1]=[2,0.5,[None,None]] # node either has 0, 1, or 2 children
 struct[2]=[0,0.5,[None,3]] #
 struct[3]=[3,0.5,[None,None]] # for now, will use double none to denote no children
 # assumption: if child is None, then use metric to determine solution
-tree = DecisionTree(struct,2)
-tree.train(ds)
-tree.query(ds[0][0])
+tree = DecisionTree(2)
+tree.generateManual(struct)
+tree.train(dat)
+print(ds[0][0],tree.query(ds[0][0]))
+print(ds[2][0],tree.query(ds[2][0]))
+print(ds[3][0],tree.query(ds[3][0]))
 
-'''
-KJG191130: at this point, have very good control over a single decision tree and
-    manually generating one. now will work on bootstrapping and randomly
-    generating a tree, which can then lead to making a forest
-'''
-
-
+tree=DecisionTree(2)
+tree.generateAuto(dat)
 
 
-
+# '''
+# KJG191130: at this point, have very good control over a single decision tree and
+#     manually generating one. now will work on bootstrapping and randomly
+#     generating a tree, which can then lead to making a forest
+# '''
+# # np.random.seed(0) # controlling for randomness
+# # bootstrapping:
+# nsamples=len(dat)
+# nsamples=10
+# a=(np.random.rand(nsamples)*(nsamples-1)).round()
+# print(a)
 
 # eof
