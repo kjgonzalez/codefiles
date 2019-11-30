@@ -253,27 +253,26 @@ class DecisionTree:
             # here, need to create connection to children
             self.node[ind]._addchildren(kids)
 
-node=Node(0,1.5,met=0)
-node.train(dat)
-print(node.query(dat[0]))
-print(node.query(dat[2]))
-import ipdb; ipdb.set_trace()
+        import ipdb; ipdb.set_trace()
 
-exit()
-# will instead create trees based on what children they have, not what parents
-nodes = dict()
-# nodes[index] = [param,thresh,[yes_child,no_child]]
-nodes[0]=[0,0.5,[1,2]] # root node usually has children
-nodes[1]=[2,0.5,[None,None]] # node either has 0, 1, or 2 children
-nodes[2]=[0,1.5,[None,3]] #
-nodes[3]=[3,0.5,[None,None]] # for now, will use double none to denote no children
+
+# observe behavior of a single node
+# node=Node(0,1.5,met=0)
+# node.train(dat)
+# print(node.query(dat[0]))
+# print(node.query(dat[2]))
+# import ipdb; ipdb.set_trace()
+# exit()
+# will instead create trees based on what children they have, not which parents
+
+# struct[index] = [param,thresh,[yes_child,no_child]]
+struct = dict()
+struct[0]=[0,1.5,[1,2]] # root node usually has children
+struct[1]=[2,0.5,[None,None]] # node either has 0, 1, or 2 children
+struct[2]=[0,0.5,[None,3]] #
+struct[3]=[3,0.5,[None,None]] # for now, will use double none to denote no children
 # assumption: if child is None, then use metric to determine solution
 
-
-tree=dict()
-for i in nodes.keys():    #def __init__(self,param=0,cond=0,thresh=0.5,metric=0):
-    tree[i]=Node(*nodes[i][:2])
-    # tree[i].
-
+tree = DecisionTree(struct,2)
 
 # eof
