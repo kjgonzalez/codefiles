@@ -290,6 +290,17 @@ class DecisionTree:
             # here, need to create connection to children
             self.node[ind]._addchildren(kids)
 
+    def addchild(self,parentNum,childNum,no_option):
+        ''' connect parent and child nodes. if no_option=True, then will
+            connect parent & "no" branch
+        '''
+        if(not no_option):
+            # this is "yes" branch
+            self.node[parentNum].yes_kid=childNum
+        else:
+            self.node[parentNum].no_kid =childNum
+        self.node[childNum].parent=parentNum
+
     def generateAuto(self,data,optimal=True):
         ''' Based on given data and whether to be optimal or not, automatically
             generate a decision tree
