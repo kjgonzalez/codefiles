@@ -11,3 +11,5 @@ catkin_ws/devel/
 py_sandbox/book_MakeYourOwnNeuralNetwork/BOOK_TariqRashid-MakeYourOwnNeuralNetwork.pdf
 # windows links
 *.lnk
+# temp
+website_help.ipynb
