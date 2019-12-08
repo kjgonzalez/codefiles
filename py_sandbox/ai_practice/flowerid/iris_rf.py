@@ -131,9 +131,9 @@ def bestsplit(data,desmetric=0):
         threshs=findthresholds(data[:,iparam])
         for ithresh in threshs:
             inode = Node(iparam,thresh=ithresh,met=desmetric)
-            score=round(inode.check(data)[2][0],5) # rounding for readability
-            arr.append([iparam,ithresh,score])
-    return np.array(arr)
+            score=round(inode.check(data)[2][2],5) # get overall metric score
+            arr.append([int(iparam),ithresh,score])
+    return np.array(arr,dtype=object)
 
 def countClasses(data,nclasses):
     ''' given some data and set of classes, count each class out
@@ -145,6 +145,19 @@ def countClasses(data,nclasses):
     for i in data:
         s[i]+=1
     return s
+
+def maskmerge(mask1,mask2):
+    ''' be able to use mask of standardized size across all nodes and be able to
+    assume mask1 is the super-mask '''
+    m3=[]
+    j=0
+    for i in range(len(mask1)):
+        if(mask1[i]):
+            m3.append(mask2[j])
+            j+=1
+        else:
+            m3.append(mask1[i])
+    return np.array(m3)
 
 class Node:
     '''
@@ -188,7 +201,7 @@ class Node:
         res1=input[np.logical_not(mask)]
         resMetric=self.metric(res0,res1)
         # get gini score
-        return res0,res1,resMetric
+        return res0,res1,resMetric,mask
 
     def train(self,data,_nodes=None):
         ''' given a set of input data, decide what the outcome of a node would be
@@ -245,7 +258,7 @@ class Node:
         gini1=1-sum( (count1/count1.sum())**2 )
         sum01=len(res0)+len(res1)
         giniN = (len(res0)/sum01)*gini0+(len(res1)/sum01)*gini1
-        return giniN,gini0,gini1
+        return gini0,gini1,giniN
 
     def entropy(self,res0,res1=None):
         ''' Another way to find how "pure" a list of classes are. based on
@@ -261,7 +274,7 @@ class Node:
         pcls1=s1/s1.sum()
         ent1=sum([-ip*np.log(ip) for ip in pcls1 if(ip>0)]) # per book, ignore '0'
         entN = ( ent0*len(res0) + ent1*len(res1) )/( len(res0) + len(res1) )
-        return entN, ent0, ent1
+        return ent0,ent1,entN
 
 class DecisionTree:
     ''' a decision tree will hold the structure of each node (parents /
@@ -303,22 +316,75 @@ class DecisionTree:
 
     def generateAuto(self,data,optimal=True):
         ''' Based on given data and whether to be optimal or not, automatically
-            generate a decision tree
+            generate a decision tree. note, to help save a bit on memory (even if not needed), will save output mask of each node, rather than the actual sub-array
             note: at each step, must determine best move available
-            1.
+            1. set original metric score to [10]*3
+            2. enter while loop, and create root node plus every other node
+            in each loop:
+                * create node
+                * if yes, create node
         '''
-        struct=dict() # want to track what structure will become
+
+        class DataHolder:
+            def __init__(self):
+                pass
+        ndat=[]
+        ndat.append(DataHolder())
+
+        # create node
         options=bestsplit(data) # returns list of [param,thresh, gini]
-        print(options)
-        ind_bestOption=np.argmin(options[:,-1]) # lowest entropy option
-        bestOption = options[ind_bestOption]
-        struct[0] = [*bestOption[:2],[None,None]] # children unknown so far
+        best = options[np.argmin(options[:,-1])] # param, thresh, metric
+        n=len(self.node) # number of nodes
+        self.node[n] = Node(best[0],best[1],met=self.metric)
+        _1,_2,ginis,mask=self.node[n].check(data)
+        ndat[n].m=mask
+        ndat[n].nm=np.logical_not(mask)
+        ndat[n].g=ginis
+        ndat[n].n=0
+
+        # find if there should be a yes_kid
+        options=bestsplit(data[ ndat[0].m ])
+        best=options[np.argmin(options[:,-1])]
+        if(best[-1]>ndat[0].g[0]):
+            print('no more nodes for "yes" option')
+        else:
+            print('adding yes node')
+            n=len(self.node) # taking advantage of 0-based index
+            self.node[n]=Node(best[0],best[1],met=self.metric)
+
+            _1,_2,ginis,mask=self.node[n].check(data[ ndat[0].m ])
+            ndat.append(DataHolder())
+            ndat[n].m=mask
+            ndat[n].nm=np.logical_not(mask)
+            ndat[n].g=ginis
+            ndat[n].n=n
+        # check for  new node, "no" option
+        options=bestsplit(data[ ndat[0].nm ])
+        best=options[np.argmin(options[:,-1])]
+
+        if(best[-1]>ndat[0].g[1]):
+            print('no more nodes for "no" option')
+        else:
+            print('adding no node')
+            n=len(self.node)
+            self.node[n]=Node(best[0],best[1],met=self.metric)
+        import ipdb; ipdb.set_trace()
+
+
+
+
+
         # given that this is the root node, this one is done outside a loop
         flag_done=False
         while(not flag_done):
             # generate new nodes until no good options left
             flag_done=True
-        import ipdb; ipdb.set_trace()
+
+    def genAuto(self,data,optimal=True):
+        ''' alright, need to just try again on making this function. it's
+            clearly not working how you thought it would. make a good flow
+            chart, then implement it.
+            '''
 
     def train(self,data):
         ''' will train recursively (depth first) by having any node that
@@ -354,9 +420,9 @@ struct[3]=[3,0.5,[None,None]] # for now, will use double none to denote no child
 tree = DecisionTree(2)
 tree.generateManual(struct)
 tree.train(dat)
-print(ds[0][0],tree.query(ds[0][0]))
-print(ds[2][0],tree.query(ds[2][0]))
-print(ds[3][0],tree.query(ds[3][0]))
+# print(ds[0][0],tree.query(ds[0][0]))
+# print(ds[2][0],tree.query(ds[2][0]))
+# print(ds[3][0],tree.query(ds[3][0]))
 
 tree=DecisionTree(2)
 tree.generateAuto(dat)
