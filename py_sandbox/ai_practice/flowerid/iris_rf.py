@@ -427,9 +427,5 @@ def tests():
 tests()
 
 if(__name__=='__main__'):
-
-    # will instead create trees based on what children they have, not which parents
-    # struct[index] = [param,thresh,[yes_child,no_child]]
-    tree.autogen(dat)
-
+    print('rf attempt')
     # eof
