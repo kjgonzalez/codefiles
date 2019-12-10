@@ -299,11 +299,22 @@ class DecisionTree:
     def generateManual(self,structure):
         ''' will create structure of tree based on given structure (dict) '''
         self._origStruct=structure
+        # create reverse list to have parent listed for each node as well
+        parent_list=[]
+        parent_list.append([0,None])
+        for ikey in s.keys():
+            for ival in s[ikey][2]:
+                if(ival!=None): parent_list.append([ival,ikey])
+        parent_list=np.array(parent_list)
+        parent_list=parent_list[np.argsort(parent_list[:,0])][:,1] # sort array, then keep only 2nd column and use by calling index
+        print(parent_list)
         for ind in structure.keys():
-            p,t,kids=structure[ind]
-            self.node[ind] = Node(p,t,self.ncls,met=self.metric)
+            param,thresh,kids=structure[ind]
+            self.node[ind] = Node(param,thresh,self.ncls,met=self.metric)
             # here, need to create connection to children
-            self.node[ind]._addchildren(kids)
+            self.node[ind].yes_kid=kids[0]
+            self.node[ind].no_kid=kids[1]
+            self.node[ind].parent=parent_list[ind]
 
     def addchild(self,parentNum,childNum,no_option):
         ''' connect parent and child nodes. if no_option=True, then will
