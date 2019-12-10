@@ -106,21 +106,13 @@ def findthresholds(data):
     threshs=[temp[i:i+2].mean() for i in inds]
     return threshs
 
-def getOptions(data,desmetric=0):
+def getOptions(data,desmetric=0,allmetrics=False):
     ''' Given an input array (assume last parameter is ground truth), determine
         type of parameter, check entropy for each combination, and return
         results.
     '''
     assert data.dtype =='O',"Dataset not loaded as dtype=object, param types might be ambiguous"
     nparams = len(data[0])-1
-    # determine nature of each parameter
-    # KJG191210: probably not needed
-    # ptype=[] # 0=binary,1=discrete,2=continuous
-    # for i in range(nparams):
-    #     if(type(data[:,i].max())==float): ptype.append(2)# non-integer: continuous data
-    #     elif(data[:,i].max()>1): ptype.append(1)# int, larger than 1: discredte
-    #     else: ptype.append(0)
-    # # check each parameter's thresholds and report all combos
     arr=[]
     for iparam in range(nparams):
         # for now, will not worry about continuous data and massive number of splits there can be...
@@ -131,9 +123,9 @@ def getOptions(data,desmetric=0):
             arr.append([int(iparam),ithresh,score])
     return np.array(arr,dtype=object)
 
-def best_split(data,desmetric=0):
+def best_split(data,desmetric=0,allmetrics=False):
     ''' in given data, return best option for splitting (p,t,metric) '''
-    options = getOptions(data)
+    options = getOptions(data,allmetrics=allmetrics)
     return options[np.argmin(options[:,-1])] # return param,thresh, metric
 
 def countClasses(data,nclasses):
