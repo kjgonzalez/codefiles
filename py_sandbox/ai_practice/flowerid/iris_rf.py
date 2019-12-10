@@ -424,17 +424,6 @@ class DecisionTree:
 # quick test to make sure things are working properly (including allmetrics)
 assert (getOptions(dat)[:,-1]==getOptions(dat,allmetrics=True)[:,-1]).all() # getoptions not working
 assert getOptions(dat)[:,-1].min()==best_split(dat,allmetrics=True)[-1] # best_split not working
-
-# will instead create trees based on what children they have, not which parents
-# struct[index] = [param,thresh,[yes_child,no_child]]
-struct = dict()
-struct[0]=[0,1.5,[1,2]] # root node usually has children
-struct[1]=[2,0.5,[None,None]] # node either has 0, 1, or 2 children
-struct[2]=[0,0.5,[None,3]] #
-struct[3]=[3,0.5,[None,None]] # for now, will use double none to denote no children
-# assumption: if child is None, then use metric to determine solution
-tree = DecisionTree(2)
-tree.generateManual(struct)
 # with sample dataset, as of KJG191210, this is what optimal, greedy decision tree looks like
 s=dict()
 s[0]=[2,0.5,[1,3]];         s[1]=[0,0.5,[None,2]]
@@ -442,26 +431,13 @@ s[2]=[3,0.5,[None,None]];   s[3]=[0,1.5,[None,4]]
 s[4]=[0,0.5,[None,5]];      s[5]=[3,0.5,[None,None]]
 tree=DecisionTree(2);       tree.generateManual(s)
 tree.train(dat)
-# print(ds[0][0],tree.query(ds[0][0]))
-# print(ds[2][0],tree.query(ds[2][0]))
-# print(ds[3][0],tree.query(ds[3][0]))
-
-tree=DecisionTree(2)
-tree.generateAuto(dat)
-
-
-# '''
-# KJG191130: at this point, have very good control over a single decision tree and
-#     manually generating one. now will work on bootstrapping and randomly
-#     generating a tree, which can then lead to making a forest
-# '''
-# # np.random.seed(0) # controlling for randomness
-# # bootstrapping:
-# nsamples=len(dat)
-# nsamples=10
-# a=(np.random.rand(nsamples)*(nsamples-1)).round()
-# print(a)
-
-# eof
 for idat in dat:
     assert np.argmax(tree.query(idat[:-1]))==idat[-1]
+
+if(__name__=='__main__'):
+
+    # will instead create trees based on what children they have, not which parents
+    # struct[index] = [param,thresh,[yes_child,no_child]]
+    tree.autogen(dat)
+
+    # eof
