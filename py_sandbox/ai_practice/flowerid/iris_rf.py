@@ -333,7 +333,55 @@ class DecisionTree:
         infos=[self.node[i].info for i in self.node.keys()]
         return infos
 
+    def autogen(self,data):
+        self.create_root(data)
+        self.tryAdd(0,data,0)
+        self.tryAdd(0,data,1)
+        # once everything is created, backfill the structure info
+        struct=dict()
+        for i in self.node.keys():
+            temp=self.node[i]
+            struct[i]=[temp.param,temp.thresh,[temp.yes_kid,temp.no_kid]]
+        self.structure=struct
+
+    def create_root(self,data):
+        ''' for now, it might be easiest to separate the root, yes, and no
+            subroutines.
         '''
+        p,t,g = best_split(data)
+        self.node[0] = Node(p,t)
+        self.node[0].ID=0
+
+    def tryAdd(self,r,data,direction):
+        ''' recursive function for branches of root.
+        INPUTS:
+            * r = root / parent node index
+            * data = data that goes into parent node
+            * direction = which child of root node to attempt (0=yes,1=no)
+        '''
+        dat0,dat1,metric=self.node[r].check(data)
+        dat=[dat0,dat1][direction]
+        leaf_score=metric[direction]
+        if(len(dat)<2):
+            # not enough data to separate
+            return None
+        iparam,ithresh,iscore=best_split(dat)
+        if(iscore>=leaf_score):
+            return None # exit condition
+        # otherwise, create new node
+        nnode=len(self.node.keys())
+        self.node[nnode]=Node(iparam,ithresh)
+        self.node[nnode].parent=r
+        self.node[nnode].ID=nnode
+        if(direction==0):
+            self.node[r].yes_kid=nnode
+        else: self.node[r].no_kid=nnode
+        # now gotta deal with new node's potential children:
+
+        if(len(self.node.keys())<self.maxnodes):
+            self.tryAdd(nnode,dat,0)
+        if(len(self.node.keys())<self.maxnodes):
+            self.tryAdd(nnode,dat,1)
 
 
     def train(self,data):
