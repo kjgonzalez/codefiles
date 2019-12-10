@@ -191,6 +191,16 @@ def entropy(res0,res1=None,nclasses=2):
     entN = ( ent0*len(res0) + ent1*len(res1) )/( len(res0) + len(res1) )
     return ent0,ent1,entN
 
+def getBootstrap(data):
+    ''' return bootstrapped subset of data. two main rules: subset of
+    data must be same length, and indices are allowed to be reused
+    KJG191210: in the future, may return inds as well, to be able to
+        track what indices are or aren't used.
+    '''
+    inds=np.random.choice(np.arange(len(data)),len(data))
+    return data[inds]
+
+
 class Node:
     '''
     INITIALIZATION INPUTS:
@@ -276,7 +286,8 @@ class Node:
             if(self.no_kid==None):
                 return self.no_ans
             else:
-                return self.no_kid # should be an integer
+                # should be an integer
+                return self.no_kid
 
 class DecisionTree:
     ''' a decision tree will hold the structure of each node (parents /
@@ -405,6 +416,7 @@ class DecisionTree:
         while(type(res)==int):
             res = self.node[res].query(idat)
         return res
+
 
 # quick test to make sure things are working properly (including allmetrics)
 def tests():
