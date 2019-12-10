@@ -39,7 +39,7 @@ done | make tree node with all functions:
 done | tree=DecisionTree(dict_format,nclasses)
 done | tree.train(data) # take output from training one node, give it to children, etc
 done | tree.query(idat) # if result is integer, go to node. if list, give result
-???? | create a single node decision tree automatically (optimal)
+inpr | create a single node decision tree automatically (optimal)
 ???? | create a single node decision tree automatically (randomized)
 ???? | bootstrap a dataset
 ???? | create a random forest
@@ -67,7 +67,7 @@ selfdat=[ # taken from DataScienceFromScratch, p221
 #Lv La Tw Ph dw
 [2, 0, 0, 0, 0], # parameters: level / language / tweets / has phd / did well
 [2, 0, 0, 1, 0], # 0/1/2 = junior / mid / senior
-[1, 1, 0, 0, 1], # 0/1/2 = java / python / r
+[1, 1, 0, 0, 1], # 0/1/2 = java / python / R
 [0, 1, 0, 0, 1], # 0/1 = False / True
 [0, 2, 1, 0, 1],
 [0, 2, 1, 1, 0],
@@ -105,7 +105,8 @@ def findthresholds(data):
     inds=np.where(temp[1:]-temp[:-1])[0]
     threshs=[temp[i:i+2].mean() for i in inds]
     return threshs
-def bestsplit(data,desmetric=0):
+
+def getOptions(data,desmetric=0):
     ''' Given an input array (assume last parameter is ground truth), determine
         type of parameter, check entropy for each combination, and return
         results.
@@ -113,18 +114,13 @@ def bestsplit(data,desmetric=0):
     assert data.dtype =='O',"Dataset not loaded as dtype=object, param types might be ambiguous"
     nparams = len(data[0])-1
     # determine nature of each parameter
-    ptype=[] # 0=binary,1=discrete,2=continuous
-    for i in range(nparams):
-        if(type(data[:,i].max())==float):
-            # non-integer: continuous data
-            ptype.append(2)
-        elif(data[:,i].max()>1):
-            # int, larger than 1: discrete
-            ptype.append(1)
-        else:
-            ptype.append(0)
-
-    # check each parameter's thresholds and report all combos
+    # KJG191210: probably not needed
+    # ptype=[] # 0=binary,1=discrete,2=continuous
+    # for i in range(nparams):
+    #     if(type(data[:,i].max())==float): ptype.append(2)# non-integer: continuous data
+    #     elif(data[:,i].max()>1): ptype.append(1)# int, larger than 1: discredte
+    #     else: ptype.append(0)
+    # # check each parameter's thresholds and report all combos
     arr=[]
     for iparam in range(nparams):
         # for now, will not worry about continuous data and massive number of splits there can be...
@@ -332,7 +328,7 @@ class DecisionTree:
         ndat.append(DataHolder())
 
         # create node
-        options=bestsplit(data) # returns list of [param,thresh, gini]
+        options=getOptions(data) # returns list of [param,thresh, gini]
         best = options[np.argmin(options[:,-1])] # param, thresh, metric
         n=len(self.node) # number of nodes
         self.node[n] = Node(best[0],best[1],met=self.metric)
@@ -343,7 +339,7 @@ class DecisionTree:
         ndat[n].n=0
 
         # find if there should be a yes_kid
-        options=bestsplit(data[ ndat[0].m ])
+        options=getOptions(data[ ndat[0].m ])
         best=options[np.argmin(options[:,-1])]
         if(best[-1]>ndat[0].g[0]):
             print('no more nodes for "yes" option')
@@ -359,7 +355,7 @@ class DecisionTree:
             ndat[n].g=ginis
             ndat[n].n=n
         # check for  new node, "no" option
-        options=bestsplit(data[ ndat[0].nm ])
+        options=getOptions(data[ ndat[0].nm ])
         best=options[np.argmin(options[:,-1])]
 
         if(best[-1]>ndat[0].g[1]):
