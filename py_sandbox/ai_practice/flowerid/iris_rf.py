@@ -39,8 +39,8 @@ done | make tree node with all functions:
 done | tree=DecisionTree(dict_format,nclasses)
 done | tree.train(data) # take output from training one node, give it to children, etc
 done | tree.query(idat) # if result is integer, go to node. if list, give result
-inpr | create a single node decision tree automatically (optimal)
-???? | create a single node decision tree automatically (randomized)
+done | create a single decision tree automatically (optimal)
+???? | create a single decision tree automatically (randomized)
 ???? | bootstrap a dataset
 ???? | create a random forest
 ???? | ??
@@ -203,7 +203,7 @@ class Node:
     def __init__(self,param=0,thresh=0.5,nclasses=2,met=0):
         assert met in self._METRICS,"invalid metric specified: "+met
         self.param=param # index, 0...n
-        self._thresh = thresh # req if cond=thresh
+        self.thresh = thresh # req if cond=thresh
         self._metric = met
         self.parent=None
         self.ncls = nclasses # will simply receive number of classes (such as from Tree object)
@@ -211,6 +211,7 @@ class Node:
         self.no_kid=None
         self.yes_ans=None # index of child branch for "no" (False) answer
         self.no_ans=None
+        self.ID=None
         if(self._metric==self._METRICS[1]):
             self.metric=entropy
         else:
@@ -223,13 +224,13 @@ class Node:
     @property
     def info(self):
         ''' return quick summary about node '''
-        L = 'param thresh parent yeskid nokid'.split(' ') # labels
-        D = [self.param,self._thresh,self.parent,self.yes_kid,self.no_kid] # data
+        L = 'ID param thresh parent yeskid nokid'.split(' ') # labels
+        D = [self.ID,self.param,self.thresh,self.parent,self.yes_kid,self.no_kid] # data
         return {L[i]:D[i] for i in range(len(L))}
 
     def check(self,input,rounding=7):
         ''' get mask and obtain separated result arrays and metrices (3-values) '''
-        mask=input[:,self.param]>self._thresh # bin/disc/cont all calculate mask same way
+        mask=input[:,self.param]>self.thresh # bin/disc/cont all calculate mask same way
         res0=input[mask] # first check yes, then no...
         res1=input[np.logical_not(mask)]
         resMetric=self.metric(res0,res1,self.ncls)
@@ -266,7 +267,7 @@ class Node:
 
     def query(self,idat):
         ''' given a single sample, return what node thinks classification would be '''
-        if(idat[self.param]>self._thresh):
+        if(idat[self.param]>self.thresh):
             if(self.yes_kid==None):
                 return self.yes_ans
             else:
@@ -315,6 +316,7 @@ class DecisionTree:
             self.node[ind].yes_kid=kids[0]
             self.node[ind].no_kid=kids[1]
             self.node[ind].parent=parent_list[ind]
+            self.node[ind].ID=ind
 
     def addchild(self,parentNum,childNum,no_option):
         ''' connect parent and child nodes. if no_option=True, then will
