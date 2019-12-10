@@ -328,6 +328,11 @@ class DecisionTree:
             self.node[parentNum].no_kid =childNum
         self.node[childNum].parent=parentNum
 
+    @property
+    def nodeinfo(self):
+        infos=[self.node[i].info for i in self.node.keys()]
+        return infos
+
         '''
 
 
