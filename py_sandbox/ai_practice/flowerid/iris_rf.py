@@ -131,6 +131,11 @@ def getOptions(data,desmetric=0):
             arr.append([int(iparam),ithresh,score])
     return np.array(arr,dtype=object)
 
+def best_split(data,desmetric=0):
+    ''' in given data, return best option for splitting (p,t,metric) '''
+    options = getOptions(data)
+    return options[np.argmin(options[:,-1])] # return param,thresh, metric
+
 def countClasses(data,nclasses):
     ''' given some data and set of classes, count each class out
     ASSUMPTIONS:
@@ -289,6 +294,7 @@ class DecisionTree:
         self.ncls = numclasses
         self._origStruct=None
         self.metric=metric # 0=gini, 1 = entropy
+        self.maxnodes=1000
 
     def generateManual(self,structure):
         ''' will create structure of tree based on given structure (dict) '''
