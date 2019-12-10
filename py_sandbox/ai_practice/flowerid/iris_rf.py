@@ -220,6 +220,13 @@ class Node:
     def children(self):
         return self.yes_kid,self.no_kid
 
+    @property
+    def info(self):
+        ''' return quick summary about node '''
+        L = 'param thresh yeskid nokid'.split(' ') # labels
+        D = [self.param,self._thresh,self.yes_kid,self.no_kid] # data
+        return {L[i]:D[i] for i in range(len(L))}
+
     def _addchildren(self,children):
         ''' Give a 2-item list of either None or some index value for another
             node. only intended to be used by DecisionTree class '''
