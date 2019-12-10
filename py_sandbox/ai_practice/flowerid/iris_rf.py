@@ -160,6 +160,39 @@ def maskmerge(mask1,mask2):
             m3.append(mask1[i])
     return np.array(m3)
 
+
+def gini(res0,res1=None,nclasses=2):
+    ''' Get the gini impurity based on the output of an entire node (both
+        binary results). can have any number of classes, which are
+        determined when running. If only one result is given, then gini
+        score of just that result is given (leaf?)
+    '''
+    count0=countClasses(res0[:,-1],nclasses)
+    gini0=1-sum( (count0/count0.sum())**2 )
+    if(type(res1)==type(None)):
+        return gini0
+    # otherwise, continue and return complete gini score
+    count1=countClasses(res1[:,-1],nclasses)
+    gini1=1-sum( (count1/count1.sum())**2 )
+    sum01=len(res0)+len(res1)
+    giniN = (len(res0)/sum01)*gini0+(len(res1)/sum01)*gini1
+    return gini0,gini1,giniN
+
+def entropy(res0,res1=None,nclasses=2):
+    ''' Another way to find how "pure" a list of classes are. based on
+        example from Data Science from Scratch
+    '''
+    s0=countClasses(res0[:,-1],nclasses)
+    pcls0=s0/s0.sum()
+    ent0=sum([-ip*np.log(ip) for ip in pcls0 if(ip>0)]) # per book, ignore '0'
+    if(type(res1)==type(None)):
+        return ent0
+    # otherwise get weighted sum of combined entropy if have both results
+    s1=countClasses(res1[:,-1],nclasses)
+    pcls1=s1/s1.sum()
+    ent1=sum([-ip*np.log(ip) for ip in pcls1 if(ip>0)]) # per book, ignore '0'
+    entN = ( ent0*len(res0) + ent1*len(res1) )/( len(res0) + len(res1) )
+    return ent0,ent1,entN
 class Node:
     '''
     INITIALIZATION INPUTS:
@@ -200,9 +233,9 @@ class Node:
         mask=input[:,self.param]>self._thresh # bin/disc/cont all calculate mask same way
         res0=input[mask] # first check yes, then no...
         res1=input[np.logical_not(mask)]
-        resMetric=self.metric(res0,res1)
+        resMetric=self.metric(res0,res1,self.ncls)
         # get gini score
-        return res0,res1,resMetric,mask
+        return res0,res1,resMetric # KJG191210: won't return mask, working recursively
 
     def train(self,data,_nodes=None):
         ''' given a set of input data, decide what the outcome of a node would be
@@ -243,39 +276,6 @@ class Node:
                 return self.no_ans
             else:
                 return self.no_kid # should be an integer
-
-    def gini(self,res0,res1=None):
-        ''' Get the gini impurity based on the output of an entire node (both
-            binary results). can have any number of classes, which are
-            determined when running. If only one result is given, then gini
-            score of just that result is given (leaf?)
-        '''
-        count0=countClasses(res0[:,-1],self.ncls)
-        gini0=1-sum( (count0/count0.sum())**2 )
-        if(type(res1)==type(None)):
-            return gini0
-        # otherwise, continue and return complete gini score
-        count1=countClasses(res1[:,-1],self.ncls)
-        gini1=1-sum( (count1/count1.sum())**2 )
-        sum01=len(res0)+len(res1)
-        giniN = (len(res0)/sum01)*gini0+(len(res1)/sum01)*gini1
-        return gini0,gini1,giniN
-
-    def entropy(self,res0,res1=None):
-        ''' Another way to find how "pure" a list of classes are. based on
-            example from Data Science from Scratch
-        '''
-        s0=countClasses(res0[:,-1],self.ncls)
-        pcls0=s0/s0.sum()
-        ent0=sum([-ip*np.log(ip) for ip in pcls0 if(ip>0)]) # per book, ignore '0'
-        if(type(res1)==type(None)):
-            return ent0
-        # otherwise get weighted sum of combined entropy if have both results
-        s1=countClasses(res1[:,-1],self.ncls)
-        pcls1=s1/s1.sum()
-        ent1=sum([-ip*np.log(ip) for ip in pcls1 if(ip>0)]) # per book, ignore '0'
-        entN = ( ent0*len(res0) + ent1*len(res1) )/( len(res0) + len(res1) )
-        return ent0,ent1,entN
 
 class DecisionTree:
     ''' a decision tree will hold the structure of each node (parents /
