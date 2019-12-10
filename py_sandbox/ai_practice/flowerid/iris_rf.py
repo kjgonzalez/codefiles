@@ -415,10 +415,10 @@ class DecisionTree:
 
     def query(self,idat):
         ''' traverse branches of tree based on given input data '''
-        res=tree.node[0].query(idat)
+        res=self.node[0].query(idat)
         # if a list, then has returned answer. if an integer, then has returned index to a child
         while(type(res)==int):
-            res = tree.node[res].query(idat)
+            res = self.node[res].query(idat)
         return res
 
 # quick test to make sure things are working properly (including allmetrics)
@@ -435,6 +435,12 @@ struct[3]=[3,0.5,[None,None]] # for now, will use double none to denote no child
 # assumption: if child is None, then use metric to determine solution
 tree = DecisionTree(2)
 tree.generateManual(struct)
+# with sample dataset, as of KJG191210, this is what optimal, greedy decision tree looks like
+s=dict()
+s[0]=[2,0.5,[1,3]];         s[1]=[0,0.5,[None,2]]
+s[2]=[3,0.5,[None,None]];   s[3]=[0,1.5,[None,4]]
+s[4]=[0,0.5,[None,5]];      s[5]=[3,0.5,[None,None]]
+tree=DecisionTree(2);       tree.generateManual(s)
 tree.train(dat)
 # print(ds[0][0],tree.query(ds[0][0]))
 # print(ds[2][0],tree.query(ds[2][0]))
@@ -457,3 +463,5 @@ tree.generateAuto(dat)
 # print(a)
 
 # eof
+for idat in dat:
+    assert np.argmax(tree.query(idat[:-1]))==idat[-1]
