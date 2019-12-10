@@ -293,22 +293,21 @@ class DecisionTree:
     def __init__(self,numclasses,metric=0):
         self.node=dict()
         self.ncls = numclasses
-        self._origStruct=None
+        self.structure=None
         self.metric=metric # 0=gini, 1 = entropy
         self.maxnodes=1000
 
     def generateManual(self,structure):
         ''' will create structure of tree based on given structure (dict) '''
-        self._origStruct=structure
+        self.structure=structure
         # create reverse list to have parent listed for each node as well
         parent_list=[]
         parent_list.append([0,None])
-        for ikey in s.keys():
-            for ival in s[ikey][2]:
+        for ikey in structure.keys():
+            for ival in structure[ikey][2]:
                 if(ival!=None): parent_list.append([ival,ikey])
         parent_list=np.array(parent_list)
         parent_list=parent_list[np.argsort(parent_list[:,0])][:,1] # sort array, then keep only 2nd column and use by calling index
-        print(parent_list)
         for ind in structure.keys():
             param,thresh,kids=structure[ind]
             self.node[ind] = Node(param,thresh,self.ncls,met=self.metric)
@@ -329,77 +328,8 @@ class DecisionTree:
             self.node[parentNum].no_kid =childNum
         self.node[childNum].parent=parentNum
 
-    def generateAuto(self,data,optimal=True):
-        ''' Based on given data and whether to be optimal or not, automatically
-            generate a decision tree. note, to help save a bit on memory (even if not needed), will save output mask of each node, rather than the actual sub-array
-            note: at each step, must determine best move available
-            1. set original metric score to [10]*3
-            2. enter while loop, and create root node plus every other node
-            in each loop:
-                * create node
-                * if yes, create node
         '''
 
-        class DataHolder:
-            def __init__(self):
-                pass
-        ndat=[]
-        ndat.append(DataHolder())
-
-        # create node
-        options=getOptions(data) # returns list of [param,thresh, gini]
-        best = options[np.argmin(options[:,-1])] # param, thresh, metric
-        n=len(self.node) # number of nodes
-        self.node[n] = Node(best[0],best[1],met=self.metric)
-        _1,_2,ginis,mask=self.node[n].check(data)
-        ndat[n].m=mask
-        ndat[n].nm=np.logical_not(mask)
-        ndat[n].g=ginis
-        ndat[n].n=0
-
-        # find if there should be a yes_kid
-        options=getOptions(data[ ndat[0].m ])
-        best=options[np.argmin(options[:,-1])]
-        if(best[-1]>ndat[0].g[0]):
-            print('no more nodes for "yes" option')
-        else:
-            print('adding yes node')
-            n=len(self.node) # taking advantage of 0-based index
-            self.node[n]=Node(best[0],best[1],met=self.metric)
-
-            _1,_2,ginis,mask=self.node[n].check(data[ ndat[0].m ])
-            ndat.append(DataHolder())
-            ndat[n].m=mask
-            ndat[n].nm=np.logical_not(mask)
-            ndat[n].g=ginis
-            ndat[n].n=n
-        # check for  new node, "no" option
-        options=getOptions(data[ ndat[0].nm ])
-        best=options[np.argmin(options[:,-1])]
-
-        if(best[-1]>ndat[0].g[1]):
-            print('no more nodes for "no" option')
-        else:
-            print('adding no node')
-            n=len(self.node)
-            self.node[n]=Node(best[0],best[1],met=self.metric)
-        import ipdb; ipdb.set_trace()
-
-
-
-
-
-        # given that this is the root node, this one is done outside a loop
-        flag_done=False
-        while(not flag_done):
-            # generate new nodes until no good options left
-            flag_done=True
-
-    def genAuto(self,data,optimal=True):
-        ''' alright, need to just try again on making this function. it's
-            clearly not working how you thought it would. make a good flow
-            chart, then implement it.
-            '''
 
     def train(self,data):
         ''' will train recursively (depth first) by having any node that
