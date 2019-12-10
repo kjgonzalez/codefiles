@@ -407,17 +407,24 @@ class DecisionTree:
         return res
 
 # quick test to make sure things are working properly (including allmetrics)
-assert (getOptions(dat)[:,-1]==getOptions(dat,allmetrics=True)[:,-1]).all() # getoptions not working
-assert getOptions(dat)[:,-1].min()==best_split(dat,allmetrics=True)[-1] # best_split not working
-# with sample dataset, as of KJG191210, this is what optimal, greedy decision tree looks like
-s=dict()
-s[0]=[2,0.5,[1,3]];         s[1]=[0,0.5,[None,2]]
-s[2]=[3,0.5,[None,None]];   s[3]=[0,1.5,[None,4]]
-s[4]=[0,0.5,[None,5]];      s[5]=[3,0.5,[None,None]]
-tree=DecisionTree(2);       tree.generateManual(s)
-tree.train(dat)
-for idat in dat:
-    assert np.argmax(tree.query(idat[:-1]))==idat[-1]
+def tests():
+    assert (getOptions(dat)[:,-1]==getOptions(dat,allmetrics=True)[:,-1]).all() # getoptions not working
+    assert getOptions(dat)[:,-1].min()==best_split(dat,allmetrics=True)[-1] # best_split not working
+    # with sample dataset, as of KJG191210, this is what optimal, greedy decision tree looks like
+    s=dict()
+    s[0]=[2,0.5,[1,3]];         s[1]=[0,0.5,[None,2]]
+    s[2]=[3,0.5,[None,None]];   s[3]=[0,1.5,[None,4]]
+    s[4]=[0,0.5,[None,5]];      s[5]=[3,0.5,[None,None]]
+    tree1=DecisionTree(2);       tree1.generateManual(s)
+    tree1.train(dat)
+    for idat in dat:
+        assert np.argmax(tree1.query(idat[:-1]))==idat[-1]
+    tree2=DecisionTree(2)
+    tree2.autogen(dat)
+    tree2.train(dat)
+    for idat in dat:
+        assert np.argmax(tree2.query(idat[:-1]))==idat[-1]
+tests()
 
 if(__name__=='__main__'):
 
