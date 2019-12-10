@@ -223,8 +223,8 @@ class Node:
     @property
     def info(self):
         ''' return quick summary about node '''
-        L = 'param thresh yeskid nokid'.split(' ') # labels
-        D = [self.param,self._thresh,self.yes_kid,self.no_kid] # data
+        L = 'param thresh parent yeskid nokid'.split(' ') # labels
+        D = [self.param,self._thresh,self.parent,self.yes_kid,self.no_kid] # data
         return {L[i]:D[i] for i in range(len(L))}
 
     def check(self,input,rounding=7):
