@@ -106,7 +106,7 @@ def findthresholds(data):
     threshs=[temp[i:i+2].mean() for i in inds]
     return threshs
 
-def getOptions(data,desmetric=0,allmetrics=False):
+def getOptions(data,desmetric=0,allmetrics=False,rounding=5):
     ''' Given an input array (assume last parameter is ground truth), determine
         type of parameter, check entropy for each combination, and return
         results.
@@ -121,17 +121,17 @@ def getOptions(data,desmetric=0,allmetrics=False):
             inode = Node(iparam,thresh=ithresh,met=desmetric)
             if(allmetrics):
                 # all metrics (yes,no,overall)
-                score=[i.round(5) for i in inode.check(data)[2]]
+                score=[i.round(rounding) for i in inode.check(data)[2]]
                 arr.append([int(iparam),ithresh,*score])
             else:
                 # single metric (overall)
-                score=round(inode.check(data)[2][2],5)
+                score=round(inode.check(data)[2][2], rounding)
                 arr.append([int(iparam),ithresh,score])
     return np.array(arr,dtype=object)
 
-def best_split(data,desmetric=0,allmetrics=False):
+def best_split(data,desmetric=0,allmetrics=False,rounding=5):
     ''' in given data, return best option for splitting (p,t,metric) '''
-    options = getOptions(data,allmetrics=allmetrics)
+    options = getOptions(data,allmetrics=allmetrics,rounding=rounding)
     return options[np.argmin(options[:,-1])] # return param,thresh, metric(s)
 
 def countClasses(data,nclasses):
@@ -234,11 +234,13 @@ class Node:
         self.no_kid = children[1]
 
     def check(self,input):
+    def check(self,input,rounding=7):
         ''' get mask and obtain separated result arrays and metrices (3-values) '''
         mask=input[:,self.param]>self._thresh # bin/disc/cont all calculate mask same way
         res0=input[mask] # first check yes, then no...
         res1=input[np.logical_not(mask)]
         resMetric=self.metric(res0,res1,self.ncls)
+        resMetric=[i.round(rounding) for i in resMetric]
         # get gini score
         return res0,res1,resMetric # KJG191210: won't return mask, working recursively
 
