@@ -119,14 +119,20 @@ def getOptions(data,desmetric=0,allmetrics=False):
         threshs=findthresholds(data[:,iparam])
         for ithresh in threshs:
             inode = Node(iparam,thresh=ithresh,met=desmetric)
-            score=round(inode.check(data)[2][2],5) # get overall metric score
-            arr.append([int(iparam),ithresh,score])
+            if(allmetrics):
+                # all metrics (yes,no,overall)
+                score=[i.round(5) for i in inode.check(data)[2]]
+                arr.append([int(iparam),ithresh,*score])
+            else:
+                # single metric (overall)
+                score=round(inode.check(data)[2][2],5)
+                arr.append([int(iparam),ithresh,score])
     return np.array(arr,dtype=object)
 
 def best_split(data,desmetric=0,allmetrics=False):
     ''' in given data, return best option for splitting (p,t,metric) '''
     options = getOptions(data,allmetrics=allmetrics)
-    return options[np.argmin(options[:,-1])] # return param,thresh, metric
+    return options[np.argmin(options[:,-1])] # return param,thresh, metric(s)
 
 def countClasses(data,nclasses):
     ''' given some data and set of classes, count each class out
@@ -151,7 +157,6 @@ def maskmerge(mask1,mask2):
         else:
             m3.append(mask1[i])
     return np.array(m3)
-
 
 def gini(res0,res1=None,nclasses=2):
     ''' Get the gini impurity based on the output of an entire node (both
@@ -185,6 +190,7 @@ def entropy(res0,res1=None,nclasses=2):
     ent1=sum([-ip*np.log(ip) for ip in pcls1 if(ip>0)]) # per book, ignore '0'
     entN = ( ent0*len(res0) + ent1*len(res1) )/( len(res0) + len(res1) )
     return ent0,ent1,entN
+
 class Node:
     '''
     INITIALIZATION INPUTS:
@@ -206,9 +212,9 @@ class Node:
         self.yes_ans=None # index of child branch for "no" (False) answer
         self.no_ans=None
         if(self._metric==self._METRICS[1]):
-            self.metric=self.entropy
+            self.metric=entropy
         else:
-            self.metric=self.gini
+            self.metric=gini
 
     @property
     def children(self):
@@ -402,6 +408,9 @@ class DecisionTree:
             res = tree.node[res].query(idat)
         return res
 
+# quick test to make sure things are working properly (including allmetrics)
+assert (getOptions(dat)[:,-1]==getOptions(dat,allmetrics=True)[:,-1]).all() # getoptions not working
+assert getOptions(dat)[:,-1].min()==best_split(dat,allmetrics=True)[-1] # best_split not working
 
 # will instead create trees based on what children they have, not which parents
 # struct[index] = [param,thresh,[yes_child,no_child]]
