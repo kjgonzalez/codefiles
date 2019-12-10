@@ -227,13 +227,6 @@ class Node:
         D = [self.param,self._thresh,self.yes_kid,self.no_kid] # data
         return {L[i]:D[i] for i in range(len(L))}
 
-    def _addchildren(self,children):
-        ''' Give a 2-item list of either None or some index value for another
-            node. only intended to be used by DecisionTree class '''
-        self.yes_kid=children[0]
-        self.no_kid = children[1]
-
-    def check(self,input):
     def check(self,input,rounding=7):
         ''' get mask and obtain separated result arrays and metrices (3-values) '''
         mask=input[:,self.param]>self._thresh # bin/disc/cont all calculate mask same way
