@@ -7,6 +7,10 @@ function bserver {ssh -i C:\Users\kris\.ssh\id_rsa -p 2422 root@141.69.58.230}
 function heimdall {ssh -i C:\Users\kris\.ssh\id_rsa iki@141.69.58.223}
 
 function ipython {ipython.exe --nosep}
+
+Set-Alias -Name pdfview -Value "C:\Program Files\SumatraPDF\SumatraPDF.exe"
+Set-Alias -Name sumatra -Value "C:\Program Files\SumatraPDF\SumatraPDF.exe"
+
 function cpprun{
     echo "building..."
     $res = g++ -std=c++11 $args
