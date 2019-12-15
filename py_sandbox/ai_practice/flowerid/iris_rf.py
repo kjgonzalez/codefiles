@@ -40,8 +40,8 @@ done | tree=DecisionTree(dict_format,nclasses)
 done | tree.train(data) # take output from training one node, give it to children, etc
 done | tree.query(idat) # if result is integer, go to node. if list, give result
 done | create a single decision tree automatically (optimal)
+done | bootstrap a dataset
 ???? | create a single decision tree automatically (randomized)
-???? | bootstrap a dataset
 ???? | create a random forest
 ???? | ??
 ???? | ??
