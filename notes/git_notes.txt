@@ -28,3 +28,10 @@ issue: get this message: "remote: This repository moved.
 git remote set-url origin [https://...git]
 
 DEAL WITH BRANCH / MERGE CONFLICTS =========================
+0. (have created local and remote changes, leading to a 
+    conflict when pulling new commits in)
+1. manually fix issues between the two, save files*
+    !!! DO NOT, ** DO NOT ** MAKE A COMMIT !!!
+2. git add <affected file(s)>
+3. git rebase --continue
+   (issue should be resolved)
