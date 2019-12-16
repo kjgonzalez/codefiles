@@ -1,11 +1,10 @@
-# Markdown Cheatsheet (title)
+# Markdown Cheatsheet (Title)
 ## Table of Contents
 1. Headers
 2. Simple text formatting
 3. Lists
 4. Links
 5. Images
-
 
 ## 1. Headers
 Headers are generated simply by number of hash signs (octothorps) you have before, such as the title or section title.
@@ -46,28 +45,27 @@ new line here
 #### sublists:
 1. item
  1. subitem (notice that this line has a space before it)
-  1. however, you can't have a subsubitem. tragic
+  1. however, you can't have a *sub*-subitem. tragic
 
 
 * same goes for bullets (notice 2 lines to separate both lists)
  * this is a subitem
+   * sub-subitems are possible here.
 
 ## 4. Links
 * This [inline, renamed link](https://www.google.com) that looks nice.
 * This [inline with hover title](https://www.google.com "google page") that looks nice.
 * This [relative reference to repo file](../blob/master/LICENSE). NOTE: not a real link here.
-* This [Reference-style link][1], but requires having links at the bottom of your ``*md`` file (links at bottom don't show up)
+* This [Reference-style link][1], but requires having links at the bottom of your `*md` file (links at bottom don't show up)
 
 [1]: http://www.google.com
 
 ## 5. Images
-Inline is pretty much the only way to include images, but you can at least put them on their own line, like so (with hover text):
+Inline is pretty much the only way to include images, but you can at least put them on their own line, like so (with hover text). method 1 without a reference:
 
 ![alt text](https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png "HoverText")
 
-what about making the image a reference as well?
-
-this is a ![logo]
+method 2 with a reference: logo is ![logo]
 
 [logo]: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
 
@@ -89,8 +87,6 @@ Just remember that every column needs to have at least three dashes for the head
 | e    | 2.71828 | e      |
 | ---  | ---     | ---    |
 | ---  | ---     | ---    |
-
-
 
 ## 7. Basic Mathematics Concepts
 * simple special characters: $\alpha$
