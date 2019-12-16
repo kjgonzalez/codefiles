@@ -26,3 +26,5 @@ UPDATE LOCATION OF REPO FOR GITHUB =========================
 issue: get this message: "remote: This repository moved. 
     Please use the new location"
 git remote set-url origin [https://...git]
+
+DEAL WITH BRANCH / MERGE CONFLICTS =========================
