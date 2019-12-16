@@ -56,7 +56,7 @@ new line here
 * This [inline, renamed link](https://www.google.com) that looks nice.
 * This [inline with hover title](https://www.google.com "google page") that looks nice.
 * This [relative reference to repo file](../blob/master/LICENSE). NOTE: not a real link here.
-* This [Reference-style link][1], but requires having links at the bottom of your *md file (links at bottom don't show up)
+* This [Reference-style link][1], but requires having links at the bottom of your ``*md`` file (links at bottom don't show up)
 
 [1]: http://www.google.com
 
@@ -64,6 +64,12 @@ new line here
 Inline is pretty much the only way to include images, but you can at least put them on their own line, like so (with hover text):
 
 ![alt text](https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png "HoverText")
+
+what about making the image a reference as well?
+
+this is a ![logo]
+
+[logo]: https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png
 
 ## 6. Tables
 Just remember that every column needs to have at least three dashes for the header cells, and every table MUST have header cells.

@@ -130,7 +130,9 @@ def getOptions(data,desmetric=0,allmetrics=False,rounding=5):
     return np.array(arr,dtype=object)
 
 def best_split(data,desmetric=0,allmetrics=False,rounding=5):
-    ''' in given data, return best option for splitting (p,t,metric) '''
+    ''' In given data, return best option for splitting (p,t,metric). can be
+        given a variable limit for automatically choosing sub-optimal split
+    '''
     options = getOptions(data,allmetrics=allmetrics,rounding=rounding)
     return options[np.argmin(options[:,-1])] # return param,thresh, metric(s)
 
@@ -301,12 +303,12 @@ class DecisionTree:
     tree.train(ds) # "train" on a dataset
     tree.query(ds[0][0]) # test on sample data
     '''
-    def __init__(self,numclasses,metric=0):
+    def __init__(self,numclasses,metric=0,maxnodes=100):
         self.node=dict()
         self.ncls = numclasses
         self.structure=None
         self.metric=metric # 0=gini, 1 = entropy
-        self.maxnodes=1000
+        self.maxnodes=maxnodes
 
     def generateManual(self,structure):
         ''' will create structure of tree based on given structure (dict) '''
@@ -344,10 +346,13 @@ class DecisionTree:
         infos=[self.node[i].info for i in self.node.keys()]
         return infos
 
-    def autogen(self,data):
-        self.create_root(data)
-        self.tryAdd(0,data,0)
-        self.tryAdd(0,data,1)
+    def autogen(self,data,varlim=None):
+        ''' Generate a tree given the data. can select if making an optimal tree
+            or non-optimal as part of a random forest.
+        '''
+        self.create_root(data,varlim=varlim)
+        self.tryAdd(0,data,0,varlim=varlim)
+        self.tryAdd(0,data,1,varlim=varlim)
         # once everything is created, backfill the structure info
         struct=dict()
         for i in self.node.keys():
@@ -355,15 +360,20 @@ class DecisionTree:
             struct[i]=[temp.param,temp.thresh,[temp.yes_kid,temp.no_kid]]
         self.structure=struct
 
-    def create_root(self,data):
-        ''' for now, it might be easiest to separate the root, yes, and no
-            subroutines.
+    def create_root(self,data,varlim=None):
+        ''' for now, it might be easiest to separate the root and internal node
+            creation subroutines.
         '''
-        p,t,g = best_split(data)
+        ops = getOptions(data,allmetrics=False,rounding=5)
+        if(varlim!=None):
+            ''' randomly select n variables to keep in list '''
+
+
+        p,t,g = ops[np.argmin(ops[:,-1])] # return param,thresh, metric(s)
         self.node[0] = Node(p,t)
         self.node[0].ID=0
 
-    def tryAdd(self,r,data,direction):
+    def tryAdd(self,r,data,direction,varlim=None):
         ''' recursive function for branches of root.
         INPUTS:
             * r = root / parent node index
