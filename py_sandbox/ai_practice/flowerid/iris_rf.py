@@ -93,10 +93,16 @@ dat=[ # taken from DataScienceFromScratch, p221
 ]
 
 import numpy as np
+import argparse, time
 from klib import data as da
-from klib import listContents as lc
 dat=np.array(dat,dtype=object) # using this type keeps ints as ints
 # will now modify data to match how iris dataset is loaded, to see if the decision tree behaves properly
+
+def npshuffle(nparr):
+    # enable random shuffling of array without being in-place
+    npa2=np.copy(nparr)
+    np.random.shuffle(npa2)
+    return npa2
 
 def convertToDS(data):
     ''' take an input array with ians at final column and convert to local convention '''
@@ -262,9 +268,8 @@ class Node:
         count0=countClasses(res0[:,-1],self.ncls)
         count1=countClasses(res1[:,-1],self.ncls)
 
-        self.yes_ans=count0/count0.sum()
-        self.no_ans =count1/count1.sum()
-
+        self.yes_ans=np.argmax(count0)
+        self.no_ans =np.argmax(count1)
         if(type(_nodes)==type(None)):
             # no need to recursively train
             return res0,res1
@@ -347,6 +352,7 @@ class DecisionTree:
         ''' Generate a tree given the data. can select if making an optimal tree
             or non-optimal as part of a random forest.
         '''
+
         self.create_root(data,optimal=optimal)
         # KJG191217: in order to balance which direction the tree grows in, will
         # randomly select left or right. workaround for depth-first instead of breadth-first
@@ -398,8 +404,13 @@ class DecisionTree:
             # not enough data to separate
             return None
         ops = getOptions(dat,allmetrics=False,rounding=5)
+        if(len(ops)<1):
+            return None
         if(optimal):
-            iparam,ithresh,iscore = ops[np.argmin(ops[:,-1])]
+            try:
+                iparam,ithresh,iscore = ops[np.argmin(ops[:,-1])]
+            except IndexError:
+                import ipdb; ipdb.set_trace()
         else:
             # find sub-optimal split for random forest
             c=np.unique(ops[:,0])
@@ -423,14 +434,14 @@ class DecisionTree:
 
         # KJG191217: just like with create_root, randomly select direction
         if(np.random.randint(2)):
-            if(len(self.node.keys())<self.maxnodes):
+            if(len(self.node.keys())<self.maxnodes-1):
                 self.tryAdd(nnode,dat,0)
-            if(len(self.node.keys())<self.maxnodes):
+            if(len(self.node.keys())<self.maxnodes-1):
                 self.tryAdd(nnode,dat,1)
         else:
-            if(len(self.node.keys())<self.maxnodes):
+            if(len(self.node.keys())<self.maxnodes-1):
                 self.tryAdd(nnode,dat,1)
-            if(len(self.node.keys())<self.maxnodes):
+            if(len(self.node.keys())<self.maxnodes-1):
                 self.tryAdd(nnode,dat,0)
 
     def train(self,data):
@@ -453,28 +464,29 @@ class RandomForest:
     ''' create a random forest from a large number of RF-trees. use to classify
         some given data.
     '''
-    def __init__(self,nclasses,metric=0,nTrees=21):
+    def __init__(self,nclasses,metric=0,nTrees=101,maxnodes=5):
         self.nTrees=nTrees
         self.tree=[]
         self.nclasses=nclasses
         self.metric=metric
-    def genTrees(data):
+        self.maxnodes=maxnodes
+    def genTrees(self,data):
         ''' for each tree:
             1. bootstrap the data
             2. create a non-optimal tree
             3.
         '''
         for i in range(self.nTrees):
-            self.tree=[DecisionTree(self.nclasses,metric=self.metric)]
+            self.tree+=[DecisionTree(self.nclasses,metric=self.metric,maxnodes=self.maxnodes)]
             data_bootstrap=getBootstrap(data)
             self.tree[i].autogen(data_bootstrap,optimal=False)
             self.tree[i].train(data_bootstrap)
-
     def query(self,idat):
         res=[]
         for itree in self.tree:
             res.append(itree.query(idat))
-        return res
+        res2=countClasses(res,self.nclasses)
+        return res2/res2.sum()
 
 # quick test to make sure things are working properly (including allmetrics)
 def tests():
@@ -488,14 +500,39 @@ def tests():
     tree1=DecisionTree(2);       tree1.generateManual(s)
     tree1.train(dat)
     for idat in dat:
-        assert np.argmax(tree1.query(idat[:-1]))==idat[-1]
+        assert tree1.query(idat[:-1])==idat[-1]
     tree2=DecisionTree(2)
     tree2.autogen(dat)
     tree2.train(dat)
     for idat in dat:
-        assert np.argmax(tree2.query(idat[:-1]))==idat[-1]
+        assert tree2.query(idat[:-1])==idat[-1]
 tests()
 
 if(__name__=='__main__'):
-    print('rf attempt')
+    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    p.add_argument('--random',default=False,action='store_true',help='Enable randomness')
+    p.add_argument('--epochs',default=1000,type=int,help='number of epochs to train')
+    args=p.parse_args()
+
+    if(not args.random):
+        np.random.seed(0)
+        print('seed controlled')
+
+    ds=npshuffle(dat)
+    ntrain = 10
+    ds_train = ds[:ntrain]
+    ds_test  = ds[ntrain:]
+
+
+    rf = RandomForest(nclasses=2,nTrees=100,maxnodes=3)
+    rf.genTrees(ds_train)
+
+    scorecard=[]
+    for idat in ds_test:
+        answer=idat[-1] # KJG191217: need to change this later
+        pred = np.argmax(rf.query(idat[:-1]))
+        print(pred,'|',answer)
+        scorecard+=[1] if(answer==pred) else [0]
+    print('performance:',sum(scorecard)/len(scorecard))
+
     # eof
