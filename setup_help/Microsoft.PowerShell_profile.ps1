@@ -10,7 +10,7 @@ function ipython {ipython.exe --nosep}
 
 Set-Alias -Name sumatra -Value "C:\Program Files\SumatraPDF\SumatraPDF.exe"
 Set-Alias -Name npp -Value "C:\Program Files (x86)\Notepad++\notepad++.exe"
-Set-Alias -Name foxit -Value "C:\Program Files (x86)\Foxit Software\Foxit Reader\Foxit Reader\FoxitReader.exe"
+Set-Alias -Name foxit -Value "D:\Programs2\FoxitReader\FoxitReader.exe"
 
 function cpprun{
     echo "building..."

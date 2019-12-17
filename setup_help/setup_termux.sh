@@ -12,7 +12,7 @@ ssh-keygen
 curl --L0 https://its-pointless.github.io/setup-pointless-repo.sh
 bash setup-pointless-repo.sh
 pkg install numpy
-
+# pkg install scipy # not sure if want to install this quite yet
 python -m pip install ipython --user
 
 cd ~/codefiles
