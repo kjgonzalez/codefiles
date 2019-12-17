@@ -8,8 +8,8 @@ function heimdall {ssh -i C:\Users\kris\.ssh\id_rsa iki@141.69.58.223}
 
 function ipython {ipython.exe --nosep}
 
-Set-Alias -Name pdfview -Value "C:\Program Files\SumatraPDF\SumatraPDF.exe"
 Set-Alias -Name sumatra -Value "C:\Program Files\SumatraPDF\SumatraPDF.exe"
+Set-Alias -Name npp -Value "C:\Program Files (x86)\Notepad++\notepad++.exe"
 
 function cpprun{
     echo "building..."
