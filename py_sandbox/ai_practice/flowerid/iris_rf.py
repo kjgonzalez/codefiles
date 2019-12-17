@@ -52,10 +52,15 @@ done | tree.query(idat) # if result is integer, go to node. if list, give result
 done | create a single decision tree automatically (optimal)
 done | bootstrap a dataset
 done | create a single decision tree automatically (randomized)
-???? | create a random forest
+done | create a random forest
+inpr | make current rf implementation compatible with how iris data is loaded
 ???? | rewrite decision tree autogen to breadth-first create tree, rather than depth-first, or rewrite to use max-depth instead of maxnodes
 ???? | ??
-???? | ??
+
+current isuses:
+* create a proper decision tree, following correct pruning techniques, etc
+*
+
 
 want to create a tree based on an format, such as:
 treedef=dict()
