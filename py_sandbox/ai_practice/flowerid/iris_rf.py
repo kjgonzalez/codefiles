@@ -10,7 +10,17 @@ NOTES:
 * realized that binary data is a subset of discrete data, and discrete is a
     subset of continuous data, and have unified mask function
 * bootstrapping: randomly selecting samples of a dataset, including multiples of a single one
-* bagging: "bootstrap aggregation",
+* bagging: "bootstrap aggregation"
+* KJG191217: main question is HOW EXACTLY does a non-optimal tree for RF get
+    made? will refer to CART algorithm and use Elements of Statistical Learning
+    book
+* KJG191217: select m=sqrt(n) variables out of the n available at each step
+* KJG191217: "grow tree until minimum node size 'n_min' is reached"... this
+    simply means a maximum number of allowable nodes, based on pg 308: "The
+    preferred strategy is to grow a large tree T0, stopping the splitting
+    process only when some minimum node size (say 5) is reached. Then this
+    large tree is pruned using cost-complexity pruning, which we now describe."
+
 General Steps:
 1. create simple, small binary dataset (e.g. heart disease from src)
 2. create data boostrappig function / bagging function
@@ -41,8 +51,9 @@ done | tree.train(data) # take output from training one node, give it to childre
 done | tree.query(idat) # if result is integer, go to node. if list, give result
 done | create a single decision tree automatically (optimal)
 done | bootstrap a dataset
-???? | create a single decision tree automatically (randomized)
+done | create a single decision tree automatically (randomized)
 ???? | create a random forest
+???? | rewrite decision tree autogen to breadth-first create tree, rather than depth-first, or rewrite to use max-depth instead of maxnodes
 ???? | ??
 ???? | ??
 
@@ -63,7 +74,7 @@ for partitioning help, want a function that:
 
 '''
 
-selfdat=[ # taken from DataScienceFromScratch, p221
+dat=[ # taken from DataScienceFromScratch, p221
 #Lv La Tw Ph dw
 [2, 0, 0, 0, 0], # parameters: level / language / tweets / has phd / did well
 [2, 0, 0, 1, 0], # 0/1/2 = junior / mid / senior
@@ -146,19 +157,6 @@ def countClasses(data,nclasses):
     for i in data:
         s[i]+=1
     return s
-
-def maskmerge(mask1,mask2):
-    ''' be able to use mask of standardized size across all nodes and be able to
-    assume mask1 is the super-mask '''
-    m3=[]
-    j=0
-    for i in range(len(mask1)):
-        if(mask1[i]):
-            m3.append(mask2[j])
-            j+=1
-        else:
-            m3.append(mask1[i])
-    return np.array(m3)
 
 def gini(res0,res1=None,nclasses=2):
     ''' Get the gini impurity based on the output of an entire node (both
@@ -410,12 +408,6 @@ class DecisionTree:
         has children to tell its children to train on that data as well. this is
         done by the root node access to both the data as well as the dict of
         nodes, which all nodes will use as a guide during training. '''
-        # KJG191130: for now, won't use "local convention", takes too much effort to convert between
-        # need to change data back to slightly more typical array
-        # inp = []
-        # for idat in data:
-        #     inp.append( np.append( idat[0],np.argmax(idat[1]) ) )
-        # inp=np.array(inp)
 
         self.node[0].train(data,self.node)
 
