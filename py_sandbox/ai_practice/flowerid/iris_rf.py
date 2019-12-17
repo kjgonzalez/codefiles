@@ -92,11 +92,10 @@ dat=[ # taken from DataScienceFromScratch, p221
 [0, 1, 0, 1, 0]
 ]
 
-# first, work on getting a decision tree to work (with a single node)
 import numpy as np
 from klib import data as da
 from klib import listContents as lc
-dat=np.array(selfdat,dtype=object) # using this type keeps ints as ints
+dat=np.array(dat,dtype=object) # using this type keeps ints as ints
 # will now modify data to match how iris dataset is loaded, to see if the decision tree behaves properly
 
 def convertToDS(data):
@@ -344,13 +343,19 @@ class DecisionTree:
         infos=[self.node[i].info for i in self.node.keys()]
         return infos
 
-    def autogen(self,data,varlim=None):
+    def autogen(self,data,optimal=True):
         ''' Generate a tree given the data. can select if making an optimal tree
             or non-optimal as part of a random forest.
         '''
-        self.create_root(data,varlim=varlim)
-        self.tryAdd(0,data,0,varlim=varlim)
-        self.tryAdd(0,data,1,varlim=varlim)
+        self.create_root(data,optimal=optimal)
+        # KJG191217: in order to balance which direction the tree grows in, will
+        # randomly select left or right. workaround for depth-first instead of breadth-first
+        if(np.random.randint(2)):
+            self.tryAdd(0,data,0,optimal=optimal)
+            self.tryAdd(0,data,1,optimal=optimal)
+        else:
+            self.tryAdd(0,data,1,optimal=optimal)
+            self.tryAdd(0,data,0,optimal=optimal)
         # once everything is created, backfill the structure info
         struct=dict()
         for i in self.node.keys():
@@ -358,20 +363,28 @@ class DecisionTree:
             struct[i]=[temp.param,temp.thresh,[temp.yes_kid,temp.no_kid]]
         self.structure=struct
 
-    def create_root(self,data,varlim=None):
+    def create_root(self,data,optimal=True):
         ''' for now, it might be easiest to separate the root and internal node
             creation subroutines.
         '''
         ops = getOptions(data,allmetrics=False,rounding=5)
-        if(varlim!=None):
-            ''' randomly select n variables to keep in list '''
+        # import ipdb; ipdb.set_trace()
+        if(optimal):
+            p,t,g = ops[np.argmin(ops[:,-1])] # return param,thresh, metric(s)
 
-
-        p,t,g = ops[np.argmin(ops[:,-1])] # return param,thresh, metric(s)
+        else:
+            ''' randomly select m variables to keep in list out of n choices '''
+            # want: to return a "best split" from m variables out of the n available ones
+            c=np.unique(ops[:,0])
+            np.random.shuffle(c)
+            d=c[:round(len(c)**0.5)] # choose m=sqrt(n) variables to create split
+            mask=[i in d for i in ops[:,0]] # create filter
+            ops2=ops[mask]
+            p,t,g = ops2[np.argmin(ops2[:,-1])] # get best split from reduced choices
         self.node[0] = Node(p,t)
         self.node[0].ID=0
 
-    def tryAdd(self,r,data,direction,varlim=None):
+    def tryAdd(self,r,data,direction,optimal=True):
         ''' recursive function for branches of root.
         INPUTS:
             * r = root / parent node index
@@ -384,7 +397,18 @@ class DecisionTree:
         if(len(dat)<2):
             # not enough data to separate
             return None
-        iparam,ithresh,iscore=best_split(dat)
+        ops = getOptions(dat,allmetrics=False,rounding=5)
+        if(optimal):
+            iparam,ithresh,iscore = ops[np.argmin(ops[:,-1])]
+        else:
+            # find sub-optimal split for random forest
+            c=np.unique(ops[:,0])
+            d=c[:round(len(c)**0.5)] # choose m=sqrt(n) variables to create split
+            mask=[i in d for i in ops[:,0]] # create filter
+            ops2=ops[mask]
+            # XX for the moment, will leave this alone and not check if there are too few options
+            iparam,ithresh,iscore = ops2[np.argmin(ops2[:,-1])] # get best split from reduced choices
+
         if(iscore>=leaf_score):
             return None # exit condition
         # otherwise, create new node
@@ -397,11 +421,17 @@ class DecisionTree:
         else: self.node[r].no_kid=nnode
         # now gotta deal with new node's potential children:
 
-        if(len(self.node.keys())<self.maxnodes):
-            self.tryAdd(nnode,dat,0)
-        if(len(self.node.keys())<self.maxnodes):
-            self.tryAdd(nnode,dat,1)
-
+        # KJG191217: just like with create_root, randomly select direction
+        if(np.random.randint(2)):
+            if(len(self.node.keys())<self.maxnodes):
+                self.tryAdd(nnode,dat,0)
+            if(len(self.node.keys())<self.maxnodes):
+                self.tryAdd(nnode,dat,1)
+        else:
+            if(len(self.node.keys())<self.maxnodes):
+                self.tryAdd(nnode,dat,1)
+            if(len(self.node.keys())<self.maxnodes):
+                self.tryAdd(nnode,dat,0)
 
     def train(self,data):
         ''' will train recursively (depth first) by having any node that
