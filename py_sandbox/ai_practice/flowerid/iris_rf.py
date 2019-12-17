@@ -449,6 +449,32 @@ class DecisionTree:
             res = self.node[res].query(idat)
         return res
 
+class RandomForest:
+    ''' create a random forest from a large number of RF-trees. use to classify
+        some given data.
+    '''
+    def __init__(self,nclasses,metric=0,nTrees=21):
+        self.nTrees=nTrees
+        self.tree=[]
+        self.nclasses=nclasses
+        self.metric=metric
+    def genTrees(data):
+        ''' for each tree:
+            1. bootstrap the data
+            2. create a non-optimal tree
+            3.
+        '''
+        for i in range(self.nTrees):
+            self.tree=[DecisionTree(self.nclasses,metric=self.metric)]
+            data_bootstrap=getBootstrap(data)
+            self.tree[i].autogen(data_bootstrap,optimal=False)
+            self.tree[i].train(data_bootstrap)
+
+    def query(self,idat):
+        res=[]
+        for itree in self.tree:
+            res.append(itree.query(idat))
+        return res
 
 # quick test to make sure things are working properly (including allmetrics)
 def tests():
