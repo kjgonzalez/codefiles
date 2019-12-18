@@ -156,7 +156,6 @@ def countClasses(data,nclasses):
         * classes range from 0 to n
         * data is a 1-D array of integers
     '''
-    print('countclasses:',nclasses)
     s=np.zeros(nclasses)
     for i in data:
         s[i]+=1
@@ -325,7 +324,7 @@ class DecisionTree:
         parent_list=parent_list[np.argsort(parent_list[:,0])][:,1] # sort array, then keep only 2nd column and use by calling index
         for ind in structure.keys():
             param,thresh,kids=structure[ind]
-            self.node[ind] = Node(param,thresh,self.ncls,met=self.metric)
+            self.node[ind] = Node(param,thresh,met=self.metric,nclasses=self.ncls)
             # here, need to create connection to children
             self.node[ind].yes_kid=kids[0]
             self.node[ind].no_kid=kids[1]
@@ -376,7 +375,7 @@ class DecisionTree:
         ''' for now, it might be easiest to separate the root and internal node
             creation subroutines.
         '''
-        ops = getOptions(data,allmetrics=False,rounding=5)
+        ops = getOptions(data,allmetrics=False,rounding=5,nclasses=self.ncls)
         # import ipdb; ipdb.set_trace()
         if(optimal):
             p,t,g = ops[np.argmin(ops[:,-1])] # return param,thresh, metric(s)
@@ -390,7 +389,7 @@ class DecisionTree:
             mask=[i in d for i in ops[:,0]] # create filter
             ops2=ops[mask]
             p,t,g = ops2[np.argmin(ops2[:,-1])] # get best split from reduced choices
-        self.node[0] = Node(p,t)
+        self.node[0] = Node(p,t,nclasses=self.ncls)
         self.node[0].ID=0
 
     def tryAdd(self,r,data,direction,optimal=True):
@@ -406,7 +405,7 @@ class DecisionTree:
         if(len(dat)<2):
             # not enough data to separate
             return None
-        ops = getOptions(dat,allmetrics=False,rounding=5)
+        ops = getOptions(dat,allmetrics=False,rounding=5,nclasses=self.ncls)
         if(len(ops)<1):
             return None
         if(optimal):
@@ -427,7 +426,7 @@ class DecisionTree:
             return None # exit condition
         # otherwise, create new node
         nnode=len(self.node.keys())
-        self.node[nnode]=Node(iparam,ithresh)
+        self.node[nnode]=Node(iparam,ithresh,nclasses=self.ncls)
         self.node[nnode].parent=r
         self.node[nnode].ID=nnode
         if(direction==0):
@@ -437,14 +436,14 @@ class DecisionTree:
 
         # KJG191217: just like with create_root, randomly select direction
         if(np.random.randint(2)):
-            if(len(self.node.keys())<self.maxnodes-1):
+            if(len(self.node.keys())<self.maxnodes):
                 self.tryAdd(nnode,dat,0)
-            if(len(self.node.keys())<self.maxnodes-1):
+            if(len(self.node.keys())<self.maxnodes):
                 self.tryAdd(nnode,dat,1)
         else:
-            if(len(self.node.keys())<self.maxnodes-1):
+            if(len(self.node.keys())<self.maxnodes):
                 self.tryAdd(nnode,dat,1)
-            if(len(self.node.keys())<self.maxnodes-1):
+            if(len(self.node.keys())<self.maxnodes):
                 self.tryAdd(nnode,dat,0)
 
     def train(self,data):
@@ -487,7 +486,6 @@ class RandomForest:
             self.tree+=[DecisionTree(self.nclasses,metric=self.metric,maxnodes=self.maxnodes)]
             data_bootstrap=getBootstrap(data)
             self.tree[i].autogen(data_bootstrap,optimal=False)
-            import ipdb; ipdb.set_trace()
             self.tree[i].train(data_bootstrap)
     def query(self,idat):
         res=[]
@@ -547,16 +545,16 @@ if(__name__=='__main__'):
     ds_train=dataset[:ntrain]
     ds_test =dataset[ntrain:]
 
-
-    rf = RandomForest(nclasses=3,nTrees=100,maxnodes=3)
-    # import ipdb; ipdb.set_trace()
+    # at this point, working with iris dataset. has 3 classes
+    rf = RandomForest(nclasses=3,nTrees=60,maxnodes=9)
     rf.genTrees(ds_train)
-
+    nNodes=[len(rf.tree[i].node.keys()) for i in range(len(rf.tree))]
+    print('max and average number of nodes:',np.max(nNodes),np.mean(nNodes))
     scorecard=[]
     for idat in ds_test:
         answer=np.argmax(idat[1]) # KJG191217: need to change this later
         pred = np.argmax(rf.query(idat[0]))
-        print(pred,'|',answer)
+        # print(pred,'|',answer)
         scorecard+=[1] if(answer==pred) else [0]
     print('performance:',sum(scorecard)/len(scorecard))
 
