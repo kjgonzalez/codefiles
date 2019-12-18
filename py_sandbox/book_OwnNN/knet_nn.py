@@ -17,8 +17,7 @@ done   | basic network working based on book
 done   | network contained in a class
 done   | able to load and save weights
 done   | network can be forced to retrain
-????   | network can have a desired number of layers
-????   | network can be configured as wanted (based on given input)
+done   | network can have a desired number of layers
 '''
 import numpy as np
 import os, argparse, time

@@ -53,9 +53,9 @@ done | create a single decision tree automatically (optimal)
 done | bootstrap a dataset
 done | create a single decision tree automatically (randomized)
 done | create a random forest
-inpr | make current rf implementation compatible with how iris data is loaded
+done | make current rf implementation compatible with how iris data is loaded
 ???? | rewrite decision tree autogen to breadth-first create tree, rather than depth-first, or rewrite to use max-depth instead of maxnodes
-???? | ??
+???? | build decision tree how given in ElementsStatisticalLearning book (with pruning)
 
 current isuses:
 * create a proper decision tree, following correct pruning techniques, etc
@@ -127,7 +127,7 @@ def findthresholds(data):
     threshs=[temp[i:i+2].mean() for i in inds]
     return threshs
 
-def getOptions(data,desmetric=0,allmetrics=False,rounding=5):
+def getOptions(data,nclasses=2,desmetric=0,allmetrics=False,rounding=5):
     ''' Given an input array (assume last parameter is ground truth), determine
         type of parameter, check entropy for each combination, and return
         results.
@@ -139,7 +139,7 @@ def getOptions(data,desmetric=0,allmetrics=False,rounding=5):
         # for now, will not worry about continuous data and massive number of splits there can be...
         threshs=findthresholds(data[:,iparam])
         for ithresh in threshs:
-            inode = Node(iparam,thresh=ithresh,met=desmetric)
+            inode = Node(iparam,thresh=ithresh,met=desmetric,nclasses=nclasses)
             if(allmetrics):
                 # all metrics (yes,no,overall)
                 score=[i.round(rounding) for i in inode.check(data)[2]]
@@ -150,19 +150,13 @@ def getOptions(data,desmetric=0,allmetrics=False,rounding=5):
                 arr.append([int(iparam),ithresh,score])
     return np.array(arr,dtype=object)
 
-def best_split(data,desmetric=0,allmetrics=False,rounding=5):
-    ''' In given data, return best option for splitting (p,t,metric). can be
-        given a variable limit for automatically choosing sub-optimal split
-    '''
-    options = getOptions(data,allmetrics=allmetrics,rounding=rounding)
-    return options[np.argmin(options[:,-1])] # return param,thresh, metric(s)
-
 def countClasses(data,nclasses):
     ''' given some data and set of classes, count each class out
     ASSUMPTIONS:
         * classes range from 0 to n
         * data is a 1-D array of integers
     '''
+    print('countclasses:',nclasses)
     s=np.zeros(nclasses)
     for i in data:
         s[i]+=1
@@ -273,8 +267,9 @@ class Node:
         count0=countClasses(res0[:,-1],self.ncls)
         count1=countClasses(res1[:,-1],self.ncls)
 
-        self.yes_ans=np.argmax(count0)
-        self.no_ans =np.argmax(count1)
+        self.yes_ans= count0/count0.sum()
+        self.no_ans = count1/count1.sum()
+
         if(type(_nodes)==type(None)):
             # no need to recursively train
             return res0,res1
@@ -357,16 +352,19 @@ class DecisionTree:
         ''' Generate a tree given the data. can select if making an optimal tree
             or non-optimal as part of a random forest.
         '''
+        # HERE, will transform data from local convention back to typical convention
+        data2 = [list(data[i][0])+[np.argmax(data[i][1])] for i in range(len(data))]
+        data2=np.array(data2,dtype=object)
 
-        self.create_root(data,optimal=optimal)
+        self.create_root(data2,optimal=optimal)
         # KJG191217: in order to balance which direction the tree grows in, will
         # randomly select left or right. workaround for depth-first instead of breadth-first
         if(np.random.randint(2)):
-            self.tryAdd(0,data,0,optimal=optimal)
-            self.tryAdd(0,data,1,optimal=optimal)
+            self.tryAdd(0,data2,0,optimal=optimal)
+            self.tryAdd(0,data2,1,optimal=optimal)
         else:
-            self.tryAdd(0,data,1,optimal=optimal)
-            self.tryAdd(0,data,0,optimal=optimal)
+            self.tryAdd(0,data2,1,optimal=optimal)
+            self.tryAdd(0,data2,0,optimal=optimal)
         # once everything is created, backfill the structure info
         struct=dict()
         for i in self.node.keys():
@@ -455,7 +453,11 @@ class DecisionTree:
         done by the root node access to both the data as well as the dict of
         nodes, which all nodes will use as a guide during training. '''
 
-        self.node[0].train(data,self.node)
+        # HERE, will transform data from local convention back to typical convention
+        data2 = [list(data[i][0])+[np.argmax(data[i][1])] for i in range(len(data))]
+        data2=np.array(data2,dtype=object)
+
+        self.node[0].train(data2,self.node)
 
     def query(self,idat):
         ''' traverse branches of tree based on given input data '''
@@ -485,32 +487,32 @@ class RandomForest:
             self.tree+=[DecisionTree(self.nclasses,metric=self.metric,maxnodes=self.maxnodes)]
             data_bootstrap=getBootstrap(data)
             self.tree[i].autogen(data_bootstrap,optimal=False)
+            import ipdb; ipdb.set_trace()
             self.tree[i].train(data_bootstrap)
     def query(self,idat):
         res=[]
         for itree in self.tree:
-            res.append(itree.query(idat))
+            res.append(np.argmax(itree.query(idat)))
         res2=countClasses(res,self.nclasses)
         return res2/res2.sum()
 
 # quick test to make sure things are working properly (including allmetrics)
 def tests():
     assert (getOptions(dat)[:,-1]==getOptions(dat,allmetrics=True)[:,-1]).all() # getoptions not working
-    assert getOptions(dat)[:,-1].min()==best_split(dat,allmetrics=True)[-1] # best_split not working
     # with sample dataset, as of KJG191210, this is what optimal, greedy decision tree looks like
     s=dict()
     s[0]=[2,0.5,[1,3]];         s[1]=[0,0.5,[None,2]]
     s[2]=[3,0.5,[None,None]];   s[3]=[0,1.5,[None,4]]
     s[4]=[0,0.5,[None,5]];      s[5]=[3,0.5,[None,None]]
     tree1=DecisionTree(2);       tree1.generateManual(s)
-    tree1.train(dat)
-    for idat in dat:
-        assert tree1.query(idat[:-1])==idat[-1]
+    tree1.train(ds)
+    for idat in ds:
+        assert np.argmax(tree1.query(idat[0]))==np.argmax(idat[1])
     tree2=DecisionTree(2)
-    tree2.autogen(dat)
-    tree2.train(dat)
-    for idat in dat:
-        assert tree2.query(idat[:-1])==idat[-1]
+    tree2.autogen(ds)
+    tree2.train(ds)
+    for idat in ds:
+        assert np.argmax(tree2.query(idat[0]))==np.argmax(idat[1])
 tests()
 
 if(__name__=='__main__'):
@@ -523,19 +525,37 @@ if(__name__=='__main__'):
         np.random.seed(0)
         print('seed controlled')
 
-    ds=npshuffle(dat)
-    ntrain = 10
-    ds_train = ds[:ntrain]
-    ds_test  = ds[ntrain:]
+    # DATALOADING ==============================================================
+    print("loading data...")
+    dataset=[]
+    for irow in open(da.irispath):
+        iraw = irow.strip().split(',') # 1x5 data
+        dmin= 0.0# domain minimum
+        dmax= 10.0# domain maximum
+        idat = (0.98/(dmax-dmin))*(np.array(iraw[:-1],dtype=float)-dmin)+0.01 # 0-10 to 0.01-0.99
+        ival = iraw[-1]
+        if('setosa' in ival): ival=0
+        elif('versicolor' in ival): ival=1
+        elif('virginica' in ival): ival=2
+        else: raise Exception('error, species not recognized')
+        ians = np.zeros(3)+0.01
+        ians[ival] = 0.99
+        dataset.append([idat,ians])
+    # at this point, have a 150x5 array of data
+    dataset=npshuffle(dataset) # shuffle data
+    ntrain = 120
+    ds_train=dataset[:ntrain]
+    ds_test =dataset[ntrain:]
 
 
-    rf = RandomForest(nclasses=2,nTrees=100,maxnodes=3)
+    rf = RandomForest(nclasses=3,nTrees=100,maxnodes=3)
+    # import ipdb; ipdb.set_trace()
     rf.genTrees(ds_train)
 
     scorecard=[]
     for idat in ds_test:
-        answer=idat[-1] # KJG191217: need to change this later
-        pred = np.argmax(rf.query(idat[:-1]))
+        answer=np.argmax(idat[1]) # KJG191217: need to change this later
+        pred = np.argmax(rf.query(idat[0]))
         print(pred,'|',answer)
         scorecard+=[1] if(answer==pred) else [0]
     print('performance:',sum(scorecard)/len(scorecard))
