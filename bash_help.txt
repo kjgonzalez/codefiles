@@ -1,4 +1,7 @@
 = General Tips / Help ======================================
+RASPBERRY PI ONLY: check temperature
+    /opt/vc/bin/vcgencmd measure_temp
+
 clone into repo using ssh (rsa)
     1. copy in rsa key
     2. git clone git@github.com:EXAMPLE/REPO.git
