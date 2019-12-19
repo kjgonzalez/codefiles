@@ -1,6 +1,7 @@
 '''
 source:
 https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_gui/py_video_display/py_video_display.html
+KJG191219: confirmed to work on rpi
 '''
 import numpy as np
 import cv2
