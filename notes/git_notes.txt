@@ -35,3 +35,4 @@ DEAL WITH BRANCH / MERGE CONFLICTS =========================
 2. git add <affected file(s)>
 3. git rebase --continue
    (issue should be resolved)
+
