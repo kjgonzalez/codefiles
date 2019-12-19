@@ -4,17 +4,22 @@ https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_gui/py_video_display/py_vid
 '''
 import numpy as np
 import cv2
-from sys import argv
-import klib
-assert klib.PYVERSION == 3, "Please use python version 3"
+import sys,argparse
+assert sys.version_info[0] == 3, "Please use python version 3"
 
-if(argv[1].isdigit()):
-    vidsrc=int(argv[1])
-else:
-    print('ERROR: argument expected as integer')
-    exit()
+# if(argv[1].isdigit()):
+#     vidsrc=int(argv[1])
+# else:
+#     print('ERROR: argument expected as integer')
+#     exit()
 
-cap = cv2.VideoCapture(vidsrc)
+p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+p.add_argument('--src',default=0,type=int,help='camera source')
+args=p.parse_args()
+
+
+cap = cv2.VideoCapture(args.src)
+print('press "q" to exit')
 while(True):
     # Capture frame-by-frame
     ret, frame = cap.read()
