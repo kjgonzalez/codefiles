@@ -6,6 +6,15 @@ Objective: make simple python script to monitor network download / upload speed
 note: in the future, may care about which network
 	connection am looking at. for now, will stick to
 	ethernet.
+
+possible network connections at sample house:
+    Ethernet
+    Ethernet 3
+    Local Area Connection* 1
+    Local Area Connection* 2
+    Ethernet 2
+    Wi-Fi
+    Loopback Pseudo-Interface 1
 '''
 
 import psutil
@@ -48,16 +57,16 @@ def calculateRate(dt,source):
 	return (rateDn,rateUp)
 
 if(len(argv)<2):
-	print 'no "internet source" input arg, using default values'
+	print('no "internet source" input arg, using default values')
 	s = 1.0
 	n = 100
 	source='Ethernet'
-	
+
 else:
 	s = float(argv[1])
 	n = int(argv[2])
 	source = argv[3]
-	print 'Collecting data every',s,'seconds,', n,'times, from',source,'. tuple of (down,up) speeds in Kb/s'
+	print('Collecting data every',s,'seconds,', n,'times, from',source,'. tuple of (down,up) speeds in Kb/s')
 
 for i in range(n):
-	print calculateRate(s,source)
+	print(calculateRate(s,source))
