@@ -1,0 +1,34 @@
+= HOW TO USE ROS ACROSS TWO COMPUTERS ================================
+
+srcs: 
+* http://wiki.ros.org/ROS/Tutorials/MultipleMachines
+* http://wiki.ros.org/ROS/NetworkSetup
+* https://answers.ros.org/question/163556/how-to-solve-couldnt-find-an-af_inet-address-for-problem/
+
+
+notes: 
+* get local ip address: "hostname -I" on given machine (only N.N.N.N part)
+* PRE-REQUISITE: each computer must be able to ssh into the other (as needed) 
+* this works across ros versions (tested between kinetic-melodic)
+* if you will be using the same host and multiple computers consistently, consider saving ROS_MASTER_URI information in the bashrc folder as well
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+First-Time setup:
+- ON MASTER COMPUTER (name "main") -----------------------------------
+echo "export ROS_IP=<MAIN_IP_ADDRESS>" >> ~/.bashrc
+echo "export ROS_MASTER_URI=http://<MAIN_IP_ADDRESS>:11311" >> ~/.bashrc
+source ~/.bashrc
+
+- ON SLAVE COMPUTER (name "remote") ----------------------------------
+echo "export ROS_IP=<REMOTE_IP_ADDRESS>" >> ~/.bashrc # 
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+Start-Up
+- ON MASTER COMPUTER (name "main") -----------------------------------
+roscore
+# open new window
+# rosrun / roslaunch / python (package / script name)
+
+- ON SLAVE COMPUTER (name "remote") ----------------------------------
+export ROS_MASTER_URI=http://<MAIN_IP_ADDRESS>:11311 # IN EACH WINDOW
+# rosrun / roslaunch / python (package / script name)
