@@ -35,9 +35,6 @@ import os, sys
 sys.path.append(os.path.abspath('../../book_OwnNN'))
 from knet_nn import NeuralNetwork
 
-# KJG200112: at this point, going to use a bit of scikit for metrics
-from sklearn.metrics import confusion_matrix as cm
-
 def npshuffle(nparr):
     # enable random shuffling of array without being in-place
     npa2=np.copy(nparr)
@@ -104,6 +101,8 @@ if(__name__=='__main__'):
     # print(scorecard)
     print('accuracy:',sum(scorecard)/len(scorecard))
 
+    # KJG200112: at this point, going to use a bit of scikit for metrics
+    from sklearn.metrics import confusion_matrix as cm
     CM = cm(ytrue,ypred) # confusion matrix
     print('results of confusion matrix:\n',CM)
 # eof

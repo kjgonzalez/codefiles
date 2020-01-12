@@ -86,9 +86,6 @@ import numpy as np
 import argparse, time
 from klib import data as da
 
-# KJG200112: at this point, going to use a bit of scikit for metrics
-from sklearn.metrics import confusion_matrix as cm
-
 dat=np.array(dat,dtype=object) # using this type keeps ints as ints
 # will now modify data to match how iris dataset is loaded, to see if the decision tree behaves properly
 
@@ -552,6 +549,8 @@ if(__name__=='__main__'):
         scorecard+=[1] if(answer==pred) else [0]
     print('performance:',sum(scorecard)/len(scorecard))
 
+    # KJG200112: at this point, going to use a bit of scikit for metrics
+    from sklearn.metrics import confusion_matrix as cm
     CM = cm(ytrue,ypred) # confusion matrix
     print('results of confusion matrix:\n',CM)
     # eof
