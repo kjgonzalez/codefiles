@@ -30,6 +30,9 @@ import numpy as np
 from klib import data as da
 import argparse, time, os, sys
 
+# KJG200112: at this point, going to use a bit of scikit for metrics
+from sklearn.metrics import confusion_matrix as cm
+
 def npshuffle(nparr):
     # enable random shuffling of array without being in-place
     npa2=np.copy(nparr)
@@ -148,14 +151,21 @@ if(__name__=='__main__'):
     # print('pcls:\n',gnb.pcls.round(4))
 
     # TESTING PHASE ============================================================
-    print('P | A')
+    # print('P | A')
     scorecard=[]
+    ytrue = []
+    ypred = []
     for idat in ds_test:
         answer=np.argmax(idat[1])
         pred=np.argmax(gnb.query(idat[0]))
-        print(answer,'|',pred)
+        ytrue.append(answer)
+        ypred.append(pred)
+
+        # print(answer,'|',pred)
         scorecard+=[1] if(answer==pred) else [0]
     # print(scorecard)
     print('performance:',sum(scorecard)/len(scorecard))
 
+    CM = cm(ytrue,ypred) # confusion matrix
+    print('results of confusion matrix:\n',CM)
 # eof

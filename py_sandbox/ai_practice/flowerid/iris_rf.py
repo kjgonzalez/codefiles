@@ -54,19 +54,6 @@ done | bootstrap a dataset
 done | create a single decision tree automatically (randomized)
 done | create a random forest
 done | make current rf implementation compatible with how iris data is loaded
-???? | rewrite decision tree autogen to breadth-first create tree, rather than depth-first, or rewrite to use max-depth instead of maxnodes
-???? | build decision tree how given in ElementsStatisticalLearning book (with pruning)
-
-current isuses:
-* create a proper decision tree, following correct pruning techniques, etc
-*
-
-
-want to create a tree based on an format, such as:
-treedef=dict()
-treedef[0]=[[props],[children]] # root node
-treedef[1]=[[props],[children]]
-
 
 for partitioning help, want a function that:
     0. given a dataset in matrix form
@@ -74,8 +61,6 @@ for partitioning help, want a function that:
     2. determines if binary, discrete, or continuous
     3. check entropy across all parameters / thresholds
     4. print results (or return best option)
-
-
 
 '''
 
@@ -100,6 +85,10 @@ dat=[ # taken from DataScienceFromScratch, p221
 import numpy as np
 import argparse, time
 from klib import data as da
+
+# KJG200112: at this point, going to use a bit of scikit for metrics
+from sklearn.metrics import confusion_matrix as cm
+
 dat=np.array(dat,dtype=object) # using this type keeps ints as ints
 # will now modify data to match how iris dataset is loaded, to see if the decision tree behaves properly
 
@@ -551,11 +540,18 @@ if(__name__=='__main__'):
     nNodes=[len(rf.tree[i].node.keys()) for i in range(len(rf.tree))]
     print('max and average number of nodes:',np.max(nNodes),np.mean(nNodes))
     scorecard=[]
+    ytrue = []
+    ypred = []
     for idat in ds_test:
         answer=np.argmax(idat[1]) # KJG191217: need to change this later
         pred = np.argmax(rf.query(idat[0]))
+        ytrue.append(answer)
+        ypred.append(pred)
+
         # print(pred,'|',answer)
         scorecard+=[1] if(answer==pred) else [0]
     print('performance:',sum(scorecard)/len(scorecard))
 
+    CM = cm(ytrue,ypred) # confusion matrix
+    print('results of confusion matrix:\n',CM)
     # eof
