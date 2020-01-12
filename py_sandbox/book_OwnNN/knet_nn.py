@@ -38,7 +38,7 @@ class NeuralNetwork:
         * LayerList expected structure: [inode,hnode0,...,hnodeN,outnode]
             inode should be size of input data, outnode should be size of
             desired output data (and MUST match labeled data)
-        * learningrate: scalar float, alpha value of network.
+        * learningrate: scalar float, value of network. (alpha != LR)
         '''
         self.lr = learningrate
 
