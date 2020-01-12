@@ -574,4 +574,11 @@ def root_newton(function,yValue,start_point,eps=1e-6,maxit=10000):
         gval=g(x)
         iter+=1
     return x,iter,gval+yValue
+
+def npshuffle(nparr):
+    ''' enable random shuffling of array without being in-place '''
+    npa2=np.copy(nparr)
+    np.random.shuffle(npa2)
+    return npa2
+
 # eof
