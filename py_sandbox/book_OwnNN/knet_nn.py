@@ -2,9 +2,10 @@
 Author: Kris Gonzalez
 DateCreated: 190320
 Objective: Improve final network created to be able to do new things.
-KJG191004: want to be able to have as many hidden layers as wanted, so will need
+NOTES:
+* KJG191004: want to be able to have as many hidden layers as wanted, so will need
     to generalize this in feed forward, backprop, etc
-
+* KJG200112: adding confusion matrix
 
 Overall goals:
     * save model to avoid retraining
@@ -19,8 +20,10 @@ done   | able to load and save weights
 done   | network can be forced to retrain
 done   | network can have a desired number of layers
 '''
+
 import numpy as np
 import os, argparse, time
+
 # note: random seed controlled below in main
 class NeuralNetwork:
     ''' Generate an n-layer, arbitrarily shaped fully-connected neural network.
@@ -115,7 +118,7 @@ if(__name__=='__main__'):
     nn=NeuralNetwork(layers,LR)
 
     # DATA LOADING =========================================
-    print('will load data')
+    print('will load MNIST dataset (local version)')
     # format labels and answers as needed to be read by network
     dataset=[]
     for irow in open('../../lib/data/mnist_5k.csv'):
@@ -162,17 +165,27 @@ if(__name__=='__main__'):
     # at this point, need to actually "score" the networkn=0
     t0=time.time()
     scorecard=[] # append 1 if right, 0 if wrong
+    ytrue = []
+    ypred = []
     for idat in ds_test:
         answer=np.argmax(idat[1])   # load ground truth answer
         pred_raw=nn.query(idat[0])  # get raw values from network
         predict=np.argmax(pred_raw) # interpret prediction
+
+        ytrue.append(answer)
+        ypred.append(predict)
         scorecard+= [1] if(answer==predict) else [0] # append answer
         # import ipdb;ipdb.set_trace()
     time_test=time.time()-t0
-    print('time to test:',time_test)
-    print('samples/second in testing:',len(ds_test)/time_test)
+    print('time to test:',round(time_test,4))
+    print('samples/second in testing:',round(len(ds_test)/time_test,1))
     # once the test set has been iterated through, get (%) correct as score:
-    print('network performance:',sum(scorecard)/len(scorecard))
-    # import ipdb;ipdb.set_trace()
+    print('accuracy:',sum(scorecard)/len(scorecard))
+
+    # don't want to import if being used as module
+    from sklearn.metrics import confusion_matrix as cm
+
+    CM = cm(ytrue,ypred)
+    print('confusion matrix:\n',CM,sep='')
 
 # eof
