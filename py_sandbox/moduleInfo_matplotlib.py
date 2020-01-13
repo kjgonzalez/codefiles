@@ -43,4 +43,22 @@ y=np.random.rand(5)
 # x=['[{},{})'.format(i,i+10) for i in range(0,80,10)]
 p.bar(x,y)
 
+''' customization while using "f,p" ======================================== '''
+
+f,p = plt.subplots()
+x=np.random.rand(5)
+y=np.random.rand(5)
+scale=7 # general size
+ratio=2 # how wide, such as 4:3 = 1.33
+f,p=plt.subplots(1,2,figsize=(scale*ratio,scale))
+p[0].plot(x,y)
+p[0].set_title('title')
+p[0].set_xlim([0,1])
+p[0].set_ylim([0,1])
+p[0].set_xlabel('xlabel')
+p[0].set_ylabel('ylabel')
+p[0].grid()
+p[0].set_aspect('equal')
+
+
 # eof
