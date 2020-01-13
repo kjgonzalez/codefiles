@@ -19,6 +19,7 @@ KJG200112: to be as similar as possible to self-made nn, use:
 import numpy as np
 from sklearn.neural_network import MLPClassifier
 from sklearn import datasets
+from sklearn.metrics import confusion_matrix as cm
 def npshuffle(nparr):
     # enable random shuffling of array without being in-place
     npa2=np.copy(nparr)
@@ -26,6 +27,7 @@ def npshuffle(nparr):
     return npa2
 
 np.random.seed(0)
+print('seed controlled')
 
 sknn = MLPClassifier(hidden_layer_sizes=(4, ),
     activation='logistic', # changed
@@ -47,16 +49,28 @@ labels = iris['target']
 
 # randomly reorder all values in dataset for splitting into train/test
 mask_shuffle = npshuffle(np.arange(len(ds)))
+ntrain = 120
 ds=ds[mask_shuffle]
 labels=labels[mask_shuffle]
+ds_train=ds[:ntrain]
+ds_test=ds[ntrain:]
+labels_train=labels[:ntrain]
+labels_test=labels[ntrain:]
 
+# train and test on everything
+sknn.fit(ds_train,labels_train)
 
+ypred = sknn.predict(ds_test)
+ytrue = labels_test[:]
 
-print(labels)
+# as an example, show probabilities when predicting
+print(sknn.predict_proba(ds_test[:10]).round(3))
 
+# get some stats about results
+ans = ypred==ytrue
+print('accuracy:',ans.sum()/len(ans))
 
-
-
-
+CM = cm(ytrue,ypred)
+print('results of confusion matrix:\n',CM,sep='')
 
 # eof
