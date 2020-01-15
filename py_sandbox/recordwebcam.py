@@ -4,18 +4,27 @@ https://docs.opencv.org/3.0-beta/doc/py_tutorials/py_gui/py_video_display/py_vid
 import numpy as np
 import cv2
 from sys import argv
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(3)
 
 # Define the codec and create VideoWriter object
 fourcc = cv2.VideoWriter_fourcc(*'XVID')
-out = cv2.VideoWriter('output.avi',fourcc, 20.0, (640,480))
+
+def changeResolution(feed,newheight=10000,newwidth=10000):
+	cap.set(cv2.CAP_PROP_FRAME_WIDTH, newheight)
+	cap.set(cv2.CAP_PROP_FRAME_HEIGHT,newwidth)
+	return 0
+
+changeResolution(cap)
+a = (640,480)
+a = (int(cap.get(cv2.CAP_PROP_FRAME_WIDTH)),int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT)))
+out = cv2.VideoWriter('output.avi',fourcc, 20.0, a)
 
 while(cap.isOpened()):
     ret, frame = cap.read()
     if ret==True:
-        frame = cv2.flip(frame,0)
+        # frame = cv2.flip(frame,0)
 
-        # write the flipped frame
+        # write the frame
         out.write(frame)
 
         cv2.imshow('frame',frame)
