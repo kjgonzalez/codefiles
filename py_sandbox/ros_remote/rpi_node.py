@@ -21,7 +21,7 @@ def takephoto(src,savepath='.'):
     cap=cv2.VideoCapture(src)
     ret, frame = cap.read()
     cap.release()
-    fpath = os.path.join(savepath,now())
+    fpath = os.path.join(savepath,now()+'.jpg')
     cv2.imwrite(fpath,frame)
     print('photo saved:',fpath)
 
