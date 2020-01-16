@@ -43,7 +43,7 @@ def temp_talker():
 
 def imgout():
     ''' publish images (aka video stream). can be checked with rviz '''
-    pub = rospy.Publisher('campub', Image, queue_size=10) # topic here
+    pub = rospy.Publisher(args.topic, Image, queue_size=10) # topic here
     rospy.init_node('campub', anonymous=True) # publisher here
     rate = rospy.Rate(1) # default:10hz
     bridge=CvBridge()
@@ -56,11 +56,12 @@ def imgout():
             pub.publish(rosimg)
         except CvBridgeError as e:
             print(e)
-        #rate.sleep() # may need to use when debugging
+        rate.sleep() # may need to use when debugging
 
 if(__name__=='__main__'):
     p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     p.add_argument('--src',default=0,type=int,help='camera source')
+    p.add_argument('--topic',type=str,default='camera',help='name of topic')
     args=p.parse_args()
     cap = cv2.VideoCapture(args.src)
     

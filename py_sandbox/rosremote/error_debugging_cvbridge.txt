@@ -1,0 +1,28 @@
+[ERROR] [1579171715.339729]: bad callback: <function cb_img at 0x7f58593f9730>
+Traceback (most recent call last):
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/rospy/topics.py", line 750, in _invoke_callback
+    cb(msg)
+  File "local_node.py", line 36, in cb_img
+    CVIMG = bridge.imgmsg_to_cv2(data) # may need to use data.data
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/cv_bridge/core.py", line 163, in imgmsg_to_cv2
+    dtype, n_channels = self.encoding_to_dtype_with_channels(img_msg.encoding)
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/cv_bridge/core.py", line 99, in encoding_to_dtype_with_channels
+    return self.cvtype2_to_dtype_with_channels(self.encoding_to_cvtype2(encoding))
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/cv_bridge/core.py", line 91, in encoding_to_cvtype2
+    from cv_bridge.boost.cv_bridge_boost import getCvType
+ImportError: dynamic module does not define module export function (PyInit_cv_bridge_boost)
+
+
+
+main issue: 
+can run this command: 
+    rosimg = bridge.cv2_to_imgmsg(frame)
+but not this one: 
+    cvimg = bridge.imgmsg_to_cv2(rosimg)
+
+get error: 
+    ImportError: dynamic module does not define module export function (PyInit_cv_bridge_boost)
+
+can duplicate when try: 
+    from cv_bridge.boost.cv_bridge_boost import getCvType
+
