@@ -26,3 +26,27 @@ get error:
 can duplicate when try: 
     from cv_bridge.boost.cv_bridge_boost import getCvType
 
+LOG OF PROGRESS: 
+src1: https://stackoverflow.com/questions/49221565/unable-to-use-cv-bridge-with-ros-kinetic-and-python3
+
+* will try to uninstall current cvbridge package
+    sudo apt-get remove ros-melodic-cv-bridge
+* will download repo and build from source
+* will try to build just like opencv: 
+    cd ??/vision_opencv/cv_bridge
+    mkdir build
+    cd build
+* will follow advice from src1, using specific flags:
+* NOTE: changed "3.5" to "3.6" below in 2 places
+    cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local \
+    -DPYTHON_EXECUTABLE=/usr/bin/python3 -DPYTHON_INCLUDE_DIR=/usr/include/python3.6m -DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.6m.so ..
+* continue building like opencv: 
+    make -j7 # runs 7 jobs in parallel
+    sudo make install
+
+
+
+
+
+
+
