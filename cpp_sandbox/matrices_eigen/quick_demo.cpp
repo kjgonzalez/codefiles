@@ -3,9 +3,10 @@ author: Kris Gonzalez
 date: 190416
 objective: want to do a quick test using eigen library for matrices. using start example from below
 source: https://eigen.tuxfamily.org/dox/GettingStarted.html
+KJG200118: get eigen by cloning this repo: https://gitlab.com/libeigen/eigen
 
 HOW TO COMPILE:
-    g++ -std=c++11 -I C:\Users\kris\repos\eigen-git-mirror\ .\quick_demo.cpp
+    g++ -std=c++11 -I C:\Users\kris\repos\eigen\ .\quick_demo.cpp
 */
 
 #include <iostream>
