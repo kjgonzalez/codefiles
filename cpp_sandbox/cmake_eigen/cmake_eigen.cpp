@@ -3,7 +3,8 @@ author: Kris Gonzalez
 date: 200118
 objective: use eigen library, but compile using cmake. proof of concept to ensure this works.
 
-source: https://eigen.tuxfamily.org/dox/GettingStarted.html
+src1: https://eigen.tuxfamily.org/dox/GettingStarted.html
+src2: https://eigen.tuxfamily.org/dox/TopicCMakeGuide.html
 KJG200118: get eigen by cloning this repo: https://gitlab.com/libeigen/eigen
 
 */
