@@ -1,3 +1,0 @@
-/home/kris/Documents/cpp/hello_cv/CMakeFiles/edit_cache.dir
-/home/kris/Documents/cpp/hello_cv/CMakeFiles/rebuild_cache.dir
-/home/kris/Documents/cpp/hello_cv/CMakeFiles/code_cv.dir
