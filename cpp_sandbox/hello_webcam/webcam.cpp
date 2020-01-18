@@ -9,7 +9,8 @@
 KJG180305: this file works, along with CMakeLists.txt file. be sure to compile
   in this form: 
 1) write out your code
-2) create CMakeLists.txt file (only needs to be done once?)
+2) create CMakeLists.txt file (only needs to be done once?) 
+!!! NOTE: PLEASE BE SURE TO ADD AN EXTENSION TO OUTPUT (EITHER .exe OR .out) !!!
 3) run commands: 
 	cmake .
 	make

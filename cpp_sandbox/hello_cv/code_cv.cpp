@@ -6,7 +6,7 @@ using namespace cv;
 KJG180305: this code works, along with CMakeList.txt file
 in order to compile the code: 
 1. write all code
-2. create CMakeLists.txt file
+2. create CMakeLists.txt file (ENSURE HAVE A FILE EXTENSION)
 3. run commands:
 	cd <TheDirectoryLocation>
 	cmake .

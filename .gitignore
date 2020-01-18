@@ -13,3 +13,4 @@ py_sandbox/book_MakeYourOwnNeuralNetwork/BOOK_TariqRashid-MakeYourOwnNeuralNetwo
 *.lnk
 # temp
 temp/
+*-swp
