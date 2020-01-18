@@ -5,5 +5,5 @@ include_directories(${OpenCV_INCLUDE_DIRS} )
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(output main.cpp)
-target_link_libraries( output ${OpenCV_LIBS} )
+add_executable(output.out main.cpp)
+target_link_libraries( output.out ${OpenCV_LIBS} )
