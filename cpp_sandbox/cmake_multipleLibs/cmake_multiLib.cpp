@@ -7,7 +7,7 @@ stat | descrip
 done | hello world
 done | compile with eigen
 done | compile with opencv
-???? | compile with gainput
+done | compile with gainput
 
 */
 

@@ -30,8 +30,8 @@ int main() {
     
     if (!stream1.isOpened()) { //check if video device has been initialised
     cout << "cannot open camera";
-    }
-    
+    } //if_statement
+
     //unconditional loop
     while (true) {
     cv::Mat cameraFrame;
@@ -39,6 +39,6 @@ int main() {
     cv::imshow("cam", cameraFrame);
     if (cv::waitKey(30) >= 0)
     break;
-    }
+    } //mainloop
     return 0;
 } //main
