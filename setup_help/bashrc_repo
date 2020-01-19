@@ -44,3 +44,16 @@ cpprun(){
       ./a.out
   fi
 }
+
+rmcmake(){
+    # remove extra make files for clean rebuilding
+    rm CMakeCache.txt
+    rm Makefile
+    rm cmake_install.cmake
+    rm -r CMakeFiles/
+    echo "done."
+}
+
+
+
+
