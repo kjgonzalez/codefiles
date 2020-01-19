@@ -124,6 +124,7 @@ class KBControl_r1:
             # here, would send the updated command to the serial port.
 
     def keydown(self,e):
+        print('pressed')
         if not e.char in self.history :    # if key isn't alrdy in list...
             self.history.append(e.char)    # add key to END(!) of list
             # NOTE: LIST IS NOW UPDATED
