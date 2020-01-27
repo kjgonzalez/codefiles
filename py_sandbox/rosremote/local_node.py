@@ -32,14 +32,14 @@ def listener():
     rospy.spin()
 
 def cb_img(data):
+    global CVIMG
     if(True):
         flag_first=False
-        #rospy.loginfo(rospy.get_caller_id() + "I heard %s", data.data)
-        print('i heard something',time.time())
-        cvimg = bridge.imgmsg_to_cv2(data)
-        #import ipdb;ipdb.set_trace()
+        # print('i heard something',time.time())
+        CVIMG = bridge.imgmsg_to_cv2(data)
+        print(time.time(),CVIMG.shape)
     #CVIMG = bridge.imgmsg_to_cv2(data) # may need to use data.data
-    
+
 def imgin():
     ''' keeping function here purely for debugging '''
     rospy.Subscriber(args.topic, Image, cb_img)
@@ -50,23 +50,16 @@ if(__name__=='__main__'):
     p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     p.add_argument('--topic',type=str,default='camera',help='name of topic')
     args=p.parse_args()
-    imgin()
-    
+    # imgin()
+
     #while(type(CVIMG)==type(None)):
         #time.sleep(1) # wait for ros image to be updated
         #print('waiting...')
-
-    #while(True):
-        ## Capture frame-by-frame
-
-        ## Display the resulting frame
-        #cv2.imshow('frame',CVIMG)
-
-        #if cv2.waitKey(1) & 0xFF == ord('q'):
-            #break
-
-    #cv2.destroyAllWindows()
+    rospy.Subscriber(args.topic, Image, cb_img)
+    rospy.init_node('camsub', anonymous=True)
     
-    
-    
-    
+    while(True):
+        cv2.imshow('frame',CVIMG)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
+    cv2.destroyAllWindows()

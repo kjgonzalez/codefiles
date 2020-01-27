@@ -3,7 +3,7 @@ date: 200115
 objective: transmit video from rpi to computer
 
 
-general steps: 
+general steps:
 1. take a picture with webcam, make sure it's transmitting properly
 '''
 
@@ -45,6 +45,11 @@ def imgout():
     ''' publish images (aka video stream). can be checked with rviz '''
     pub = rospy.Publisher(args.topic, Image, queue_size=10) # topic here
     rospy.init_node('campub', anonymous=True) # publisher here
+    if(args.fps==None):
+        rate = rospy.Rate(1) # default:10hz
+         # just to have something
+    else:
+        rate=rospy.Rate(1/args.fps)
     rate = rospy.Rate(1) # default:10hz
     bridge=CvBridge()
     while not rospy.is_shutdown():
@@ -56,15 +61,17 @@ def imgout():
             pub.publish(rosimg)
         except CvBridgeError as e:
             print(e)
-        rate.sleep() # may need to use when debugging
+        if(args.fps!=None):
+            rate.sleep() # may need to use when debugging
 
 if(__name__=='__main__'):
     p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     p.add_argument('--src',default=0,type=int,help='camera source')
     p.add_argument('--topic',type=str,default='camera',help='name of topic')
+    p.add_argument('--fps',default=None,help='max fps. omit for maximum')
     args=p.parse_args()
     cap = cv2.VideoCapture(args.src)
-    
+
     try:
         imgout() # this function goes into internal while loop
     except rospy.ROSInterruptException:

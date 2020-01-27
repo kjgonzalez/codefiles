@@ -1,4 +1,33 @@
 
+= HELP WITH INSTALLING ROS FROM SOURCE WITH PYTHON3 ==================
+# http://wiki.ros.org/melodic/Installation/Source
+# https://answers.ros.org/question/295012/how-can-i-install-ros-melodic-with-python3/
+# general steps, written here: (special steps are also given and annotated)
+# note: cv_bridge seems to install here as well
+
+sudo apt-get install python3-rosdep python3-rosinstall-generator python3-wstool python3-rosinstall build-essential # NOTE: ADDED '3' HERE
+sudo rosdep init
+rosdep update
+mkdir -p ~/programs/ros_catkin_ws # NOTE: personally programs parent folder
+cd ~/programs/ros_catkin_ws
+# NOTE: install "ros desktop", the "recommended" version
+rosinstall_generator desktop --rosdistro melodic --deps --tar > melodic-desktop.rosinstall
+wstool init -j8 src melodic-desktop.rosinstall
+./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release
+
+# for some reason, might have stuff uninstall part-way through
+sudo apt-get install python3-rosdep python3-rosinstall-generator python3-wstool python3-rosinstall build-essential
+
+# at this point, maybe everything properly installed? 
+echo "source ~/programs/ros_catkin_ws/install_isolated/setup.bash" >> ~/.bashrc
+source ~/.bashrc
+
+# install a potentially missing dependency in python
+python3 -m pip install defusedxml --user
+
+# hopefully done at this point! run roscore just to check
+
+
 
 = HOW TO USE ROS ACROSS TWO COMPUTERS ================================
 

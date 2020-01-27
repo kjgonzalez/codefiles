@@ -5,11 +5,12 @@ NOTE: when running things, be sure to source devel/setup.bash after "catkin_make
 general steps: 
 
 # DEVELOP
-cd ~/(???)/catkin_ws
-catkin_create_pkg PkgName [dependencies...]
-mkdir -p src/PkgName/src/ # or PkgName/scripts, depending on language
+cd ~/(???)/catkin_ws/src
+catkin_create_pkg PkgName [dependencies...] # eg. std_msgs rospy roscpp
+#mkdir -p src/PkgName/src/ # or PkgName/scripts, depending on language
 # (write some code)
 # (if writing in cpp, modify CMakeLists.txt)
+# (if writing in py, chmod +x FileName.py)
 cd ~/(???)/catkin_ws
 catkin_make
 
