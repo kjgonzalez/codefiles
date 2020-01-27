@@ -8,12 +8,6 @@ import cv2
 import sys,argparse
 assert sys.version_info[0] == 3, "Please use python version 3"
 
-# if(argv[1].isdigit()):
-#     vidsrc=int(argv[1])
-# else:
-#     print('ERROR: argument expected as integer')
-#     exit()
-
 p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
 p.add_argument('--src',default=0,type=int,help='camera source')
 p.add_argument('--avgprint',default=False,action='store_true',help='debug: print average pixel color')
