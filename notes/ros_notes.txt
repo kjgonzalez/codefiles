@@ -8,11 +8,18 @@
 sudo apt-get install python3-rosdep python3-rosinstall-generator python3-wstool python3-rosinstall build-essential # NOTE: ADDED '3' HERE
 sudo rosdep init
 rosdep update
-mkdir -p ~/programs/ros_catkin_ws # NOTE: personally programs parent folder
+mkdir -p ~/programs/ros_catkin_ws # NOTE: personally use programs parent folder
 cd ~/programs/ros_catkin_ws
 # NOTE: install "ros desktop", the "recommended" version
 rosinstall_generator desktop --rosdistro melodic --deps --tar > melodic-desktop.rosinstall
 wstool init -j8 src melodic-desktop.rosinstall
+
+# THIS IS THE BARE BONES VERSION: 
+# rosinstall_generator ros_comm --rosdistro melodic --deps --tar > melodic-ros_comm.rosinstall
+# wstool init -j8 src melodic-ros_comm.rosinstall
+
+# NOTE: make sure that PYTHONPATH is properly updated, such as on rpi: 
+# export PYTHONPATH=$PYTHONPATH:/usr/lib/python3/dist-packages/
 ./src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release
 
 # for some reason, might have stuff uninstall part-way through
