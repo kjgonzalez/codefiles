@@ -1,8 +1,7 @@
 /*
 author: kris gonzalez
 date: 190408
-objective: ok, it's clear that you always forget cpp because you dont practice
-    it enough.
+objective: simple review of cpp basics
 
 HOW TO USE:
 g++ -std=c++11 basics.cpp; ./a.out
@@ -372,7 +371,7 @@ std::cout << "memory location: " << &var << nl; // give address, using actual va
 std::cout << "memory location: "<< var_addr << nl; // give addr, using pointer
 std::cout << "actual value: " << *var_addr << nl; // give value at address held by pointer
 
-//arrow operator allows access to the members sof an object that a pointer is pointing to.
+//arrow operator allows access to the members of an object that a pointer is pointing to.
 std::string someString = "this text is accessed via a pointer.";
 std::string* delme = &someString;
 printf("%s\n",delme->c_str());
