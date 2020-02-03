@@ -17,6 +17,7 @@ function cpprun{
     g++ -std=c++11 $args
     if($?){
         echo "SYSTEM: Success, running..."
+        echo ""
         .\a.exe
     }
 }
