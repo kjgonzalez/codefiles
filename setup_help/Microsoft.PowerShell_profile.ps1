@@ -13,10 +13,10 @@ Set-Alias -Name npp -Value "C:\Program Files (x86)\Notepad++\notepad++.exe"
 Set-Alias -Name foxit -Value "D:\Programs2\FoxitReader\FoxitReader.exe"
 
 function cpprun{
-    echo "building..."
-    $res = g++ -std=c++11 $args
-    echo "result: $res"
-    if($res -eq $null){
+    echo "SYSTEM: building..."
+    g++ -std=c++11 $args
+    if($?){
+        echo "SYSTEM: Success, running..."
         .\a.exe
-    }# if
+    }
 }
