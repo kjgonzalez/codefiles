@@ -40,7 +40,8 @@ class puppy{
 };  //class puppy
 
 //KJGNOTE: the following two pieces of code aren't needed here, they've been
-//  moved to norms.cpp/h anderectangle.h
+//  moved to norms.cpp/h and rectangle.h
+
 // double pyt(double a, double b){
 //   return pow(a*a+b*b,0.5);
 // } //pyt

@@ -2,7 +2,9 @@
 here, we're using a "simple" approach to include code from the main cpp program
   in another location (to create modularity / simplicity). however, it's
   recommended by stroustrup (cpp_language,p425) to avoid including functions in
-  a header file
+  a header file BECAUSE different file extensions have different purposes in
+  compiler, and because "it is hard for implementations to avoid replication of
+  aggregates presented in several translation units."
 */
 
 class rect{
