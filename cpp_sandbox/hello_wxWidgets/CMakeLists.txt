@@ -10,7 +10,7 @@ find_package(wxWidgets REQUIRED COMPONENTS net core base)
 include(${wxWidgets_USE_FILE})
 
 
-add_executable( a.out wx_attempt.cpp) # SPECIFY .out HERE!!!
+add_executable( a.out hello_wxwidgets.cpp) # SPECIFY .out HERE!!!
 
 target_link_libraries(a.out
     ${wxWidgets_LIBRARIES})

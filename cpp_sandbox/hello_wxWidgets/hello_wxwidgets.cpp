@@ -2,40 +2,41 @@
 date: 200205
 objective: first time compile of wxWidgets to ensure wxwidgets works
 
-How to Compile: 
+How to Compile:
     (assume code and CMakeLists files created)
     cmake .
-    make 
+    make
     (run file)
 
-NOTES: 
+NOTES:
 * KJG020205: This works on linux side
 * be sure to include proper items in CMakeLists
 
 
 */
-
+#include <iostream>
 #include <wx/wx.h>
 
 class Simple : public wxFrame
 {
 public:
     Simple(const wxString& title)
-		: wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(250, 150))
-	{
-		Centre();
-	}
+        : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(250, 150))
+    {
+        Centre();
+    }
 };
 
 class MyApp : public wxApp
 {
 public:
-	bool OnInit()
-	{
-		Simple *simple = new Simple(wxT("Window Title"));
-		simple->Show(true);
-		return true;
-	}
+    bool OnInit()
+    {
+        Simple *simple = new Simple(wxT("Window Title"));
+        simple->Show(true);
+        std::printf("hello world\n");
+        return true;
+    }
 };
 
 wxIMPLEMENT_APP(MyApp);
