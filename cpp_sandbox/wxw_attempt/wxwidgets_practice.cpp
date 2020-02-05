@@ -1,0 +1,29 @@
+/*
+date: 200205
+objective: try to make a simple gui with buttons, and will build up from there
+
+NOTES:
+* don't need an "int main" thing
+need a class that represents what the application is.
+"pixel game engine" ???
+
+stat | description
+???? | ???
+???? | ???
+???? | ???
+???? | ???
+???? | ???
+???? | ???
+
+*/
+
+#include <iostream>
+#include <wx/wx.h>
+
+class cApp : public wxApp{
+public:
+    cApp();
+    ~cApp();
+public:
+    virtual bool OnInit
+}
