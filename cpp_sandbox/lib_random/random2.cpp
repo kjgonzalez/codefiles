@@ -42,9 +42,9 @@ int main (){
         v.push_back(rd()%20+1);
     }
 
-    cout << "average value:" << mean(v) << endl;
-    cout << "max     value:" << max(v) << endl;
-    cout << "min     value:" << min(v) << endl;
+    cout << "average value:" << mean(v) << endl; // ~10.5
+    cout << "max     value:" << max(v) << endl; // 20
+    cout << "min     value:" << min(v) << endl; // 1
 
 
     return 0;
