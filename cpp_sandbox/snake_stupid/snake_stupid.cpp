@@ -27,10 +27,24 @@ done | show apple object
 ???? | ??
 ???? | ??
 
+strange error happening with repeated runs of program with random function:
+Exception: STATUS_ACCESS_VIOLATION at rip=003CC1CCBA1
+rax=0000000000000000 rbx=0000000600085080 rcx=000000010040400B
+rdx=0000000000000002 rsi=0000000600085080 rdi=000000018030ABD0
+r8 =0000000000000001 r9 =000000010040400B r10=000000010040400B
+r11=0000000600084D38 r12=0000000000000002 r13=00000000FFFFCC76
+r14=0000000000000000 r15=00000000FFFFCC76
+rbp=0000000000000001 rsp=00000000FFFFB6C0
+program=C:\Users\kris\codefiles\cpp_sandbox\snake_stupid\a.exe, pid 1493, thread main
+cs=0033 ds=002B es=002B fs=0053 gs=002B ss=002B
+
+
+
+
 */
 #include <iostream>
 #include <vector>
-#include <cstdlib> // easiest way to have a random number
+#include <random>
 using namespace std;
 class Apple{
     /* Class that tracks the r and c locations of the apple */
@@ -43,6 +57,14 @@ class Snake{
     /* track location of snake head and body*/
 public:
     int rHead, cHead;
+    std::vector<int[2]> v;
+    Snake(int r_, int c_){
+        /* initialize snake position, and must take care not to put too close to
+            wall, or facing walls
+        */
+        rHead=r_;cHead=c_;
+    }
+
     void move(int direction){
         /* update snake head position and rest of body*/
     }
@@ -65,42 +87,39 @@ public:
     void redrawBoard(){
         // redraw blank board
         bb.push_back( string(cSize+2,'X')+"\n" ); //top
-        for(int i=0;i<rSize-2;i++){bb.push_back( "X" + string(cSize,' ')+"X\n");} //mid
+        for(int i=0;i<rSize;i++){bb.push_back( "X" + string(cSize,' ')+"X\n");} //mid
         bb.push_back( string(cSize+2,'X') ); //bottom
     }//redrawBoard
-    void drawApple(int r,int c){
+    void drawApple(Apple &a){
         // draw apple coordinate on board, a single letter
-        bb[r+1].replace(c+1,1,"A");
+        bb[a.r+1].replace(a.c+1,1,"A");
+    }
+    void drawSnake(Snake &s){
+        // draw entire snake, starting with head.
+        bb[s.rHead+1].replace(s.cHead+1,1,"O");
     }
 };
 
 
 int main(){
+    int r=10; int c=20; // desired board dimensions
+    random_device rand; // initialize random number generator
 
-    //alright, let's figure out how to make something random
-    // attempt 1: use cstdlib & rand()%maxvalue
-    // cout << rand()%20 << endl; // FAIL
-
-    // attempt 2: try to incorporate time variable
-
-
-    return 0;
-
-    int r,c;
-    r=10; // desired board dimensions
-    c=20;
+    Apple apple(8,8); // this is generating some kind of issue...?
+    Snake snake(4,4);
     Board board(r,c);
-    board.drawApple(rand()%r,rand()%c);
+    board.drawApple(apple);
+    board.drawSnake(snake);
     board.print();
     return 0;
 
 // aspect ratio: 2:1
 
-    // don't want this to run at the moment
-    int x;
-    cout << "give a number: ";
-    cin >> x;
-    cout << "you gave: " << x << endl;
+    // // don't want this to run at the moment
+    // int x;
+    // cout << "give a number: ";
+    // cin >> x;
+    // cout << "you gave: " << x << endl;
 
 
 }
