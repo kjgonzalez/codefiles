@@ -1,6 +1,6 @@
 /*
 date: 200207
-objective: demonstrate an easy way to use the random library
+objective: demonstrate an easy way to use the (a?) random library
 */
 #include <iostream>
 #include <random>
@@ -15,6 +15,7 @@ int max(vector<int> &vec);
 int main (){
     random_device rd;
     cout << "a random number: " << rd() << std::endl;
+    cout << "max value possible:" << rd.max() << std::endl;
 
     cout << "kjg: at this point, will test and see what happens with 10k dice rolls" << endl;
 
@@ -27,6 +28,8 @@ int main (){
     cout << "max     value:" << max(v) << endl; // 20
     cout << "min     value:" << min(v) << endl; // 1
 
+    cout << "Can also use this to generate a decimal value: ";
+    cout << ((double)(rd()%1000000)) / (double)(1e6) << endl;
 
     return 0;
 }
