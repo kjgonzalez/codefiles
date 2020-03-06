@@ -32,4 +32,12 @@ function cpprun{
     }# if
 }
 
+= QUICK POWERSHELL COMMAND INFO ================================
+get alias of some / all commands    Get-Alias SomeFunctionName
+
+
+
+
+
+
 
