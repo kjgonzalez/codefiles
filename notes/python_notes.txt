@@ -1,45 +1,5 @@
-1. what's a way to look up all available modules???
->> maybe just searching through folders? >> ACTUALLY: "help('modules')"
-idea 1: 
->> help('modules')
-* note: outputs a multi-column list of names. bit of a hassle, but simple and reliable.
-
 - - - - - - - - - - - - -
-How to use Pip: 
-Basic usage
-Standard packaging tools are all designed to be used from the command line. The
-    following command will install the latest version of a module and its 
-    dependencies from the Python Packaging Index:
-typical:   python -m pip install SomePackage --user
-alternate: pip install SomePackage --user
-update pip: python -m pip install --upgrade pip
-
-- - - - - - - - - - - - -
-List comprehension in python (see list_comprehension.py)
->>> x=range(1,6)
->>> x
-[1, 2, 3, 4, 5]
->>> y=[i**2 for i in x]
->>> y
-[1, 4, 9, 16, 25]
-
-- - - - - - - - - - - - -
-How Jupyter works
-"web application that allows a user to run live code, embed visualizations, and 
-	provide explantaory text all in one place"
-NOTE: jupyter is another name for ipython notebook
-look like a webpage, but actually 3 components: live code, output results and 
-	visualization, and rich-text formatting & media embedding
-
-in order to run, a command would look like so: 
-	cd DesiredFolder
-	jupyter notebook object_detectiontutorial.ipynb
-you're also able to see an intermediate state of data, meaning you can do a sort
-	of helpful debugging
-
-- - - - - - - - - - - - -
-Quick note about making a print table in python (using pandas)
-
+Use Pandas to make a nice printed table:
 In [38]: body=np.array(np.round(np.random.rand(3,3)*5,2),dtype=object)
 In [39]: head='one two three'.split(' ')
 In [40]: rownames=['a','b','c']
@@ -49,10 +9,6 @@ Out[41]:
 a  0.52  3.97  0.43
 b  0.68  4.54  4.19
 c  4.16  1.73  4.54
-
-- - - - - - - - - - - - -
-Fix python indentation (only) to PEP8:
->> autopep8 path/to/file.py --select=E101,E121 --in-place
 
 - - - - - - - - - - - - -
 Updating available fonts manually for matplotlib (and ubuntu overall)
@@ -71,22 +27,17 @@ font = {'fontname':'Bahianita','fontsize':15}
 plt.plot(x,y)
 plt.title('hello',**font)
 - - - - - - - - - - - - -
-Create & activate virtual environment
+LIST OF QUICK, SIMPLE COMMANDS TO KEEP IN MIND
 
-  python3 -m venv /path/to/new/virtual/environment
-  <venv>\Scripts\Activate.ps1 # platform-specific (https://docs.python.org/3/library/venv.html)
-
-
-- - - - - - - - - - - - -
-list all installed packages and versions
-  pip freeze
-
-- - - - - - - - - - - - -
-install packages in a requirements file
-pip install -r requirements.txt
-
-- - - - - - - - - - - - -
-use pip with proxy
-  pip install SomePackage --proxy 199.19.250.205:80
-
-
+list available modules      help('modules') # note: takes a while
+create virtual env          python3 -m venv /path/to/new/virtual/environment
+activate virtual-env        <venv>\Scripts\Activate.ps1 # platform-specific
+list pkgs/versions          pip freeze
+list pkgs/vers ALT          pip list
+install pkgs w/ file        pip install -r requirements.txt
+use pip w/ proxy            pip install SomePackage --proxy ipv4:port
+install pip pkg (v1)        python -m pip install SomePackage --user
+install pip pkg (v2)        pip install SomePackage --user
+update pip (v1 or v2)       python -m pip install --upgrade pip
+fix PEP8 indentation        autopep8 path/to/file.py --select=E101,E121 --in-place
+start jupyter anywhere      jupyter-notebook.exe # may need special flags
