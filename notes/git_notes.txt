@@ -36,3 +36,22 @@ DEAL WITH BRANCH / MERGE CONFLICTS =========================
 3. git rebase --continue
    (issue should be resolved)
 
+CHECKOUT A REMOTE BRANCH ===================================
+git checkout BranchName #omit remotes/origin
+
+KEEP A LOCAL BRANCH OF A REPO UPDATED WITH REMOTE MASTER ===
+1. git clone repo
+2. git branch NewBranchName of desired "master" version
+3. commit local changes (especially if you don't plan to keep this forever)
+4. git fetch
+5. git rebase origin/MasterBranchName
+
+
+
+KJG NEED TO CLARIFY TWO THINGS: 
+
+1. can you branch a repo, make your own commits, but still get remote commits from other teams? yes, you can
+2. can you git clone, make your own commits, then later branch from a specific point the past? - not preferrable
+
+
+

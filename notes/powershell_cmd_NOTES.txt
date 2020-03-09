@@ -1,14 +1,5 @@
-= Search for a file in a folder (& recursively) ============
-in Powershell: 
-dir <filename>
-to make it recursive: dir -s <filename>
-
-= view text file contents in cmd ===========================
-more FileName.txt
-
 = set alias in powershell (note: not saved) ================
 Set-Alias -Name list -Value <SomeAction>
-
 src: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/set-alias?view=powershell-6
 note:https://stackoverflow.com/questions/24914589/how-to-create-permanent-powershell-aliases
 
@@ -32,11 +23,15 @@ function cpprun{
     }# if
 }
 
-= QUICK POWERSHELL COMMAND INFO ================================
-get alias of some / all commands    Get-Alias SomeFunctionName
 
-
-
+= SIMPLE ONE-LINE COMMANDS =================================
+(CMD) create a symlink:         mklink path/link path/real/item
+(PWS) run a cmd-based command:  cmd /c <rest of command here>
+(PWS) get aliases:              Get-Alias <OptionalFuncName>
+(PWS) custom find/grep          function fgrep($o){cmd /c dir /b /s $o} #usage: fgrep ITEM
+(CMD) view text file contents   more FileName.txt
+(PWS) simple (bad) file search  dir -s filename # -s=recursive
+(PWS) create alias              Set-Alias -Name list -Value <SomeAction>
 
 
 
