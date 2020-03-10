@@ -1,1 +1,5 @@
-withsometext
+plan: 
+1. create feature branch
+2. make some edits on master branch
+3. make some edits on feature branch
+4. merge them (or try to do pull request)
