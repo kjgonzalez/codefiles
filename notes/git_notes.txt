@@ -27,7 +27,7 @@ issue: get this message: "remote: This repository moved.
     Please use the new location"
 git remote set-url origin [https://...git]
 
-DEAL WITH BRANCH / MERGE CONFLICTS =========================
+DEAL WITH BRANCH / MERGE CONFLICTS =========================a
 0. (have created local and remote changes, leading to a 
     conflict when pulling new commits in)
 1. manually fix issues between the two, save files*
@@ -46,12 +46,23 @@ KEEP A LOCAL BRANCH OF A REPO UPDATED WITH REMOTE MASTER ===
 4. git fetch
 5. git rebase origin/MasterBranchName
 
+src: https://stackoverflow.com/questions/3876977/update-git-branches-from-master
+(NOTE: use option 2)
 
+UPDATE SUBMODULES OF A MAIN REPO ===========================
+cause of issue: x
+    * git pull in main repo
+    * git status
+    * see "modified: submodules/SomeName (new commits)
 
-KJG NEED TO CLARIFY TWO THINGS: 
+solution: 
+git submodule update
 
-1. can you branch a repo, make your own commits, but still get remote commits from other teams? yes, you can
-2. can you git clone, make your own commits, then later branch from a specific point the past? - not preferrable
+src: 
+https://unix.stackexchange.com/questions/214879/git-submodule-shows-new-commits-submodule-status-says-nothing-to-commit/215258
+
+result: 
+git status gives "nothing to commit, working tree clean"
 
 
 
