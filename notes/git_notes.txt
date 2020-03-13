@@ -14,7 +14,7 @@ INITIALIZING A NEW BRANCH ==================================
 
 DELETING A BRANCH ==========================================
   git branch -d NewBranch (local)
-  git push --delete NewBranch (remote)
+  git push RemoteName (origin) --delete NewBranch (remote)
 
 MERGING A BRANCH ===========================================
   git merge NewBranch (must already be in main branch)
@@ -63,6 +63,14 @@ https://unix.stackexchange.com/questions/214879/git-submodule-shows-new-commits-
 
 result: 
 git status gives "nothing to commit, working tree clean"
+
+MERGE A FEATURE BRANCH ONTO A MASTER BRANCH ================
+# on master branch
+git branch feature
+# make some commits
+git checkout master
+git merge feature # adds extra commit explaining the merge
+
 
 
 
