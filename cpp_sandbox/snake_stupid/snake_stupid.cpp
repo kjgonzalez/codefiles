@@ -22,12 +22,12 @@ done | show apple object
 done | board has random location generator
 done | show snake object
 done | move snake
+done | detect when snake hits a wall
+done | detect when snake eats apple
+done | detect when snake hits itself
 ???? | eat apple
 ???? | randomly re-place apple
 ???? | increase snake length on eat
-???? | detect when snake hits a wall
-???? | detect when snake eats apple
-???? | detect when snake hits itself
 ???? | disable snake moving into itself (instant-uTurn)
 ???? | ??
 ???? | ??
@@ -51,11 +51,24 @@ cs=0033 ds=002B es=002B fs=0053 gs=002B ss=002B
 #include <vector>
 #include <random>
 using namespace std;
+
+bool sameLoc(vector<int> one, vector<int> two){
+    /* check whether two vectors have the same value or not */
+    if(one[0]==two[0] && one[1]==two[1]) return true;
+    else return false;
+} // bool sameLoc
+
 class Apple{
     /* Class that tracks the r and c locations of the apple */
 public:
     int r,c;
     Apple(int r_,int c_){r=r_;c=c_;}
+    const vector<int> asVec(){
+        vector<int> v_;
+        v_.push_back(r);
+        v_.push_back(c);
+        return v_;
+    }//asVec
 };
 
 class Snake{
@@ -75,6 +88,8 @@ public:
         if(dir_==0){
             v.push_back({r_+1,c_});
             v.push_back({r_+2,c_});
+            // v.push_back({r_+3,c_}); //debug
+            // v.push_back({r_+4,c_});
         }
         else if(dir_==1){
             v.push_back({r_,c_-1});
@@ -144,11 +159,20 @@ public:
     vector<string> bb;
     Apple *pApple;
     Snake *pSnake;
+    vector<int> rLim;
+    vector<int> cLim;
 
     Board(Apple &a,Snake &s,int rSize_=10,int cSize_=20){
         pApple=&a;
         pSnake=&s;
         rSize=rSize_;cSize=cSize_;
+        // if snake head ever touches any of these bounds, it is "out"
+        rLim.push_back(0);
+        rLim.push_back(rSize+1);
+        cLim.push_back(0);
+        cLim.push_back(cSize+1);
+
+
         // initialize board
         bb.push_back( string(cSize+2,'X')+"\n" ); //top
         for(int i=0;i<rSize;i++){bb.push_back( "X" + string(cSize,' ')+"X\n");} //mid
@@ -168,7 +192,7 @@ public:
     }//redrawBoard
     void drawApple(){
         // draw apple coordinate on board, a single letter
-        bb[pApple->r+1].replace(pApple->c+1,1,"A");
+        bb[pApple->r].replace(pApple->c,1,"A");
     }
     void drawSnake(){
         // draw entire snake, starting with head.
@@ -178,25 +202,60 @@ public:
         }//forloop
     } // drawSnake
     void updatePrint(){
+        // cout << "eat? " << checkIfEat() << " ";
+        // cout << "hit? " << checkIfCollide() << endl;
         redrawBoard();
         drawApple();
         drawSnake();
         print();
     }
+    bool checkIfEat(){
+        /* check if snake head has reached apple */
+        return sameLoc(pApple->asVec(),pSnake->v[0]);
+    }
+    bool checkIfCollide(){
+        /* check if snake head has hit the boundary walls or itself */
+
+        // wall check
+        if(     pSnake->v[0][0]==rLim[0]){return true;} //too far up
+        else if(pSnake->v[0][0]==rLim[1]){return true;} //too far down
+        else if(pSnake->v[0][1]==cLim[0]){return true;} //too far down
+        else if(pSnake->v[0][1]==cLim[1]){return true;} //too far down
+        //self-check
+        for(int i=1;i<pSnake->v.size();i++){
+            if(sameLoc(pSnake->v[0],pSnake->v[i])){return true;}
+        }
+        return false;
+
+    }//checkIfCollide
+    bool move(int dir){
+        /* check if move is valid, if snake grows, and then where snake goes*/
+        pSnake->move(dir);
+        if(checkIfCollide()){
+            printf("error, hit\n");return true;
+        }
+        else{
+        return false;
+        }//else
+    }//move()
+
 };
 
 
 int main(){
+
     int r=10; int c=20; // desired board dimensions
     random_device rand; // initialize random number generator
-    Apple apple(8,8); // this is generating some kind of issue...?
+    Apple apple(3,7); // this is generating some kind of issue...?
     Snake snake(4,7,0);
     Board board(apple,snake,r,c);
     // board.updatePrint();
     char dir='w';
     int dir_=0;
+    bool death=false;
+    board.updatePrint();
     while(dir!='q'){
-        board.updatePrint();
+        // printf("head: (%i,%i)\n",snake.v[0][0],snake.v[0][1]);
         cout << "please give a direction ('q' to quit): ";
         cin >> dir;
         switch(dir){
@@ -206,7 +265,20 @@ int main(){
             case('d'):dir_=1;break;
             default:dir_=0;break;
         }//case(dir)
-        snake.move(dir_);
+        death=board.move(dir_);
+        if(death){
+            printf("DEATH!\n");
+            exit(0);
+        }
+        // dir='q';
+        // if(death){
+        //     printf("DEATH!\n");
+        //     // exit(0);
+        //     // dir='q';
+        //     // break;
+        // }
+        board.updatePrint();
+
     }//whileloop
     return 0;
 }

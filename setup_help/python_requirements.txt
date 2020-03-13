@@ -1,5 +1,6 @@
 # Title: Python Modules Install List
 # Usage: python -m pip install -r FILENAME --user
+# upgrade pip: python -m pip install --upgrade pip
 jupyter
 ipython
 ipdb
@@ -11,6 +12,7 @@ opencv-contrib-python
 pandas
 mutagen # needed for audio metadata manipulation
 pydub # needed for audio conversion
+pyyaml # not sure if needed right now
 # note: need ffmpeg https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg
 praw # PyRedditAPIWrapper
 # # requirements for thesis, not sure if needed yet
@@ -20,4 +22,3 @@ praw # PyRedditAPIWrapper
 # torchvision
 # easydict
 # cffi
-# pyyaml # not sure if needed right now
