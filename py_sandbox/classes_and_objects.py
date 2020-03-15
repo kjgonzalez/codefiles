@@ -89,7 +89,7 @@ class rectangle(shape):
         self.width=width
     def perim(self):
         return 2*(self.length+self.width)
-    
+
     @property
     def area(self):
         return self.length*self.width
@@ -125,12 +125,12 @@ class Employee(Person): # this class is now based on previous, more general clas
     def __init__(self,first,last,staffnum):
         Person.__init__(self,first,last) # first, create the "person" level characteristics
         self.staffnumber = staffnum # then assign new characteristics
-    
+
     def GetEmployee(self):
         return self.Name()+', '+self.staffnumber
 
 # note: using *<list> to give arguments is called unpacking a container / iterator
-x = Person(*'marge simpson'.split(' ')) 
+x = Person(*'marge simpson'.split(' '))
 y = Employee(*'homer simpson 1007'.split(' '))
 
 print(x.Name())
@@ -139,13 +139,13 @@ print(y.GetEmployee())
 '''
 however, what if we just put the methods "Name" and "getEmployee" into a __str__ method?
 
-note1: Overriding is an object-oriented programming feature that allows 
-    a subclass to provide a different implementation of a method that is 
-    already defined by its superclass or by one of its superclasses. 
+note1: Overriding is an object-oriented programming feature that allows
+    a subclass to provide a different implementation of a method that is
+    already defined by its superclass or by one of its superclasses.
 
-note2: Overloading is the ability to define the same method, with the same 
-    name but with a different number of arguments and types. It's the ability 
-    of one function to perform different tasks, depending on the number of 
+note2: Overloading is the ability to define the same method, with the same
+    name but with a different number of arguments and types. It's the ability
+    of one function to perform different tasks, depending on the number of
     parameters or the types of the parameters.
 '''
 
@@ -164,7 +164,7 @@ class Employee(Person):
     def __str__(self):
         return super().__str__() + ", " +  self.staffnumber
 
-x = Person('marge','simpson',36) 
+x = Person('marge','simpson',36)
 y = Employee('homer','simpson',28,'1007')
 
 #print(x)
@@ -185,7 +185,7 @@ Using the "super" function
 src1: https://www.pythonforbeginners.com/super/working-python-super-function
 src2: https://www.python-course.eu/python3_multiple_inheritance.php
 
-goal: want a "much more abstract and portable solution for initializing 
+goal: want a "much more abstract and portable solution for initializing
     classes" (arguably within the subclass it's being called from)
 additionally: seems to handle the "Method Resolution Order" much better than
     the default way of simply initializing the class.
@@ -204,13 +204,34 @@ class triangle(shape):
         return sum(self.lengths)
 
 t=triangle([3.0,4.0,5.0])
-import ipdb;ipdb.set_trace()
 
+''' ITERATORS ============================================================== '''
+class counters:
+    def __init__(self):
+        self.items=[1,2,3,4,5,6,7,8,9]
+        self._index=0
+    def __iter__(self):
+        ''' this enables the object to be iterable '''
+        return self
+    def __len__(self):
+        ''' this enables the object to use "next" function '''
+        return len(self.items)
+    def __next__(self):
+        ''' specific behavior that happens everytime you iterate over the class '''
+        if(self._index>=len(self.items)):
+            self._index=0
+            raise StopIteration
+        res = self.items[self._index]
+        self._index += 1
+        return res
 
-
-
-
-
-
+c=counters()
+print('version 1:',end=' ')
+for i in c:
+    print(i,end=' ')
+print()
+print('version 2:',end=' ')
+for i in range(len(c.items)):
+    print(next(c),end=' ')
 
 # eof
