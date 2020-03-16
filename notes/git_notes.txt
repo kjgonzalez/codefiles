@@ -1,10 +1,14 @@
 KJG Git Notes
 
-Initial Setup ==============================================
-git config --global user.email
-git config --global user.name
-git config --global pull.rebase true
-git config --global push.default simple
+Sources: 
+1: https://unix.stackexchange.com/questions/214879/git-submodule-shows-new-commits-submodule-status-says-nothing-to-commit/215258
+cause of issue: x
+    * git pull in main repo
+    * git status
+    * see "modified: submodules/SomeName (new commits)
+
+2: issue: get this message: "remote: This repository moved. Please use the new location"
+
 
 INITIALIZING A NEW BRANCH ==================================
   git branch NewBranch
@@ -12,22 +16,7 @@ INITIALIZING A NEW BRANCH ==================================
   (some changes get committed here)
   git push --set-upstream origin NewBranch
 
-DELETING A BRANCH ==========================================
-  git branch -d NewBranch (local)
-  git push RemoteName (origin) --delete NewBranch (remote)
-
-MERGING A BRANCH ===========================================
-  git merge NewBranch (must already be in main branch)
-
-MENTIONING AN ISSUE IN A COMMIT ============================
-commit <item> -m "#ISSUE_NUM: working on this thing"
-
-UPDATE LOCATION OF REPO FOR GITHUB =========================
-issue: get this message: "remote: This repository moved. 
-    Please use the new location"
-git remote set-url origin [https://...git]
-
-DEAL WITH BRANCH / MERGE CONFLICTS =========================a
+DEAL WITH BRANCH / MERGE CONFLICTS =========================
 0. (have created local and remote changes, leading to a 
     conflict when pulling new commits in)
 1. manually fix issues between the two, save files*
@@ -44,25 +33,10 @@ KEEP A LOCAL BRANCH OF A REPO UPDATED WITH REMOTE MASTER ===
 2. git branch NewBranchName of desired "master" version
 3. commit local changes (especially if you don't plan to keep this forever)
 4. git fetch
-5. git rebase origin/MasterBranchName
+5. git rebase origin/MasterBranch
 
 src: https://stackoverflow.com/questions/3876977/update-git-branches-from-master
 (NOTE: use option 2)
-
-UPDATE SUBMODULES OF A MAIN REPO ===========================
-cause of issue: x
-    * git pull in main repo
-    * git status
-    * see "modified: submodules/SomeName (new commits)
-
-solution: 
-git submodule update
-
-src: 
-https://unix.stackexchange.com/questions/214879/git-submodule-shows-new-commits-submodule-status-says-nothing-to-commit/215258
-
-result: 
-git status gives "nothing to commit, working tree clean"
 
 MERGE A FEATURE BRANCH ONTO A MASTER BRANCH ================
 # on master branch
@@ -71,6 +45,18 @@ git branch feature
 git checkout master
 git merge feature # adds extra commit explaining the merge
 
-
-
-
+QUICK COMMANDS FOR HELPING TO GET STARTED ==================
+initial config 1        git config --global user.email YourEmail
+initial config 2        git config --global user.name YourName
+initial config 3        git config --global pull.rebase true
+initial config 4        git config --global push.default simple
+initial config 5        git config --global diff.tool kdiff3 # specify desired tool here
+initial config 6        git config --global difftool.kdiff3.path "C:\Program Files\KDiff3\kdiff3.exe" # note: not always needed
+---
+delete branch, local    git branch -d NewBranch
+delete branch, remote   git push origin --delete NewBranch # note: "origin" can be other names
+merge from master       git merge MasterBranch # must be in FeatureBranch
+update submodules       git submodule update (Src1)
+mention issue in commit git commit -m "#ISSUE_NUM: working on this thing" (# is required)
+update github repo loc  git remote set-url origin [https://...git] (Src2)
+checkout new branch     git checkout BranchName #omit remotes/origin

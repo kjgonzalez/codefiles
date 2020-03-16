@@ -32,6 +32,7 @@ function cpprun{
 (CMD) view text file contents   more FileName.txt
 (PWS) simple (bad) file search  dir -s filename # -s=recursive
 (PWS) create alias              Set-Alias -Name list -Value <SomeAction>
+(CMD) find string in files      findstr /s "Text Here" *.* # note: also possible in powershell
 
 
 
