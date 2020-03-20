@@ -57,7 +57,7 @@ initial config 6        git config --global difftool.kdiff3.path "C:\Program Fil
 delete branch, local    git branch -d NewBranch
 delete branch, remote   git push origin --delete NewBranch # note: "origin" can be other names
 merge from master       git merge MasterBranch # must be in FeatureBranch
-update submodules       git submodule update (Src1)
-mention issue in commit git commit -m "#ISSUE_NUM: working on this thing" (# is required)
-update github repo loc  git remote set-url origin [https://...git] (Src2)
+update submodules       git submodule update #(Src1)
+mention issue in commit git commit -m "#ISSUE_NUM: working on this thing" #(# is required)
+update github repo loc  git remote set-url origin [https://...git] #(Src2)
 checkout new branch     git checkout BranchName #omit remotes/origin
