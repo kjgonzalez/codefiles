@@ -27,6 +27,10 @@ font = {'fontname':'Bahianita','fontsize':15}
 plt.plot(x,y)
 plt.title('hello',**font)
 - - - - - - - - - - - - -
+export pycharm settings:
+File >> Export Settings... >> (choose what and where to save)
+
+- - - - - - - - - - - - -
 LIST OF QUICK, SIMPLE COMMANDS TO KEEP IN MIND
 
 list available modules      help('modules') # note: takes a while
