@@ -234,4 +234,37 @@ print('version 2:',end=' ')
 for i in range(len(c.items)):
     print(next(c),end=' ')
 
+
+''' ABSTRACTMETHOD ========================================================= '''
+from abc import abstractmethod
+
+class Animal:
+    def __init__(self,name):
+        self.name=name
+        self.loc = (0,0)
+
+    @abstractmethod
+    def move(self,location):
+        ''' by writing @abstractmethod, child class MUST implement "concrete"
+            version of this method, otherwise run into an error
+        '''
+        raise Exception("not implemented")
+
+class Cat(Animal):
+    def __init__(self,name):
+        # Animal.__init__(self,name)
+        super().__init__(name) # alternate method of calling
+    # def move(self,location):
+        # self.loc = location
+        # print('{} moves to {}'.format(name,location))
+
+c = Cat('tammy')
+c.move((1,2))
+
+
+
+
+
+
+
 # eof
