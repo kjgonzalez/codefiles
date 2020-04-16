@@ -198,8 +198,27 @@ print("perimeter:",a.perim())
 
 
 
+print('''
+################################################################################
+# decorator for function that takes arguments ##################################
+''')
+
+def dec2(fn):
+    def wrapper(*args,**kwargs):
+        print('before')
+        res = fn(*args,**kwargs)
+        print('after')
+        return res
+    return wrapper
+
+# @dec2 # can also do it this way
+def pyt(a,b):
+    return (a**2+b**2)**0.5
 
 
+pyt=dec2(pyt)
+
+print(pyt(3,4))
 
 
 print('\n\nDone.')
