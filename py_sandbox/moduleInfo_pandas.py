@@ -18,3 +18,15 @@ vals= np.column_stack((vals1,vals2))
 table=pd.DataFrame(data=vals,index=names,columns=['count','AP'])
 print(table)
 # sample=[['Car']]
+
+# can read in a file like so:
+dat = pd.read_csv('../lib/data/iris.csv',header=None) # if have no header, give "None"
+print('iris dataset shape:',dat.shape)
+
+# initialize an empty dataframe and add data later:
+# simple method is to initialize with known columns, and add row data later
+dat = pd.DataFrame(columns = ['a','b','c'])
+dat.loc[0]=[1,2,3]
+print(dat)
+print('number of rows in table:',len(dat))
+print('number of columns in table:',len(dat.columns))

@@ -61,7 +61,7 @@ if(False):
     p[0].set_xlabel('xlabel')
     p[0].set_ylabel('ylabel')
     p[0].grid()
-    p[0].set_aspect('equal')
+    p[0].set_aspect('equal') # aspect ratio
 
 ''' using a colormap '''
 if(False):
