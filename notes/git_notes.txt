@@ -88,6 +88,12 @@ git branch feature
 git checkout master
 git merge feature # adds extra commit explaining the merge
 
+DEALING WITH AN IGNORED .GITIGNORE FILE ====================
+if you have a .gitignore file that you created locally, but nothing that is
+put it is being recognized, this may be a windows-specific encoding error.
+    THUS, BE SURE TO SAVE YOUR .GITIGNORE FILE IN ANSI ENCODING! 
+
+
 QUICK COMMANDS FOR HELPING TO GET STARTED ==================
 initial config 1        git config --global user.email YourEmail
 initial config 2        git config --global user.name YourName
