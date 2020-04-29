@@ -8,12 +8,12 @@ https://www.maketecheasier.com/create-symbolic-links-windows10/
 NOTE: must be done in COMMANDLINE, not POWERSHELL
 mklink path/to/desired/link /path/to/real/item
 
-= Powershell: command-line function ========================
+= PWS: command-line function ===============================
 Function HelloWorld {
   echo "Hello world! I'm a powershell function"
 }
 
-= Powershell: if statements ================================
+= PWS: if statements =======================================
 function cpprun{
     echo "building..."
     $res = g++ -std=c++11 $args
@@ -23,7 +23,7 @@ function cpprun{
     }# if
 }
 
-= powershell: self-built watch function ====================
+= PWS: self-built watch function ===========================
 function watch($o,$n=1){
     while(1){
     cls
@@ -32,6 +32,15 @@ function watch($o,$n=1){
     sleep $n
     }
 }
+
+= PWS / CMD: batch command across multiple lines ===========
+NOTE HOW YOU NEED A CARAT SYMBOL FOR CONTINUING ON NEWLINE
+python command.py ^ 
+    arg1 arg2 ^
+    arg3 etc
+
+
+
 
 
 = SIMPLE ONE-LINE COMMANDS =================================
