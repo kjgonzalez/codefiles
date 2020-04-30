@@ -55,6 +55,20 @@ INITIALIZING A NEW BRANCH LOCALLY ==========================
   (some changes get committed here)
   git push --set-upstream origin NewBranch
 
+MOVING / DELETING A LOCAL/REMOTE BRANCH ====================
+git branch -m OldName NewName  # rename local
+git push <remote> --delete OldName # delete old branch, where <remote> can be "origin"
+git push <remote> NewName      # Push the new branch to remote
+git push <remote> -u NewName   # re-start remote branch tracking
+
+
+
+MISCELLANEOUS NOTES ABOUT BRANCHES =========================
+* you can create a new branch from any other branch
+* you can have a local branch without a remote branch, and vice-versa
+* can also rename a branch locally & remotely (see below)
+
+
 DEAL WITH BRANCH / MERGE CONFLICTS =========================
 0. (have created local and remote changes, leading to a 
     conflict when pulling new commits in)
@@ -110,6 +124,8 @@ update submodule from upstream      git submodule update --remote --merge
 update submodule from coworker      git pull; git submodule update
 update submodule from coworker ALT  git pull --recurse-submodules
 ---
+
+rename branch, local    git branch -m NewBranch # must be on that branch
 delete branch, local    git branch -d NewBranch
 delete branch, remote   git push origin --delete NewBranch # note: "origin" can be other names
 merge from master       git merge MasterBranch # must be in FeatureBranch
