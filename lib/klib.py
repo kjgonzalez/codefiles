@@ -162,11 +162,15 @@ class Stopwatch:
             OUT: 5.2087955
     '''
     def __init__(self):
-        self.t1=time.time()
+        self.t1 = time.time()
+        self.laps=[]
     def start(self):
         self.t1=time.time()
-    def lap(self):
-        return time.time()-self.t1
+    def lap(self,name=''):
+        _lap = time.time()-self.t1
+        self.laps.append([_lap,name])
+        return _lap
+
 
 # class Stopwatch
 
