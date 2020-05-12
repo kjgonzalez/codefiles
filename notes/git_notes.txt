@@ -55,7 +55,7 @@ INITIALIZING A NEW BRANCH LOCALLY ==========================
   (some changes get committed here)
   git push --set-upstream origin NewBranch
 
-MOVING / DELETING A LOCAL/REMOTE BRANCH ====================
+RENAMING / DELETING A LOCAL/REMOTE BRANCH ==================
 git branch -m OldName NewName  # rename local
 git push <remote> --delete OldName # delete old branch, where <remote> can be "origin"
 git push <remote> NewName      # Push the new branch to remote
