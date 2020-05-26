@@ -248,7 +248,7 @@ class Animal:
         ''' by writing @abstractmethod, child class MUST implement "concrete"
             version of this method, otherwise run into an error
         '''
-        raise Exception("not implemented")
+        pass
 
 class Cat(Animal):
     def __init__(self,name):
@@ -262,9 +262,21 @@ c = Cat('tammy')
 c.move((1,2))
 
 
+''' creating a __call__ method ========================================= '''
+# call enables the entire object to be used like a function
+print()
+class AddTwo:
+    def __init__(self,a):
+        self.a = a
 
+    def __call__(self):
+        return self.a+2
 
-
-
+    def method_add(self):
+        return self.a+2
+x = AddTwo(2)
+print(x)
+print( x() )
+print( x.method_add() )
 
 # eof
