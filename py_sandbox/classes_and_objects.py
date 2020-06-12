@@ -280,3 +280,84 @@ print( x() )
 print( x.method_add() )
 
 # eof
+
+''' All "magic" methods aka "dunder" (double underscore) methods ======= '''
+# this section will exist as a complete collection of all magic methods used in python classes
+print('= {} {}'.format('dunder methods','='*50))
+class Dunders:
+    def __init__(self):
+        ''' used when class is initialized. usage: x = Dunders(args) '''
+        print('initialized')
+        self.val = 0
+        self.arr = [1,2,3,4,5]
+        self._index = 0
+    def __str__(self):
+        ''' used when class is called like a string object '''
+        return 'object called like a string'
+    def __call__(self):
+        ''' used when object called like a function '''
+        return 1
+    def __getitem__(self, item):
+        ''' used when object called like a dict / array '''
+        return 'a'*item
+    def __len__(self):
+        ''' used when object acts like an array '''
+        return 2
+    def __iter__(self):
+        ''' allows the object to be iterable '''
+        return self
+    def __next__(self):
+        ''' allows using "next" builtin '''
+        if(self._index>=len(self.arr)):
+            self._index=0
+            raise StopIteration
+        res = self.arr[self._index]
+        self._index += 1
+        return res
+    def __repr__(self):
+        ''' allows using "repr" builtin. "official" string of object. "different" than __str__ '''
+        return 'Very important string'
+    def __reversed__(self):
+        ''' allows using "reversed" builtin. can still return w/e you want '''
+        return [7,6,5,4,3]
+    def __del__(self):
+        ''' handles deletion of object '''
+        print('this object being deleted')
+    def ignored(self):
+        print('''note: will be skipping these:
+         * __eq__ - check for equality, and others: (lt, le, ne, gt, ge)
+         * __bool__ - check for true/false. if not defined, len() is used (True for non-zero values)
+         * __bytes__ - return a bytes representation of data
+         * __add__ - addition
+         * __getattr__
+         * __setattr__
+         * __delattr__
+         * __getattribute__
+         * __dir__
+         * any others mentioned on: https://docs.python.org/3/reference/datamodel.html#specialnames
+         ''')
+
+
+
+# examples of each
+x = Dunders() # __init__
+print(x) # __str__
+print(x()) # __call__
+print(x[4]) # __getitem__
+print('using len dunder:',len(x)) # __len__
+print(next(x)) # __next__
+print([i for i in x]) # __iter__
+print(repr(x)) # __repr__
+print(list(reversed(x))) # __reversed__
+
+
+
+
+
+
+
+
+
+
+
+
