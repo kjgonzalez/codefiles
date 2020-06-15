@@ -255,11 +255,11 @@ def antiOverwrite(filename):
         valid=not os.path.exists(name2) # True = name available
     return name2
 
-def getlist(rec=False,files=True,ext=''):
+def getlist(rec=True,files=True,ext=''):
     ''' This function is implemented as alias for "dir". Use THAT function. '''
-    return dir(rec,files,ext)
+    return dir(path='.',rec=rec,files=files,ext=ext)
 
-def dir(path='.',rec=False,files=True,ext=''):
+def dir(path='.',rec=True,files=True,ext=''):
     '''
     Objective: Emulate ls / dir command to be cross platform and return as a
         list. Can choose to run recursively, only show folders or show all
