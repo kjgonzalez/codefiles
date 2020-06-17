@@ -8,7 +8,7 @@ cause of issue: x
     * see "modified: submodules/SomeName (new commits)
 2: issue: get this message: "remote: This repository moved. Please use the new location"
 3: https://git-scm.com/book/en/v2/Git-Tools-Submodules
-
+4: https://stackoverflow.com/questions/3876977/update-git-branches-from-master
 
 DEALING WITH SUBMODULES IN GIT =============================
 Submodules are generally a pain and should be avoided unless code is stable 
@@ -61,23 +61,6 @@ git push <remote> --delete OldName # delete old branch, where <remote> can be "o
 git push <remote> NewName      # Push the new branch to remote
 git push <remote> -u NewName   # re-start remote branch tracking
 
-
-
-MISCELLANEOUS NOTES ABOUT BRANCHES =========================
-* you can create a new branch from any other branch
-* you can have a local branch without a remote branch, and vice-versa
-* can also rename a branch locally & remotely (see below)
-
-
-DEAL WITH BRANCH / MERGE CONFLICTS =========================
-0. (have created local and remote changes, leading to a 
-    conflict when pulling new commits in)
-1. manually fix issues between the two, save files*
-    !!! DO NOT, ** DO NOT ** MAKE A COMMIT !!!
-2. git add <affected file(s)>
-3. git rebase --continue
-   (issue should be resolved)
-
 CHECKOUT A REMOTE BRANCH ===================================
 first time:	
     git checkout --track origin/BranchName
@@ -92,8 +75,7 @@ KJG200316: note that this is not recommended
 4. git fetch
 5. git rebase origin/MasterBranch
 
-src: https://stackoverflow.com/questions/3876977/update-git-branches-from-master
-(NOTE: use option 2)
+(Src4, NOTE: use option 2)
 
 MERGE A FEATURE BRANCH ONTO A MASTER BRANCH ================
 # on master branch
@@ -102,11 +84,24 @@ git branch feature
 git checkout master
 git merge feature # adds extra commit explaining the merge
 
+DEAL WITH BRANCH / MERGE CONFLICTS =========================
+0. (have created local and remote changes, leading to a 
+    conflict when pulling new commits in)
+1. manually fix issues between the two, save files*
+    !!! DO NOT, ** DO NOT ** MAKE A COMMIT !!!
+2. git add <affected file(s)>
+3. git rebase --continue
+   (issue should be resolved)
+
 DEALING WITH AN IGNORED .GITIGNORE FILE ====================
 if you have a .gitignore file that you created locally, but nothing that is
 put it is being recognized, this may be a windows-specific encoding error.
     THUS, BE SURE TO SAVE YOUR .GITIGNORE FILE IN ANSI ENCODING! 
 
+MISCELLANEOUS NOTES ABOUT BRANCHES =========================
+* you can create a new branch from any other branch
+* you can have a local branch without a remote branch, and vice-versa
+* can also rename a branch locally & remotely (see below)
 
 QUICK COMMANDS FOR HELPING TO GET STARTED ==================
 initial config 1        git config --global user.email YourEmail

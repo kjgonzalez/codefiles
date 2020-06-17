@@ -15,6 +15,7 @@ vals1= np.array(np.random.rand(9)*100+10,int)
 vals2 = np.array([0.8, 0.7, 0.4, 0.8, 0.7, 0.5, 0.8, 0.9, 0.8])
 vals= np.column_stack((vals1,vals2))
 
+# basic initialization
 table=pd.DataFrame(data=vals,index=names,columns=['count','AP'])
 print(table)
 # sample=[['Car']]
@@ -30,3 +31,9 @@ dat.loc[0]=[1,2,3]
 print(dat)
 print('number of rows in table:',len(dat))
 print('number of columns in table:',len(dat.columns))
+
+# add a column or row to a dataframe: 
+df = pd.DataFrame(np.random.rand(3,3),columns=list('abc'))
+df['d']=[1,2,3]
+df.loc[len(df)] = np.arange(df.shape[1])
+print(df)

@@ -71,4 +71,16 @@ print('1&2: ',(a1==a2).all(),end=' | ') # true
 print('1&3: ',(a1==a3).all(),end=' | ') # true
 print('2&3: ',(a2==a3).all())           # true
 
+print(''' random items ========================================================== ''')
+a=np.random.rand(5)*10
+print('original:\n ',a)
+print('rounded to nearest int:\n ',np.rint(a))
+
+a=np.array([4,3,1,1,5,4,1,3,2,5,1,2])
+print('raw:',a)
+print('unique values:',np.unique(a,return_counts=True))
+
+
+
+
 # eof
