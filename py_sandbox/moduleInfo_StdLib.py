@@ -18,6 +18,7 @@ print('readable: {:,}'.format(round(a*1e6)))
 print('Lpad    : |{:>8}|'.format(b))
 print('Rpad    : |{:<8}|'.format(b))
 print('Cpad    : |{:^8}|'.format(b))
+print('pad spec: |{:+^8}|'.format(b)) # charcter before '^' will be repeated everywhere
 
 
 
