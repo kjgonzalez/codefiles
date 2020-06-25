@@ -72,15 +72,28 @@ print('1&3: ',(a1==a3).all(),end=' | ') # true
 print('2&3: ',(a2==a3).all())           # true
 
 print(''' random items ========================================================== ''')
+# np.rint: rounded integers
 a=np.random.rand(5)*10
 print('original:\n ',a)
 print('rounded to nearest int:\n ',np.rint(a))
 
+# np.unique: unique values in array
 a=np.array([4,3,1,1,5,4,1,3,2,5,1,2])
 print('raw:',a)
 print('unique values:',np.unique(a,return_counts=True))
 
-
-
-
+# np.interp: linear interpolation
+xref = np.linspace(0,6, 50) # a few ref values, slow data rate
+yref = np.sin(xref)
+# Changing "10" to larger number than "50" causes downsampling to 50
+# Changing "0" or "6" below lead to truncation / extension
+xout = np.linspace(-1,5.5,10) # many out values, to be scaled to ref. 
+yout = np.cos(xout)-.5 # y data as well
+yout_adj = np.interp(xref,xout,yout)-0.25 # (x: desired resolution, xp: current resolution, fp: data to change)
+# f,p = plt.subplots()
+# p.plot(xref,yref,'-o',label='ref')
+# p.plot(xout,yout,':s',label='out')
+# p.plot(xref,yout_adj,':x',label='out_adj')
+# p.legend()
+# plt.show()
 # eof
