@@ -9,6 +9,7 @@ KJG190814: perhaps also want to look into how to get a csv file via pandas?
 
 import numpy as np
 import pandas as pd
+import tempfile as tmp
 
 names='car cyc dc misc ped sitting tram truck van'.split(' ')
 vals1= np.array(np.random.rand(9)*100+10,int)
@@ -20,9 +21,15 @@ table=pd.DataFrame(data=vals,index=names,columns=['count','AP'])
 print(table)
 # sample=[['Car']]
 
+# write out a file like so:
+f = tmp.NamedTemporaryFile(mode='w',suffix='.csv',delete=False)
+fname = f.name
+pd.DataFrame(np.random.rand(3,3),columns=list('abc')).to_csv(f)
+f.close()
+
 # can read in a file like so:
-dat = pd.read_csv('../lib/data/iris.csv',header=None) # if have no header, give "None"
-print('iris dataset shape:',dat.shape)
+dat = pd.read_csv(fname,header=None) # if have no header, give "None"
+print('shape:',dat.shape)
 
 # initialize an empty dataframe and add data later:
 # simple method is to initialize with known columns, and add row data later
@@ -37,3 +44,13 @@ df = pd.DataFrame(np.random.rand(3,3),columns=list('abc'))
 df['d']=[1,2,3]
 df.loc[len(df)] = np.arange(df.shape[1])
 print(df)
+
+# merge two tables in various ways
+x = pd.DataFrame(np.ones((4,4)),columns=list('abcd'))
+y = pd.DataFrame(np.zeros((4,4)),columns=list('abce'))
+# merge 1: append to the end
+z = pd.merge(x,y,how='outer')
+print('merge1:\n',z,sep='')
+# merge 2: merge on specific column
+z = pd.merge(x,y,how='outer',on=['a'])
+print('merge2:\n',z,sep='')
