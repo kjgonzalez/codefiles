@@ -1,7 +1,7 @@
 # Title: Python Modules Install List
 # Usage: python -m pip install -r FILENAME --user
 # upgrade pip: python -m pip install --upgrade pip
-jupyter
+#jupyter # not really needed anymore
 ipython
 ipdb
 numpy
