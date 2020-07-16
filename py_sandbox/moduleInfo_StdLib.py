@@ -20,5 +20,21 @@ print('Rpad    : |{:<8}|'.format(b))
 print('Cpad    : |{:^8}|'.format(b))
 print('pad spec: |{:+^8}|'.format(b)) # charcter before '^' will be repeated everywhere
 
+# another way to pad strings
+
+print('text with rpad '.ljust(30,'-'))
+
+
+# 02 Windows Command Line  =========================================================================
+
+import os
+
+# 2.01 Get Command Line output as string ===============================
+x = os.popen('echo hello').read()
+print(x)
+
+
+
+
 
 

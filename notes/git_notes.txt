@@ -77,12 +77,11 @@ KJG200316: note that this is not recommended
 
 (Src4, NOTE: use option 2)
 
-MERGE A FEATURE BRANCH ONTO A MASTER BRANCH ================
-# on master branch
-git branch feature
-# make some commits
-git checkout master
-git merge feature # adds extra commit explaining the merge
+
+MERGE BRANCH_UPDATE INTO BRANCH_OLD ================
+# go to old branch and merge it with updates
+git checkout branch_old
+git merge branch_update # adds extra commit explaining the merge
 
 DEAL WITH BRANCH / MERGE CONFLICTS =========================
 0. (have created local and remote changes, leading to a 

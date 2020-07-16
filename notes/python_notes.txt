@@ -1,4 +1,26 @@
 - - - - - - - - - - - - -
+How to use imports in a project, including with submodules:
+
+* ideally, no scripts should be in a submodule
+* if run something from a submodule, treat path as if running from parent folder
+* every folder should contain an __init__.py, even in Py3.x
+
+MainProject/
+    submoduleA/
+        submoduleB/
+            (etc)
+        __init__.py     # can be left blank
+        mod0.py         # nothing special
+        mod1.py         # nothing special
+        mod2.py         # import submoduleA.mod1
+        demo.py         # sys.path.append('..'); import submoduleA.mod2
+    __init__.py         # can be left blank
+    mod3.py             # import submoduleA.mod2
+    mod4.py             # import submoduleA.mod0
+    main1.py            # import mod4; import submoduleA.mod0; (etc)
+
+
+- - - - - - - - - - - - -
 Use Pandas to make a nice printed table:
 In [38]: body=np.array(np.round(np.random.rand(3,3)*5,2),dtype=object)
 In [39]: head='one two three'.split(' ')

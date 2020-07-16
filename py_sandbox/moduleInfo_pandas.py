@@ -54,3 +54,10 @@ print('merge1:\n',z,sep='')
 # merge 2: merge on specific column
 z = pd.merge(x,y,how='outer',on=['a'])
 print('merge2:\n',z,sep='')
+
+# select a subset of data
+x = pd.DataFrame({'name':['a']*5+['b']*5, 'dat':np.random.rand(10)})
+print(x)
+print('rows with "a" in them:')
+print( x[x['name']=='a'] )
+
