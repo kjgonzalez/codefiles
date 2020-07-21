@@ -67,17 +67,6 @@ first time:
 any other time:
     git checkout BranchName #omit remotes/origin
 
-KEEP A LOCAL BRANCH OF A REPO UPDATED WITH REMOTE MASTER ===
-KJG200316: note that this is not recommended
-1. git clone repo
-2. git branch NewBranchName of desired "master" version
-3. commit local changes (especially if you don't plan to keep this forever)
-4. git fetch
-5. git rebase origin/MasterBranch
-
-(Src4, NOTE: use option 2)
-
-
 MERGE BRANCH_UPDATE INTO BRANCH_OLD ================
 # go to old branch and merge it with updates
 git checkout branch_old
@@ -96,6 +85,22 @@ DEALING WITH AN IGNORED .GITIGNORE FILE ====================
 if you have a .gitignore file that you created locally, but nothing that is
 put it is being recognized, this may be a windows-specific encoding error.
     THUS, BE SURE TO SAVE YOUR .GITIGNORE FILE IN ANSI ENCODING! 
+
+GIT SQUASH MULTIPLE COMMENTS ===============================
+squash the last <nCommits>:
+    1. git rebase -i HEAD~nCommits
+    2. set at least 1 commit to...
+        "pick/p" 
+        "reword/r" (pick w/ new message)
+        "squash/s"
+        "fixup/f" (squash w/o message)
+    3. save
+    4. make final commit message
+squash commits after CommitHash:
+    1. git rebase -i CommitHash
+    2. (follow steps above)
+
+
 
 MISCELLANEOUS NOTES ABOUT BRANCHES =========================
 * you can create a new branch from any other branch
@@ -128,3 +133,4 @@ close issue in commit   git commit -m "Fixes #ISSUE_NUM ..." #(# is required)
 update github repo loc  git remote set-url origin [https://...git] #(Src2)
 checkout new branch     git checkout BranchName #omit remotes/origin
 checkout w/ tracking    git branch --set-upstream-to=origin/<branch> BranchName
+git squash commits      git rebase -i HEAD~nCommits (or -i HASH, see above)

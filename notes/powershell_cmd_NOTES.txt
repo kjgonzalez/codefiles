@@ -39,7 +39,10 @@ python command.py ^
     arg1 arg2 ^
     arg3 etc
 
-
+= PWS / CMD: batch command across multiple lines ===========
+it is indeed possible to call a batch script with arguments 
+    via a shortcut. for example, this is possible: 
+    .\Compile_Stuff.lnk arg1 arg2
 
 
 

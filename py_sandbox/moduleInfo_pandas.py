@@ -61,3 +61,32 @@ print(x)
 print('rows with "a" in them:')
 print( x[x['name']=='a'] )
 
+# sort a dataframe by a given column
+# NOTE: can have a list of sorting priority (sort by column a, then column b, then...)
+print('unsorted')
+arr = (np.random.rand(3,4)*100).round().astype(int)
+x = pd.DataFrame(arr,columns=list('abcd'))
+print(x)
+print('sorted ascending by column b')
+x2 = x.sort_values(by=['b'],inplace=False) # "inplace" prevents having to make a new array
+print(x2)
+
+print('sorted descending by column c')
+x3 = x.sort_values(by=['c'],ascending=False)
+print(x3)
+
+# drop a row or a column from the data
+x = pd.DataFrame(np.random.rand(3,3),columns=list('abc'))
+print('dropping rows columns')
+# drop a column
+print('original\n{}'.format(x))
+print('drop a column:\n{}'.format( x.drop(['a'],axis=1) ))
+print('drop a row:\n{}'.format( x.drop([0]) ))
+
+# NOTE: the indices are preserved during these operations, so you need "reset_index" to reset these values
+print('drop a row and use new indices:\n{}'.format( x.drop([0]).reset_index(drop=True) ))
+
+# swap two columns around (note: not really that convenient)
+print('swapping columns around:\n{}'.format(x.reindex(columns=['b','a','c'])))
+
+print('alternative method:\n{}'.format( x[['b','a','c']] ))
