@@ -1,11 +1,24 @@
 '''
-start creating basic example of making unittests in python. typically accessed
+Start creating basic example of making unittests in python. typically accessed
   via pycharm, but also usable in command line
 
-TODO: ensure that this module explains the most important concepts
 
-USAGE: 
+Important unit test concepts: 
+"test ..."
+* fixture: prep needed to perform testing (e.g. temp db's, directories, etc) 
+* case: individual unit of testing, represented as a function of class TestCase
+* suite: collection of test cases / suites, aggregate tests to run together
+* runner: orchestrate execution of tests. can be graphical, textual, etc
+
+
+USAGE 1 (if have __main__ call): 
     python moduleInfo_unittest.py -v
+
+USAGE 2 (typical):
+    python -m unittest moduleInfo_unittest.py -v
+
+USAGE 3 (if have some structure and numerous tests):
+    python -m unittest discover <args>
 
 EXAMPLE OUTPUT:
 test_Blah (__main__.TestExample) ... ok
@@ -37,7 +50,6 @@ class Blah:
     def add2(x):
         return x+2
 
-# TODO: create functional test
 class TestExample(unittest.TestCase):
     def __init__(self,*args,**kwargs):
         super(TestExample,self).__init__(*args,**kwargs)
@@ -57,7 +69,7 @@ class TestExample(unittest.TestCase):
         b = Blah(3)
         self.assertTrue( b.plus1 == 4)
 
-if __name__ =='__main__':
-    # NOTE: if you have some kind of continuous integration (CI) built
-    # into your repo, this may not be necessary
-    unittest.main()
+#if __name__ =='__main__':
+#    # NOTE: if you have some kind of continuous integration (CI) built
+#    # into your repo, this may not be necessary
+#    unittest.main()
