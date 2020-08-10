@@ -60,8 +60,8 @@ create virtual env          python3 -m venv /path/to/new/virtual/environment
 activate virtual-env        <venv>\Scripts\Activate.ps1 # platform-specific
 list pkgs/versions          pip freeze
 list pkgs/vers ALT          pip list
+use pip w/ proxy            pip install SomePackage --proxy ipv4:port (include "http"!)
 install pkgs w/ file        pip install -r requirements.txt
-use pip w/ proxy            pip install SomePackage --proxy ipv4:port
 install pip pkg (v1)        python -m pip install SomePackage --user
 install pip pkg (v2)        pip install SomePackage --user
 update pip (v1 or v2)       python -m pip install --upgrade pip

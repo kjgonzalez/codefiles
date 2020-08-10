@@ -55,7 +55,7 @@ print('merge1:\n',z,sep='')
 z = pd.merge(x,y,how='outer',on=['a'])
 print('merge2:\n',z,sep='')
 
-# select a subset of data
+# select a subset of data, aka filter
 x = pd.DataFrame({'name':['a']*5+['b']*5, 'dat':np.random.rand(10)})
 print(x)
 print('rows with "a" in them:')

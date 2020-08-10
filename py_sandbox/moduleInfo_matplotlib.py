@@ -96,6 +96,12 @@ if(False):
     for i in range(5):
         p.plot(x,np.sin(x)+i,color=rgba[i])
 
+''' color invidiual points like a colormap ================================= '''
+if(False):
+    x = np.linspace(0,6)
+    y = np.sin(x)
+    plt.scatter(x,y,c=y)
+
 ''' creating a broken axis ================================================= '''
 if(True):
     # src: https://matplotlib.org/3.1.0/gallery/subplots_axes_and_figures/broken_axis.html
