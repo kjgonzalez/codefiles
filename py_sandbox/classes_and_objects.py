@@ -329,9 +329,10 @@ class Dunders:
          * __bool__ - check for true/false. if not defined, len() is used (True for non-zero values)
          * __bytes__ - return a bytes representation of data
          * __add__ - addition
-         * __getattr__
-         * __setattr__
-         * __delattr__
+         * __contains__ - interacts with "in" statement
+         * __getattr__ - get attribute by name. interacts with getattr function
+         * __setattr__ - set attribute by name. interacts with setattr function
+         * __delattr__ - delete attribute. interacts with delattr function
          * __getattribute__
          * __dir__
          * any others mentioned on: https://docs.python.org/3/reference/datamodel.html#specialnames
