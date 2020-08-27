@@ -1,7 +1,6 @@
 /*
 date: 190709
-objective: simplify the mountain of shit that is cpp file i/o into a class that
-    lets you do things much more easily.
+
 
 
 basic example:
