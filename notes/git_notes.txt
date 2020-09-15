@@ -9,6 +9,8 @@ cause of issue: x
 2: issue: get this message: "remote: This repository moved. Please use the new location"
 3: https://git-scm.com/book/en/v2/Git-Tools-Submodules
 4: https://stackoverflow.com/questions/3876977/update-git-branches-from-master
+5: https://stackoverflow.com/questions/5667884/how-to-squash-commits-in-git-after-they-have-been-pushed
+
 
 DEALING WITH SUBMODULES IN GIT =============================
 Submodules are generally a pain and should be avoided unless code is stable 
@@ -86,7 +88,7 @@ if you have a .gitignore file that you created locally, but nothing that is
 put it is being recognized, this may be a windows-specific encoding error.
     THUS, BE SURE TO SAVE YOUR .GITIGNORE FILE IN ANSI ENCODING! 
 
-GIT SQUASH MULTIPLE COMMENTS ===============================
+GIT SQUASH MULTIPLE LOCAL COMMITS ==========================
 squash the last <nCommits>:
     1. git rebase -i HEAD~nCommits
     2. set at least 1 commit to...
@@ -100,6 +102,10 @@ squash commits after CommitHash:
     1. git rebase -i CommitHash
     2. (follow steps above)
 
+GIT SQUASH REMOTE COMMITS ==================================
+git rebase-i origin/BranchName~NCommits BranchName
+git push origin +master # force pushes only to one branch
+(Src5)
 
 
 MISCELLANEOUS NOTES ABOUT BRANCHES =========================
@@ -123,14 +129,15 @@ update submodule from upstream      git submodule update --remote --merge
 update submodule from coworker      git pull; git submodule update
 update submodule from coworker ALT  git pull --recurse-submodules
 ---
-rename branch, local    git branch -m NewBranch # must be on that branch
-delete branch, local    git branch -d NewBranch
-delete branch, remote   git push origin --delete NewBranch # note: "origin" can be other names
-merge from master       git merge MasterBranch # must be in FeatureBranch
-update submodules       git submodule update --remote --merge #(Src1) (do AFTER master update)
-mention issue in commit git commit -m "#ISSUE_NUM: working on this thing" #(# is required)
-close issue in commit   git commit -m "Fixes #ISSUE_NUM ..." #(# is required)
-update github repo loc  git remote set-url origin [https://...git] #(Src2)
-checkout new branch     git checkout BranchName #omit remotes/origin
-checkout w/ tracking    git branch --set-upstream-to=origin/<branch> BranchName
-git squash commits      git rebase -i HEAD~nCommits (or -i HASH, see above)
+rename branch, local       git branch -m NewBranch # must be on that branch
+delete branch, local       git branch -d NewBranch
+delete branch, remote      git push origin --delete NewBranch # note: "origin" can be other names
+merge from master          git merge MasterBranch # must be in FeatureBranch
+update submodules          git submodule update --remote --merge #(Src1) (do AFTER master update)
+mention issue in commit    git commit -m "#ISSUE_NUM: working on this thing" #(# is required)
+close issue in commit      git commit -m "Fixes #ISSUE_NUM ..." #(# is required)
+update github repo loc     git remote set-url origin [https://...git] #(Src2)
+checkout new branch        git checkout BranchName #omit remotes/origin
+create&checkout new branch git checkout -b branchName
+checkout w/ tracking       git branch --set-upstream-to=origin/<branch> BranchName
+git squash commits         git rebase -i HEAD~nCommits (or -i HASH, see above)
