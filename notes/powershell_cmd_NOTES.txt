@@ -48,14 +48,15 @@ it is indeed possible to call a batch script with arguments
 
 = SIMPLE ONE-LINE COMMANDS =================================
 (CMD) create a symlink:         mklink path/link path/real/item
+(CMD) view text file contents   more FileName.txt
+(CMD) find string in files      findstr /s "Text Here" *.* # note: also possible in powershell
+(CMD) pseudo-df command         fsutil volume diskfree <volume> 
+(CMD) remove one file           del <filename>
+(CMD) remove folder + files     rmdir <folder> /s/q # /s is recursive, /q is quiet
 (PWS) run a cmd-based command:  cmd /c <rest of command here>
 (PWS) get aliases:              Get-Alias <OptionalFuncName>
 (PWS) custom find/grep          function fgrep($o){cmd /c dir /b /s $o} #usage: fgrep ITEM
-(CMD) view text file contents   more FileName.txt
 (PWS) simple (bad) file search  dir -s filename # -s=recursive
 (PWS) create alias              Set-Alias -Name list -Value <SomeAction>
-(CMD) find string in files      findstr /s "Text Here" *.* # note: also possible in powershell
-(CMD) pseudo-df command         fsutil volume diskfree <volume> 
-
-
-
+(PWS) remove one file           rm <filename>
+(PWS) remove folder + files     rm -recurse <folder>

@@ -141,3 +141,4 @@ checkout new branch        git checkout BranchName #omit remotes/origin
 create&checkout new branch git checkout -b branchName
 checkout w/ tracking       git branch --set-upstream-to=origin/<branch> BranchName
 git squash commits         git rebase -i HEAD~nCommits (or -i HASH, see above)
+git squash remote commits  git rebase -i origin/BRANCH~4 BRANCH ; git push origin +BRANCH
