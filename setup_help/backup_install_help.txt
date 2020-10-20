@@ -11,6 +11,8 @@ sudo apt-get install pinta
 sudo apt-get install vim
 sudo apt-get install compizconfig-settings-manager
 (relevant libraries)
+# rpi specific: 
+sudo apt install pure-ftpd
 
 
 python libs: -----------------------------------------------
@@ -19,20 +21,6 @@ matplotlib
 Pillow
 opencv-contrib-python
 etc...
-
-ADJUST SETTINGS: -------------------------------------------
-STATUS | DESCRIP
-done   | do not mount certain drives
-done   | never allow screen to turn off (until brightness issue is fixed)
-done   | correctly adjust date/time incl. how displayed
-done   | create external bash file for modifying settings
-done   | clone codefiles repo
-done   | install ublock origin for firefox
-done   | install atom (download filename.deb, sudo dpkg -i filename.deb)
-!!!!   | make system backup image of current state, quick recovery
-!!!!   | setup git properly
-!!!!   | use official font sizes (currently: courier 12)
-
 
 GIT SETTINGS -----------------------------------------------
 (see git_notes.txt for more)
