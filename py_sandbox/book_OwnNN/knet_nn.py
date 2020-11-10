@@ -32,7 +32,7 @@ class NeuralNetwork:
         default, network uses sigmoid activation function, but may be modified
             for any other.
     '''
-    def __init__(self,LayerList,learningrate):
+    def __init__(self,LayerList,learningrate=0.1):
         ''' initialize network, given a layer list and learning rate
         INPUTS:
         * LayerList expected structure: [inode,hnode0,...,hnodeN,outnode]

@@ -1,0 +1,91 @@
+= create a new project in Visual Studio 2019 ===============
+1. create new project
+2. "empty project"
+3. select "place solution and project in the same directory"
+done
+
+= How to include a directory in Visual Studio 2019 =========
+with solution open: 
+1. Project >> [project] Properties
+2. Configuration Properties / VC++ Directories 
+3. Include Directories >> (click dropdown) >> "<Edit...>"
+4. click "New Line", or new folder icon >> enter in path
+
+example: 
+want to add k_cpp, have file structure: 
+C:\Users\example\repos
+    \k_cpp
+        \.git
+        \klib
+            _includeTest.hpp
+            <other_files>
+        <other_files>
+
+path is: C:\Users\PATH_TO\repos\k_cpp
+for Eigen:  C:\path\to\eigen-git-mirror\ (which contains \Eigen folder)
+for Boost:  C:\path\to\boost_VERSIONNUMBER
+
+
+= quick tips on using printf (and sprintf_s) ===============
+  /*  format specifiers:
+      * %c = character
+      * %d = decimal
+      * %e = scientific notation
+      * %f = floating point
+      * %s = string of characters
+  general format: %<L/R_justify(-)><fillerChar><. if float><nCharacters><specifier>
+  */
+  int a=3;
+  double b = 1.23456789;
+  char c = 'x';
+
+  // integers & characters
+  printf("=%i= \n",a);
+  printf("=%08i= \n", a);
+  printf("=%-8i= \n", a);
+  printf("=%8c= \n", c);
+  printf("=%-8c= \n", c);
+
+  // floating point values
+  printf("=%f= \n", b);
+  printf("=%.9f= \n", b);
+  printf("=%8.4f= \n", b);
+  printf("=%08.4f= \n", b);
+  printf("=%.4f= \n", b);
+
+= pass a function as an argument to another function =======
+  int add3(int val) { return val + 3; }
+  int modifyVal(int val, int func(int)) { return func(val); }
+  // ...
+  int z = 3;
+  cout << modifyVal(z,add3) << endl; // output: 6
+
+= how to install Eigen ===============================================
+cd ~/repos/
+git clone https://gitlab.com/libeigen/eigen
+(include the directory ~/repos/eigen/ in includes directory)
+...
+in program: 
+#include <Eigen/Dense>
+(done)
+
+
+
+= list files in directory (req: C++17+ or later)
+
+
+= boost notes ========================================================
+
+= apply per-element function to 2D matrix ===
+  // attempt to apply transform to 2d matrix
+  int s1 = w.size1();
+  w.resize(w.size1() * w.size2(), 1,false);
+  std::transform(w.begin1(), w.end1(), w.begin1(), add2);
+  w.resize(s1, w.size1() / s1,false);
+
+
+
+
+
+
+
