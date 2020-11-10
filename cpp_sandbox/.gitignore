@@ -8,3 +8,21 @@
 */CMakeFiles/
 */Makefile
 *.cmake
+
+# visual studio (remember to put solution & project in same directory)
+*.suo
+*.VC*
+*.vs/
+*Debug/*
+*Release/*
+*.sln
+*.vc*
+*.exe*
+*.ilk
+*.log
+*.pdb
+*.tlog*
+*.obj
+*.idb
+*.ipdb
+*.iobj
