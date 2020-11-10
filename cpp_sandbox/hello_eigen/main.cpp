@@ -8,6 +8,10 @@ How to Install / Use Eigen:
     VC++ Directories >> Include Directories >> (add path here)
 4. start using Eigen
 
+things to add: 
+  * append new row(s)
+  * append new col(s)
+
 */
 
 #include <iostream>
@@ -70,12 +74,17 @@ int main() {
   // matrix properties
   cout << "diagonal: " << x1.diagonal().transpose() << endl;
   cout << "shape (should be 2,5): " << x3.rows() << ',' << x3.cols() << endl;
+  
   // matrix manipulation
-
-  //eig::Map<eig::MatrixXf> M2(M1.data(), 6, 2);
   eig::Map < eig::MatrixX<double>> x4(x1.data(), 1,x1.size());
-  //cout << "M2:" << endl << M2 << endl;
-  cout << x4 << endl;
+  cout << "reshape: " << x4 << endl;
+  // append a row
+  eig::MatrixX<double> x6(2,2);
+  x6 << 0, 1, 2, 3;
+  x6.conservativeResize(x6.cols() + 1, eig::NoChange); // shortcut
+  x6(2, 0) = 5;
+  x6(2, 1) = 6;
+  cout << "append row: \n" << x6 << endl;
 
   // taking part of matrix: 
   eig::MatrixX<double> x5(5, 5);
