@@ -21,6 +21,11 @@ MainProject/
 
 
 - - - - - - - - - - - - -
+make a module accessible from anywhere
+1. add path to system variable PYTHONPATH
+2. restart command line / bash
+
+- - - - - - - - - - - - -
 Use Pandas to make a nice printed table:
 In [38]: body=np.array(np.round(np.random.rand(3,3)*5,2),dtype=object)
 In [39]: head='one two three'.split(' ')

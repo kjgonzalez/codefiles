@@ -265,7 +265,7 @@ def renred(maxsize=2000,overwrite=False,recursive=False):
         imgreduce(ifile,maxsize,overwrite)
     print("FN 'renred': Done")
 #
-def renSubfolder(SubfolderName,JPGONLY=True,DATEONLY=False):
+def renSubfolder(SubfolderName,DATEONLY=False):
     ''' Objective: Rename a SUBFOLDER of current directory 
     by going in, looking at each img's mod dates (this
     uses function 'getdate', doesn't depend on 
@@ -274,11 +274,38 @@ def renSubfolder(SubfolderName,JPGONLY=True,DATEONLY=False):
     imgs, use only.
     '''
     n1=SubfolderName
-    n2=getrange(jpgOnly=JPGONLY,dateOnly=DATEONLY,subfolder=SubfolderName)
+    n2=getrange(dateOnly=DATEONLY,subfolder=SubfolderName)
     #try:
     os.rename(n1,n2)
     print("FN 'renSubfolder': renamed '{}' to '{}'".format(n1,n2))
 #
 
+if(__name__=='__main__'):
+    import argparse
+    
+    actions=dict()
+    actions['renameFolder']='rename folder to reflect range of files inside, i.e. "YYMMDD-YYMMDD"'
+    
+    
+    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,description='Potential arguments:'+str(list(actions.keys())))
+    p.add_argument('usage',type=str,help='desired operation')
+    p.add_argument('--args',nargs='+',required=False)
+    args=p.parse_args()
+    action = args.usage
+    others = args.args
+    # want to implement some basic modification abilities to this lib. will add as needed
+    if(action == 'renameFolder'):
+        # want to rename folder to reflect range of images / videos inside
+        print("this action")
+        targFolder = others[0]
+        assert os.path.isdir(targFolder,),"argument needs to be target folder. exiting."
+        renSubfolder(targFolder)
 
+    else: print("Error, desired action not recognized. fix or add. exiting.")
+    
+    
+    
+    
+    
+    
 

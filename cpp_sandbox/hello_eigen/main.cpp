@@ -42,8 +42,9 @@ int main() {
   eig::MatrixX<double> xtemp = y1.matrix();
 
   // note there are also vectors, but used to a far lesser extent
-  eig::Vector3<double> v;
+  eig::VectorX<double> v(6);
   v << 1, 2, 3, 4, 5, 6;
+  cout << "vector: " << v << endl;
 
   // basic per-element operations: 
   cout << "scalar addition \n" << (x1.array() + 10).matrix() << endl; // note: need to be in array
@@ -95,11 +96,13 @@ int main() {
   cout << "column1 \n" << x5.block(0, 1, x5.rows(), 1) << endl;
   cout << "row3 \n" << x5.block(3, 0, 1,x5.cols()) << endl;
 
-  // special matrices. only static, can be whatever dimensions needed
+  // special matrices. dynamic or static, can be whatever dimensions needed
   cout << "identity matrix \n" << eig::Matrix<double,3,3>::Identity() << endl;
   cout << "zeros \n" << eig::Matrix<double, 3, 3>::Zero() << endl;
   cout << "ones\n" << eig::Matrix<double, 3, 3>::Ones() << endl;
+  cout << "random\n" << eig::MatrixX<double>::Random(3,3) << endl;
 
+  
 
 
 }

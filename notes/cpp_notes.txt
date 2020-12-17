@@ -33,7 +33,7 @@ for Boost:  C:\path\to\boost_VERSIONNUMBER
       * %e = scientific notation
       * %f = floating point
       * %s = string of characters
-  general format: %<L/R_justify(-)><fillerChar><. if float><nCharacters><specifier>
+  general format: %<L/R_justify(-)><fillerChar><nChar><. if float><nDigits><specifier>
   */
   int a=3;
   double b = 1.23456789;
@@ -69,20 +69,65 @@ in program:
 #include <Eigen/Dense>
 (done)
 
+= checking for memory leaks in visual studio =================
+src: https://stackoverflow.com/questions/4790564/finding-memory-leaks-in-a-c-application-with-visual-studio
+2 main methods: interactive or programmed
+INTERACTIVE
+1. Debug > Windows > Show Diagnostic Tools > "Memory Usage"
+2. at start of code, at first breakpoint, take a snapshot
+3. at end of code, final breakpoint, take a snapshot
+4. compare memory usage between the two
+
+PROGRAMMED
+Add following lines to various places in code: 
+    #define _CRTDBG_MAP_ALLOC
+    #include<crtdbg.h>
+    ...
+    _CrtMemState sOld;
+    _CrtMemState sNew;
+    _CrtMemState sDiff;
+    _CRTMemCheckpoint(&sOld); // take a snapshot
+    ...
+    _CrtMemCheckpoint(&sNew); // take a snapshot
+    if(_CrtMemDifference(&sDiff,&sOld,&sNew)){
+        OutputDebugString(L"-----------_CrtMemDumpStatistics ---------");
+        _CrtMemDumpStatistics(&sDiff);
+        OutputDebugString(L"-----------_CrtMemDumpAllObjectsSince ---------");
+        _CrtMemDumpAllObjectsSince(&sOld);
+        OutputDebugString(L"-----------_CrtDumpMemoryLeaks ---------");
+        _CrtDumpMemoryLeaks();
+    }
+    return 0;
+    ...
+
+= throw an error =============================================
+to catch an error in code, format a block like below. note that 
+    three keywords needed: try, throw, & catch
+
+try{
+  if(ExceptionCheck) throw ERROR_NUMBER; // do not use a string
+  
+  (rest of code to try)
+}
+catch (int e){
+  cout << "exception " << e << ". exiting...";
+  exit(NULL)
+}
 
 
-= list files in directory (req: C++17+ or later)
+= list files in directory (req: C++17+ or later) =============
+???
 
 
-= boost notes ========================================================
-
-= apply per-element function to 2D matrix ===
+= boost: apply per-element function to 2D matrix ===
   // attempt to apply transform to 2d matrix
   int s1 = w.size1();
   w.resize(w.size1() * w.size2(), 1,false);
   std::transform(w.begin1(), w.end1(), w.begin1(), add2);
   w.resize(s1, w.size1() / s1,false);
 
+= conditional operator help ==================================
+int x = condition ? ActionIfTrue : ActionIfFalse
 
 
 

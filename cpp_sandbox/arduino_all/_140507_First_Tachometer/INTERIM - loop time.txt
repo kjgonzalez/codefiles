@@ -1,0 +1,59 @@
+/*code objective: measure light pulses as something goes in between a light emitter and sensor
+  thus, will be able to measure something like RPM's, etc.
+  
+*/
+
+//global varspace
+int smax=0;
+int smin=0;
+int smid=0;
+int sloc=0;  //sensor location
+int eloc=12; //emitter location
+int ploc=1;  //potentio location
+
+//temp vars
+int prevTime=0;
+int currTime=0;
+int loopTime=0;
+int waitTime=0;
+
+void setup(){
+  //initialize system
+  Serial.begin(9600);
+  delay(3000);
+  Serial.println("start");
+  pinMode(eloc,OUTPUT);
+  
+  //get "off" reading
+  smin=analogRead(sloc);
+  
+  //get "on" reading
+  digitalWrite(eloc,HIGH);
+  delay(500);
+  smax=analogRead(sloc);
+  digitalWrite(eloc,LOW);
+  
+  //setup "threshold"
+  smid=(smax+smin)/2;
+  
+  Serial.println("min \t max \t mid");
+  Serial.print(smin);  Serial.print("\t");
+  Serial.print(smax);  Serial.print("\t");
+  Serial.println(smid);
+  //temp
+  currTime=millis();
+} //setup
+
+void loop(){
+  //cycle LED on/off at some rate, have sensor try to measure this
+  prevTime=currTime;
+  currTime=millis();
+  loopTime=currTime-prevTime;
+  waitTime=constrain(map(analogRead(ploc),0,1023,10,500),10,500);
+  
+  delay(waitTime);
+  Serial.print(waitTime);
+  Serial.print("\t");
+  Serial.println(loopTime);
+
+}
