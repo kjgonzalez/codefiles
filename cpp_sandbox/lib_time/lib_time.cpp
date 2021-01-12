@@ -10,7 +10,7 @@ done | pause / sleep for a certain amount of time
 ???? | show time as kjg standard, eg. 2020Feb06-22:08:15 >> YYYYMMMDD-HH:mm:SS
 
  */
-
+#pragma warning(disable : 4996) // disable time warning
 #include <iostream>
 #include <string>
 #include <time.h> // AKA ctime
@@ -55,19 +55,25 @@ int main(){
     sleep(1);
     printf("time elapsed: %i\n",time(NULL)-t0);
 
-    printf("current time: %s \n",asString(3).c_str());
+    tm* curr_tm;
+    time(&timer);
+    curr_tm = localtime(&timer);
+    char date_string[100];
+    strftime(date_string, 50, "%Y%b%d-%H%M%S\n",curr_tm);
+    printf("current datetime: %s\n", date_string);
+
 
     time_t rawtime;
     struct tm * timeinfo;
     time (&rawtime);
     timeinfo = localtime( &rawtime);
     cout << "year-month-day-weekday-hour-minute-second: ";
-    cout << timeinfo->tm_year+1900 << " "; // life starts in 1900
-    cout << timeinfo->tm_mon+1 << " "; // 0-indexed
-    cout << timeinfo->tm_mday << " ";
-    cout << timeinfo->tm_wday << " ";
-    cout << timeinfo->tm_hour << " ";
-    cout << timeinfo->tm_min << " ";
+    cout << timeinfo->tm_year+1900 << "-"; // life starts in 1900
+    cout << timeinfo->tm_mon+1 << "-"; // 0-indexed
+    cout << timeinfo->tm_mday << "-";
+    cout << timeinfo->tm_wday << "-";
+    cout << timeinfo->tm_hour << "-";
+    cout << timeinfo->tm_min << "-";
     cout << timeinfo->tm_sec << endl;
 
     auto start = chrono::high_resolution_clock::now();

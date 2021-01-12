@@ -59,6 +59,12 @@ for Boost:  C:\path\to\boost_VERSIONNUMBER
   // ...
   int z = 3;
   cout << modifyVal(z,add3) << endl; // output: 6
+  
+  NOTE: can also have a function pointer: 
+  int add2(int a) { return a + 2; }
+  int (*pFN)(int) = add2; // note 2 "int"s, for output & input
+  int b = pFN(3) + 2; // answer is 7
+  
 
 = how to install Eigen ===============================================
 cd ~/repos/
@@ -129,6 +135,8 @@ catch (int e){
 = conditional operator help ==================================
 int x = condition ? ActionIfTrue : ActionIfFalse
 
+= getting arguments in =======================================
+int main(int argc, char **argv){ //this line is key
 
 
 

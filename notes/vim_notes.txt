@@ -29,5 +29,9 @@ set expandtab
 2. ENTER
 3. to find next instance, 'n', previous, 'N'
 
+# UNDO SOME ACTION =========================================
+1. press 'u'
+
+
 # eof
 
