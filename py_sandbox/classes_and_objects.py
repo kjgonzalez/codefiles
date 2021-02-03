@@ -281,6 +281,18 @@ print( x.method_add() )
 
 # eof
 
+''' builder design pattern ============================================ '''
+class Builder:
+    def __init__(self):
+        self.val = 0
+    def add(self,a):
+        self.val += a
+        return self
+    def print(self):
+        print(self.val)
+# b = Builder().add(1).add(2).print() # prints '3' to console
+
+
 ''' All "magic" methods aka "dunder" (double underscore) methods ======= '''
 # this section will exist as a complete collection of all magic methods used in python classes
 print('= {} {}'.format('dunder methods','='*50))
