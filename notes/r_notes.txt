@@ -1,0 +1,51 @@
+Working in R
+
+stuff to use =====================================
+things to know how to do in R: 
+* make a variable
+* make a function
+* loops, if statement
+* make a class
+* load a file
+* save a file
+* multiply two arrays
+* load and display an image
+* learn other things? 
+* make / manipulate dataframes
+
+super helpful functions ==========================
+rstudioapi::getSourceEditorContext()$path
+
+
+basic operators ==================================
+modulus: %% (4%%2 equals 0)
+root: ** (4**2 equals 2)
+bool: TRUE, FALSE
+
+builtins =========================================
+https://www.javatpoint.com/r-built-in-functions
+length()
+typeof()
+c() ("combine" function, to make arrays, etc)
+*:* (makes an array, inclusive. e.g. 0:3 equals 0 1 2 3)
+
+make a variable ==================================
+a = 2
+
+make a loop / if-else statement ==================
+for(i in 0:9){
+  if(i%%2){print('a')}
+  else if(i%%3){print('b')}
+  else{print('c')}
+}
+
+make a function ==================================
+pyt <- function(a,b) { 
+    return (a*a+b*b)**0.5
+    }
+
+make a class =====================================
+
+
+
+
