@@ -7,7 +7,22 @@ STAT | DESCRIPTION
 done | show current time
 done | show elapsed time
 done | pause / sleep for a certain amount of time
-???? | show time as kjg standard, eg. 2020Feb06-22:08:15 >> YYYYMMMDD-HH:mm:SS
+done | show time as kjg standard, eg. 2020Feb06-22:08:15 >> YYYYMMMDD-HH:mm:SS
+
+
+Know the various codes for strftime: http://www.cplusplus.com/reference/ctime/strftime/
+    basics:
+        %Y: year, full
+        %y: year, last 2 digits
+        %m: month as number
+        %b: month as 3 letters
+        %B: month, full name
+        %d: day, zero padded
+        %F: YYYY-mm-DD format
+        %H: hour, 24hr format
+        %M: minute
+        %S: second
+        %X: HH:MM:SS format
 
  */
 #pragma warning(disable : 4996) // disable time warning
@@ -36,12 +51,17 @@ void sleep2(double seconds){
     }
 }
 
-string asString(int i){
-    // get time in seconds as formatted string
-    // format: YYYYMMMDD-HH:mm:SS -- eg. 2020Feb06-22:08:15
-
-    return "hello there";
+std::string tstamp() {
+    time_t timer;
+    tm* curr_tm;
+    time(&timer);
+    curr_tm = localtime(&timer);
+    char date_string[100];
+    strftime(date_string, 50, "%Y%b%d-%H%M%S\n", curr_tm);
+    std::string str(date_string);
+    return str;
 }
+
 
 int main(){
     printf("Info on Time library:\n");
@@ -61,7 +81,12 @@ int main(){
     char date_string[100];
     strftime(date_string, 50, "%Y%b%d-%H%M%S\n",curr_tm);
     printf("current datetime: %s\n", date_string);
+    
+    strftime(date_string, 50, "%F-%X\n", curr_tm);
+    printf("alternative: %s\n", date_string);
 
+    sleep(1);
+    printf("right now: %s\n", tstamp().c_str());
 
     time_t rawtime;
     struct tm * timeinfo;
