@@ -250,47 +250,39 @@ def antiOverwrite(filename):
     i=0
     valid=False
     while(not valid):
-        i+=1 # 2nd file should start with 1, etc
+        i += 1 # 2nd file should start with 1, etc
         name2=os.path.join(path,'{}_{}.{}'.format(name,i,ext))
         valid=not os.path.exists(name2) # True = name available
     return name2
 
-def getlist(rec=True,files=True,ext=''):
-    ''' This function is implemented as alias for "dir". Use THAT function. '''
-    return dir(path='.',rec=rec,files=files,ext=ext)
-
-def dir(path='.',rec=True,files=True,ext=''):
+def getlist(path='.', recursive=False, exts:str='', incl_folders=False):
+    ''' Emulate ls / dir command to be cross platform and return items found as
+        a list. NOTE: will implement recursion as a queue
+    INPUTS:
+        * path: starting folder to look in
+        * recursive: whether should go into subfolders or not
+        * inclFolders: show folders as well as files
+        * ext: which filetype to look for, default any
     '''
-    Objective: Emulate ls / dir command to be cross platform and return as a
-        list. Can choose to run recursively, only show folders or show all
-        files (of specific types) and folders. if recursive = False and
-        files=False, would just show current working directory. filetypes will
-        show all filetypes by default, but can be specific ones as well.
-    Inputs:
-        * path: base path. Default: '.' . This arg to be verified. (kjg190622)
-        * rec: Recursive check. Default: False (no recursion)
-        * files: Show only files or folders. Default: True (files only)
-        * ext: Which filetype to look for. Default: '' (any)
-    Output:
-        * <list>: filepaths
-    '''
-    isf=os.path.isfile
-    opj=os.path.join
-    abp=os.path.abspath
-    assert os.path.isdir(path),'Not a path: '+path
-    paths=os.walk(path) if rec else path # where to check, if recursive
-    ext='.'+ext if ext!='' else ext # if not default, prefix '.'
-
-    # for each directory, for each file/folder, append to list
-    all = [ipath for base in paths for ipath in glob(opj(abp(base[0]),'*'))]
-    if(files):
-        # only want files back. if ext='', return all incl w/o ext.
-        sub=[ipath for ipath in all if (isf(ipath) and (ext in ipath))]
-        return sub
-    else:
-        sub=[ipath for ipath in all if not isf(ipath)]
-        return sub
-# def dir
+    assert(os.path.isdir(path)), "Not a valid path"
+    queue = [os.path.abspath(path)] # list of paths to check
+    exts = exts.split('-')
+    def isGoodExt(inp:str):
+        if(exts[0] == ''): return True
+        if(os.path.splitext(inp)[1][1:] in exts):
+            return True
+        else: return False
+    output = []
+    for ipath in queue:
+        for iitem in os.listdir(ipath):
+            iitem2 = os.path.join(ipath,iitem)
+            isfolder = os.path.isdir(iitem2)
+            isexts = isGoodExt(iitem2)
+            if(recursive and isfolder): queue.append(iitem2)
+            if(incl_folders and isfolder): output.append(iitem2)
+            elif(not isfolder and isexts): output.append(iitem2)
+    return output
+# def getlist
 
 def ping(ip_address='www.google.com'):
     ''' check that an internet connection works'''
@@ -317,7 +309,7 @@ def ringbell(duration=0.15,freq=1300):
             raise Exception("Program 'sox' not installed. Sound could not play")
     elif(OSVERSION==1):
         raise Exception ("Not implemented yet, please verify below code")
-        import winsound # must leave this here, would not work on other platforms.
+        import winsound  # must leave this here, would not work on other platforms.
         winsound.Beep(freq,duration)
 # def ringbell
 

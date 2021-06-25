@@ -44,7 +44,7 @@ class Tests_kimg(unittest.TestCase):
         ipath = osp.join(IMG_FOLDER, 'IMAG1727.jpg')
         self.assertTrue('200913_142641' == kimg.imgdate(1600000001))
 
-    def test_b_dates(self):
+    def test_b_gdm_gdc_gdt_getdate(self):
         ''' Ensure that gdm, gdc, and gdt are all functioning properly. Unfortunately, date created & modified are
             relative to when the file was created locally.
          '''
@@ -80,16 +80,13 @@ class Tests_kimg(unittest.TestCase):
         self.assertTrue(os.path.exists(res2))
 
     def test_g_imgreduce(self):
-        # verify that maximum dimension is 2000 and that exif data was preserved
+        ''' verify that maximum dimension is 2000 and that exif data was preserved '''
         ifile = os.path.abspath(os.path.join(IMG_FOLDER,'IMAG2772.jpg'))
         # ifile = os.path.abspath(os.path.join(IMG_FOLDER,'17_map.png'))
         self.assertTrue(os.path.exists(ifile))
-        print(os.path.getsize(ifile))
         kimg.imgreduce(ifile,overwrite=True)
-
         im:pil.Image = pil.open(ifile)
         self.assertTrue(2000 >= max(im.size))
-
         exif = None
         try:
             exif = piexif.load(im.info['exif'])
@@ -98,10 +95,18 @@ class Tests_kimg(unittest.TestCase):
         im.close()
         self.assertTrue(exif is not None)
 
-        print(os.path.getsize(ifile))
+    def test_h_renfolder(self):
+        renamepath = 'data/sample/subfold/'
+        kimg.renfolder(renamepath)
+        self.assertTrue(os.path.exists(os.path.abspath('data/sample/180807-181231')))
 
-
-
-
-
+    def test_g_renred(self):
+        # simply assert that each jpg is reduced & renamed
+        kimg.renred(IMG_FOLDER,overwrite=True,recursive=True)
+        for ifile in kimg.getlist(IMG_FOLDER,recursive=True,exts='jpg-JPG'):
+            fname = os.path.split(ifile)[1]
+            with pil.open(ifile) as im:
+                maxdim = max(im.size)
+            self.assertTrue(maxdim<=2000)
+            self.assertTrue('IMA' not in fname)
 
