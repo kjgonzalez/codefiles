@@ -1,4 +1,18 @@
-how to ssh into rpi: 
-ssh pi@192.168.0.31
 
+--------------------------------------------------
+get usb-connected rpi_zero onto internet:
+1. plug in MicroSD directly to computer (not thru rpi)
+2. open /config.txt and add to bottom of file: 
+    dtoverlay=dwc2
+3. open /cmdline.txt and append to end of line:
+    modules-load=dwc2,g_ether
+4. create a an empty file called ssh at /
+5. disconnect SD card and mount on rpi
+
+--------------------------------------------------
+how to ssh into rpi: 
+ssh pi@192.168.x.y
+OR
+ssh pi@raspberrypi.local
 pw: k...7
+

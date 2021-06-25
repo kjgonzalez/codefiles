@@ -13,6 +13,16 @@ Function HelloWorld {
   echo "Hello world! I'm a powershell function"
 }
 
+= *.bat file commands / basic setup ========================
+first line should always be @echo off
+"REM" is how comments are made (e.g. REM this is a comment)
+"echo %1" will print out first command line argument
+"echo %~dp1" will print out abs path of 1st argument
+
+
+
+
+
 = PWS: if statements =======================================
 function cpprun{
     echo "building..."

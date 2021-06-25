@@ -24,7 +24,7 @@ print(table)
 # write out a file like so:
 f = tmp.NamedTemporaryFile(mode='w',suffix='.csv',delete=False)
 fname = f.name
-pd.DataFrame(np.random.rand(3,3),columns=list('abc')).to_csv(f)
+pd.DataFrame(np.random.rand(3,3),columns=list('abc')).to_csv(f) # disable index with "index=False"
 f.close()
 
 # can read in a file like so:
@@ -85,6 +85,10 @@ print('drop a row:\n{}'.format( x.drop([0]) ))
 
 # NOTE: the indices are preserved during these operations, so you need "reset_index" to reset these values
 print('drop a row and use new indices:\n{}'.format( x.drop([0]).reset_index(drop=True) ))
+
+xx = pd.DataFrame((np.random.rand(3,3)*10).astype(int))
+yy = pd.DataFrame((np.random.rand(3,3)*10).astype(int))
+print('concatenate two tables that share the same headers:\n',pd.concat([xx,yy],axis=0).reset_index(drop=True)
 
 # swap two columns around (note: not really that convenient)
 print('swapping columns around:\n{}'.format(x.reindex(columns=['b','a','c'])))

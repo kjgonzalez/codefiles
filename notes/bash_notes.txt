@@ -11,3 +11,4 @@ search for a string in certain files    grep "SomeText" *.*
 make a program executable               sudo chmod +x filename
 force restart from the command line     sudo shutdown -r now
 list all files plus filesizes           ls -sh1S # size,humanreadable,1col,sort
+check cron                              crontab -e

@@ -2,6 +2,7 @@
 # Usage: python -m pip install -r FILENAME --user
 # upgrade pip: python -m pip install --upgrade pip
 #jupyter # not really needed anymore
+# note: pycharm version is 2019.3.4
 ipython
 ipdb
 numpy

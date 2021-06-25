@@ -5,6 +5,22 @@ Objective: demonstrate how to read a single image from a tarball without
     that can be used as a checksum when downloading from a server
 '''
 
+'''
+how to work with zip and tarball modules
+
+things to cover:
+    * TODO: zip
+        * todo: create a zipped file
+        * todo: unzip a file to a folder
+        * todo: unzip a file to local folder (don't create new subfolder)
+    * TODO: tarball
+        * todo: same as all above
+'''
+
+import zipfile, shutil
+
+
+
 import tarfile
 import hashlib
 import numpy as np
