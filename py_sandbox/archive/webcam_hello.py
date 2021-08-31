@@ -9,7 +9,7 @@ from sys import argv
 if(argv[1].isdigit()):
 	vidsrc=int(argv[1])
 else:
-	print 'ERROR: argument expected as integer'
+	print('ERROR: argument expected as integer')
 	exit()
 
 cap = cv2.VideoCapture(vidsrc)
