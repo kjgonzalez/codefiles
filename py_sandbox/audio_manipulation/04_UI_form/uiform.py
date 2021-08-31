@@ -14,7 +14,7 @@ things to fix:
 ===== div: in progress ===========
 * switch to a new song by double-clicking on it in listbox (popup: save?)
 
-
+TODO: if a local config file doesn't exist, set that up with user right away
 
 '''
 
