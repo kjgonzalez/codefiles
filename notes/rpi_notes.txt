@@ -1,5 +1,11 @@
 
 --------------------------------------------------
+change rpi time zone
+1. raspi-config
+2. "localization" / "internationalisation"
+3. select appropriate region and Finish
+
+--------------------------------------------------
 get usb-connected rpi_zero onto internet:
 1. plug in MicroSD directly to computer (not thru rpi)
 2. open /config.txt and add to bottom of file: 
@@ -8,7 +14,8 @@ get usb-connected rpi_zero onto internet:
     modules-load=dwc2,g_ether
 4. create a an empty file called ssh at /
 5. disconnect SD card and mount on rpi
-
+6. (change internet settings to allow shared ethernet connection?)
+7. power on rpi with usb connection to pc
 --------------------------------------------------
 how to ssh into rpi: 
 ssh pi@192.168.x.y
