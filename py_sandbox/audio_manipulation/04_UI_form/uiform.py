@@ -21,8 +21,10 @@ TODO: if a local config file doesn't exist, set that up with user right away
 import os,sys,time
 import tkinter as tk
 from tkinter import font as ft
-fontSize = 12 # default font size is 9
+from tkinter import filedialog
 import kaudio as ka
+import json
+fontSize = 12 # default font size is 9
 
 
 class MainWindow:
@@ -32,13 +34,30 @@ class MainWindow:
     '''
 
     def __init__(self):
+
+        if(not os.path.exists('config.json')):
+            print('first time setup')
+            root = tk.Tk()
+            root.withdraw()
+            tempdir = filedialog.askdirectory(parent=root, initialdir=os.getcwd(),
+                                              title='Please select a music directory')
+            if(tempdir == ''):
+                raise Exception('failed to give valid location')
+            d = {'path': tempdir}
+            with open('config.json', 'w') as fout:
+                json.dump(d, fout, indent=1)
+        with open('config.json') as f:
+            dat = json.load(f)
+
+        self._targpath = dat['path']
         self.passfn = lambda : print('hello world')
         self.printstate = lambda: print('state:',self.V['autochkCMT'].get())
         self.printindex = lambda: print('selected:',self.I['files'].curselection())
         self.printautotxt = lambda:print('text:',self.V['autoCMT'].get())
         self.printfields = lambda:print(self.getAllFields())
         self.reloadFirst = lambda:self.setAllFromFile(self._filelist[0])
-        self._filelist = [ifile for ifile in os.listdir('.') if('mp3' in ifile)]
+        self._filelist = None
+        self.updateFileList()
         self._fields = 'fname title artist album track genre year comment'.split(' ')
         self._current = None # needs to be set at first run
         self.origInfo = None # initialize dict variable for original metadata
@@ -48,9 +67,10 @@ class MainWindow:
         helv = ft.Font(self.R,family='Helvetica',size=fontSize)
         self.F=tk.Frame(self.R)
         self.F.pack()
+        self._prev_info = dict()
 
         # control variables
-        self.V=dict()
+        self.V = dict()
         self.V['autochkCMT'] = tk.IntVar() # status for auto-Comment
         self.V['autochkFNM'] = tk.IntVar() # status for auto-Filename
         self.V['autoCMT'] = tk.StringVar() # text for auto-comment
@@ -60,48 +80,52 @@ class MainWindow:
 
         # buttons
         self.B = dict() # dictionary of buttons
+        self.B['path'] = tk.Button(self.F,font=helv,text='newpath',command=self.update_config_path)
+        self.B['fill'] = tk.Button(self.F,font=helv,text='FILL',command=self.fill_old_data)
         self.B['save'] = tk.Button(self.F,font=helv,text='SAVE',command=self.saveData)
         self.B['prev'] = tk.Button(self.F,font=helv,text='PREV',command=self.loadPrevFile)
         self.B['next'] = tk.Button(self.F,font=helv,text='NEXT',command=self.loadNextFile)
         self.B['quit'] = tk.Button(self.F,font=helv,text='QUIT',command=self.quit) # fg='black'
 
         # checkmarks
-        self.C=dict()
+        self.C = dict()
         self.C['autochkCMT'] = tk.Checkbutton(self.F,font=helv,text='AutoComment',variable=self.V['autochkCMT'])
         self.C['autochkFNM'] = tk.Checkbutton(self.F,font=helv,text='AutoFilename',variable=self.V['autochkFNM'])
 
         # entry forms
-        self.E=dict()
+        self.E = dict()
         for ifield in self._fields:
             self.E[ifield] = tk.Entry(self.F,font=helv,textvariable=self.V[ifield],width=40)
         self.E['autoCMT'] = tk.Entry(self.F,font=helv,textvariable=self.V['autoCMT'])
 
         # label forms
-        self.L=dict()
+        self.L = dict()
         for ifield in self._fields:
             self.L[ifield] = tk.Label(self.F,font=helv,text=ifield)
         # self.L['autoFNM'] = tk.Label(self.F,font=helv,textvariable=self.V['autoFNM']) # original
         self.L['autoFNM'] = tk.Label(self.F,font=helv,text='<Artist> - <Title>.mp3')
 
         # listbox(es)
-        self.I=dict()
+        self.I = dict()
         self.I['files'] = tk.Listbox(self.F,font=helv,activestyle='dotbox',width=40)
 
         # placement of all items
+        self.B['path'].grid(    row=11, column=12)
+        self.B['fill'].grid(    row=11, column=7)
         self.B['save'].grid(    row=11,column= 8)
         self.B['prev'].grid(    row=11,column= 9)
         self.B['next'].grid(    row=11,column=10)
         self.B['quit'].grid(    row=11,column=11)
         self.C['autochkCMT'].grid(row= 7,column= 1)
         self.C['autochkFNM'].grid(row= 8,column= 1)
-        self.E['fname'].grid(   row= 1,column=8,columnspan=4)
-        self.E['title'].grid(   row= 2,column=8,columnspan=4)
-        self.E['artist'].grid(  row= 3,column=8,columnspan=4)
-        self.E['album'].grid(   row= 4,column=8,columnspan=4)
-        self.E['track'].grid(   row= 5,column=8,columnspan=4)
-        self.E['genre'].grid(   row= 6,column=8,columnspan=4)
-        self.E['year'].grid(    row= 7,column=8,columnspan=4)
-        self.E['comment'].grid( row= 8,column=8,columnspan=4)
+        self.E['fname'].grid(   row= 1,column=8,columnspan=6)
+        self.E['title'].grid(   row= 2,column=8,columnspan=6)
+        self.E['artist'].grid(  row= 3,column=8,columnspan=6)
+        self.E['album'].grid(   row= 4,column=8,columnspan=6)
+        self.E['track'].grid(   row= 5,column=8,columnspan=6)
+        self.E['genre'].grid(   row= 6,column=8,columnspan=6)
+        self.E['year'].grid(    row= 7,column=8,columnspan=6)
+        self.E['comment'].grid( row= 8,column=8,columnspan=6)
         self.E['autoCMT'].grid( row= 7,column= 2)
         self.L['autoFNM'].grid( row= 8,column= 2)
         self.L['fname'].grid(   row= 1,column=7)
@@ -130,8 +154,25 @@ class MainWindow:
         print('exiting')
         self.F.quit()
 
+    def update_config_path(self):
+
+        _dir = filedialog.askdirectory(parent=self.R, initialdir=self._targpath,
+                                       title='Please select a music directory')
+        if(_dir == ''):
+            print('no change')
+            return None
+        dd = {'path': _dir}
+        with open('config.json', 'w') as ffout:
+            json.dump(dd, ffout, indent=1)
+        self._targpath = _dir
+        print('you selected:',_dir)
+        self.updateFileList()
+        self.populateListBox()
+        self.setAllFromIndex(0) # initialize data fields
+        self.update_prev_data()
+
     def updateFileList(self):
-        self._filelist = [ifile for ifile in os.listdir('.') if('mp3' in ifile)]
+        self._filelist = [os.path.join(self._targpath,ifile) for ifile in os.listdir(self._targpath) if('mp3' in ifile)]
 
     def updateAutoFileName(self,event): # perhaps "tk.Event" ?
         ''' here, will outline the formatting for auto-filenaming, and this
@@ -139,14 +180,15 @@ class MainWindow:
         * For now, keeping things just as <Artist> - <Title>
         * want to run this on keypress of artist & title widgets
         '''
+        filepath = os.path.dirname(self.V['fname'].get())
         text = '{} - {}.mp3'.format(self.V['artist'].get(),self.V['title'].get())
-        self.V['autoFNM'].set(text)
+        self.V['autoFNM'].set(os.path.join(filepath,text))
 
     def populateListBox(self):
         ''' Clears anything in the list box, then populates it with
         items_list.
         '''
-        end=max(self.I['files'].size()-1,0) # use max in case no lines
+        end = max(self.I['files'].size()-1,0) # use max in case no lines
         self.I['files'].delete(0,end)
         for item in self._filelist:
             self.I['files'].insert(tk.END,item) # adds newline
@@ -155,6 +197,7 @@ class MainWindow:
         ''' given self._filelist, load a given index and update
             self._current
         '''
+        self.update_prev_data() # before switching, get what's currently there
         self.setAllFromFile(self._filelist[index])
         self._current = index
 
@@ -191,6 +234,21 @@ class MainWindow:
             # auto-filename enabled, override current filename.
             res['fname'] = self.V['autoFNM'].get()
         return res
+
+    def fill_old_data(self,*kargs):
+        # use previous file's data and fill in artist, album, genre, year, comment
+        # print('previous:',self._prev_info)
+        for ifield in self._prev_info.keys():
+            self.V[ifield].set(self._prev_info[ifield])
+
+    def update_prev_data(self):
+        self._prev_info = {
+            'artist':self.E['artist'].get(),
+            'album':self.E['album'].get(),
+            'genre':self.E['genre'].get(),
+            'year':self.E['year'].get(),
+            'comment':self.E['comment'].get(),
+        }
 
     def saveData(self,*kargs): # kargs needed for callback
         ''' write out the new metadata to file '''
@@ -252,13 +310,14 @@ class MainWindow:
 
         # run initial loading of metadata
         self.setAllFromIndex(0) # initialize data fields
+        self.update_prev_data() # initialize "prevoius" data
         self.R.mainloop()
         self.R.destroy()
 
 # kjg190626: ok, for the moment, will run from 00... folder
 
-if(__name__=='__main__'):
-    listdir = [ifile for ifile in os.listdir('.') if('mp3' in ifile)]
+if(__name__ == '__main__'):
 
+    # look for config file, if none found, prompt user for starting directory
     main = MainWindow()
     main.run()
