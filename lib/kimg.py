@@ -7,6 +7,8 @@ Objective: Quickly & easily edit many image files for photo archives
 (see module klib.py)
 
 == NOTES ===================================================
+Required packages:
+    Pillow, piexif,
 Assumptions include:
 * user has pillow (PIL fork) installed (pip3 intall Pillow)
 * user has piexif installed (pip3 install piexif (exif preservation)
@@ -33,72 +35,221 @@ Assumptions include:
 TODO: make a simple separation program that can takes an entire folder of files and separates them by how many hours
     are between chronologically ordered photos. use as an auto-folderize program
 
-TODO: make a function that takes in a jpg and creates a pdf with preconfigured settings. e.g. imgToPDF(imgpath,newname,settings)
+TODO: function "setdate": allow one to change date of a jpg
+TODO: function "tojpg": convert a single photo to a jpg
+TODO: fix this header comment
+TODO: make tests for each function
+TODO: explain arguments and output of each function
+
+kimg library: 
+what's the point of this library? 
+make it easier modify photos
+
+for a single photo: 
+  get date taken - date     - done
+  set date taken - redate   - done
+  fix year format- yy2yyyy  - done
+  set photo name - rename   - done
+  set photo size - resize   - done
+  set type       - reformat - 
+
+for a folder: 
+  get range of photos - folder_range
+  set folder name     - folder_rename
+  mass edit photos    - mass_edit
+  (modify photos en masse)
+  
 '''
 
 # INITIALIZE MODULES #######################################
-from klib import PYVERSION, getlist
-import PIL.Image as pil
-import time
+import argparse
+from datetime import datetime as dt
 import os
+import time
 from typing import Union
+import piexif
+import PIL.Image as pil
+from klib import PYVERSION, getlist
 assert PYVERSION == 3, "Must use python3. Exiting."
 
 # INITIALIZE FUNCTIONS #####################################
 
-def gdm(imgname):
-    ''' Get date modified '''
-    # kjg181121: works
-    import os
-    return os.path.getmtime(imgname)
+def _is_dateformat(strname:str):
+    '''
+    Return whether string is numeric plus underscore only e.g. 20160503_123456. assumes that only
+    filename is given, not any path or extension.
+    INPUT:
+        strname: raw string to be checked
+    '''
+    if(strname[0]=='_'):
+        return False # off-chance that first value is underscore, along with rest of number
+    elif(not strname.replace('_','0').isnumeric()):
+        return False # string has more than numbers and underscore
+    elif(len(strname) not in [13,15]):
+        return False # string may be numeric+underscore, but wrong length
+    else:
+        return True
 
-def gdc(imgname):
-    ''' Get date created '''
-    # kjg181121: works
-    import os
-    return os.path.getctime(imgname)
-
-def gdt(imgname):
-    ''' Get date taken (via PIL). Note: this fails for PNG images '''
-    # kjg181121: works
-    from PIL import Image    # compiled module from internet
+def date(imgpath:str,as_str=False):
+    '''
+    Get earliest date of photo (modified, created, taken (jpg only), and filename)
+    INPUTS:
+        imgpath: path to file
+        as_str: return date as YYYYMMDD_HHmmSS string instead of float. default=False
+    '''
+    _dc = os.path.getctime(imgpath)
+    _dm = os.path.getmtime(imgpath)
+    _dt = time.time() # update if date taken found
+    _pn = time.time() # update if photo name helpful
     try:
-        with Image.open(imgname) as f:
-            a = f._getexif()[36867] #gives string
+        with pil.open(imgpath) as f:
+            a = f._getexif()[36867]
             f.close()
-        b = '%Y:%m:%d %H:%M:%S' #string parser
-        c = time.mktime(time.strptime(a,b))
-        return c # format: seconds since epoch
+        b = '%Y:%m:%d %H:%M:%S'  # string parser
+        _dt = time.mktime(time.strptime(a, b))
     except KeyError:
         # reason: latest date will be after to gdm and gdc
-        return time.time() #worst case, return current time
+        print("Key error:", imgpath)
     except IOError:
         # reason: attempting to get data on non-JPG file
-        print("FN 'gdt' WARNING, NON-JPG FILE:",imgname)
-        return time.time() #user: use at own risk
+        print("Non-jpg file:",imgpath)
     except TypeError:
-        # reason: not entirely sure yet, but seems to be rare error
-        #    ErrTxt: 'NoneType' object has no attribute '__getitem__'
-        #   for now, will simply return current date, and hope that 
-        #   functions 'gdm' or 'gdc' will capture earliest 
-        #   date. (KJG170830)
-        print("FN 'gdt' WARNING, missing attribute 'date taken':",imgname)
-        return time.time()
+        ''' Reason: not entirely sure yet, but seems to be rare error ErrTxt: 'NoneType' object 
+        has no attribute '__getitem__'. For now, will simply return current date, and hope that
+        functions 'gdm' or 'gdc' will capture earliest date. (KJG170830)
+        '''
+        print("Missing attribute 'date taken':",imgpath)
+
+    # first check if YY format, then check for YYYY format
+    _basename = os.path.basename(imgpath).split('.')[0]
+    if(_is_dateformat(_basename)):
+        _pn = time.mktime(dt.strptime(_basename, '%y%m%d_%H%M%S').timetuple() # YY format
+            ) if(len(_basename) == 13
+            ) else time.mktime(dt.strptime(_basename, '%Y%m%d_%H%M%S').timetuple()) # YYYY format
+
+    # compare all results, take earliest value
+    seconds = min(_dc,_dm,_dt,_pn)
+    if(as_str):
+        tstruct = time.localtime(seconds)  # get 'time.struct_time' type
+        return time.strftime("%Y%m%d_%H%M%S", tstruct)
+    else:
+        return seconds
+
+def redate(imgpath,YYYYMMDD_HHmmSS):
+    '''
+    Set date taken of a jpg (specifically) to given value, or use 'auto'
+    INPUTS:
+        imgpath: path to file
+        YYYYMMDD_HHmmSS: formatted date string, or explicit string 'auto'
+    '''
+    assert os.path.splitext(imgpath)[1] in ['.jpg','.JPG'], "invalid format, not jpg"
+    if(YYYYMMDD_HHmmSS == 'auto'):
+        YYYYMMDD_HHmmSS = date(imgpath,as_str=True)
+    des_time = dt.strptime(YYYYMMDD_HHmmSS,'%Y%m%d_%H%M%S')
+    des_time_str = des_time.strftime("%Y:%m:%d %H:%M:%S")
+    exif = piexif.load(imgpath)
+    exif['0th'][piexif.ImageIFD.DateTime] = des_time_str
+    exif['Exif'][piexif.ExifIFD.DateTimeOriginal] = des_time_str
+    exif['Exif'][piexif.ExifIFD.DateTimeDigitized] = des_time_str
+    exif_bytes = piexif.dump(exif)
+    piexif.insert(exif_bytes, imgpath)
+
+def rename(imgname, append=False):
+    ''' Objective: handle the messiness of renaming an image
+        file and ensuring that it doesn't have the same name
+        as an image taken in the same YYMMDD_HHmmSS as
+        another photo. Exif data is preserved. Specific to
+        calling this function, you can append the old file
+        name to the new file (imgdate) value that is
+        generated, such as if wanting to keep a video's
+        original name.
+    '''
+    newname = imgdate(getdate(imgname))   # get new name for img
+    path,oldname = os.path.split(imgname)
+    ext = getext(imgname)
+    if(append):
+        newname = newname + '_'+imgname[:imgname.find('.')]
+
+    # ensure that have unique filename and not overwriting
+    i = 0
+    while(i < 100):
+        testname = os.path.join(path,newname)+\
+                   ('_'+str(i) if(i>0) else '') + \
+                   '.'+ext
+        if(os.path.exists(testname)): i += 1
+        else:
+            os.rename(imgname,testname)
+            return os.path.abspath(testname)
+
+def yy2yyyy(imgpath: str):
+    '''
+    Upgrade files that have been named with YY to YYYY format.
+    INPUT:
+        imgpath: path to file
+    '''
+    dirname = os.path.dirname(imgpath)
+    base,ext = os.path.splitext(os.path.basename(imgpath))
+    assert _is_dateformat(base), "basename not date format: "+base
+    if(len(base)==15):
+        return None # already in correct format
+    base2 = dt.strptime(base,'%y%m%d_%H%M%S').strftime('%Y%m%d_%H%M%S')
+    imgpath2 = os.path.join(dirname,base2+ext)
+    os.rename(imgpath,imgpath2)
 
 def imgdate(seconds):
     ''' Convert float seconds value to formatted string '''
     # kjg181121: works
-    import time
+    # TODO: remove this deprecated function
     tstruct=time.localtime(seconds) #get 'time.struct_time' type
-    return time.strftime("%Y%m%d_%H%M%S",tstruct)[2:] # drop 2 digits from year
+    return time.strftime("%Y%m%d_%H%M%S",tstruct)
+
+def reduce(imgname, maxsize=2000, overwrite=False):
+    '''Reduce image size, and by default save
+        to new file name. if file is smaller than
+        maxsize, image will not be modified at all.
+        defaults: maxsize = 2000, overwrite=False
+    ** kjgnote: need to double check if this function truly working, as
+        well as being cross-platform.
+    '''
+    # kjg181127: works
+    im = pil.open(imgname)
+    # before doing anything else, check if img too small
+    if (im.size[0] < maxsize and im.size[1] < maxsize):
+        return 'NoChange:' + imgname
+
+    # before modifying image, try getting exif properties
+    flag_hasexif = True
+    try:
+        exif = piexif.load(im.info['exif'])
+        flag_hasexif = True
+    except KeyError:
+        print("FN 'imgreduce' WARNING: MISSING EXIF DATA:", imgname)
+        flag_hasexif = False
+    if (not overwrite):
+        i = os.path.splitext(imgname)
+        imgname = i[0] + '_edit' + i[1]
+
+    # next, set new image dimensions
+    i = im.size  # (w,h)
+    if (i[0] > i[1]):  # if w > h
+        w2 = maxsize
+        h2 = int(float(w2) / float(i[0]) * i[1])
+    else:  # w<=h
+        h2 = maxsize
+        w2 = int(float(h2) / float(i[1]) * i[0])
+    # resize and save image, with exif data
+    if (flag_hasexif):
+        exif_byte = piexif.dump(exif)  # perhaps can do sooner
+        im.resize((w2, h2), pil.ANTIALIAS).save(imgname, exif=exif_byte)
+    else:
+        im.resize((w2, h2), pil.ANTIALIAS).save(imgname)
+    im.close()
+
 
 def getdate(imgname):
     ''' Objective: return earliest img file made, in seconds.'''
-    # kjg181121: works
-    m=gdm(imgname) #date photo modified
-    c=gdc(imgname) #date photo created
-    t=gdt(imgname) #date photo taken (not always available)
-    return min(m,c,t)
+    # TODO: remove this deprecated function
+    return date(imgname)
 
 def getrange(subfolder='.', date_only=True, recursive=True, exts:str= 'jpg-JPG'):
     ''' Objective: return in a string the min and max dates of
@@ -136,75 +287,7 @@ def getext(imgname):
     # kjg181121: works
     return os.path.splitext(imgname)[1][1:]
 
-def imgrename(imgname, append=False):
-    ''' Objective: handle the messiness of renaming an image
-        file and ensuring that it doesn't have the same name
-        as an image taken in the same YYMMDD_HHmmSS as
-        another photo. Exif data is preserved. Specific to 
-        calling this function, you can append the old file 
-        name to the new file (imgdate) value that is 
-        generated, such as if wanting to keep a video's 
-        original name.
-    '''
-    newname = imgdate(getdate(imgname))   # get new name for img
-    path,oldname = os.path.split(imgname)
-    ext = getext(imgname)
-    if(append):
-        newname = newname + '_'+imgname[:imgname.find('.')]
 
-    # ensure that have unique filename and not overwriting
-    i = 0
-    while(i < 100):
-        testname = os.path.join(path,newname)+\
-                   ('_'+str(i) if(i>0) else '') + \
-                   '.'+ext
-        if(os.path.exists(testname)): i += 1
-        else:
-            os.rename(imgname,testname)
-            return os.path.abspath(testname)
-
-def imgreduce(imgname,maxsize=2000,overwrite=False):
-    '''Objective: reduce image size, and by default save 
-        to new file name. if file is smaller than
-        maxsize, image will not be modified at all.
-        defaults: maxsize = 2000, overwrite=False
-    ** kjgnote: need to double check if this function truly working, as
-        well as being cross-platform.
-    '''
-    import piexif
-    # kjg181127: works
-    im = pil.open(imgname)
-    # before doing anything else, check if img too small
-    if(im.size[0] < maxsize and im.size[1] < maxsize):
-        return 'NoChange:'+imgname
-    
-    # before modifying image, try getting exif properties
-    flag_hasexif=True
-    try:
-        exif = piexif.load(im.info['exif'])
-        flag_hasexif=True
-    except KeyError:
-        print("FN 'imgreduce' WARNING: MISSING EXIF DATA:",imgname)
-        flag_hasexif=False
-    if(not overwrite):
-        i = os.path.splitext(imgname)
-        imgname = i[0]+'_edit'+i[1]
-
-    # next, set new image dimensions
-    i = im.size # (w,h)
-    if(i[0] > i[1]):  #if w > h
-        w2 = maxsize
-        h2 = int(float(w2)/float(i[0])*i[1])
-    else:           # w<=h
-        h2 = maxsize
-        w2 = int(float(h2)/float(i[1])*i[0])
-    #resize and save image, with exif data
-    if(flag_hasexif):
-        exif_byte = piexif.dump(exif) # perhaps can do sooner
-        im.resize((w2,h2),pil.ANTIALIAS).save(imgname,exif=exif_byte)
-    else:
-        im.resize((w2,h2),pil.ANTIALIAS).save(imgname)
-    im.close()
 
 def renfolder(path,exts='jpg-JPG',append=False):
     ''' Objective: Rename a SUBFOLDER of current directory 
@@ -233,15 +316,16 @@ def renred(path, maxsize=2000,overwrite=False,recursive=False):
         NOTE: only targets jpg files. ignores all others.
         '''
     for ifile in getlist(path,recursive=recursive,exts='jpg-JPG'):
-        imgreduce(ifile,maxsize=maxsize,overwrite=overwrite)
-        imgrename(ifile)
+        reduce(ifile, maxsize=maxsize, overwrite=overwrite)
+        rename(ifile)
 
 def img2pdf(path,resolution:Union[str,int,float]=100):
     '''
     Convert an image to pdf.
     INPUTS:
         * path: path to image file
-        * resolution: typically a number. can also give 'a4' and program will attempt to auto-resize based on width
+        * resolution: typically a number. can also give either {'a3','a4'} and program will attempt
+            to auto-resize based on width
     NOTE: A4 dimensions are (210,297) mm, (8.268,11.693) inches
     '''
     x: pil.Image = pil.open(path).convert('RGB')
@@ -250,6 +334,8 @@ def img2pdf(path,resolution:Union[str,int,float]=100):
     if(resolution == 'a4'):
         # try to set resolution to A4 dimensions (in inches)
         resolution = x.size[0]/8.268
+    elif(resolution == 'a3'):
+        resolution = x.size[0]/(297/25.4)
     x.save(newpath, resolution=resolution)  # default resolution seems to be 72 dpi
 
 def reformat(file:str,newtype:str='webp',oldtypes:str='jpg-JPG-png-PNG'):
@@ -273,22 +359,39 @@ def reformat(file:str,newtype:str='webp',oldtypes:str='jpg-JPG-png-PNG'):
     assert newtype in ['jpg','png','webp']
     for ifile in files:
         base = os.path.splitext(ifile)[0]
-        print('next:',ifile)
         if(('.png' in ifile or '.PNG' in ifile) and (newtype in ['png','webp'])):
             pil.open(ifile).convert('RGBA').save(base+'.'+newtype)
         else:
             pil.open(ifile).convert('RGB').save(base + '.' + newtype)
-    print('done')
+        print('done:', ifile)
+
+def tojpg(path,setdate=True,rename=True,replace=False):
+    '''
+    Convert a file to jpg, and if desired already give it a date that it was taken 
+    INPUTS:
+        * path: path to image file
+        * setdate: give new file the earliest date detected in old file
+        * rename: rename file to match earliest date in file
+    '''
+    newfile=os.path.splitext(path)[0]+'.jpg'
+    pil.open(path).save(newfile)
+    # TODO: CREATE THIS
+    pass
+
 
 if(__name__ == '__main__'):
-    import argparse
 
     actions = dict()
+    helpstr = '''
+    renameFolder <folderName> | 
+    reformat <imageName> | 
+    '''
     actions['renameFolder'] = 'rename folder to reflect range of files inside, i.e. "YYMMDD-YYMMDD"'
-    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,description='Potential arguments:'+str(list(actions.keys())))
+    actions['reformat'] = 'reformat a single file to a desired image type'
+    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,description=helpstr)
     p.add_argument('usage',type=str,help='desired operation')
-    p.add_argument('--args',nargs='+',required=False)
-    args=p.parse_args()
+    p.add_argument('args',nargs='+')
+    args = p.parse_args()
     action = args.usage
     others = args.args
     # want to implement some basic modification abilities to this lib. will add as needed
@@ -299,11 +402,13 @@ if(__name__ == '__main__'):
         assert os.path.isdir(targFolder,),"argument needs to be target folder. exiting."
         renfolder(targFolder)
 
+    elif(action == 'reformat'):
+        # TODO: be able to run on more than one file
+        # TODO: ignore files that already match desired format
+        # TODO: be able to select desired format
+        print('should run reformat on...', others)
+        assert len(others) == 1, 'only one argument allowed'
+        assert os.path.isfile(others[0]),'argument must be a file'
+        reformat(others[0])
     else: print("Error, desired action not recognized. fix or add. exiting.")
     
-    
-    
-    
-    
-    
-

@@ -75,7 +75,7 @@ class Tests_kimg(unittest.TestCase):
     def test_f_imgrename(self):
         ifile = os.path.join(IMG_FOLDER,'IMAG1727.jpg')
         self.assertTrue(os.path.exists(ifile))
-        kimg.imgrename(ifile)
+        kimg.rename(ifile)
         res2 = os.path.join(IMG_FOLDER,'181213_080011_1.jpg')
         self.assertTrue(os.path.exists(res2))
 
@@ -84,7 +84,7 @@ class Tests_kimg(unittest.TestCase):
         ifile = os.path.abspath(os.path.join(IMG_FOLDER,'IMAG2772.jpg'))
         # ifile = os.path.abspath(os.path.join(IMG_FOLDER,'17_map.png'))
         self.assertTrue(os.path.exists(ifile))
-        kimg.imgreduce(ifile,overwrite=True)
+        kimg.reduce(ifile, overwrite=True)
         im:pil.Image = pil.open(ifile)
         self.assertTrue(2000 >= max(im.size))
         exif = None
