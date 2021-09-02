@@ -14,8 +14,10 @@ things to fix:
 ===== div: in progress ===========
 * switch to a new song by double-clicking on it in listbox (popup: save?)
 
-TODO: if a local config file doesn't exist, set that up with user right away
-
+TODO: update listbox location when click "next" or "previous"
+TODO: load from double-clicking listbox
+TODO: be able to clear metadata that isn't listed
+TODO: from now on, auto-filename should follow format <TT> <artist> - <name>.mp3 (TT = tracknumber)
 '''
 
 import os,sys,time
@@ -50,6 +52,7 @@ class MainWindow:
             dat = json.load(f)
 
         self._targpath = dat['path']
+        print(self._targpath)
         self.passfn = lambda : print('hello world')
         self.printstate = lambda: print('state:',self.V['autochkCMT'].get())
         self.printindex = lambda: print('selected:',self.I['files'].curselection())
@@ -62,7 +65,7 @@ class MainWindow:
         self._current = None # needs to be set at first run
         self.origInfo = None # initialize dict variable for original metadata
         self.R = tk.Tk()
-        self.R.resizable(False,False)
+        self.R.resizable(True,False)
         self.R.title('UI Form')
         helv = ft.Font(self.R,family='Helvetica',size=fontSize)
         self.F=tk.Frame(self.R)
@@ -95,48 +98,50 @@ class MainWindow:
         # entry forms
         self.E = dict()
         for ifield in self._fields:
-            self.E[ifield] = tk.Entry(self.F,font=helv,textvariable=self.V[ifield],width=40)
+            self.E[ifield] = tk.Entry(self.F,font=helv,textvariable=self.V[ifield],width=80)
         self.E['autoCMT'] = tk.Entry(self.F,font=helv,textvariable=self.V['autoCMT'])
 
         # label forms
         self.L = dict()
         for ifield in self._fields:
             self.L[ifield] = tk.Label(self.F,font=helv,text=ifield)
-        # self.L['autoFNM'] = tk.Label(self.F,font=helv,textvariable=self.V['autoFNM']) # original
-        self.L['autoFNM'] = tk.Label(self.F,font=helv,text='<Artist> - <Title>.mp3')
+        self.L['autoFNM'] = tk.Label(self.F,font=helv,text='<track> <artist> - <title>.mp3')
 
         # listbox(es)
         self.I = dict()
-        self.I['files'] = tk.Listbox(self.F,font=helv,activestyle='dotbox',width=40)
+        self.I['files'] = tk.Listbox(self.F,font=helv,activestyle='dotbox',width=80)
 
         # placement of all items
-        self.B['path'].grid(    row=11, column=12)
-        self.B['fill'].grid(    row=11, column=7)
-        self.B['save'].grid(    row=11,column= 8)
-        self.B['prev'].grid(    row=11,column= 9)
-        self.B['next'].grid(    row=11,column=10)
-        self.B['quit'].grid(    row=11,column=11)
-        self.C['autochkCMT'].grid(row= 7,column= 1)
-        self.C['autochkFNM'].grid(row= 8,column= 1)
-        self.E['fname'].grid(   row= 1,column=8,columnspan=6)
-        self.E['title'].grid(   row= 2,column=8,columnspan=6)
-        self.E['artist'].grid(  row= 3,column=8,columnspan=6)
-        self.E['album'].grid(   row= 4,column=8,columnspan=6)
-        self.E['track'].grid(   row= 5,column=8,columnspan=6)
-        self.E['genre'].grid(   row= 6,column=8,columnspan=6)
-        self.E['year'].grid(    row= 7,column=8,columnspan=6)
-        self.E['comment'].grid( row= 8,column=8,columnspan=6)
-        self.E['autoCMT'].grid( row= 7,column= 2)
-        self.L['autoFNM'].grid( row= 8,column= 2)
-        self.L['fname'].grid(   row= 1,column=7)
-        self.L['title'].grid(   row= 2,column=7)
-        self.L['artist'].grid(  row= 3,column=7)
-        self.L['album'].grid(   row= 4,column=7)
-        self.L['track'].grid(   row= 5,column=7)
-        self.L['genre'].grid(   row= 6,column=7)
-        self.L['year'].grid(    row= 7,column=7)
-        self.L['comment'].grid( row= 8,column=7)
-        self.I['files'].grid(   row= 1,column= 1,rowspan=6,columnspan=2) #,columnspan=3,rowspan=6)
+        self.I['files'].grid(row=1, column=1, rowspan=6, columnspan=10)  # ,columnspan=3,rowspan=6)
+        self.C['autochkCMT'].grid(row=7, column=1)
+        self.E['autoCMT'].grid(row=7, column=2)
+        self.C['autochkFNM'].grid(row=8, column=1)
+        self.L['autoFNM'].grid(row=8, column=2)
+
+        self.L['fname'].grid(   row= 9, column=1)
+        self.E['fname'].grid(   row= 9, column=2,columnspan=10)
+        self.L['title'].grid(   row= 10,column=1)
+        self.E['title'].grid(   row= 10,column=2,columnspan=10)
+        self.L['artist'].grid(  row= 11,column=1)
+        self.E['artist'].grid(  row= 11,column=2,columnspan=10)
+        self.L['album'].grid(   row= 12,column=1)
+        self.E['album'].grid(   row= 12,column=2,columnspan=10)
+        self.L['track'].grid(   row= 13,column=1)
+        self.E['track'].grid(   row= 13,column=2,columnspan=10)
+        self.L['genre'].grid(   row= 14,column=1)
+        self.E['genre'].grid(   row= 14,column=2,columnspan=10)
+        self.L['year'].grid(    row= 15,column=1)
+        self.E['year'].grid(    row= 15,column=2,columnspan=10)
+        self.L['comment'].grid( row= 16, column=1)
+        self.E['comment'].grid( row= 16, column=2,columnspan=10)
+
+
+        self.B['path'].grid(    row=17, column=1)
+        self.B['fill'].grid(    row=17, column=2)
+        self.B['save'].grid(    row=17,column= 3)
+        self.B['prev'].grid(    row=17,column= 4)
+        self.B['next'].grid(    row=17,column=5)
+        self.B['quit'].grid(    row=17,column=6)
 
         # bind custom events
         self.E['title'].bind( '<KeyRelease>',self.updateAutoFileName)
@@ -172,7 +177,8 @@ class MainWindow:
         self.update_prev_data()
 
     def updateFileList(self):
-        self._filelist = [os.path.join(self._targpath,ifile) for ifile in os.listdir(self._targpath) if('mp3' in ifile)]
+        self._filelist = [os.path.join(self._targpath,ifile) for ifile in
+                          os.listdir(self._targpath) if('mp3' in ifile)]
 
     def updateAutoFileName(self,event): # perhaps "tk.Event" ?
         ''' here, will outline the formatting for auto-filenaming, and this
@@ -181,7 +187,13 @@ class MainWindow:
         * want to run this on keypress of artist & title widgets
         '''
         filepath = os.path.dirname(self.V['fname'].get())
-        text = '{} - {}.mp3'.format(self.V['artist'].get(),self.V['title'].get())
+
+        # if track number is available, prepend it to filename
+        track=self.V['track'].get().split('/')[0]
+        if(track != ''):
+            track = '{:0>2} '.format(track)
+
+        text = track+'{} - {}.mp3'.format(self.V['artist'].get(),self.V['title'].get())
         self.V['autoFNM'].set(os.path.join(filepath,text))
 
     def populateListBox(self):
@@ -264,7 +276,7 @@ class MainWindow:
         elif(ndiff==1 and diff['fname']):
             # only the filename was changed. rename file, update list, update "original" info
             print('only filename change')
-            os.rename(i1['fname'],i2['fname'])
+            os.rename(os.path.abspath(i1['fname']),i2['fname'])
             self.updateFileList()
             self.populateListBox()
             self.origInfo=i2
