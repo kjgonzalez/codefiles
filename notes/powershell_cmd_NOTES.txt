@@ -57,6 +57,7 @@ it is indeed possible to call a batch script with arguments
 
 
 = SIMPLE ONE-LINE COMMANDS =================================
+(CMD) get list of files:        dir /s /b /a (s = recursive)
 (CMD) create a symlink:         mklink path/link path/real/item
 (CMD) view text file contents   more FileName.txt
 (CMD) find string in files      findstr /s "Text Here" *.* # note: also possible in powershell
@@ -70,3 +71,5 @@ it is indeed possible to call a batch script with arguments
 (PWS) create alias              Set-Alias -Name list -Value <SomeAction>
 (PWS) remove one file           rm <filename>
 (PWS) remove folder + files     rm -recurse <folder>
+(PWS) shutdown computer         shutdown /s /f /t 60  (works in CMD)
+(PWS) cancel shutdown           shutdown /a           (works in CMD)
