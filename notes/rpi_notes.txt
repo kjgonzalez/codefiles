@@ -17,9 +17,24 @@ get usb-connected rpi_zero onto internet:
 6. (change internet settings to allow shared ethernet connection?)
 7. power on rpi with usb connection to pc
 --------------------------------------------------
-how to ssh into rpi: 
-ssh pi@192.168.x.y
-OR
-ssh pi@raspberrypi.local
-pw: k...7
+how to ssh into rpi's: 
+pia: ssh pia@192.168.x.y
+pib: ssh pib@raspberrypi.local
+--------------------------------------------------
+how to change username on rpi via ssh:
+1. login as normal (via pi@raspberrypi.local, etc)
+    a. sudo passwd root # make something simple
+    b. sudo vim /etc/ssh/sshd_config # will change one line in this file
+    c. # find/modify line to: 
+        PermitRootLogin yes
+    d. # save and close
+    e. sudo reboot
+2. login as root (root@raspberrypi.local, etc)
+    a. usermod -l NEWNAME OLDNAME
+    b. usermod -m -d /home/NEWNAME NEWNAME # yes, write it twice
+    c. # remove root login from step 1c, save, and reboot
 
+you may now ssh in with your new name:
+    ssh NEWNAME@raspberrypi.local
+
+--------------------------------------------------
