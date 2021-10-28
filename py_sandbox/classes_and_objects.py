@@ -310,7 +310,7 @@ class Dunders:
         ''' used when object called like a function '''
         return 1
     def __getitem__(self, item):
-        ''' used when object called like a dict / array '''
+        ''' used when object called like a dict / array. requires iter? '''
         return 'a'*item
     def __len__(self):
         ''' used when object acts like an array '''
