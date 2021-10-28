@@ -14,10 +14,11 @@ things to fix:
 ===== div: in progress ===========
 * switch to a new song by double-clicking on it in listbox (popup: save?)
 
-TODO: update listbox location when click "next" or "previous"
+TODO: update listbox highlight when click "next" or "previous"
 TODO: load from double-clicking listbox
 TODO: be able to clear metadata that isn't listed
-TODO: from now on, auto-filename should follow format <TT> <artist> - <name>.mp3 (TT = tracknumber)
+TODO: make a status line with label
+
 '''
 
 import os,sys,time
@@ -28,6 +29,14 @@ import kaudio as ka
 import json
 fontSize = 12 # default font size is 9
 
+def clean_string(input):
+    ''' remove disallowed characters from title string so it can be used in filename '''
+    res = input+''
+    disallowed = '/\:*?"<>|¿'
+    for i in disallowed:
+        res = res.replace(i,'')
+    res = res.replace('  ',' ')
+    return res
 
 class MainWindow:
     ''' Class to contain and load main window interface. this only initializes
@@ -75,7 +84,7 @@ class MainWindow:
         # control variables
         self.V = dict()
         self.V['autochkCMT'] = tk.IntVar() # status for auto-Comment
-        self.V['autochkFNM'] = tk.IntVar() # status for auto-Filename
+        self.V['autochkFNM'] = tk.IntVar(value=1) # status for auto-Filename
         self.V['autoCMT'] = tk.StringVar() # text for auto-comment
         self.V['autoFNM'] = tk.StringVar() # text for auto-filename
         for ifield in self._fields:
@@ -148,10 +157,12 @@ class MainWindow:
         self.E['artist'].bind('<KeyRelease>',self.updateAutoFileName)
         self.R.bind('<Control-s>',self.saveData)
         self.R.bind('<Control-S>',self.saveData)
-        self.R.bind('<Control-j>',self.loadPrevFile)
-        self.R.bind('<Control-J>',self.loadPrevFile)
-        self.R.bind('<Control-k>',self.loadNextFile)
-        self.R.bind('<Control-K>',self.loadNextFile)
+        self.R.bind('<Control-a>',self.loadPrevFile)
+        self.R.bind('<Control-A>',self.loadPrevFile)
+        self.R.bind('<Control-d>',self.loadNextFile)
+        self.R.bind('<Control-D>',self.loadNextFile)
+        self.R.bind('<Control-f>',self.fill_old_data)
+        self.R.bind('<Control-F>',self.fill_old_data)
         self.R.bind('<Control-q>',self.quit)
         self.R.bind('<Control-Q>',self.quit)
 
@@ -194,6 +205,7 @@ class MainWindow:
             track = '{:0>2} '.format(track)
 
         text = track+'{} - {}.mp3'.format(self.V['artist'].get(),self.V['title'].get())
+        text = clean_string(text)
         self.V['autoFNM'].set(os.path.join(filepath,text))
 
     def populateListBox(self):
@@ -212,7 +224,6 @@ class MainWindow:
         self.update_prev_data() # before switching, get what's currently there
         self.setAllFromFile(self._filelist[index])
         self._current = index
-
 
     def setAllFromFile(self,filename):
         ''' given a filename, populate metadata fields '''
@@ -244,6 +255,7 @@ class MainWindow:
         # override filename if auto-filename enabled
         if(self.V['autochkFNM'].get()):
             # auto-filename enabled, override current filename.
+            self.updateAutoFileName(1) # requires argument while updating
             res['fname'] = self.V['autoFNM'].get()
         return res
 
@@ -262,7 +274,25 @@ class MainWindow:
             'comment':self.E['comment'].get(),
         }
 
-    def saveData(self,*kargs): # kargs needed for callback
+    def saveData(self,*kargs): # new version of save
+        print('saving metadata & filename')
+        i1 = self.origInfo
+        i2 = self.getAllFields()
+
+        os.rename(i1['fname'], i2['fname'])
+        self.updateFileList()
+        self.populateListBox()
+        dat = ka.MetaMP3(i2['fname'])
+        for ifield in dat.tags:
+            dat.set(ifield, i2[ifield])
+        dat.save()
+        self.origInfo = i2
+
+        # after saving, update fname and comment, the only two that can be auto-changed by program
+        self.V['fname'].set(i2['fname'])
+        self.V['comment'].set(i2['comment'])
+
+    def saveData_old0(self,*kargs): # kargs needed for callback
         ''' write out the new metadata to file '''
         # case 1: only metadata is changed. save that and quit
         i1 = self.origInfo
@@ -327,6 +357,8 @@ class MainWindow:
         self.R.destroy()
 
 # kjg190626: ok, for the moment, will run from 00... folder
+
+
 
 if(__name__ == '__main__'):
 
