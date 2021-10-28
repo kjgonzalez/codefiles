@@ -1,6 +1,6 @@
 /*
 Author: Kris Gonzalez
-Created: 181117
+Created: 20181117
 Objective: Use a serial connection between pc-arduino to ensure that serial
   connection is functioning properly. this is a debugging program to be used
   in conjunction with related python script.
@@ -23,7 +23,6 @@ BOARD: two
 PC: lalalala
 BOARD: lalalala
 PC: q
-
 
 */
 

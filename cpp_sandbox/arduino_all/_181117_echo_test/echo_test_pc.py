@@ -23,23 +23,29 @@ possible ways to list ubuntu serial ports:
 
 import serial
 import time
-from sys import argv
+import argparse
 
-ser = serial.Serial()
-ser.baudrate = 38400
-ser.timeout = 0.1 # amount of time to wait for new data
-ser.port = argv[1]
 
-ser.open()
-inp=''
-print('Connection established. baud: '+str(ser.baudrate)+'. Press "q" to exit')
-inp = input('PC: ')
-while(inp != 'q'):
-    ser.write(inp.encode())
-    time.sleep(0.4)
-    print(ser.read_all().decode("utf-8")[:-1]) # remove newline char
+if(__name__ == '__main__'):
+    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    p.add_argument('--src',default='COM0',help='serial port to access. "COM0" or similar on windows, "/dev/ttyACM2" or similar on linux')
+    args=p.parse_args()
+
+    ser = serial.Serial()
+    ser.baudrate = 115200
+    ser.timeout = 0.1 # amount of time to wait for new data
+    ser.port = args.src
+
+    ser.open()
+    inp=''
+    print('Connection established. baud: '+str(ser.baudrate)+'. Press "q" to exit')
     inp = input('PC: ')
-# while loop
-ser.flush()
-ser.close()
-print('\nExiting...')
+    while(inp != 'q'):
+        ser.write(inp.encode())
+        time.sleep(0.4)
+        print(ser.read_all().decode("utf-8")[:-1]) # remove newline char
+        inp = input('PC: ')
+    # while loop
+    ser.flush()
+    ser.close()
+    print('\nExiting...')
