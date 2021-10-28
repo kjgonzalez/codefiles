@@ -1,0 +1,51 @@
+basics of javascript, enough to work on foundry
+
+function test(x,y){
+    console.log('hello')
+    return x+y;
+}
+
+// two ways to define a variable: 
+x = 1
+let xx = 2
+
+function test2(x){
+    if(x<0) return -1;
+    else if(x==0) return 0;
+    else return 1;
+}
+
+let z = []
+z.push(1)
+z.push(10)
+z.push(3)
+z.push(5)
+
+// note: two ways to iterate through arrays
+z.forEach(function(item, index, array) {
+    console.log(item, index)
+})
+
+for (let i = 0; i < cars.length; i++) {
+    console.log(item, index);
+}
+
+foundryvtt-specific: 
+// array of selected tokens: 
+canvas.tokens.controlled // array
+token...
+.x
+.y
+.scale.x
+.scale.y
+.angle
+
+// get grid spacing: 
+canvas.grid.h (or canvas.grid.size) // note: read-only
+rotate left: 
+    get array of controlled characters
+    get centroid of all selected values
+
+// conventions: 
+step = canvas.grid.h
+
