@@ -1,8 +1,21 @@
 ================================================================================
 Rasberry Pi-Specific
-enable certain functionalities         sudo raspi-config
-list available i2c devices             i2cdetect # install i2c-tools
+enable certain functionalities  sudo raspi-config
+list available i2c devices      i2cdetect # install i2c-tools
+set python3 as the default      sudo update-alternatives --install $(which python) python $(readlink -f $(which python3)) 3
 
+================================================================================
+MAGIC COMMAND TO RUN THINGS IN CRONTAB (EXAMPLE)
+@reboot sleep 1 && screen -d -S octoprint -m /home/pi/programs/octoprint/OctoPrint/bin/octoprint serve
+
+
+================================================================================
+DEAL WITH SCREEN PROGRAM DIRECTLY
+create new socket    screen -S socketName
+reattach to socket   screen -r socketName
+get list of sockets  screen -ls 
+detach from socket   CTRL+A,D
+delete a socket      (connect to socket), "exit"
 
 
 ================================================================================
@@ -13,3 +26,6 @@ force restart from the command line     sudo shutdown -r now
 list all files plus filesizes           ls -sh1S # size,humanreadable,1col,sort
 check cron                              crontab -e
 show current system time                date
+delete a folder and all files inside    rm -r /path/to/dir/
+create a pause in a shell script        sleep N (N seconds)
+run two commands on one line            Command1 && Command2

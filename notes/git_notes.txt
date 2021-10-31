@@ -103,7 +103,9 @@ squash commits after CommitHash:
     2. (follow steps above)
 
 GIT SQUASH REMOTE COMMITS ==================================
-git rebase-i origin/BranchName~NCommits BranchName
+git rebase -i origin/BranchName~NCommits BranchName
+(use "reword" on one line, "fixup" to hide old messages)
+(crate new message
 git push origin +master # force pushes only to one branch
 (Src5)
 
@@ -140,5 +142,5 @@ update github repo loc     git remote set-url origin [https://...git] #(Src2)
 checkout new branch        git checkout BranchName #omit remotes/origin
 create&checkout new branch git checkout -b branchName
 checkout w/ tracking       git branch --set-upstream-to=origin/<branch> BranchName
-git squash commits         git rebase -i HEAD~nCommits (or -i HASH, see above)
+git squash local commits   git rebase -i HEAD~nCommits (or -i HASH, see above)
 git squash remote commits  git rebase -i origin/BRANCH~4 BRANCH ; git push origin +BRANCH
