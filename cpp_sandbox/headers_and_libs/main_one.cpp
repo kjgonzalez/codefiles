@@ -43,7 +43,7 @@ class puppy{
 //  moved to norms.cpp/h and rectangle.h
 
 // double pyt(double a, double b){
-//   return pow(a*a+b*b,0.5);
+  // return pow(a*a+b*b,0.5);
 // } //pyt
 
 // class rect{
