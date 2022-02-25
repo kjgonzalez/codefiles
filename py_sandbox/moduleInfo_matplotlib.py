@@ -103,7 +103,7 @@ if(False):
     plt.scatter(x,y,c=y)
 
 ''' creating a broken axis ================================================= '''
-if(True):
+if(False):
     # src: https://matplotlib.org/3.1.0/gallery/subplots_axes_and_figures/broken_axis.html
     pts = np.array([
         0.015, 0.166, 0.133, 0.159, 0.041, 0.024, 0.195, 0.039, 0.161, 0.018,
@@ -151,6 +151,19 @@ if(True):
     kwargs.update(transform=ax2.transAxes)  # switch to the bottom axes
     ax2.plot((-d, +d), (1 - d, 1 + d), **kwargs)  # bottom-left diagonal
     ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
+
+''' importing / manipulating images ======================================== '''
+
+fpath = '../data/baby.jpg'
+def rgb2gray(rgb):
+    return np.dot(rgb[...,:3],[0.2989, 0.5870, 0.1140])
+im = plt.imread(fpath)
+f,p = plt.subplots(2)
+p[0].imshow(im)
+p[1].imshow(rgb2gray(im))
+
+
+
 
 
 # plot your results ============================================

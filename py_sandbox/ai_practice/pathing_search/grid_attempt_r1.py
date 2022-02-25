@@ -8,6 +8,7 @@ objective: work on creating a depth-first search and breadth-first search
 ''' INITIALIZATIONS ======================================================== '''
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 
 # setup functions
 def plotgrid(gridarr,fsize=4):
@@ -21,7 +22,7 @@ def plotgrid(gridarr,fsize=4):
     ylims=[yticks.min(),yticks.max()]
     p.set_xticks(xticks,minor=True)
     p.set_yticks(yticks,minor=True)
-    p.grid(b=True,which='minor')
+    p.grid(visible=True,which='minor')
     return f,p
 
 def canGoInDir(arr,coord,direction):
@@ -95,7 +96,7 @@ grid[4,0]=0
 grid[4,2]=0
 grid[4,5]=0
 loc_start=[0,0]
-loc_end  =[4,3] # row/col format
+loc_end = [4,3] # row/col format
 print('map created')
 
 w=grid.shape[1]
@@ -151,7 +152,9 @@ path = bfs(adj,st,en)
 print('path:',path)
 
 coords=np.array(path2coords(path,grid.shape[1]))
+f:Figure = None
 f,p=plotgrid(grid,8)
+p.set_title('bfs')
 p.plot(*loc_start[::-1],'ro')
 p.plot(*loc_end[::-1],'rx')
 p.plot(coords[:,1],coords[:,0],'g-')
@@ -183,6 +186,7 @@ print('path:',path)
 
 coords=np.array(path2coords(path,grid.shape[1]))
 f,p=plotgrid(grid,8)
+p.set_title('dfs')
 p.plot(*loc_start[::-1],'ro')
 p.plot(*loc_end[::-1],'rx')
 p.plot(coords[:,1],coords[:,0],'g-')
