@@ -1,10 +1,16 @@
 
 --------------------------------------------------
+flash rpi image onto a card
+1. install RPI imager and run
+2. select relevant image (or download own desired version)
+3. connect relevant sd card
+4. begin flashing process
+OPTIONAL: add wifi and SSH privileges offline
+--------------------------------------------------
 change rpi time zone
 1. raspi-config
 2. "localization" / "internationalisation"
 3. select appropriate region and Finish
-
 --------------------------------------------------
 get usb-connected rpi_zero onto internet:
 1. plug in MicroSD directly to computer (not thru rpi)
@@ -21,7 +27,7 @@ how to ssh into rpi's:
 pia: ssh pia@192.168.x.y
 pib: ssh pib@raspberrypi.local
 --------------------------------------------------
-how to change username on rpi via ssh:
+how to change username/password on rpi via ssh:
 1. login as normal (via pi@raspberrypi.local, etc)
     a. sudo passwd root # make something simple
     b. sudo vim /etc/ssh/sshd_config # will change one line in this file
@@ -36,5 +42,11 @@ how to change username on rpi via ssh:
 
 you may now ssh in with your new name:
     ssh NEWNAME@raspberrypi.local
-
 --------------------------------------------------
+rpi first time use recommendations
+0. (after logging in)
+1. change username/password
+2. get internet working
+3. sudo apt-get update
+4. sudo apt-get upgrade
+5. sudo apt-get install vim screen git
