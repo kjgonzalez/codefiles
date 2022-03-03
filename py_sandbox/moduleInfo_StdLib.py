@@ -20,6 +20,8 @@ print('Rpad    : |{:<8}|'.format(b))
 print('Cpad    : |{:^8}|'.format(b))
 print('pad spec: |{:+^8}|'.format(b)) # charcter before '^' will be repeated everywhere
 
+# classic example: lpad with zeros:
+print('typical : {:0>3}'.format(3))
 # another way to pad strings
 
 print('text with rpad '.ljust(30,'-'))

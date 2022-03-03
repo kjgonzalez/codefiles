@@ -336,7 +336,9 @@ def img2pdf(path,resolution:Union[str,int,float]=100):
         resolution = x.size[0]/8.268
     elif(resolution == 'a3'):
         resolution = x.size[0]/(297/25.4)
-    x.save(newpath, resolution=resolution)  # default resolution seems to be 72 dpi
+    # default resolution seems to be 72 dpi
+    # note: "quality=100" is quite important! default seems to be ~75
+    x.save(newpath, resolution=resolution,quality=100)
 
 def reformat(file:str,newtype:str='webp',oldtypes:str='jpg-JPG-png-PNG'):
     ''' Reformat arg file as newtype.
