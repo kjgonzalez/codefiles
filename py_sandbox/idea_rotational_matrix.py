@@ -1,7 +1,7 @@
 '''
 datecreated: 190930
 objective: demonstrate rotational matrix. not always easy to figure out
-BONUS: demosntrate translation as well in same matrix
+BONUS: demonstrate translation as well in same matrix
 
 general steps:
 1. plot a simple rectangle

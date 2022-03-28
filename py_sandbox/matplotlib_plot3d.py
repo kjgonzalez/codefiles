@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D # only required to "register 3D projection"
 
-npts=100000
+npts=1000
 z=np.linspace(0,10,npts)
 x=np.cos(z)
 y=np.sin(z)

@@ -1,7 +1,7 @@
 '''
 Track memory usage of a specific process by name or PID
 
-help information: python memtrack.py --help
+help information: python idea_memtrack.py --help
 NOTE: this program requires 'psutil', which requires
     either a python environment or to be installed before usage.
 '''

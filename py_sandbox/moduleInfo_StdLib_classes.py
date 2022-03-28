@@ -14,10 +14,10 @@ Covers:
 
 '''
 
-(''' ===========================================================================
-Basics of a class in python ''')
+''' ===========================================================================
+Basics of a class in python '''
 
-class dog:
+class Dog:
     '''
     this is a class that will outline properties and methods of dogs
     '''
@@ -68,13 +68,13 @@ class dog:
             print(self.name+' doesn''t have anything')
 
 
-(''' ===========================================================================
+''' ===========================================================================
 How a subclass / inheritance works in python
 example: shape>>rectangle>>square
 real-world: imdb>>kitti>>kitti_3d
-''')
+'''
 
-class shape:
+class Shape:
     def __init__(self,color):
         self.color=color
     def perim(self):
@@ -82,9 +82,9 @@ class shape:
     def area(self):
         raise NotImplementedError
 
-class rectangle(shape):
+class Rectangle(Shape):
     def __init__(self,length,width,color='red'):
-        shape.__init__(self,color)
+        Shape.__init__(self, color)
         self.length=length
         self.width=width
     def perim(self):
@@ -94,24 +94,24 @@ class rectangle(shape):
     def area(self):
         return self.length*self.width
 
-class square(rectangle):
+class square(Rectangle):
     def __init__(self,length,color='blue'):
-        rectangle.__init__(self,length,length,color)
+        Rectangle.__init__(self, length, length, color)
 
     def area(self):
         print('giving square area')
         return self.length*self.length
 
-shap=shape('purple')
-rect=rectangle(3,5)
+shap=Shape('purple')
+rect=Rectangle(3, 5)
 squa=square(4)
 # import ipdb;ipdb.set_trace()
 
-(''' ===========================================================================
+''' ===========================================================================
 Class inheritance example 2 in python
 
 source: https://www.python-course.eu/python3_inheritance.php
-''')
+'''
 
 class Person:
     def __init__(self,first,last):
@@ -194,7 +194,7 @@ additionally: seems to handle the "Method Resolution Order" much better than
 
 # will try and use the shapes examples
 
-class triangle(shape):
+class triangle(Shape):
     def __init__(self,sides_arr,color='blue'):
         super().__init__(color=color)
         self.lengths=sides_arr+[]
