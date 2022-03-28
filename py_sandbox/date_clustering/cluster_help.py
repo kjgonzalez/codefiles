@@ -1,5 +1,6 @@
 '''
-Objective: setup simple clustering function that will take in a bunch of dates and suggest clusters / groups for them.
+Objective: setup simple clustering function that will take in a bunch of dates and suggest
+    clusters / groups for them.
 
 General Steps:
 1. get list
@@ -10,7 +11,8 @@ General Steps:
 
 reminder: sort numpy array by column: a[a[:,1].argsort()]
 
-# 80 Char ======================================================================
+# todo: create
+
 '''
 
 

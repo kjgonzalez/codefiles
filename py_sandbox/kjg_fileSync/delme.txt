@@ -1,6 +1,0 @@
-delme.txt
-locA
-locB
-paths.txt
-recursive.py
-synchronize.py

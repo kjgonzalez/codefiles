@@ -9,9 +9,9 @@ General Steps
 	4. export / save each frame to a subfolder (already created)
 	5. complete.
 Input Arguments:
-	* arg1 = video file
-	* arg2 = desired number of frames ('all' for all frames)
-	* arg3 = path to place images
+	* arg1: video (path & filename)
+	* arg2: number of desired frame (number, or 'all')
+	* arg3: output directory
 '''
 
 # initializations
@@ -22,14 +22,14 @@ from sys import argv
 
 # catch argument errors
 if(not os.path.exists(argv[1])):
-	print 'ERROR: video not found'
-	exit()
+    print ('ERROR: video not found')
+    exit()
 elif(not argv[2].isdigit() and argv[2] != 'all'):
-	print 'ERROR: desiredFrames is not a number or ''all'' '
-	exit()
+    print ('ERROR: desiredFrames is not a number or ''all'' ')
+    exit()
 elif(not os.path.exists(argv[3])):
-	print 'ERROR: output path not found'
-	exit()
+    print ('ERROR: output path not found')
+    exit()
 
 # load video
 
@@ -41,27 +41,32 @@ desiredExportLoc = argv[3]
 vid=cv2.VideoCapture(videoToLoad)
 nFrames = vid.get(cv2.CAP_PROP_FRAME_COUNT)
 if(argv[2].isdigit()):
-	desiredFrames = int(argv[2])
+    desiredFrames = int(argv[2])
 else:
-	desiredFrames = int(nFrames)
+    desiredFrames = int(nFrames)
 frames=[]
 success = True
 
 # will eventually try to catch desired frames in while loop instead of forloop
 while success:
-	success,iframe = vid.read()
-	frames.append(iframe)
-print 'counted frames:',len(frames)
-print 'cv2 frames:',vid.get(cv2.CAP_PROP_FRAME_COUNT)
+    success,iframe = vid.read()
+    frames.append(iframe)
+print ('counted frames:',len(frames))
+print ('cv2 frames:',vid.get(cv2.CAP_PROP_FRAME_COUNT))
 nFrames = len(frames)
+
+if(desiredFrames>nFrames):
+    print ('desired frames (',desiredFrames,')too high, limiting to',nFrames)
+    desiredFrames=nFrames
 
 # select only frames that match criteria, resize, and export
 for i in range(0,desiredFrames):
-	j=int(round(float(i)/float(desiredFrames+1)*nFrames))
-	res=cv2.resize(frames[j],(0,0),fx=1,fy=1)
-	fpath = desiredExportLoc+str(i)+'.jpg'
-	cv2.imwrite(fpath,res)
-	print fpath,'\t frame',j
+    j=int(round(float(i)/float(desiredFrames+1)*nFrames))
+    res=frames[j]
+    #res=cv2.resize(frames[j],(0,0),fx=1./3,fy=1./3)
+    fpath = desiredExportLoc+str(i)+'.jpg'
+    cv2.imwrite(fpath,res)
+    print (fpath,'\t frame',j)
 
 
-print 'exiting...'
+print ('exiting...')

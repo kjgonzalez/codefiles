@@ -1,0 +1,11 @@
+ Volume in drive C is Windows8_OS
+ Volume Serial Number is 3244-48B5
+
+ Directory of C:\Users\Kris\Dropbox\Design Studies\Programming\Python\py_sandbox\kjg_fileSync\locA
+
+11/05/2016  19:19    <DIR>          .
+11/05/2016  19:19    <DIR>          ..
+11/05/2016  19:19               401 sample.txt
+11/05/2016  19:19                 0 sample2.txt
+               2 File(s)            401 bytes
+               2 Dir(s)  97,567,674,368 bytes free

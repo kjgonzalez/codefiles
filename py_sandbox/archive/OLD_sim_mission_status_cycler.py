@@ -32,7 +32,7 @@ rate = rospy.Rate(0.25) # want to change every 4 seconds
 try:
 	i = 0
 	while(not rospy.is_shutdown()):
-		print 'current mission:',i
+		print ('current mission:',i)
 		sendme = UInt8()
 		sendme.data = i
 		pub_status.publish(sendme)

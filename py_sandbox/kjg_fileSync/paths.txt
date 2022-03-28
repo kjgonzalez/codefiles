@@ -1,2 +1,0 @@
-C:\Users\Kris\Dropbox\Design Studies\Programming\Python\py_sandbox\kjg_fileSync\locA
-C:\Users\Kris\Dropbox\Design Studies\Programming\Python\py_sandbox\kjg_fileSync\locB

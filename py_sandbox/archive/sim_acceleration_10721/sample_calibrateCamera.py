@@ -76,7 +76,7 @@ while(1):
     _, frame = cap.read()
     ratio=0.75
     frame = cv2.resize(frame,None,fx=ratio, fy=ratio,
-					   interpolation = cv2.INTER_AREA)
+                       interpolation = cv2.INTER_AREA)
 
 
     # Convert BGR to HSV

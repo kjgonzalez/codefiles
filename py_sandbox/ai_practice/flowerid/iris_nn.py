@@ -32,7 +32,7 @@ import numpy as np
 from klib import data as da
 import argparse, time
 import os, sys
-sys.path.append(os.path.abspath('../../book_OwnNN'))
+sys.path.append(os.path.abspath('../book_OwnNN'))
 from knet_nn import NeuralNetwork
 
 def npshuffle(nparr):
