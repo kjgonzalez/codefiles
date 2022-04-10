@@ -42,6 +42,28 @@ how to change username/password on rpi via ssh:
 
 you may now ssh in with your new name:
     ssh NEWNAME@raspberrypi.local
+
+3. update password
+    a. passwd
+    b. (follow prompts)
+
+--------------------------------------------------
+set a static ip address for pi
+0. get relevant information of network: 
+    a. current pi address
+    b. desired pi address
+    c. router address
+    d. DNS address (usually same as router gateway address)
+        "sudo vim /etc/resolv.conf" >> see what's there
+1. sudo vim /etc/dhcpcd.conf
+    a. append following lines: 
+        interface NETWORK (e.g. eth0, wlan0, etc)
+        static ip_address=STATIC_IP/24 ("/24" IS CRITICAL)
+        static routers=ROUTER_IP 
+        static domain_name_servers=DNS_IP (usually same as DNS)
+    b. save, close
+2. restart pi
+
 --------------------------------------------------
 rpi first time use recommendations
 0. (after logging in)
@@ -50,3 +72,5 @@ rpi first time use recommendations
 3. sudo apt-get update
 4. sudo apt-get upgrade
 5. sudo apt-get install vim screen git
+6. change username
+7. change password

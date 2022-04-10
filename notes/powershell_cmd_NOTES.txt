@@ -73,3 +73,4 @@ it is indeed possible to call a batch script with arguments
 (PWS) remove folder + files     rm -recurse <folder>
 (PWS) shutdown computer         shutdown /s /f /t 60  (works in CMD)
 (PWS) cancel shutdown           shutdown /a           (works in CMD)
+(CMD) create bin file anysize   fsutil file createnew FILENAME FILESIZE_BYTES
