@@ -144,3 +144,5 @@ create&checkout new branch git checkout -b branchName
 checkout w/ tracking       git branch --set-upstream-to=origin/<branch> BranchName
 git squash local commits   git rebase -i HEAD~nCommits (or -i HASH, see above)
 git squash remote commits  git rebase -i origin/BRANCH~4 BRANCH ; git push origin +BRANCH
+check all tags (versions)  git tag -n
+create new tag (version)   git tag -a "X.Y.Z" -m "MSG_HERE"
