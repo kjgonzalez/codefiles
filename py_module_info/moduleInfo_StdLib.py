@@ -151,7 +151,7 @@ class Rect:
         assert val>=0, "value smaller than zero"
         self._z = val
 
-# 05 Miscellaneous ================================================================
+# 05 Sets, lambda, maps =========================================================
 
 # sets (src:https://docs.python.org/3/library/stdtypes.html#set)
 A=set('one two three four 5 6 7'.split(' '))
@@ -190,6 +190,28 @@ y = list(map(pyt,x0,x1))
 
 # 'listify'
 b = list(map(list,'one two thr'.split(' '))) # out:[['o','n','e'],['t','w','o'],['t','h','r']]
+
+
+# 06 Sets, lambda, maps =========================================================
+print('FOLLOWING IS ONLY POSSIBLE WITH PYTHON 3.7 AND UP')
+
+# data classes (py3.7): mutable structs
+from dataclasses import dataclass
+
+@dataclass
+class Point:
+    x: float
+    y: float
+    z: float = 0.0 # can have default values
+
+# NamedTuple's (py3.6): immutable structs
+from typing import NamedTuple
+
+class MyStruct(NamedTuple):
+    foo: str
+    bar: int
+    baz: list
+
 
 
 # eof
