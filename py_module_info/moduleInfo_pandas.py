@@ -1,9 +1,13 @@
-'''
+    '''
 dateCreated: 190518
 objective: how to make a nice table with pandas from numpy. in this example,
     will generate a dummy table with count & AP values for 9 different classes
 
 KJG190814: perhaps also want to look into how to get a csv file via pandas? 
+
+todo: add iloc in pandas
+todo: append series to pandas dataframe (new row)
+
 '''
 
 
@@ -94,3 +98,8 @@ print('concatenate two tables that share the same headers:\n',pd.concat([xx,yy],
 print('swapping columns around:\n{}'.format(x.reindex(columns=['b','a','c'])))
 
 print('alternative method:\n{}'.format( x[['b','a','c']] ))
+
+# using iloc: 
+a = pd.DataFrame(np.random.rand(6,3),columns='a b c'.split(' '))
+for i in a.iloc:
+    print(i)

@@ -4,11 +4,14 @@ DateCreated: 180320
 Objective: use some sort of classical engineering for blob detection. load the 
 	cone image and detect the orange cone
 
+todo: update this code for py3, modernize (KJG20220616)
+
 '''
 
 import numpy as np
 import cv2
 from sys import argv
+import tkinter as Tkinter
 
 def resize2(imgname,Screen2ImageRatio=2):
 	''' Objective: provide SUPER simple way to resize an image relative to size
@@ -16,7 +19,7 @@ def resize2(imgname,Screen2ImageRatio=2):
 		is not resized if it is smaller than a ratio of the screen dimensions. 
 		However, if it is larger, the image is resized.
 	'''
-	import Tkinter
+	
 	root = Tkinter.Tk()
 	sc_dim = (root.winfo_screenheight(),root.winfo_screenwidth())
 	
@@ -39,10 +42,10 @@ def nothing(x):
 
 # CONTROL SECTION ##############################################################
 vid_src = 1 # 0=built-in, 1=usb camera
-null=[0,0,0,255,255,255] # trackbar init lo/hi values
-ini_orange=[0,104,206,023,255,255]
-ini_blue=[102,115,124,109,255,255]
-ini_green=[58,49,77,80,255,255]
+null=      [0,0,0,255,255,255] # trackbar init lo/hi values
+ini_orange=[0,104,206,23,255,255]
+ini_blue=  [102,115,124,109,255,255]
+ini_green= [58,49,77,80,255,255]
 ini_yellow=[24,105,0,30,255,255]
 
 ini_track=ini_orange
@@ -53,7 +56,7 @@ ini_track=ini_orange
 # INITIALIZATIONS ################################
 
 # send user message to bash: 
-print 'end program with ESC'
+print('end program with ESC')
 
 # load image
 #pre = cv2.imread(argv[1])

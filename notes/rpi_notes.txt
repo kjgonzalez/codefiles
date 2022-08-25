@@ -27,6 +27,12 @@ how to ssh into rpi's:
 pia: ssh pia@192.168.x.y
 pib: ssh pib@raspberrypi.local
 --------------------------------------------------
+change swap size memory
+NOTE: default is 100 (MB), keep it there when possible!
+sudo vim /etc/dphys-swapfile
+  change line "CONF_SWAPSIZE=" to desired value (MB)
+  reboot rpi
+--------------------------------------------------
 how to change username/password on rpi via ssh:
 1. login as normal (via pi@raspberrypi.local, etc)
     a. sudo passwd root # make something simple

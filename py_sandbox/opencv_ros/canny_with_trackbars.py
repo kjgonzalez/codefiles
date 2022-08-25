@@ -7,6 +7,7 @@ Objective: learn how the two thresholds of canny edge
 KJGNOTE: probably want to do some blurring next time in order to better
 	remove other lines
 
+todo: update for py3, modern code (KJG20220616)
 '''
 
 import cv2

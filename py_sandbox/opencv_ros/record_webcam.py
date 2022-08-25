@@ -35,7 +35,7 @@ class TimeCorrection:
 if(__name__ == '__main__'):
     p = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     p.add_argument('--src',default=0,help='camera source')
-    p.add_argument('--rate',default=1,help='desired FPS (max 60)')
+    p.add_argument('--rate',default=30,help='desired FPS (max 60)')
     p.add_argument('--out',default='../data/output.avi',help='filepath')
     p.add_argument('--maxtime',default=-1,help='maximum seconds to record, "-1" = never stop')
     args = p.parse_args()
