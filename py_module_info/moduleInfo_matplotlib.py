@@ -2,6 +2,7 @@
 some basic examples of how to use matplotlib, along with some perhaps intersting
     unique applications of the module.
 
+todo: add blitting
 
 '''
 
@@ -19,7 +20,6 @@ if(False):
     plt.plot()
 
 ''' quick demonstration of histograms ====================================== '''
-
 if(False):
     n=10000
     x=(np.random.rand(n)*np.random.rand(n))**0.5
@@ -36,7 +36,6 @@ if(False):
     p2.grid()
 
 ''' bar chart ============================================================== '''
-
 if(False):
     f,p=plt.subplots()
     # help(p.bar)
@@ -153,16 +152,14 @@ if(False):
     ax2.plot((1 - d, 1 + d), (1 - d, 1 + d), **kwargs)  # bottom-right diagonal
 
 ''' importing / manipulating images ======================================== '''
-
-fpath = '../data/baby.jpg'
-def rgb2gray(rgb):
-    return np.dot(rgb[...,:3],[0.2989, 0.5870, 0.1140])
-im = plt.imread(fpath)
-f,p = plt.subplots(2)
-p[0].imshow(im)
-p[1].imshow(rgb2gray(im))
-
-
+if(False):
+    fpath = '../data/baby.jpg'
+    def rgb2gray(rgb):
+        return np.dot(rgb[...,:3],[0.2989, 0.5870, 0.1140])
+    im = plt.imread(fpath)
+    f,p = plt.subplots(2)
+    p[0].imshow(im)
+    p[1].imshow(rgb2gray(im))
 
 
 

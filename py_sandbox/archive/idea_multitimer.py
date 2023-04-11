@@ -1,6 +1,7 @@
 '''
 datecreated: 190830
 objective: mock-up of talker timer
+goal is to track how much each person talks in critical role podcast
 
 General Steps:
 1. get a ui

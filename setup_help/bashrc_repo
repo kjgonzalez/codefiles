@@ -29,11 +29,14 @@ alias runjupyter="cd /;jupyter notebook" # won't work until jupyter installed
 # special screen commands
 alias sn="screen -S $arg1"  # new socket
 alias sr="screen -r $arg1"  # reattach to socket
-alias sl="screen -ls"       # list active socket
-#(detach is CTRL+A,C)
+alias sl="screen -ls"       # list active sockets
+sk(){
+screen -X -S $1 quit # kill a socket
+}
+# manual detach: enter session & press CTRL+A,D
+# manual kill: enter session & type "exit"
 #(delete is sr <ScrName>, exit)
 
-# ADDME!!!!!!!!!!
 cpprun(){
   # show how to give input arguments with bash as well as variables
   echo "building..."

@@ -15,13 +15,93 @@ things to demonstrate:
 * tkinter variables - done
 * checkmarks - done
 * multi-button input - done
+
+common keybinds:
+more info:
+    https://anzeljg.github.io/rin2/book2/2405/docs/tkinter/key-names.html
+    https://stackoverflow.com/questions/16082243/how-to-bind-ctrl-in-python-tkinter
+  Up, Down, Left, Right
+  Control-c
+  slash, backslash, 1, Key-1
+  <Double-Button-1>
+| event                 | name                  |
+| Ctrl-c                | Control-c             |
+| Ctrl-/                | Control-slash         |
+| Ctrl-\                | Control-backslash     |
+| Ctrl+(Mouse Button-1) | Control-1             |
+| Ctrl-1                | Control-Key-1         |
+| Enter key             | Return                |
+|                       | Button-1              |
+|                       | ButtonRelease-1       |
+|                       | Home                  |
+|                       | Up, Down, Left, Right |
+|                       | Configure             |
+| window exposed        | Expose                |
+| mouse enters widget   | Enter                 |
+| mouse leaves widget   | Leave                 |
+|                       | Key                   |
+|                       | Tab                   |
+|                       | space                 |
+|                       | BackSpace             |
+|                       | KeyRelease-BackSpace  |
+| any key release       | KeyRelease            |
+| escape                | Escape                |
+|                       | F1                    |
+|                       | Alt-h                 |
+
+
+
 '''
 
 import tkinter as tk
 from tkinter import font as ft # optional: control fonts used in tkinter
+from tkinter import ttk
+
+class GUI:
+    def __init__(self):
+        self.R = tk.Tk()
+        self.R.title('hello tkinter')
+        # self.R.resizable(False,False) # can optionally fix window dimensions
+        # self.R.geometry(1000x750)
+        self.F = tk.Frame(self.R)
+        helv = ft.Font(self.R,family='Helvetica',size=12)
+        self.varint = tk.IntVar()
+        self.varstr = tk.StringVar()
+        self.lbl = tk.Label(self.F,text='onetwo')
+        self.btn = tk.Button(self.F,text='button',command=lambda:print('hello world'))
+        self.chk = tk.Checkbutton(self.F,text='print')
+        self.rfm = tk.Frame(self.F)
+        self.rb1 = tk.Radiobutton(self.rfm,variable=self.varint,value=1)
+        self.rb2 = tk.Radiobutton(self.rfm,variable=self.varint,value=2)
+        self.cbx = ttk.Combobox(self.F)
+        self.lbx = tk.Listbox(self.F)
+        # todo: scrollbar
+        # todo: text
+        # todo: scale
+        # todo: spinbox
+        # todo: progressbar
+        # todo: canvas
+        # todo: menu
+
+        self.F.grid(row=0,column=0)
+        self.btn.grid(row=1,column=0)
+        self.chk.grid(row=2,column=0)
+        self.rfm.grid(row=3,column=0)
+        self.lbl.grid(row=4,column=0)
+        self.cbx.grid(row=5,column=0)
+        self.lbx.grid(row=6,column=0)
+
+        self.rb1.grid(row=0,column=0)
+        self.rb2.grid(row=0,column=1)
+        self.R.bind('<q>',lambda x: self.F.quit())
+
+    def run(self):
+        self.R.mainloop() # vital for each and every tkinter function
+        try: self.R.destroy() # after the mainloop, everything must be removed
+        except: pass
+
 class MainWindow:
     def __init__(self):
-        pass
         self.R = tk.Tk() # create root object
         # self.R.resizable(False,False) # can optionally fix window dimensions
         self.R.title("Hello Tkinter")
@@ -93,5 +173,5 @@ class MainWindow:
 
 
 if(__name__=='__main__'):
-    main = MainWindow()
-    main.run()
+    GUI().run()
+    # main = MainWindow().run()

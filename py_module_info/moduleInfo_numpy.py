@@ -96,4 +96,14 @@ yout_adj = np.interp(xref,xout,yout)-0.25 # (x: desired resolution, xp: current 
 # p.plot(xref,yout_adj,':x',label='out_adj')
 # p.legend()
 # plt.show()
+
+# using np.vectorize
+# goal of vectorize is to apply a function that normally isn't meant to take array data to an array
+fn = lambda x: x**2
+fn2 = lambda a,b: a+b
+vfn = np.vectorize(fn)
+print(vfn(range(5)))
+print(np.vectorize(fn2)([0,1,2],[1,2,3]))
+
+
 # eof

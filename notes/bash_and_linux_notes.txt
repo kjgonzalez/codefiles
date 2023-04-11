@@ -1,12 +1,64 @@
-= General Tips / Help ======================================
-RASPBERRY PI ONLY: check temperature
-    /opt/vc/bin/vcgencmd measure_temp
+- General Tips / Help --------------------------------------
 
+------------------------------------------------------------
+Dealing with Drives, Storage, and Mounting
+
+simple commands:
+  cat /etc/fstab
+  mount -l # a lot of weird, confusing information
+  cat /proc/mounts # identical output to mount -l
+  sudo fdisk -l # per filesys basic info. quite helpful
+  umount /path/to/drive
+  lsblk -fp
+  sudo /dev/<device, like sda1> /path/to/drive
+  cat /etc/default/rcS
+  cat /boot/cmdline.txt (rpi only)
+  sudo fdisk -l | grep '^Disk' # list all harddisks
+
+
+------------------------------------------------------------
+<filesystem> <mountpoint> <type> <options> <dump> <pass>
+
+filesystem (ex: /dev/sda1):
+mountpoint (ex: /media/kjg/hdd):
+type (ex: ntfs-3g):
+options (ex: defaults):
+dump (ex: 0):
+pass (ex: 0):
+
+------------------------------------------------------------
+check for all active devices on local network
+nmap -sn 192.168.XXX.255/24 # replace "XXX" with relevant value, such as 178 or 2
+
+
+------------------------------------------------------------
+what is difference between .bashrc, .profile, .bash_profile, etc?
+
+* bashrc and bash_profile both help customize command line environment
+* a linux shell has two modes, interactive and non-interactive
+* a linux shell has another two modes, login or non-login (diff startup scripts)
+
+/etc/bash.bashrc:
+    executes only in interactive shells
+
+~/.bashrc:
+    runs in both interactive and non-interactive modes...?
+    only runs when logged in
+
+~/.bash_profile: ??
+~/.bash_login: ??
+~/.profile: ??
+
+sources:
+https://phoenixnap.com/kb/bashrc-vs-bash-profile
+
+
+------------------------------------------------------------
 clone into repo using ssh (rsa)
     1. copy in rsa key
     2. git clone git@github.com:EXAMPLE/REPO.git
     3. DONE
-
+------------------------------------------------------------
 create bash function / variables:
     argexample(){
       # show how to give input arguments with bash as well as variables
@@ -14,11 +66,13 @@ create bash function / variables:
       echo "$greet, you've asked me to say $1"
     }
 
+------------------------------------------------------------
 list subfolder / files size, and give in order:
     du -hs * | sort -h -r
     (list summary of human-readable disk usage for all items in folder, and 
         sort by -h flag in reverse order (largest-first)
 
+------------------------------------------------------------
 use screen to safely run commands in ssh connection:
     start:    screen -S <name>
     detach:   CTRL+a,d
@@ -30,11 +84,12 @@ use screen to safely run commands in ssh connection:
            termcapinfo xterm* ti@:te@
         3. ESC >> :x >> ENTER
 
+------------------------------------------------------------
 remove file/folder from git without actually deleting (stop tracking):
     1. add file to .gitignore file
     2. git rm --cached FILE  |or| git rm --cached -r FOLDER
     3. (add/commit/push as usual)
-
+/home/pia/.local/bin
 quick targz flag help:
     c: create archive
     f: to file (need filename)
@@ -47,28 +102,31 @@ append a path to linux PATH variable (esp. for .bashrc file)
     NOTE: put this either in .bashrc or .profile ("more" permanent & widespread)
     export PATH="$PATH:some/new/path"
 
+------------------------------------------------------------
 update, upgrade, etc:
 https://unix.stackexchange.com/questions/361814/whats-the-difference-between-software-update-and-upgrade
 * apt-get update: updates LIST of available packages, version etc.
 * apt-get upgrade: upgrades PACKAGES on personal computer (depends on update)
 
 
-
-how to know an ssh server is running (hint: they usually are)
+------------------------------------------------------------
+how to know an ssh server is running
     ps -A | grep sshd
 
-================================================================================
-Rasberry Pi-Specific
-enable certain functionalities  sudo raspi-config
-list available i2c devices      i2cdetect # install i2c-tools
-set python3 as the default      sudo update-alternatives --install $(which python) python $(readlink -f $(which python3)) 3
-
-================================================================================
+------------------------------------------------------------
 MAGIC COMMAND TO RUN THINGS IN CRONTAB (EXAMPLE)
 @reboot sleep 1 && screen -d -S octoprint -m /home/pi/programs/octoprint/OctoPrint/bin/octoprint serve
 
+------------------------------------------------------------
+setup shebang thing for bash scripts correctly
+best:
+  #!/usr/bin/env bash
+alternate:
+  #!/bin/bash
 
-================================================================================
+info: https://stackoverflow.com/questions/10376206/what-is-the-preferred-bash-shebang
+
+------------------------------------------------------------
 DEAL WITH SCREEN PROGRAM DIRECTLY
 create new socket    screen -S socketName
 reattach to socket   screen -r socketName
