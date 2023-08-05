@@ -149,7 +149,6 @@ class Map:
             OUTPUT:
                 * status, if solved
                 * path, if solved
-            # todo: move this to be independent function that is called by class
         '''
         status = False
         if (_path is None):
@@ -184,14 +183,146 @@ class Map:
         pass
 
 
+class Map2:
+    '''
+    parse an image file to generate node graph. for each node, return next available node.
+    '''
+    def __init__(self,allow_diags=False):
+        self.grid:np.ndarray = None
+        self.loc_start:np.ndarray = None
+        self.loc_end:np.ndarray = None
+        self.ind_end = None
+        self.path = None # list of points to find way through grid
+        self.f,self.p = (None,None)
+        self.adjlist = None
+        self.allow_diags=allow_diags
+
+    def readimg(self,path):
+        '''
+        Read an image and interpret as map. assume each pixel is a location
+        1=passable,0=unpassable
+        '''
+        self.grid = np.array(rgb2gray(plt.imread(path))).round().astype(int)
+        return self
+
+    def readarr(self,arr:np.ndarray):
+        '''
+        Read an array and interpret as map. assume each cell is a location.
+        1 = passable, 0 = not passable
+        '''
+        self.grid = arr
+        return self
+
+    def disp(self,start=None,end=None,pathlist=None):
+        ''' return figure and plot of map '''
+        _f,_p = plt.subplots()
+        _p.imshow(self.grid,cmap='gray')
+        xlabels = np.arange(0, self.grid.shape[1] + 1)
+        ylabels = np.arange(0, self.grid.shape[0] + 1)
+        xticks = xlabels - 0.5
+        yticks = ylabels - 0.5
+        xlims = [xticks.min(), xticks.max()]
+        ylims = [yticks.max(), yticks.min()]
+        _p.set_xlim(xlims)
+        _p.set_ylim(ylims)
+        _p.set_xticks(xticks)
+        _p.set_yticks(yticks)
+        _p.set_xticklabels(list(xlabels[:-1]) + [" "])
+        _p.set_yticklabels(list(ylabels[:-1]) + [" "])
+        _p.grid(which='both')
+
+        if(start is not None): _p.plot(*start[::-1], 'ro')
+        if(end is not None):   _p.plot(*end[::-1], 'rx')
+        if(pathlist is not None):
+            coords=np.array(pathlist)
+            _p.plot(coords[:,1],coords[:,0],'g-')
+        return _f,_p
+
+    def adjacent(self, loc_rc):
+        '''
+        Return list of valid coordinates that can be reached from current location ([r,c])
+        '''
+        def val(ir,ic):
+            ''' sub function: return whether particular spot traversible '''
+            h,w = self.grid.shape
+            if(ir < 0 or ir >= h or ic < 0 or ic > w): return 0
+            return self.grid[ir,ic]
+        assert val(*loc_rc) != 0,"invalid starting location"
+        r,c = loc_rc
+        valids = []
+        if(val(r-1,c) != 0):valids.append(np.array([r-1,c])) # N
+        if(val(r,c+1) != 0):valids.append(np.array([r,c+1])) # E
+        if(val(r+1,c) != 0):valids.append(np.array([r+1,c])) # S
+        if(val(r,c-1) != 0):valids.append(np.array([r,c-1])) # W
+
+        if(self.allow_diags):
+            if(val(r-1,c) != 0):valids.append(np.array([r-1,c]))  # NE
+            if(val(r,c+1) != 0):valids.append(np.array([r,c+1]))  # SE
+            if(val(r+1,c) != 0):valids.append(np.array([r+1,c]))  # SW
+            if(val(r,c-1) != 0):valids.append(np.array([r,c-1]))  # NW
+        return valids
+
+    def validpoints(self):
+        ''' return list of valid places to occupy (where grid==1) '''
+        return np.column_stack((np.where(self.grid == 1)))
+
+
+def depth_first_search(mapgraph:Map2,start:np.ndarray,goal:np.ndarray):
+    '''
+    Depth-first search. runs recursively. note: need to simplify this code and understand
+        better.
+        INPUT: (none)
+        OUTPUT:
+            * path, if solved
+    '''
+
+    def dfs(ipt, _path=None):
+        ''' if current node not solution, check next available option. if invalid, return None '''
+        if _path is None: _path = []
+        res=False
+        if(_path is None): _path = []
+        _path.append(ipt)
+        if(tuple(ipt) == tuple(goal)):
+            return True, _path
+        # otherwise, try next available options
+        for iopt in mapgraph.adjacent(ipt):
+            if(tuple(iopt) not in _path):
+                res,_path = dfs(tuple(iopt),_path)
+                if(res): return res, _path
+                elif(len(_path)>0):
+                    _path.pop(-1) # drop incorrect paths
+        return res, _path
+
+    result,pathout=dfs(tuple(start))
+    if(result): return pathout
+    else: return []
+
+
+def dijkstra_search(mapgraph,start,goal):
+    '''
+    find path to reach goal after creating graph
+    1. create graph to determine each one
+    '''
+    pass
+
+def astar_search(mapgraph,start,goal):
+    ''' use a-star search to find a path '''
+    pass
+
+
+
+
 if(__name__ == '__main__'):
 
-    m = Map()
-    m.readimg('maze2.png')
-    m.setStart(m.selectPoint())
-    m.setEnd(m.selectPoint())
-    m.solve()
-    f,p = m.disp()
+    m = Map2().readimg('maze2r1.png')
+    pt_start = np.array([1,1])
+    # pt_end = np.array([5,15]) # unreachable node
+    pt_end = np.array([23,23]) # unreachable node
+
+    path = depth_first_search(m,pt_start,pt_end)
+    if(len(path)==0): path=None
+
+    f,p = m.disp(pt_start,pt_end,path) # (r,c) notation
     plt.show()
 
 

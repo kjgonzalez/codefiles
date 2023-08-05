@@ -42,7 +42,7 @@ void loop(){
     digitalWrite(13,LOW);
 
     Serial.print("BOARD: ");
-    Serial.println(Serial.readString());
+    Serial.print(Serial.readString());
   }//while data available
 }//loop
 

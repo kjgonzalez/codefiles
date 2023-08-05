@@ -16,13 +16,14 @@ main idea: will use "pulsein(...)" function to help
 #define echoPin 8
 
 
-uint16_t getMiddle(){
+float ultrasound_mm(){
 	digitalWrite(trigPin, HIGH);
-	delayMicroseconds(100);
+	delayMicroseconds(20);
 	digitalWrite(trigPin, LOW);
 	
-	uint16_t dist_cm = pulseIn(echoPin, HIGH); //time to return in microseconds
-	return dist_cm*.0172; //.0172 = 343 cm/us * 1/2
+	float t_us = pulseIn(echoPin, HIGH); //time to return in microseconds
+	//return t_us;
+	return t_us*.172; //.172 = 3430 mm/us * 1/2
 
 }
 
@@ -41,6 +42,6 @@ void loop() {
 // 	
 // 	int dist_cm = pulseIn(echoPin, HIGH); //time to return in microseconds
 // 	dist_cm = dist_cm*.0172; //.0172 = 343 cm/us * 1/2
-	Serial.println(getMiddle());
+	Serial.println(ultrasound_mm());
 	delay(800);
 }

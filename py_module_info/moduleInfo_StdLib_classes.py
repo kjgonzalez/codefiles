@@ -32,9 +32,18 @@ class Dog:
         self.np = np # this is how you can keep a module inside a class
         self.name = name
         self.breed = breed
-        self.age = age
+        self._age = age
         self.hasitem = False
         self.hasitem_name = ''
+
+    @property # how to create a property
+    def age(self):
+        return self._age
+
+    @age.setter #  and how to make a property mutable
+    def age(self,newage):
+        self._age = newage
+
     def bark(self):
         '''this function requires no inputs, and has a simple output'''
         print(self.name+' barks. Woof!')
@@ -202,6 +211,7 @@ class triangle(Shape):
         assert self.lengths[-1]<sum(self.lengths[:2]),"Longest side too long"
     def perim(self):
         return sum(self.lengths)
+    
 
 t=triangle([3.0,4.0,5.0])
 

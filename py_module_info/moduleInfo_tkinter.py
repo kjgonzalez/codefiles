@@ -57,48 +57,77 @@ import tkinter as tk
 from tkinter import font as ft # optional: control fonts used in tkinter
 from tkinter import ttk
 
-class GUI:
+
+
+class BOILERPLATE:
+    ''' the very most basic starting gui to help get any project rolling'''
+    @staticmethod
+    def makeplace(elem,row,col):
+        elem.grid(row=row,column=col) # need more later
+        return elem
+
+
     def __init__(self):
         self.R = tk.Tk()
         self.R.title('hello tkinter')
         # self.R.resizable(False,False) # can optionally fix window dimensions
-        # self.R.geometry(1000x750)
-        self.F = tk.Frame(self.R)
-        helv = ft.Font(self.R,family='Helvetica',size=12)
-        self.varint = tk.IntVar()
-        self.varstr = tk.StringVar()
-        self.lbl = tk.Label(self.F,text='onetwo')
-        self.btn = tk.Button(self.F,text='button',command=lambda:print('hello world'))
-        self.chk = tk.Checkbutton(self.F,text='print')
-        self.rfm = tk.Frame(self.F)
-        self.rb1 = tk.Radiobutton(self.rfm,variable=self.varint,value=1)
-        self.rb2 = tk.Radiobutton(self.rfm,variable=self.varint,value=2)
-        self.cbx = ttk.Combobox(self.F)
-        self.lbx = tk.Listbox(self.F)
+        # self.R.geometry("1000x750") # start at a particular window size
+        # self.R.geometry("+10+10") # start at a particular location
+        mp = self.makeplace
+
+        self.F = mp(tk.Frame(self.R),0,0)
+        self.lbl = mp(tk.Label(self.F,text='test'),0,0)
+        self.ent = mp(tk.Entry(self.F,width=10),0,1)
+
+        self.frm_radio = mp(tk.Frame(self.R),1,0)
+        self.var_radio = tk.IntVar()
+        self.rbn_1 = mp(tk.Radiobutton(self.frm_radio,text='one',variable=self.var_radio,value=1),0,0)
+        self.rbn_2 = mp(tk.Radiobutton(self.frm_radio,text='two',variable=self.var_radio,value=2),0,1)
+
+        self.scl_power = mp(tk.Scale(self.R,from_=0,to=100,length=200,orient=tk.HORIZONTAL),2,0)
+        self.chk_opt = mp(tk.Checkbutton(self.R,text='activate'),3,0)
+        self.btn_run = mp(tk.Button(self.R,text='Run This',command=self.cb_advance_pbar),4,0)
+        self.prb_complete = mp(ttk.Progressbar(self.R,length=200),5,0) # note: need ttk
+
+        self.lbx_vals:tk.Listbox = mp(tk.Listbox(self.R,height=4),6,0)
+        self.lbx_vals.insert(tk.END,*('one two three four five six seven eight nine ten'.split(' ')))
+
+        self.cbx_vals:ttk.Combobox = mp(ttk.Combobox(self.R,width=20,state='readonly'),7,0)
+        self.cbx_vals['values'] = 'one two three four five'.split(' ')
+
+
+        self.cnv_draw:tk.Canvas = mp(tk.Canvas(self.R,width=200,height=200,background='white'),20,0)
         # todo: scrollbar
         # todo: text
-        # todo: scale
         # todo: spinbox
-        # todo: progressbar
-        # todo: canvas
         # todo: menu
+        # todo: keypresses
 
-        self.F.grid(row=0,column=0)
-        self.btn.grid(row=1,column=0)
-        self.chk.grid(row=2,column=0)
-        self.rfm.grid(row=3,column=0)
-        self.lbl.grid(row=4,column=0)
-        self.cbx.grid(row=5,column=0)
-        self.lbx.grid(row=6,column=0)
-
-        self.rb1.grid(row=0,column=0)
-        self.rb2.grid(row=0,column=1)
         self.R.bind('<q>',lambda x: self.F.quit())
+        self.R.bind('<Button-1>',self.cb_draw_point)
+
+    def cb_advance_pbar(self):
+        temp = self.prb_complete['value']+10
+        if(temp>100): self.prb_complete['value']=0
+        else: self.prb_complete['value'] = temp
+
+    def cb_draw_point(self,event):
+        # print(event)
+        if('canvas' not in str(event.widget)): return None
+        x,y = event.x,event.y
+        sz=2
+        self.cnv_draw.create_oval(x-sz,y-sz,x+sz,y+sz,fill='red',outline='green',width=2)
+
+    def _entryfocus(self):
+        ents = []
+        ents.append(str(self.ent))
+        if(str(self.R.focus_get()) in ents): return True
+        return False
 
     def run(self):
         self.R.mainloop() # vital for each and every tkinter function
-        try: self.R.destroy() # after the mainloop, everything must be removed
-        except: pass
+        #try: self.R.destroy() # after the mainloop, everything must be removed
+        #except: pass
 
 class MainWindow:
     def __init__(self):
@@ -173,5 +202,5 @@ class MainWindow:
 
 
 if(__name__=='__main__'):
-    GUI().run()
+    BOILERPLATE().run()
     # main = MainWindow().run()
