@@ -1,6 +1,6 @@
 #!/bin/bash
 # Author: Kris Gonzalez
-# DateCreated: 190110
+# Last Updated: 230806
 # Objective: simple bashrc config across all computers
 # How to use: include "source /path/to/codefiles/bash_repo" in .bashrc file
 # Assumptions: 
@@ -8,54 +8,58 @@
 #   * jupyter installed (pip install jupyter)
 #   * repo 'codefiles' is located in user's home folder
 
-
+# DISABLED ITEMS  ###################################
 # make bash line colorful 
-PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$ '
+# PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$ '
 
 # # important settings (imported from another repo, verify if needed)
 # export LC_ALL=C # for pip
 # PATH="$PATH:/usr/local/cuda-9.0/bin" # enables usage of nvcc (note: not sure if helps)
-export PYTHONPATH=$PYTHONPATH:~/codefiles/lib
+# export PYTHONPATH=$PYTHONPATH:~/codefiles/lib
 
-# kjg aliases
-alias shortbash='export PS1="\[\033[01;32m\]$ \[\033[00m\]"'
-alias longbash="export PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$ '"
-alias ipython="ipython --nosep"
-alias runjupyter="cd /;jupyter notebook" # won't work until jupyter installed
+# alias runjupyter="cd /;jupyter notebook" # won't work until jupyter installed
 # alias python="python3" # disabling, may interfere with octoprint / py2-specific stuff
 
+#rmcmake(){
+    ## remove extra make files for clean rebuilding
+    #rm CMakeCache.txt
+    #rm Makefile
+    #rm cmake_install.cmake
+    #rm -r CMakeFiles/
+    #echo "done."
+#}
 # alias where='echo "bserver,kitti $STY"' # not needed for now
+#export LC_CTYPE=en_US.UTF-8
+#export LC_ALL=en_US.UTF-8
+#export LANGUAGE=en_US:en
+#export LANG=en_US.UTF-8
+
+########################################################################
+
+
+# kjg aliases
+#alias shortbash='export PS1="\[\033[01;32m\]$ \[\033[00m\]"'
+#alias longbash="export PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$ '"
+alias ipython="ipython3 --nosep"
+alias python="python3"
+alias activate_ve=". ~/ve_main/bin/activate"
 
 # special screen commands
+# manual detach: enter session & press CTRL+A,D
+# manual kill: enter session & type "exit". (delete is sr <ScrName>, exit)
 alias sn="screen -S $arg1"  # new socket
 alias sr="screen -r $arg1"  # reattach to socket
 alias sl="screen -ls"       # list active sockets
-sk(){
-screen -X -S $1 quit # kill a socket
-}
-# manual detach: enter session & press CTRL+A,D
-# manual kill: enter session & type "exit"
-#(delete is sr <ScrName>, exit)
+sk(){ screen -X -S $1 quit; } # kill a socket
 
+calc(){ python -c "print($1)"; }
 cpprun(){
   # show how to give input arguments with bash as well as variables
-  echo "building..."
-  g++ -std=c++11 $1
-  if [ $? -eq 0 ]
-    then
-      ./a.out
+  echo "building..." 
+  g++ -std=c++11 $1 
+  if [ $? -eq 0 ] 
+    then 
+      ./a.out 
   fi
 }
-
-rmcmake(){
-    # remove extra make files for clean rebuilding
-    rm CMakeCache.txt
-    rm Makefile
-    rm cmake_install.cmake
-    rm -r CMakeFiles/
-    echo "done."
-}
-
-
-
 
