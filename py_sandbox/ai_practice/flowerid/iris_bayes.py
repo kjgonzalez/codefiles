@@ -27,14 +27,9 @@ NOTES:
 # INITIALIZATION ===============================================================
 
 import numpy as np
-from klib import data as da
 import argparse, time, os, sys
-
-def npshuffle(nparr):
-    # enable random shuffling of array without being in-place
-    npa2=np.copy(nparr)
-    np.random.shuffle(npa2)
-    return npa2
+sys.path.append('../../../data')
+from loader import load_iris
 
 class GaussianNaiveBayes:
     ''' Gaussian Naive Bayes classifier. initially developed for use with iris
@@ -105,10 +100,35 @@ class GaussianNaiveBayes:
             pvals[iclass] = p_x[iclass]*self.pcls[iclass] / sum_p_x_cls
         return pvals
 
+def remap(arr,outmin=0,outmax=1,inmin=None,inmax=None):
+    ''' remap, featurescale, etc an array. '''
+    inmin = arr.min() if(inmin is None) else inmin
+    inmax = arr.max() if(inmax is None) else inmax
+    return (outmax-outmin)/(inmax-inmin)*(arr-inmin)
+
+def val2onehot(val,arrlen):
+    a = np.zeros(arrlen)
+    a[val] = 1
+    return a
+
+def confusion_matrix(gt,pr,gt_on_left=True,nclasses=None):
+    '''
+    construct a confusion matrix. gt is on left.
+    '''
+    nclasses = len(np.unique(gt)) if(nclasses is None) else nclasses
+    a = np.zeros((nclasses,nclasses))
+    for i in range(len(gt)):
+        if(gt_on_left): a[gt[i],pr[i]]+=1
+        else: a[pr[i],gt[i]]+=1
+    return a
+
+
 if(__name__=='__main__'):
     p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     p.add_argument('--random',default=False,action='store_true',help='Enable randomness')
+    p.add_argument('--verbose',default=False,action='store_true',help='show all output')
     args=p.parse_args()
+    vv = args.verbose
 
     if(not args.random):
         np.random.seed(0) # for now, control randomness seed
@@ -116,29 +136,23 @@ if(__name__=='__main__'):
 
     # DATALOADING ==============================================================
     print("loading data...")
-    dataset=[]
-    for irow in open(da.irispath):
-        iraw = irow.strip().split(',') # 1x5 data
-        dmin= 0.0# domain minimum
-        dmax= 10.0# domain maximum
-        idat = (0.98/(dmax-dmin))*(np.array(iraw[:-1],dtype=float)-dmin)+0.01 # 0-10 to 0.01-0.99
-        ival = iraw[-1]
-        if('setosa' in ival): ival=0
-        elif('versicolor' in ival): ival=1
-        elif('virginica' in ival): ival=2
-        else: raise Exception('error, species not recognized')
-        ians = np.zeros(3)+0.01
-        ians[ival] = 0.99
-        dataset.append([idat,ians])
-    # at this point, have a 150x5 array of data
-    dataset=npshuffle(dataset) # shuffle data
+
+    dat = load_iris()
+    ds = dat['data']
+    gt = dat['target']
+
+    ds = remap(ds,0.01,0.99,0,10)
+    dataset = []
+    for i in range(len(ds)):
+        ihot = remap(val2onehot(gt[i],3),0.01,0.99)
+        dataset.append([ds[i],ihot])
+    np.random.shuffle(dataset)
 
     ntrain = 120
     ds_train=dataset[:ntrain]
     ds_test =dataset[ntrain:]
 
     # print('overall:')
-    # print(ds_train)
     # TRAINING PHASE ===========================================================
     print('initializing network...')
 
@@ -148,7 +162,7 @@ if(__name__=='__main__'):
     # print('pcls:\n',gnb.pcls.round(4))
 
     # TESTING PHASE ============================================================
-    # print('P | A')
+    if(vv): print('P | A')
     scorecard=[]
     ytrue = []
     ypred = []
@@ -158,13 +172,18 @@ if(__name__=='__main__'):
         ytrue.append(answer)
         ypred.append(pred)
 
-        # print(answer,'|',pred)
+        if(vv): print(answer,'|',pred)
         scorecard+=[1] if(answer==pred) else [0]
     # print(scorecard)
     print('performance:',sum(scorecard)/len(scorecard))
 
     # KJG200112: at this point, going to use a bit of scikit for metrics
-    from sklearn.metrics import confusion_matrix as cm
-    CM = cm(ytrue,ypred) # confusion matrix
-    print('results of confusion matrix:\n',CM)
+    try:
+        #KJG231012: use try because on phone dont have sklearn
+        from sklearn.metrics import confusion_matrix as cm
+        CM = cm(ytrue,ypred) # confusion matrix
+        print('results of confusion matrix:\n',CM)
+    except:
+        print('unable to import sklearn')
+        print(confusion_matrix(ytrue,ypred))
 # eof

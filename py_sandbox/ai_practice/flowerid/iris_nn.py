@@ -29,11 +29,13 @@ NOTES:
 '''
 # INITIALIZATION ===============================================================
 import numpy as np
-from klib import data as da
+#from klib import data as da
 import argparse, time
 import os, sys
 sys.path.append(os.path.abspath('../book_OwnNN'))
 from knet_nn import NeuralNetwork
+sys.path.append('../../../data')
+from loader import load_iris
 
 def npshuffle(nparr):
     # enable random shuffling of array without being in-place
@@ -58,22 +60,19 @@ if(__name__=='__main__'):
     layers=[int(i) for i in args.layers.split('-')]
     # DATALOADING ==============================================================
     print("loading data...")
+    d = load_iris()
+    ds = d['data']
+    gt = d['target']
     dataset=[]
-    for irow in open(da.irispath):
-        iraw = irow.strip().split(',') # 1x5 data
-        dmin= 0.0# domain minimum
-        dmax= 10.0# domain maximum
-        idat = (0.98/(dmax-dmin))*(np.array(iraw[:-1],dtype=float)-dmin)+0.01 # 0-10 to 0.01-0.99
-        ival = iraw[-1]
-        if('setosa' in ival): ival=0
-        elif('versicolor' in ival): ival=1
-        elif('virginica' in ival): ival=2
-        else: raise Exception('error, species not recognized')
-        ians = np.zeros(3)+0.01
-        ians[ival] = 0.99
+    for i,irow in enumerate(ds):
+        idat = (0.99-0.01)/(10-0)*(irow-0)
+        ians = np.ones(3)*0.01
+        ians[gt[i]]=0.99
         dataset.append([idat,ians])
     # at this point, have a 150x5 array of data
-    dataset=npshuffle(dataset) # shuffle data
+    #print(dataset[:10])
+    
+    np.random.shuffle(dataset)
 
     ntrain = 120
     ds_train=dataset[:ntrain]
@@ -102,7 +101,10 @@ if(__name__=='__main__'):
     print('accuracy:',sum(scorecard)/len(scorecard))
 
     # KJG200112: at this point, going to use a bit of scikit for metrics
-    from sklearn.metrics import confusion_matrix as cm
-    CM = cm(ytrue,ypred) # confusion matrix
-    print('results of confusion matrix:\n',CM)
+    try:
+        from sklearn.metrics import confusion_matrix as cm
+        CM = cm(ytrue,ypred) # confusion matrix
+        print('results of confusion matrix:\n',CM)
+    except:
+        print('no sklearn module found')
 # eof

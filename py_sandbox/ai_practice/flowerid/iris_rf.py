@@ -82,9 +82,12 @@ dat=[ # taken from DataScienceFromScratch, p221
 [0, 1, 0, 1, 0]
 ]
 
+import sys
 import numpy as np
 import argparse, time
-from klib import data as da
+#from klib import data as da
+sys.path.append('../../../data')
+from loader import load_iris
 
 dat=np.array(dat,dtype=object) # using this type keeps ints as ints
 # will now modify data to match how iris dataset is loaded, to see if the decision tree behaves properly
@@ -187,6 +190,8 @@ def getBootstrap(data):
         track what indices are or aren't used.
     '''
     inds=np.random.choice(np.arange(len(data)),len(data))
+    #print('backup:',inds)
+    #print('backup2:',data)
     return data[inds]
 
 
@@ -511,26 +516,22 @@ if(__name__=='__main__'):
 
     # DATALOADING ==============================================================
     print("loading data...")
+    d = load_iris()
+    ds = d['data']
+    gt = d['target']
+
     dataset=[]
-    for irow in open(da.irispath):
-        iraw = irow.strip().split(',') # 1x5 data
-        dmin= 0.0# domain minimum
-        dmax= 10.0# domain maximum
-        idat = (0.98/(dmax-dmin))*(np.array(iraw[:-1],dtype=float)-dmin)+0.01 # 0-10 to 0.01-0.99
-        ival = iraw[-1]
-        if('setosa' in ival): ival=0
-        elif('versicolor' in ival): ival=1
-        elif('virginica' in ival): ival=2
-        else: raise Exception('error, species not recognized')
-        ians = np.zeros(3)+0.01
-        ians[ival] = 0.99
+    for i,irow in enumerate(ds):
+        idat = (0.99-0.01)/(10-0)*(irow-0)
+        ians = np.ones(3)*0.01
+        ians[gt[i]]=0.99
         dataset.append([idat,ians])
-    # at this point, have a 150x5 array of data
-    dataset=npshuffle(dataset) # shuffle data
+    dataset = np.array(dataset,dtype=object)
+    np.random.shuffle(dataset)
+
     ntrain = 120
     ds_train=dataset[:ntrain]
     ds_test =dataset[ntrain:]
-
     # at this point, working with iris dataset. has 3 classes
     rf = RandomForest(nclasses=3,nTrees=60,maxnodes=9)
     rf.genTrees(ds_train)
@@ -550,7 +551,10 @@ if(__name__=='__main__'):
     print('performance:',sum(scorecard)/len(scorecard))
 
     # KJG200112: at this point, going to use a bit of scikit for metrics
-    from sklearn.metrics import confusion_matrix as cm
-    CM = cm(ytrue,ypred) # confusion matrix
-    print('results of confusion matrix:\n',CM)
+    try:
+        from sklearn.metrics import confusion_matrix as cm
+        CM = cm(ytrue,ypred) # confusion matrix
+        print('results of confusion matrix:\n',CM)
+    except:
+        print('sklearn module not found')
     # eof
