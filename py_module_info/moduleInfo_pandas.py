@@ -45,8 +45,8 @@ print('number of columns in table:',len(dat.columns))
 
 # add a column or row to a dataframe: 
 df = pd.DataFrame(np.random.rand(3,3),columns=list('abc'))
-df['d']=[1,2,3]
-df.loc[len(df)] = np.arange(df.shape[1])
+df['d']=[1,2,3] # add a new column
+df.loc[len(df)] = np.arange(df.shape[1]) # add a new row, but not always best way
 print(df)
 
 # merge two tables in various ways
@@ -58,6 +58,11 @@ print('merge1:\n',z,sep='')
 # merge 2: merge on specific column
 z = pd.merge(x,y,how='outer',on=['a'])
 print('merge2:\n',z,sep='')
+# append rows of one table to another, "concatenate"
+x = pd.DataFrame()
+x = pd.concat((x,pd.DataFrame( {'a':[1,2,3],'b':[4,5,6]} )))
+# can even make empty table first
+
 
 # select a subset of data, aka filter
 x = pd.DataFrame({'name':['a']*5+['b']*5, 'dat':np.random.rand(10)})
@@ -86,6 +91,12 @@ print('dropping rows columns')
 print('original\n{}'.format(x))
 print('drop a column:\n{}'.format( x.drop(['a'],axis=1) ))
 print('drop a row:\n{}'.format( x.drop([0]) ))
+
+# filter data in column
+print('filtering ----')
+x=pd.DataFrame({'a':[1,2,3,4,5],'b':[6,7,8,9,0]})
+print(x[x['a']<4])
+print(x[x.b.isin([6,9,12])])
 
 # NOTE: the indices are preserved during these operations, so you need "reset_index" to reset these values
 print('drop a row and use new indices:\n{}'.format( x.drop([0]).reset_index(drop=True) ))
