@@ -11,7 +11,8 @@ stat description
 done basic class
 done usable in ipython
 ???? usable with curses
-
+todo add list of genres for reference
+todo make filtering class for ease of use
 '''
 
 import argparse
