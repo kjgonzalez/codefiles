@@ -88,9 +88,12 @@ class Audiofile:
         dd=self.props
         self.edit(album=dd['title']+' - Single')
         return self
-    def autoFname(self):
+    def autoFname(self,withtrk=False):
         dd=self.props
-        self.edit(fname=dd['artist']+' - '+dd['title']+'.mp3')
+        name2=dd['artist']+' - '+dd['title']+'.mp3'
+        if(withtrk):
+            name2=f"{dd['trknum']:0>2} "+name2
+        self.edit(fname=name2)
         return self
 
 
