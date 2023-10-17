@@ -18,9 +18,51 @@ import argparse
 import os
 import os.path as osp
 import eyed3
+import pandas as pd
+import numpy as np
 
-def getsongs(path):
-    return [osp.join(path,i) for i in os.listdir(path) if('mp3' in i)]
+def getsongs(path,filters=None,allow_err=False):
+    ''' 
+    Given a path and any filters, return results. filters is a complicated 
+      variable, several examples will be given.
+    
+    "songs that are in genres [country, pop] and by Taylor Swift":
+    {'genre':['country','pop'],'artist':'Taylor Swift'} # note: operator "in", not "=="
+
+    "songs that are by ACDC and in album Back in Black":
+    {'artist':'AC/DC','album':'Back in Black'}
+
+    '''
+    files = []
+
+    for ifile in os.listdir(path):
+        ipath = osp.join(path,ifile)
+        if('mp3' not in ifile): continue
+        if(filters is not None):
+            d=Audiofile(ipath).props
+            keep=True # if anything not met, set false
+            for ikey in filters.keys():
+                # todo: use try/except
+                ivals = filters[ikey]
+                if(type(ivals) is not list): ivals = [ivals]
+                #ivals = filters[ikey] if(type(ivals) is list) else [filters[ikey]]
+                ichk = d[ikey]
+                res = max([ichk in iv for iv in ivals])
+                keep = min(res,keep)
+            if(keep): files.append(ipath)
+
+        else: files.append(ipath)
+    return files
+    #return [osp.join(path,i) for i in os.listdir(path) if('mp3' in i)]
+
+def checkall(songlist:list,properties:list='fname artist genre'.split(' ')):
+    ''' simple table of list of song metadata for quick scan'''
+    d = {i:[] for i in properties}
+    for ifile in songlist:
+        dd=Audiofile(ifile).props
+        for i in properties:
+            d[i].append(dd[i])
+    return pd.DataFrame(d)
 
 class Audiofile:
     def __init__(self,path,verbose=False):
@@ -93,6 +135,7 @@ class Audiofile:
         name2=dd['artist']+' - '+dd['title']+'.mp3'
         if(withtrk):
             name2=f"{dd['trknum']:0>2} "+name2
+        # todo: filename sanitization step
         self.edit(fname=name2)
         return self
 
