@@ -19,8 +19,15 @@ import argparse
 import os
 import os.path as osp
 import eyed3
+from eyed3 import id3
 import pandas as pd
-import numpy as np
+#import numpy as np
+
+
+genres = [i 
+        for i in id3.genres.values() 
+        if (type(i) not in [int, type(None)])]
+genres.sort()
 
 def getsongs(path,filters=None,allow_err=False):
     ''' 
