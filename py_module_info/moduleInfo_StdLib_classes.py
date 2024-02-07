@@ -322,6 +322,9 @@ class Dunders:
     def __getitem__(self, item):
         ''' used when object called like a dict / array. requires iter? '''
         return 'a'*item
+    def __setitem__(self,ikey,ival):
+        ''' assign value to specific index, like dictionary '''
+        self.arr[ikey] = ival
     def __len__(self):
         ''' used when object acts like an array '''
         return 2
