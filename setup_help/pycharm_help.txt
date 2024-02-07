@@ -1,0 +1,8 @@
+keymaps to change in pycharm
+select next tab (default = alt+left
+select previous tab (default = alt+right)
+add selection for next occurrence (default = alt+j)
+duplicate line or selection (default = ctrl+d)
+run (default = shift+f10)
+debug (default = shift+f9 or something)
+close tab (default = ctrl + f4)
