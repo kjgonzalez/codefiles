@@ -3,6 +3,9 @@ Set-Alias -Name list -Value <SomeAction>
 src: https://docs.microsoft.com/en-us/powershell/module/microsoft.powershell.utility/set-alias?view=powershell-6
 note:https://stackoverflow.com/questions/24914589/how-to-create-permanent-powershell-aliases
 
+= PWS: create a profile ====================================
+>> New-Item -ItemType File -Path $profile -Force
+
 = CMD: create a symlink ====================================
 https://www.maketecheasier.com/create-symbolic-links-windows10/
 NOTE: must be done in COMMANDLINE, not POWERSHELL
