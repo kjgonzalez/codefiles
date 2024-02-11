@@ -146,4 +146,5 @@ git squash local commits   git rebase -i HEAD~nCommits (or -i HASH, see above)
 git squash remote commits  git rebase -i origin/BRANCH~4 BRANCH ; git push origin +BRANCH
 check all tags (versions)  git tag -n
 create new tag (version)   git tag -a "X.Y.Z" -m "MSG_HERE"
-modify prev commit msg	   git commit --amend (deal with new message)
+modify prev commit msg     git commit --amend (deal with new message)
+git log (gitlog), simple   git log --pretty=format:"%h %ai %s" -10
