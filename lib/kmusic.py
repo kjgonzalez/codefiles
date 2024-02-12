@@ -18,11 +18,15 @@ todo make filtering class for ease of use
 import argparse
 import os
 import os.path as osp
+import time
 import eyed3
 from eyed3 import id3
 import pandas as pd
-import tkinter as tk
-from tkinter import ttk
+try:
+    import tkinter as tk
+    from tkinter import ttk
+except:
+    print("no GUI available, shell only")
 genres = [i for i in id3.genres.values() if (type(i) not in [int, type(None)])]
 genres.sort()
 
@@ -101,7 +105,7 @@ class Audiofile:
         d['comment']=None if(len(a.tag.comments)<1) else a.tag.comments[0].text
         return d
     
-    def edit(self,fname=None,title=None,artist=None,album=None,genre=None,year=None,trknum=None,trktot=None,comment=None):
+    def edit(self,fname=None,title=None,artist=None,album=None,genre=None,year=None,trknum=None,trktot=None,comment=None,autocomment=True):
         if(fname is not None): self.rename(fname)
         a = eyed3.load(self.path)
         if(title is not None): a.tag.title=title
@@ -114,7 +118,14 @@ class Audiofile:
         # todo: handle more flexibly (just num, just tot, assertions)
         if(trknum is not None and trktot is not None): a.tag.track_num = (trknum,trktot)
         
-        if(comment is not None): 
+        if(autocomment):
+            txt='KJG'+time.strftime("%y%m%d",time.localtime(time.time()))
+            if(comment is not None):
+                comment = txt+': '+comment
+            else:
+                comment = txt
+
+        if(comment is not None):
             if(len(a.tag.comments)<1):
                 a.tag.comments.set(comment) # maybe has to be used every time?
             else:
