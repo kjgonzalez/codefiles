@@ -13,6 +13,14 @@ done usable in ipython
 ???? usable with curses
 todo add list of genres for reference
 todo make filtering class for ease of use
+todo auto-converter to deal with outdated id tag versions
+
+ideal usage: 
+    mlib = MusicLib(path,refresh=True)
+    songlist=mlib.filter(filt={})
+    song = songlist[i] # needs to tie back to mlib singleton
+    song.edit()...
+
 '''
 
 import argparse
@@ -22,18 +30,72 @@ import time
 import eyed3
 from eyed3 import id3
 import pandas as pd
+from klib import getlist
 try:
     import tkinter as tk
     from tkinter import ttk
 except:
     print("no GUI available, shell only")
-genres = [i for i in id3.genres.values() if (type(i) not in [int, type(None)])]
-genres.sort()
+#genres = [i for i in id3.genres.values() if (type(i) not in [int, type(None)])]
+#genres.sort()
+
+class genres:
+    acoustic='Acoustic'
+    alternative='Alternative'
+    altrock='AlternRock'
+    bachata='Bachata'
+    classical='Classical'
+    classicrock='Classic Rock'
+    country='Country'
+    dubstep='Dubstep'
+    electronic='Electronic'
+    hiphop='Hip-Hop'
+    indie='Indie'
+    indierock='Indie Rock'
+    indiepop='Indie Pop'
+    instrumental='Instrumental'
+    latin='Latin'
+    latinrock='Latin Rock'
+    merengue='Merengue'
+    metal='Metal'
+    musical='Musical'
+    oldies='Oldies'
+    pop='Pop'
+    reggae='Reggae'
+    reggaeton='Reggaeton'
+    rnb = 'R&B'
+    rock='Rock'
+    rocknroll='Rock & Roll'
+    salsa='Salsa'
+    techno='Techno'
+
+class Dframe(pd.DataFrame):
+    def filt(self,col,isval='',hasval=''):
+        assert col in self.columns,'invalid col'
+        assert len(isval)+len(hasval)>0,'no parameter given'
+        if(len(isval)>0):
+            res = self[self[col]==isval]
+            return Dframe(res.reset_index(drop=0)) # todo: untested
+        else:
+            mask=[]
+            for ival in self[col]:
+                res = hasval in str(ival)
+                mask.append(res)
+            res = self[mask]
+            return Dframe(res.reset_index(drop=0))
+
+def regen_allprops(path):
+    ''' given a path, collect all relevant properties '''
+    allprops=[]
+    for ifile in getlist(path,recursive=1,exts='mp3'):
+        d=Audiofile(ifile).props
+        allprops.append(d)
+    return Dframe(allprops)
 
 def getsongs(path,filters=None,allow_err=False):
     ''' 
     Given a path and any filters, return results. filters is a complicated 
-      variable, several examples will be given.
+      variable, several examples will be given. There is no recursive folder search.
     
     "songs that are in genres [country, pop] and by Taylor Swift":
     {'genre':['country','pop'],'artist':'Taylor Swift'} # note: operator "in", not "=="
@@ -43,26 +105,29 @@ def getsongs(path,filters=None,allow_err=False):
 
     '''
     files = []
-
+    #print('starting')
     for ifile in os.listdir(path):
         ipath = osp.join(path,ifile)
         if('mp3' not in ifile): continue
+        #print('file:',ifile)
         if(filters is not None):
             d=Audiofile(ipath).props
             keep=True # if anything not met, set false
             for ikey in filters.keys():
+                #print('  filter',ikey)
                 # todo: use try/except
                 ivals = filters[ikey]
                 if(type(ivals) is not list): ivals = [ivals]
                 #ivals = filters[ikey] if(type(ivals) is list) else [filters[ikey]]
                 ichk = d[ikey]
+                if(ichk is None):
+                    ichk = '(n/a)'
                 res = max([ichk in iv for iv in ivals])
                 keep = min(res,keep)
             if(keep): files.append(ipath)
 
         else: files.append(ipath)
     return files
-    #return [osp.join(path,i) for i in os.listdir(path) if('mp3' in i)]
 
 def checkall(songlist:list,properties:list='fname artist genre'.split(' ')):
     ''' simple table of list of song metadata for quick scan'''
@@ -74,10 +139,13 @@ def checkall(songlist:list,properties:list='fname artist genre'.split(' ')):
     return pd.DataFrame(d)
 
 class Audiofile:
-    def __init__(self,path,verbose=False):
+    def __init__(self,path,verbose=False,autoversion=False):
         eyed3.log.setLevel('ERROR')
         self.path = path
         self.v=verbose
+        if(autoversion):
+            tmp = eyed3.load(self.path)
+            ver = tmp.tag.version
         assert 'mp3' in os.path.splitext(path)[1],'invalid filetype, mp3 only'
         if(self.v):
             dd = self.props
@@ -94,7 +162,7 @@ class Audiofile:
     def props(self):
         a = eyed3.load(self.path)
         d={}
-        d['fname']=  self.filename
+        # d['fname']=  self.filename # todo: remove for 'path'
         d['title']=  a.tag.title
         d['artist']= a.tag.artist
         d['album']=  a.tag.album
@@ -102,7 +170,12 @@ class Audiofile:
         d['year']=   None if(a.tag.release_date is None) else a.tag.release_date.year
         d['trknum']= a.tag.track_num[0]
         d['trktot']= a.tag.track_num[1]
-        d['comment']=None if(len(a.tag.comments)<1) else a.tag.comments[0].text
+        # d['dir']=self.dirname # todo: remove for 'path'
+        try:
+            d['comment']=None if(len(a.tag.comments)<1) else a.tag.comments[0].text
+        except:
+            d['comment']=None
+        d['path']=self.path
         return d
     
     def edit(self,fname=None,title=None,artist=None,album=None,genre=None,year=None,trknum=None,trktot=None,comment=None,autocomment=True):
@@ -136,6 +209,9 @@ class Audiofile:
     @property
     def filename(self):
         return os.path.basename(self.path)
+    @property
+    def dirname(self):
+        return os.path.dirname(self.path)
     def rename(self,fname):
         assert '.mp3' in fname,'must include valid filetype'
         base = os.path.dirname(self.path)
@@ -228,16 +304,18 @@ class GuiKmusic:
 
 
 if(__name__ == '__main__'):
-    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    p.add_argument('--a',dest='int1',type=int,help='first int',default=0)
-    args=p.parse_args()
+    #p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    #p.add_argument('--a',dest='int1',type=int,help='first int',default=0)
+    #args=p.parse_args()
 
-    '''
-    collect
-    
-    '''
-
-
-
+    ''' debug: look for carlos bollorque music '''
+    path = '/data/data/com.termux/files/home/storage/music/'
+    path = 'debugging'
+    print('exists:',os.path.exists(path))
+    #files = getsongs(path,filters={'artist':'Carlos Bollorque'})
+    files = getsongs(path)
+    print(f'{len(files)} files')
+    print(Audiofile(files[0]).props)
+    #for ifile in files: print('',ifile)
 #eof
 
