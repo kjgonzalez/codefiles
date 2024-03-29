@@ -20,7 +20,7 @@ SnoozeBlock config_teensyLC(lc5vBuffer,digital,timer);
 
 void setup() {
 pinMode(led, OUTPUT);
-// timer.setTimer(5000); // enable this to turn on sleeping for a set amount of time
+timer.setTimer(5000); // [ms] enable this to turn on sleeping for a set amount of time
 }
 
 void loop() {
