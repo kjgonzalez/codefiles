@@ -43,7 +43,7 @@ if(__name__ == '__main__'):
     while(inp != 'q'):
         ser.write(inp.encode())
         time.sleep(0.4)
-        print(ser.read_all().decode("utf-8")[:-1]) # remove newline char
+        print(ser.read_all().decode("utf-8"))#[:-1]) # remove newline char
         inp = input('PC: ')
     # while loop
     ser.flush()

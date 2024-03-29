@@ -69,6 +69,24 @@ public:
     void res(){cout << "derived result" << endl;}
 };
 
+// simple versions, combined: 
+// classes, inheritance, composition
+class MiniFunc{public:
+    MiniFunc() {}; // simple initialization
+    int area(int d0, int d1) { return d0 * d1; }
+};
+class Shape {public:
+    int identifier;
+    Shape(int id = 3) { identifier = id; }
+};
+class Rect:public Shape{public: // inheritance
+    int x, y;
+    MiniFunc fn; // composition
+    Rect(int xval,int yval,int id=2){
+        x = xval, y = yval, identifier = id;
+    }
+    int area() { return fn.area(x, y); }
+};
 
 int main(){
     // 01: simple class, nothing fancy
