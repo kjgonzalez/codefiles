@@ -10,6 +10,7 @@ sample usage:
 stat description
 done basic class
 done usable in ipython
+???? because pandas not working, need to keep pandas confined to single places where it is used
 ???? usable with curses
 todo add list of genres for reference
 todo make filtering class for ease of use
@@ -29,7 +30,10 @@ import os.path as osp
 import time
 import eyed3
 from eyed3 import id3
-import pandas as pd
+try:
+    import pandas as pd
+except:
+    print('pandas not available, some functions will fail')
 from klib import getlist
 try:
     import tkinter as tk
@@ -69,28 +73,30 @@ class genres:
     salsa='Salsa'
     techno='Techno'
 
-class Dframe(pd.DataFrame):
-    def filt(self,col,isval='',hasval=''):
-        assert col in self.columns,'invalid col'
-        assert len(isval)+len(hasval)>0,'no parameter given'
-        if(len(isval)>0):
-            res = self[self[col]==isval]
-            return Dframe(res.reset_index(drop=0)) # todo: untested
-        else:
-            mask=[]
-            for ival in self[col]:
-                res = hasval in str(ival)
-                mask.append(res)
-            res = self[mask]
-            return Dframe(res.reset_index(drop=0))
+#class Dframe(pd.DataFrame):
+#    def filt(self,col,isval='',hasval=''):
+#        assert col in self.columns,'invalid col'
+#        assert len(isval)+len(hasval)>0,'no parameter given'
+#        if(len(isval)>0):
+#            res = self[self[col]==isval]
+#            return Dframe(res.reset_index(drop=0)) # todo: untested
+#        else:
+#            mask=[]
+#            for ival in self[col]:
+#                res = hasval in str(ival)
+#                mask.append(res)
+#            res = self[mask]
+#            return Dframe(res.reset_index(drop=0))
 
 def regen_allprops(path):
     ''' given a path, collect all relevant properties '''
+    import pandas as pd
     allprops=[]
     for ifile in getlist(path,recursive=1,exts='mp3'):
         d=Audiofile(ifile).props
         allprops.append(d)
-    return Dframe(allprops)
+    #return Dframe(allprops)
+    return pd.Dataframe(allprops)
 
 def getsongs(path,filters=None,allow_err=False):
     ''' 
@@ -131,6 +137,7 @@ def getsongs(path,filters=None,allow_err=False):
 
 def checkall(songlist:list,properties:list='fname artist genre'.split(' ')):
     ''' simple table of list of song metadata for quick scan'''
+    import pandas as pd
     d = {i:[] for i in properties}
     for ifile in songlist:
         dd=Audiofile(ifile).props
