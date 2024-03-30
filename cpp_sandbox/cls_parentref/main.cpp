@@ -5,6 +5,8 @@
 #include <iostream>
 
 class Item1;
+class Item2;
+
 class Item2{public:
     int name=2;
     Item1 *parent;
