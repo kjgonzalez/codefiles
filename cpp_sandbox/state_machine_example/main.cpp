@@ -23,8 +23,8 @@ enum ST {OFF,RDY,WSH,SPN,STOP};
 struct State{
     enum ST name;
     void *parent;
-    virtual void enter(){}
-    virtual void exit(){}
+    virtual void enter(){printf("enter:wrong" nl);}
+    virtual void exit(){printf("exit:wrong" nl);}
     virtual enum ST loop(){
         printf("wrong" nl);
         return ST::STOP;}
@@ -54,7 +54,7 @@ struct StateMachine{
     }
     void loop(){
         if(!started){ d[curr]->enter();started=true; }
-        printf("loop" nl);
+        //printf("loop" nl);
 
         res = d[curr]->loop();
         if(res==ST::STOP){d[curr]->exit();exit=true;return;}
@@ -73,8 +73,37 @@ struct StReady:State{
     void enter(){printf("rdy: enter" nl);}
     void exit(){printf("rdy: exit" nl);}
     enum ST loop(){
+        printf("ready" nl);
+        count++;
+        if(count<2) return name;
+        else return ST::WSH;
+    }
+};
+
+
+struct StWash:State{
+    enum ST name = WSH;
+    int count=0;
+    void enter(){printf("wsh: enter" nl);}
+    void exit(){printf("wsh: exit" nl);}
+    enum ST loop(){
+        printf("washing..." nl);
         count++;
         if(count<5) return name;
+        else return ST::SPN;
+    }
+};
+
+
+struct StSpin:State{
+    enum ST name = SPN;
+    int count=0;
+    void enter(){printf("spn: enter" nl);}
+    void exit(){printf("spn: exit" nl);}
+    enum ST loop(){
+        printf("spinning..." nl);
+        count++;
+        if(count<2) return name;
         else return ST::STOP;
     }
 };
@@ -83,6 +112,8 @@ int main(){
     printf("hi" nl);
     StateMachine sm;
     sm.add(RDY,new StReady);
+    sm.add(WSH,new StWash);
+    sm.add(SPN,new StSpin);
     sm.printsaved();
     while(!sm.exit){
         sm.loop();
