@@ -56,7 +56,7 @@ calc(){ python -c "print($1)"; }
 cpprun(){
   # show how to give input arguments with bash as well as variables
   echo "building..." 
-  g++ -std=c++11 $1 
+  g++ -std=c++11 $* # '*' accepts all args, '$1' accepts first
   if [ $? -eq 0 ] 
     then 
       ./a.out 
