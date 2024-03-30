@@ -10,8 +10,9 @@ test ideas here locally
 
 
 int main() {
+    printf("local testing\n");
     StateMachine sm;
-
+    
     
     
     

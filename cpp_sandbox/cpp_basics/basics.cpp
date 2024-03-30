@@ -75,6 +75,11 @@ General things to practice:
     4. do some small operations on data
     3. plot the data on a graph (apparently hard to do?)
 
+need to clarify some keywords (todo):
+    * inline
+    * static
+    * const
+    * pragma
 
 */
 

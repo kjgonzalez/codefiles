@@ -7,11 +7,13 @@ enum STATE { STcomm, STreactive, STsleep, STsave }; // start state only exists d
 typedef enum STATE st_t;
 
 class StateMachine {
-public:
-    /* class with access to all other classes */
+public: /* class with access to all other classes */
     st_t statecurr;
     st_t stateprev;
     StateMachine() {}
+    void loop(){
+
+    }//loop
 };//class-statemachine
 
 class State {
@@ -20,12 +22,20 @@ public:
     State(st_t nameval) { name = nameval; }
     void enter() {}
     void exit() {}
-    void loop() {}
-
+    st_t loop() {return name}
 };//class-state
 
-class Comm {
-
+class Comm:State{
+    void enter(){
+        printf("enter comm\n");
+    }//void enter
+    void exit(){
+        print("exit comm\n");
+    }//exit
+    st_t loop(){
+        print("loop comm\n");
+        return name;
+    }//loop
 };//class-comm
 
 
