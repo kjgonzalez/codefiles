@@ -26,3 +26,5 @@
 *.idb
 *.ipdb
 *.iobj
+*.vscode/*
+*.vs/*

@@ -101,6 +101,7 @@ int main(){
     cout << timeinfo->tm_min << "-";
     cout << timeinfo->tm_sec << endl;
 
+    cout << "waiting 1.0s \n";
     auto start = chrono::high_resolution_clock::now();
     sleep(1);
     auto elapsed = chrono::high_resolution_clock::now() - start;
@@ -108,6 +109,7 @@ int main(){
     cout << "elapsed in ms:" << microseconds << endl;
     cout << "in seconds: " << (float)microseconds/1e6 << endl;
 
+    cout << "waiting 1.2s \n";
     start = chrono::high_resolution_clock::now();
     sleep2(1.2);
     elapsed = chrono::high_resolution_clock::now() - start;
@@ -115,6 +117,10 @@ int main(){
     cout << "2nd elapsed in ms:" << microseconds << endl;
     cout << "2nd in seconds: " << (float)microseconds/1e6 << endl;
 
+    uint32_t us32 = (uint32_t) microseconds;
+    uint64_t us64 = (uint64_t) microseconds;
+    cout << "cast to uint32_t" << us32 << endl;
+    cout << "cast to uint64_t" << us64 << endl;
 
     return 0;
 }

@@ -4,7 +4,7 @@ objective: demonstrate an easy way to use the (a?) random library
 */
 #include <iostream>
 #include <random>
-#include <vector>
+
 using namespace std;
 
 //defining stuff at the bottom to get to the code asap
@@ -12,25 +12,28 @@ float mean(vector<int> &vec);
 int min(vector<int> &vec);
 int max(vector<int> &vec);
 
-int main (){
-    random_device rd;
+void use_random_device(){
+    random_device rd; // random_device should only be used to seed srand
     cout << "a random number: " << rd() << std::endl;
     cout << "max value possible:" << rd.max() << std::endl;
-
-    cout << "kjg: at this point, will test and see what happens with 10k dice rolls" << endl;
-
-    vector<int> v;
-    for(int i=0;i<10000;i++){
-        v.push_back(rd()%20+1);
-    }
-
-    cout << "average value:" << mean(v) << endl; // ~10.5
-    cout << "max     value:" << max(v) << endl; // 20
-    cout << "min     value:" << min(v) << endl; // 1
 
     cout << "Can also use this to generate a decimal value: ";
     cout << ((double)(rd()%1000000)) / (double)(1e6) << endl;
 
+}
+
+void use_basics(){
+    // const auto epoch = std::chrono::system_clock::now().time_since_epoch();
+    // const auto seconds = std::chrono::duration_cast<std::chrono::seconds>(epoch);
+
+    random_device rd;
+    srand(rd());
+    cout << "random: " << rand() << endl;
+}
+
+int main (){
+    use_random_device();
+    use_basics();
     return 0;
 }
 
