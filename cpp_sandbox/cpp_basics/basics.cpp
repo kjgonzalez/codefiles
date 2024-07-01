@@ -124,6 +124,11 @@ std::string lpad(std::string str,int maxLength=70,const char& filler = '='){
     return str;
 }//lpad
 
+// pass function as callable argument
+int mult2(int a){return 2*a;}
+
+int pass_fn(int callable(int val)){ return callable(3)+5;}
+
 
 int main(){
 

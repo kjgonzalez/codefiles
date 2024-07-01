@@ -14,11 +14,11 @@ void loop() {
   delay(1500);
   digitalWrite(io,LOW);
   delay(n);
-    digitalWrite(io,HIGH);
+  digitalWrite(io,HIGH);
   delay(n);
   digitalWrite(io,LOW);
   delay(n);
-    digitalWrite(io,HIGH);
+  digitalWrite(io,HIGH);
   delay(n);
   digitalWrite(io,LOW);
   delay(n);
