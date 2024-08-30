@@ -24,6 +24,8 @@ new line here
 * **_combined_** can be great
 * ~~strikethrough~~ helps too
 * Three dashes  make a nice gray-colored divider, but can't be kept close to text above them
+* Superscript<sup>text</sup> (best done through html tags)
+* Subscript<sub>text</sub> (best done through html tags)
 
 ---
 
