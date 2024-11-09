@@ -2,25 +2,18 @@
 # Usage: python -m pip install -r FILENAME --user
 # upgrade pip: python -m pip install --upgrade pip
 #jupyter # not really needed anymore
-# note: pycharm version is 2019.3.4
-piexif
+#ipdb
+#opencv-contrib-python
 ipython
-ipdb
 numpy
 matplotlib
 Pillow
+# img metadata manipulation
+piexif
 scipy
-opencv-contrib-python
 pandas
-mutagen # needed for audio metadata manipulation
-pydub # needed for audio conversion
-pyyaml # not sure if needed right now
+# needed for audio metadata manipulation
+mutagen
+# needed for audio conversion
+pydub 
 # note: need ffmpeg https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg
-praw # PyRedditAPIWrapper
-# # requirements for thesis, not sure if needed yet
-# boltons
-# pprint
-# torch==0.4.0
-# torchvision
-# easydict
-# cffi
