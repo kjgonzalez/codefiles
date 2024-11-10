@@ -1,17 +1,12 @@
 /*
-basics of file I/O, with library fstream. WILL ALSO COMPARE WITH C APPROACH: FOPEN
-
-include: 
-* write string to a file
-* write bytes to a file
-* read a file
+Basics of file I/O, with library fstream. WILL ALSO COMPARE WITH C APPROACH: FOPEN
 
 notes: 
 * "fstream" is a unified, combined way of initializing read & write variables
 
 sources: 
 * c-fopen: https://cplusplus.com/reference/cstdio/fopen/
-* 
+* cpp-write https://cplusplus.com/reference/ostream/ostream/write/
 
 */
 
@@ -73,35 +68,8 @@ void cpp_read_write() {
 }
 
 int main(){
+    c_read_write();
     cpp_read_write();
-
-    // C++ approach ==============================
-    //std::fstream f;
-    //// options: in, out, binary, ate=at end, app=append, trunc=truncate [combine these bitwise]
-    //f.open("tmp.txt", std::fstream::out);
-
-    ////f << "some\n";
-    ////char x[100] = "text\n";
-    ////f.write(x,5); // c-strings include a sentinel value, NULL (end of string)
-    //// note: even when not specified, can write binary data to file
-    //char x[100];
-    //for (int i = 0; i < 100; i++) x[i] = i;
-    //f.write(x, sizeof(x));
-    //f.close();
-    //
-    //// read a file
-    //f.open("tmp.txt",std::fstream::in);
-    //char tmp;
-    //for(int i = 0; i < 100; i++) x[i] = 0; // clear c-string
-    //for (int i = 0; i < 100; i++) {
-    //    f.read(&tmp, 1); // give addr. to tmp
-    //    x[i] = tmp;
-    //    //printf("%hhx ", tmp);
-    //}
-    //f.close();
-    ////f.read(x, sizeof(x) - 1);
-    ////printf("%s\n", x );
-
 
     return 0;
 }
