@@ -31,6 +31,9 @@ int main() {
     //reverse the vector
     std::reverse(v.begin(), v.end()); //note: reverse part of vector lib
 
+    // append one vector to another
+    v.insert(v.end(), w.begin(), w.end());
+
     return 0;
 }
 
