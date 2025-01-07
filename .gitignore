@@ -6,6 +6,7 @@ catkin_ws/devel/
 *.gz
 *.ods#
 *.swp
+*.exe
 *.ipynb_checkpoints/
 .idea/*
 # linux-side pdf
