@@ -1,7 +1,11 @@
 /*
 block comment.
 k250108: first attempt at using go. statically
-  typed compiled lanaguage, seems easy to use
+    typed compiled lanaguage, seems easy to use
+
+mini notes:
+    "go run myfile.go" >> developer compile & run, for testing
+    "go build myfile.go" >> actually create a binary to use
 
 main questions:
   matrix package?
