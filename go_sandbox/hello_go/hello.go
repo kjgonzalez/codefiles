@@ -19,10 +19,13 @@ main questions:
 package main // line comment: 'package' = collection of one/multiple go files
 
 import "fmt" // specific features of a particular package
+import "math"
+var print = fmt.Println
 
 func main() {
-    fmt.Println("hey world")
-    
+    //fmt.Println("hey world")
+    print("hi")
+    print(math.Cos(1))
     
 
 

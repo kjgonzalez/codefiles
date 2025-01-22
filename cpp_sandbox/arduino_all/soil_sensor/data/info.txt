@@ -1,0 +1,26 @@
+mtotal = mextra + msoil + mwater=pct*msoil
+mtotal = mextra + msoil*(1+pct)
+mtotal = mextra=150 + msoil*(1+pct)
+assume mextra = 150g
+
+(mtotal-150) / (1+pct) = msoil
+plasticplate=30g, x5 (x1 plate, x2 pot, x2 plant+sensor)
+@0117-2148: 
+mtotal: 980
+mextra: 150
+mmix = 830
+adc: 447
+adc2pct: ???
+
+sensor calibration plan
+1. gather 1.5kg mixed dirt
+2. dry the dirt in the oven, in the ceramic tray
+3. set oven to 110degC, bake for 1hr or until soil fully dried
+4. measure soil mass, keep only 1kg
+5. measure dry soil with sensor
+5. for given step size of 5%: 
+    a. add 5% of soil mass as water => 50g water
+    b. mix soil & water (dirt)
+    c. measure dirt mixture with sensor
+    d. repeat until satisfied
+6. create plot to correlate the values

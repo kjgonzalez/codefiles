@@ -1,0 +1,5 @@
+sensor in air: 679
+sensor in water (deepest): 276
+NOTE: the sensor value changes based on how deep the sensor is put. sensor was dipped down to ~3.5cm
+dry dirt (note, as dry as it could be made): 
+
