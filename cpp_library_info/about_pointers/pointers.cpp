@@ -147,8 +147,87 @@ int main()
     fn4_using_vectors();
     fn5_bad_pointers();
     fn6_uniqueptr();
+/* 
+k250123: FIX THIS vvvvvvvvvvvvvv
+ *
+basic info on how to use pointers effectively.
+
+* size of a pointer (size of addressable data, e.g. 64bit)
+* pointer object, passing between functions
+* returning pointer to object... ?
+
+notes:
+* passing by reference & pointer seem equivalent when passing in for memory usage
+* returning a pointer is better than returning a value for memory usage
+* memory space can sometimes be reused intelligently by the compiler
+*/
+
+#include <iostream>
+using std::cout;
+using std::endl;
+
+class Rect{
+public:
+    int x,y;
+    Rect(int x_=0, int y_=0){x=x_;y=y_;}
+    int area(){return x*y;}
+};
+
+void printinfo(Rect* rptr){ cout << rptr << " " << rptr->x << " " << rptr->y << endl;}
+
+void passing_in(Rect r_val, Rect &r_ref,Rect *r_ptr){
+    // the three methods of passing in a variable, and how it's tracked in memory
+    printf("- passing_in function --------------------\n");
+    cout << "rval addr: "; printinfo(&r_val);
+    cout << "rref addr: "; printinfo(&r_ref);
+    cout << "rptr addr: "; printinfo(r_ptr);
+}
+
+Rect return_val(){ 
+    Rect r(1,1); 
+    cout << "func-val:  "; printinfo(&r);
+    return r;
+}
+
+Rect* return_ptr(){ 
+    Rect* rptr = new Rect(2,2); 
+    cout << "func-ptr:  "; printinfo(rptr);
+    return rptr; 
+}
+
+int main(){
+    printf("about: pointers and their usage\n");
+    // basics: accessing pointer information
+    int16_t var=3;
+    int16_t* ptr=&var;
+    cout << "var: " << var << ". size_bytes: ("<< sizeof(var) << ")\n";
+    cout << "var_addr: "<< &var <<"\n";
+    cout << "ptr: " << ptr << ". size_bytes: ("<< sizeof(ptr) << ")\n";
+    cout << "ptr_val: "<< *ptr << "\n";
+
+    Rect r1(2,3);
+    Rect* pr = &r1; // use reference to one entity for pointer variable
+    Rect* r2 = new Rect(4,5); // instantiate entity in same line as declare pointer
+
+    printf("obj: %d. %d \n",r1.x,r1.area());
+    printf("obj-ptr1: %d. %d \n",pr->x,pr->area());
+    printf("obj-ptr2: %d. %d \n",r2->x,r2->area());
+    
+    // how to pass entities in differently
+    cout << "r1 addr:   "; printinfo(&r1);
+    cout << "r2 addr:   "; printinfo(r2);// << r2 << endl;
+    passing_in(r1,r1,&r1);
+
+    // how to return entities differently
+    printf("- return from func ------------\n");
+    Rect retval = return_val();
+    cout << "main-val:  "; printinfo(&retval);
+    
+    Rect* retptr = return_ptr();
+    cout << "main-ptr:  "; printinfo(retptr);
 
     return 0;
 }
 
-// eof
+// eof 
+
