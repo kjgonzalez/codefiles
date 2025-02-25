@@ -1,0 +1,1 @@
+cd /home/pi/programs/mjpg-streamer/mjpg-streamer-experimental; screen -d -S webcam -m ./mjpg_streamer -i "input_uvc.so -f 1 -q 30 -y" -o "output_http.so -w ./www"
