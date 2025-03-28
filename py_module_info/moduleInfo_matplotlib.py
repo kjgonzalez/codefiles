@@ -2,7 +2,7 @@
 some basic examples of how to use matplotlib, along with some perhaps intersting
     unique applications of the module.
 
-todo: add blitting
+todo: add blitting 
 
 '''
 
