@@ -2,7 +2,6 @@
 some basic examples of how to use matplotlib, along with some perhaps intersting
     unique applications of the module.
 
-todo: add blitting 
 
 '''
 
@@ -161,6 +160,45 @@ if(False):
     p[0].imshow(im)
     p[1].imshow(rgb2gray(im))
 
+''' blitting =============================================================== '''
+if(False):
+    def run_blitting():
+        from matplotlib.backend_bases import KeyEvent
+        from random import random
+        flag_blitting_done = False  # note: bad practice, but convenient for small example
+
+        def cbQuit(evkey: KeyEvent):
+            print('pressed:', evkey.key)
+            global flag_blitting_done
+            flag_blitting_done = True
+        print('Default quit: "q"')
+        #x = np.linspace(-2*np.pi,0, 100)
+        #x = np.linspace(-99,0,100)
+        x = list(range(-99,1,1))
+        buff = RingBuffer()
+
+        # prepare graph for blitting
+        fig, ax = plt.subplots()
+        fig.canvas.mpl_connect('key_press_event',cbQuit)
+        (ln,) = ax.plot(x,buff.latest(), animated=True)
+        ax.set_ylim([0,1])
+        ax.grid()
+        plt.show(block=False)
+        plt.pause(0.1)
+        bg = fig.canvas.copy_from_bbox(fig.bbox)
+        # add curves that will be drawn
+        ax.draw_artist(ln)
+        fig.canvas.blit(fig.bbox)
+
+        while(not flag_blitting_done):
+            fig.canvas.restore_region(bg)
+            buff.update(random())
+            ln.set_ydata(buff.latest())
+            ax.draw_artist(ln)
+            fig.canvas.blit(fig.bbox)
+            fig.canvas.flush_events()
+        print('blitting complete')
+    run_blitting()
 
 
 # plot your results ============================================
