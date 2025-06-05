@@ -1,6 +1,7 @@
 # Created: 190507
 # Objective: a windows-version ".bashrc" file that can help preload helpful commands.
 # Save this file at ~\Documents\PowerShell\Microsoft.PowerShell_profile.ps1
+# another way to check path : echo $PROFILE.CurrentUserCurrentHost
 
 # function ipython {ipython.exe --nosep} # not necessary
 # first time setup of ipython: 
