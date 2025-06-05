@@ -6,7 +6,7 @@ terminator \
 chromium-browser \
 python3-pip \
 git \
-kate \
+geany \
 pinta \
 vim\
 compizconfig-settings-manager \
@@ -18,3 +18,4 @@ screen
 sudo pip3 install --upgrade pip # after 1st run, just pip
 pip install -r python_requirements.txt --user
 # google tasks-only page: https://tasks.google.com/embed/?origin=https%3A%2F%2Fcalendar.google.com
+# if tkinter is not part of built-in python install: sudo apt install --reinstall python3-tk
