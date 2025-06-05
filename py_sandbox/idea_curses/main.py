@@ -182,7 +182,8 @@ class TUIRoot():
         self._scr=None
         self._title='kTUI'
         self._quitkey='\\'
-    
+        self._curloc=(10,10) # row, column
+
     def title(self,newtitle=None):
         if(newtitle is not None): self._title=newtitle
         return self._title
@@ -191,9 +192,15 @@ class TUIRoot():
         if(newkey is not None): self._quitkey=newkey
         return self._quitkey
 
-    def getScreenSize(self)->tuple:
-        return self._scr.getmaxyx()
-        
+    def getScreenSize(self)->tuple: return self._scr.getmaxyx()
+ 
+    def getCursorLoc(self)->tuple: return self._curloc
+    def setCursorLoc(self,rowval,colval):
+        # constrain
+        lims = self.getScreenSize()
+        r = constrain(rowval,0,lims[0])
+        c = constrain(colval,0,lims[1])
+        self._scr.move(r,c)
 
     def _setupAndLoop(self,scr):
         # initialization
@@ -210,8 +217,10 @@ class TUIRoot():
             addstr(0,0,f"{self._title} (quit:{self._quitkey} "
                    + f"dims:{self.getScreenSize()} "
                    + f"loc:{self.getCursorLoc()} "
+                   + f"last:{k} "
                    + ")"
                    )
+            scr.move(*self.getCursorLoc())
             # get input
             k = scr.getch() #wait for input
             # process input
