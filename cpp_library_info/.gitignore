@@ -1,6 +1,7 @@
 # ignore all visual studio / vscode data
 **/x64/
 **/.vs/
+**/out/
 *.sln
 *.vcxproj
 *.filters
