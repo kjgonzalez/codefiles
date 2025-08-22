@@ -6,6 +6,6 @@ KJG180305: able to compile using command: >> g++ code.cpp
 using namespace std;
 
 int main(){
-	cout << "hello world!" << endl;
-	return 0;
+    cout << "hello world!" << endl;
+    return 0;
 }

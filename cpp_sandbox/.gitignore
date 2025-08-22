@@ -8,7 +8,8 @@
 */CMakeFiles/
 */Makefile
 *.cmake
-
+**/out/
+**/build/
 # visual studio (remember to put solution & project in same directory)
 *.suo
 *.VC*
