@@ -11,6 +11,7 @@ how to generally work with pointers
 
 #include <vector>
 #include <memory>
+#include <iostream> // todo: delme
 typedef std::vector<uint8_t> bvec_t; // vector of bytes
 
 class Rect
@@ -81,7 +82,7 @@ Rect* badptr_dangling(int x, int y)
     */
     Rect r(x, y);
     printf("dangler area: %d\n", r.area()); 
-    return &r;
+    return &r; // note: correctly raises warning about bad return address
 }
 
 Rect* badptr_memleak(int x, int y)
@@ -127,13 +128,35 @@ std::unique_ptr<Rect> unique_ptr(int x, int y)
 void fn6_uniqueptr()
 {
     /* unlike strictly using new/delete, unique_ptr keeps track of deallocation */
-
+    printf("-- fn6_uniqueptr --\n");
     std::unique_ptr<Rect> pr;
     for (int i = 0; i < 10; i++)
     {
         pr = unique_ptr(i, i + 1); // memory is allocated once, then doesn't increase
     }
 }
+
+void shared_recurse(std::shared_ptr<Rect> rec,int depth=2)
+{
+    printf("current use count: %d\n", rec.use_count());
+    if (depth > 0) shared_recurse(rec, depth - 1);
+    printf("current use after: %d\n", rec.use_count());
+}
+
+void fn7_sharedptr()
+{
+    printf("-- fn1_sharedptr --\n");
+    // normally, object is declared / used like so:
+    // Rect r(3, 4); r.area();
+    std::shared_ptr<Rect> rr = std::make_shared<Rect>(3, 4); // how to initialize with shared
+    printf("sharedptr area: %d\n", rr->area()); // access declared object
+    printf("mem loc: %p\n", rr.get());
+    printf("current use count: %d\n", rr.use_count());
+    shared_recurse(rr);
+    printf("current use after: %d\n", rr.use_count());
+    // can also swap memory addresses with another item... seems quite helpful
+}
+
 
 
 
@@ -147,6 +170,7 @@ int main()
     fn4_using_vectors();
     fn5_bad_pointers();
     fn6_uniqueptr();
+    fn7_sharedptr();
     return 0;
 }
 // eof
