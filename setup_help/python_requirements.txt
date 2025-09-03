@@ -1,19 +1,23 @@
 # Title: Python Modules Install List
-# Usage: python -m pip install -r FILENAME --user
 # upgrade pip: python -m pip install --upgrade pip
-#jupyter # not really needed anymore
-#ipdb
-#opencv-contrib-python
 ipython
 numpy
 matplotlib
 Pillow
-# img metadata manipulation
-piexif
-scipy
 pandas
+openpyxl
+# optional modules: ====================
+# optional: science
+scipy
+# optional: img metadata manipulation
+piexif
 # needed for audio metadata manipulation
 mutagen
 # needed for audio conversion
 pydub 
 # note: need ffmpeg https://github.com/adaptlearning/adapt_authoring/wiki/Installing-FFmpeg
+# obsolete modules: ====================
+#jupyter # not really needed anymore
+#ipdb
+#opencv-contrib-python
+
