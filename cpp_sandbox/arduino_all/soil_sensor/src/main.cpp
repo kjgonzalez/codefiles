@@ -2,14 +2,13 @@
 
 // put function declarations here:
 #define PIN_LED 13
-int led = 13;
 #define PIN_SENSOR PIN_A9 // TeensyLC physical pin23
 
 #define T_CYCLE 2000
 #define T_ON 1
 void setup() {
     // put your setup code here, to run once:
-    pinMode(led, OUTPUT);
+    pinMode(PIN_LED, OUTPUT);
     Serial.begin(9600); // could be 115200 as well
     while(!Serial); // need to wait for native USB port
     delay(100);

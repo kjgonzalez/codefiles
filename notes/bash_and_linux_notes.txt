@@ -103,6 +103,12 @@ append a path to linux PATH variable (esp. for .bashrc file)
     export PATH="$PATH:some/new/path"
 
 ------------------------------------------------------------
+store variable output from a result
+count="$(cat `/.bashrc | grep if | wc -l)" # count number of lines where 'if' appears in file
+echo "number: ${count}"
+
+
+------------------------------------------------------------
 update, upgrade, etc:
 https://unix.stackexchange.com/questions/361814/whats-the-difference-between-software-update-and-upgrade
 * apt-get update: updates LIST of available packages, version etc.
