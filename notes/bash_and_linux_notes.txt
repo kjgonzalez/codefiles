@@ -104,8 +104,49 @@ append a path to linux PATH variable (esp. for .bashrc file)
 
 ------------------------------------------------------------
 store variable output from a result
-count="$(cat `/.bashrc | grep if | wc -l)" # count number of lines where 'if' appears in file
+count="$(cat `/.bashrc | grep "if" | wc -l)" # count number of lines where 'if' appears in file
 echo "number: ${count}"
+
+------------------------------------------------------------
+bash logic
+https://ryanstutorials.net/bash-scripting-tutorial/bash-if-statements.php
+https://stackoverflow.com/questions/49110/how-do-i-write-a-for-loop-in-bash
+https://www.w3schools.com/bash/bash_loops.php
+
+lt, gt, le, gt, eq, ! (not), 
+
+count="$(cat `/.bashrc | grep "if" | wc -l)"
+if [ $count -gt 10 ]
+then 
+  echo "count is higher than 10"
+elif [ $count -gt 5 ]
+then
+  echo "count is higher than 5"
+else
+  echo "count is 5 or lower"
+fi
+
+##############
+echo "forloop 1"
+for i in $(seq 1 10);
+do
+  echo $i
+done
+
+echo "forloop 2"
+vals=$(seq 1 5)
+for i in "${vals}";
+do
+  echo "val $i thing"
+done
+
+echo "whileloop 1"
+counter=10
+while [ $counter -gt 0 ]; do
+  echo "value is $counter"
+  counter=$((counter-1))
+done
+
 
 
 ------------------------------------------------------------

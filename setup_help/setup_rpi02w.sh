@@ -13,7 +13,7 @@ sudo apt install git cmake screen vim -y
 cd ~/
 python -m venv vemain
 . vemain/bin/activate
-python -m pip install numpy pandas ipython
+python -m pip install numpy pandas ipython pyserial
 
 # add ~/.bashrc info
 
@@ -30,7 +30,7 @@ echo "" >> ~/.vimrc
 
 # config git
 # note: correctly configured pi will be called pi<LETTER>, e.g. pia
-echo "configuring git..."
+echo "configuring git..."z
 git config --global user.email k@j
 git config --global user.name $USER
 git config --global pull.rebase true
