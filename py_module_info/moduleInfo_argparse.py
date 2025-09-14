@@ -38,4 +38,15 @@ else:
     print('cuda disabled')
 
 print('list of arguments:',args.list)
+
+
+# some boilerplate: 
+if(__name__ == '__main__'):
+    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    p.add_argument('req',help='reqArg')
+    p.add_argument('--option',default=1,type=int,help='option')
+    p.add_argument('--cuda',default=False,action='store_true',help='boolean')
+    args=p.parse_args()
+
+
 # eof
