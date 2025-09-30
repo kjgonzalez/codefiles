@@ -19,7 +19,7 @@ void str_replace(std::string& str, const char* old_, const char* new_, int32_t c
     }
 }
 
-std::vector <std::string> str_split(std::string& str, const char* delimiter) {
+std::vector<std::string> str_split(std::string& str, const char* delimiter) {
     /* Split a string into substrings, return vector */
     uint32_t p0=0;
     uint32_t p1=0;
@@ -31,6 +31,29 @@ std::vector <std::string> str_split(std::string& str, const char* delimiter) {
         p0 = p1+len_delim;
     }
     return out;
+}
+
+// nothing built-in for lower/upper, so have a few options, all around "std::tolower/toupper"
+inline std::string str_lower(std::string input)
+{
+    std::string s = "";
+    for(int i=0;i<input.length();i++)
+        s+=std::tolower(input[i]);
+    return s;
+}
+
+inline std::string str_upper(std::string input)
+{
+    std::string s = "";
+    for(int i=0;i<input.length();i++)
+        s+=std::toupper(input[i]);
+    return s;
+}
+
+void str_upper_inplace(std::string& input)
+{
+    for(int i=0;i<input.length();i++)
+        input[i]=std::toupper(input[i]);
 }
 
 
@@ -49,6 +72,18 @@ int main() {
     for (std::string istr : str_split(sample, " ")) {
         printf(">> %s\n", istr.c_str());
     }
+
+    // test: tolower
+    using std::string;
+
+    string s3 = "This, is A test.";
+    string s3a = "";
+    string s3b = "";
+    printf("orig:  %s\n",s3.c_str());
+    printf("lower: %s\n",str_lower(s3).c_str());
+    str_upper_inplace(s3);
+    printf("upper: %s\n",s3.c_str());
+
     return 0;
 }
 

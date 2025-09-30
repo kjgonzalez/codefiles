@@ -16,6 +16,23 @@ python -m venv vemain
 python -m pip install numpy pandas ipython pyserial
 
 # add ~/.bashrc info
+# todo: add some logic to decide whether to add
+# # KJG Section =================================
+# 
+# echo "KJG functions/tips"
+# echo "  activate:   activate vemain"
+# echo "  sn:         new screen socket"
+# echo "  sr:         reattach to socket"
+# echo "  sl:         list sockets"
+# echo "  CTRL+A,D:   detach from socket"
+# echo "  tip: kill socket by entering & 'exit'"
+# 
+# alias activate=". ~/vemain/bin/activate"
+# alias sn="screen -S $arg1"  # new socket
+# alias sr="screen -r $arg1"  # reattach to socket
+# alias sl="screen -ls"       # list active sockets
+# # manual detach: enter session & press CTRL+A,D
+# # manual kill: enter session & type "exit". (delete is sr <ScrName>, exit)
 
 # add ~/.vimrc info
 echo "setup ~/.vimrc..."
