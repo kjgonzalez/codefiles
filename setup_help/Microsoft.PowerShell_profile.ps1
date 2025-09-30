@@ -3,6 +3,7 @@
 # Pre-Installation (assuming Git is installed)
 # 1. open powershell as admin
 # 2. Set-ExecutionPolicy -ExecutionPolicy RemoteSigned ("A", yes to all)
+# 2a. alternative: Set-ExecutionPolicy -ExecutionPolicy Unrestricted -Scope CurrentUser
 # 3. close admin powershell
 # 4. open powershell at ~/
 # 5. run "ssh-keygen"
