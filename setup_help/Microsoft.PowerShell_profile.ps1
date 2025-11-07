@@ -56,7 +56,7 @@ echo "  ipython:    run interactive python (only after 'activate')"
 echo "  npp:        open file in notepad++"
 echo "  sumatra:    open PDF file in Sumatra"
 echo "  tip:        diff FILEA FILEB  (compare two files in vscode)"
-
+echo "  tip:        Get-ChildItem -Recurse "." | Where { ! $_.PSIsContainer } | Select FullName >> ~/index.txt"
 
 Set-Alias -Name activate -Value "C:\Users\kjg\vemain\Scripts\Activate.ps1"
 Set-Alias -Name foxit -Value "C:\Program Files (x86)\Foxit Software\Foxit Reader\FoxitReader.exe"

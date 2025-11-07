@@ -1,0 +1,1 @@
+attempt at a "clean" cmake project that includes cpp library & executable

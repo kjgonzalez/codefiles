@@ -19,7 +19,7 @@ In Windows:
 2. click "Environment Variables..."
 3. find "PYTHONPATH" in user variables, or create new variable
 4. add new value (adapting to local computer):
-    C:\...\codefiles\scripts_libs
+    C:\\...\\codefiles\\scripts_libs
 5. reopen Command Line
 
 == NOTES ===================================================
@@ -52,7 +52,10 @@ In Windows:
 '''
 
 # INITIALIZATIONS ==============================================================
-import os,sys,time # only "standard" modules are imported here
+import os
+import sys
+import time
+import argparse
 import numpy as np
 from glob import glob
 import functools # not sure if this is standard
@@ -267,6 +270,15 @@ def getlist(path='.', recursive=False, exts:str='', incl_folders=False):
     assert(os.path.isdir(path)), "Not a valid path"
     queue = [os.path.abspath(path)] # list of paths to check
     exts = exts.split('-')
+
+    banned_folders=['$RECYCLE.BIN','.Trash-1000','System Volume Information','WindowsImageBackup']
+    checked_banned=False
+    
+    def isBanned(ipath):
+        for ibanned in banned_folders:
+            if(ibanned in ipath):
+                return True
+        return False
     def isGoodExt(inp:str):
         if(exts[0] == ''): return True
         if(os.path.splitext(inp)[1][1:] in exts):
@@ -278,7 +290,9 @@ def getlist(path='.', recursive=False, exts:str='', incl_folders=False):
             iitem2 = os.path.join(ipath,iitem)
             isfolder = os.path.isdir(iitem2)
             isexts = isGoodExt(iitem2)
-            if(recursive and isfolder): queue.append(iitem2)
+            if(recursive and isfolder): 
+                if(not isBanned(iitem2)):
+                    queue.append(iitem2)
             if(incl_folders and isfolder): output.append(iitem2)
             elif(not isfolder and isexts): output.append(iitem2)
     return output
@@ -455,8 +469,6 @@ def pyt(arr):
     return b**0.5
 #def pyt
 
-
-
 def scale(arr,xlim=(None,None),ylim=(0.01,0.99) ):
     ''' return a linearly scaled output of original array. follows simple
         interpolation for each element in the array. xmin and xmax are the
@@ -576,5 +588,22 @@ def npshuffle(nparr):
     npa2=np.copy(nparr)
     np.random.shuffle(npa2)
     return npa2
+
+
+
+if(__name__ == '__main__'):
+    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    p.add_argument('--walk',default='',help='reqArg')
+    p.add_argument('--recursive',default=False,action='store_true',help='recursive')
+    p.add_argument('--inclFolders',default=False,action='store_true',help='recursive')
+    args=p.parse_args()
+
+    if(args.walk!=''):
+        print("file walk:",args.walk)
+        for ifile in getlist(args.walk,args.recursive,incl_folders=args.inclFolders):
+            print(ifile)
+
+
+
 
 # eof

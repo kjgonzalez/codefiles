@@ -56,6 +56,30 @@ void str_upper_inplace(std::string& input)
         input[i]=std::toupper(input[i]);
 }
 
+void str_functions()
+{
+    // a little about how the various functions of std::string work
+    std::string s;
+    // about memory / availability
+    // keep in mind that a string is a special kind of vector. so, some behaviors are shared between the two. 
+    auto x = s.capacity(); // 15
+    auto y = s.size();     // 0
+    s.reserve(128);
+    x = s.capacity();   // 128+15
+    y = s.size();       // 0
+    s.resize(256);
+    x = s.capacity();   // 256+15
+    y = s.size();       // 256
+    /* what happened? reserve & capacity are the heap memory allocated for the object, what the 
+        object is prepared to hold, and happens in the background. on the other hand, resize & 
+        size describe the size of the user-accessible string. it's the difference between having 
+        a large warehouse (capacity) and a lot of goods (size)
+    */
+
+
+
+}
+
 
 int main() {
     std::string text = "hello world";

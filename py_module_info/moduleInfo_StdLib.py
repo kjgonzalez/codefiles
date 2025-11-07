@@ -19,6 +19,7 @@ print('Lpad    : |{:>8}|'.format(b))
 print('Rpad    : |{:<8}|'.format(b))
 print('Cpad    : |{:^8}|'.format(b))
 print('pad spec: |{:+^8}|'.format(b)) # charcter before '^' will be repeated everywhere
+print('hex-nice: |{:0>2X}|'.format(10))
 
 # classic example: lpad with zeros:
 print('typical : {:0>3}'.format(3))
