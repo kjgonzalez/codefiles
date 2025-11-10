@@ -35,7 +35,7 @@ target_include_directories(
 # executable =============
 add_executable(
     demo
-    src/examples/demo.cpp # todo: moveme
+    "src/examples/demo.cpp" # todo: moveme
     )
 target_link_libraries(
     demo

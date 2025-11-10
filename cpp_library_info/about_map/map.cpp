@@ -20,11 +20,11 @@ int main()
 
     cout << "size: " << m1.size() << endl;
     mymap_t::iterator ipair1 = m1.find(2);
-    mymapit_t ipair2 = m1.find(-1);
     cout << "find(2): " << ipair1->second << endl;
-    cout << "find(-1): " << ipair2->first << " " << ipair2->second << endl;
-    bool wasfound = ipair2 == m1.end();
-    cout << "wasfound? " << wasfound << endl;
+    //cout << "find(-1): " << ipair2->first << " " << ipair2->second << endl; // would fail
+    mymapit_t ipair2 = m1.find(-1);
+    bool wasfound = ipair2 != m1.end(); // if(ipair==end()), then KEY WAS NOT FOUND
+    cout << "was key [" << -1 << "] found? " << wasfound << endl;
     cout << "m1[1]: " << m1[1] << endl;
     cout << "m1[2]: " << m1.at(2) << endl; // safer, throws error if element doesn't exist
     m1.erase(1); // drop an element
