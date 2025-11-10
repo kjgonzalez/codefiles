@@ -13,6 +13,7 @@ notes:
 */
 
 #include <stdio.h> // only for printf
+#include <vector> // for iterating over a custom container class
 
 //basic struct
 struct Person{
@@ -52,6 +53,21 @@ public:
     Triangle(int xval, int yval) { x = xval; y = yval; mat.mat_num = 3; }
 };
 
+// you can have a custom class that can perform a range-based for-loop, but you still depend on 
+//   the vector class itself
+class Mylist
+{
+    std::vector<int> vals = { 9,8,7,6,5,4,3,2,1,0 };
+
+public:
+    Mylist() {};
+    int size() { return vals.size(); }
+    int operator[](size_t ind) { return vals[ind]; }
+    std::vector<int>::iterator begin() { return vals.begin(); }
+    std::vector<int>::iterator end() { return vals.end(); }
+};
+
+
 int main() {
     printf("hi\n");
 
@@ -60,6 +76,12 @@ int main() {
 
     Triangle tri(3, 4);
     printf("tri mat: %d \n", tri.mat.mat_num);
+
+    Mylist ml;
+    printf("normal forloop: "); for (int i = 0; i < ml.size(); i++){printf("%d ", ml[i]);} printf("\n");
+    printf("ranged forloop: "); for(auto i : ml){printf("%d ", i);} printf("\n");
+
+    //ml[2] = 3; // invalid operation
 
     return 0;
 }
