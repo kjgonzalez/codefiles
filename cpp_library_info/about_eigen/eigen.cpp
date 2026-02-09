@@ -12,10 +12,9 @@ Great external resource: https://gist.github.com/gocarlos/c91237b02c120c6319612e
 typedef Eigen::MatrixXd matxx; // convenience
 
 
-Eigen::Vector2i eigShape(Eigen::MatrixXd& mat)
+std::complex<int> eigShape(Eigen::MatrixXd& mat)
 {
-    Eigen::Vector2i s(mat.rows(), mat.cols());
-    return s;
+    return std::complex<int>(mat.rows(), mat.cols());
 }
 
 double eigStdDevCol(Eigen::MatrixX3d &mat, int colnum)
@@ -58,8 +57,8 @@ int main()
 
     Eigen::Matrix4d mat = Eigen::Matrix4d::Identity(); // fixed size, dynamic info
     cout << "Identity:" << endl << mat << endl;
-    cout << "arr1 shape: \n" << eigShape((Eigen::MatrixXd)arr1) << endl;
-    cout << "arr1.T shape: \n" << eigShape((Eigen::MatrixXd)arr1.transpose()) << endl;
+    cout << "arr1 shape: " << eigShape((Eigen::MatrixXd)arr1) << endl;
+    cout << "arr1.T shape: " << eigShape((Eigen::MatrixXd)arr1.transpose()) << endl;
 
     printf("- basic stats ---\n"); // ===========================================
     printf("shape: (%llu, %llu)\n", arr1.rows(), arr1.cols());
@@ -100,13 +99,6 @@ int main()
     cout << "eigenvals: \n" << eigsolve.eigenvalues() << endl;
     cout << "eigenvectors: \n" << eigsolve.eigenvectors() << endl;
     cout << "**NOTE: returned as complex-comptible numbers/vectors..." << endl;
-
-
-
-
-    //for (int i = 0; i < raw.size(); i++) {
-    //    
-    //}
 
 
 
