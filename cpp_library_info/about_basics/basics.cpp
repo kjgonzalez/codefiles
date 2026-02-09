@@ -152,6 +152,7 @@ printf("method2: %s\n",sampleString.c_str());
 /* PARAMETERS FOR PRINTF. src: http://www.cplusplus.com/reference/cstdio/printf/
   SYM  DESCRIPTION                                  EXAMPLE
   d/i Signed decimal integer                        392
+  z   size_t shorthand (effectively u64)            8589934592 (2**33)
   u   Unsigned decimal integer                      7235
   o   Unsigned octal                                610
   x   Unsigned hexadecimal integer                  7fa
