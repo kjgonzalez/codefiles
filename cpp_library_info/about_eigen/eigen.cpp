@@ -88,17 +88,34 @@ int main()
 
     printf("- Eigenvalues/vectors ---\n"); // ===================================
     /*
-    np.linalg.eig(np.array([[2,1],[0,3]])) gives:
-      eigvals={2,3}, 
-      eigvecs={[1, sqrt(2)/2],[0, sqrt(2)/2]}
+    np.linalg.eig(np.array([[0,1],[-2,-3]])) gives:
+      eigvals={-1,-2}, 
+      eigvecs={[1,-1]/sqrt(2),[1,-2]/sqrt(5)}
     */
     Eigen::Matrix2d eig1;
-    eig1 << 2, 1, 0, 3;
+    eig1 << 0, 1, -2, -3;
     cout << "given: \n" << eig1 << endl;
     Eigen::EigenSolver<Eigen::Matrix2d> eigsolve(eig1);
     cout << "eigenvals: \n" << eigsolve.eigenvalues() << endl;
     cout << "eigenvectors: \n" << eigsolve.eigenvectors() << endl;
     cout << "**NOTE: returned as complex-comptible numbers/vectors..." << endl;
+
+    printf("- special operations ---\n"); // =====================================
+    /* dot product, cross product, matmul */
+    Eigen::Vector3d v(4, 0, 0);
+    Eigen::Vector3d w(4, 3, 0);
+    cout << "dot(<4,0,0>,<4,3,0>) = " << v.dot(w) << endl; // ans=16
+    cout << "cross(<4,0,0>,<4,3,0>) = " << v.cross(w).reshaped(1,3) << endl; // ans=12
+
+    Eigen::Matrix2d a;
+    a << 1, 2, -3, 4;
+    Eigen::Vector2d b(5, 7);
+    cout << "matrix multiplication (e.g. A@b in numpy): \n" << a * b << endl; // [19,13].T
+    
+    cout << "linspace(n=21,lo=0,hi=2): \n" << Eigen::VectorXd::LinSpaced(21, 0, 2).transpose() << endl;
+
+
+
 
 
 
