@@ -30,16 +30,22 @@ import os.path as osp
 import time
 import eyed3
 from eyed3 import id3
+
+HAVE_PANDAS=True
+HAVE_TKINTER=True
 try:
     import pandas as pd
-except:
+except ImportError:
     print('pandas not available, some functions will fail')
+    HAVE_PANDAS=False
 from klib import getlist
 try:
     import tkinter as tk
     from tkinter import ttk
-except:
+    from tkinter import filedialog as fd
+except ImportError:
     print("no GUI available, shell only")
+    HAVE_TKINTER=False
 #genres = [i for i in id3.genres.values() if (type(i) not in [int, type(None)])]
 #genres.sort()
 
@@ -242,67 +248,78 @@ class Audiofile:
 class GuiKmusic:
     ''' the very most basic starting gui to help get any project rolling'''
     @staticmethod
-    def makeplace(elem,row,col):
-        elem.grid(row=row,column=col) # need more later
+    def makeplace(elem,row,col,sticky='nw'):
+        elem.grid(row=row,column=col,sticky=sticky) # need more later
         return elem
 
     def __init__(self):
         self.R = tk.Tk()
-        self.R.title('hello tkinter')
-        # self.R.resizable(False,False) # can optionally fix window dimensions
-        # self.R.geometry("1000x750") # start at a particular window size
-        # self.R.geometry("+10+10") # start at a particular location
+        self.R.title('KMusic GUI')
+        self.R.resizable(False,False) # can optionally fix window dimensions
         mp = self.makeplace
 
-        self.F = mp(tk.Frame(self.R),0,0)
+        #self.R.rowconfigure(0,weight=1) # todo: figure out rowconfigure
+        #frm_select.rowconfigure(2,weight=1)
 
-        self.lbl = mp(tk.Label(self.F,text='test'),0,0)
-        self.ent = mp(tk.Entry(self.F,width=10),0,1)
+        frm_select:tk.Frame = mp(tk.Frame(self.R),0,0)
+        self.btn_selfile = mp(tk.Button(frm_select,text='Select File',command=self.cbSelFile),0,0)
+        self.btn_selfldr = mp(tk.Button(frm_select,text='Select Folder',command=self.cbSelFolder),0,1)
+        self.ent_selpath:tk.Entry = mp(tk.Entry(frm_select,width=70,state='readonly'),0,2) # normal, disabled, readonly
 
-        self.frm_radio = mp(tk.Frame(self.R),1,0)
-        self.var_radio = tk.IntVar()
-        self.rbn_1 = mp(tk.Radiobutton(self.frm_radio,text='one',variable=self.var_radio,value=1),0,0)
-        self.rbn_2 = mp(tk.Radiobutton(self.frm_radio,text='two',variable=self.var_radio,value=2),0,1)
+        frm_modreg:tk.Frame = mp(tk.Frame(self.R),1,0)
+        self.lbx_files = mp(tk.Listbox(frm_modreg,height=20,width=50),0,0) # todo: add scrollbar
 
-        self.scl_power = mp(tk.Scale(self.R,from_=0,to=100,length=200,orient=tk.HORIZONTAL),2,0)
-        self.chk_opt = mp(tk.Checkbutton(self.R,text='activate'),3,0)
-        self.btn_run = mp(tk.Button(self.R,text='Run This',command=self.cb_advance_pbar),4,0)
-        self.prb_complete = mp(ttk.Progressbar(self.R,length=200),5,0) # note: need ttk
+        frm_items:tk.Frame = mp(tk.Frame(frm_modreg),0,1)
+        mp(tk.Label(frm_items,text='Title'),0,0)
+        self.ent_title=mp(tk.Entry(frm_items,width=40),0,1)
+        mp(tk.Label(frm_items,text='Artist'),1,0)
+        self.ent_artist = mp(tk.Entry(frm_items, width=40), 1, 1)
+        mp(tk.Label(frm_items,text='Album'),2,0)
+        self.ent_album = mp(tk.Entry(frm_items, width=40), 2, 1)
+        mp(tk.Label(frm_items,text='Genre'),3,0)
+        self.ent_genre = mp(tk.Entry(frm_items, width=40), 3, 1)
+        mp(tk.Label(frm_items,text='Year'),4,0)
+        self.ent_year = mp(tk.Entry(frm_items, width=40), 4, 1)
+        mp(tk.Label(frm_items,text='TrackNum'),5,0)
+        self.ent_tracknum = mp(tk.Entry(frm_items, width=40), 5, 1)
+        mp(tk.Label(frm_items,text='nTracks'),6,0)
+        self.ent_ntracks = mp(tk.Entry(frm_items, width=40), 6, 1)
 
-        self.lbx_vals:tk.Listbox = mp(tk.Listbox(self.R,height=4),6,0)
-        self.lbx_vals.insert(tk.END,*('one two three four five six seven eight nine ten'.split(' ')))
+        self.R.bind('<q>',lambda x: self.cbQuit())
+        self.R.bind('<Double-Button-1>',lambda x: self.cbSelItemFromList()) # <Double-Button-1>
 
-        self.cbx_vals:ttk.Combobox = mp(ttk.Combobox(self.R,width=20,state='readonly'),7,0)
-        self.cbx_vals['values'] = 'one two three four five'.split(' ')
+    def cbQuit(self):
+        if('entry' in str(self.R.focus_get())):
+            print('ignoring')
+        else:
+            self.R.quit()
+
+    def cbSelFolder(self):
+        print('select folder')
+        path = fd.askdirectory(title='Select Folder')
+        if(path==''): return
+        self.setSelectedEntry(path)
+
+    def cbSelFile(self):
+        print('select file')
+        path = fd.askopenfilenames(title='Select File')[0]
+        if(path==''): return
+        self.setSelectedEntry(path)
+        # todo: load info about selected item
 
 
-        self.cnv_draw:tk.Canvas = mp(tk.Canvas(self.R,width=200,height=200,background='white'),20,0)
-        # todo: scrollbar
-        # todo: text
-        # todo: spinbox
-        # todo: menu
-        # todo: keypresses
+    def cbSelItemFromList(self):
+        x = self.R.focus_get()
+        if(self.R.focus_get()!=self.lbx_files):
+            return
+        # todo: get selected item from list and load info
 
-        self.R.bind('<q>',lambda x: self.F.quit())
-        self.R.bind('<Button-1>',self.cb_draw_point)
 
-    def cb_advance_pbar(self):
-        temp = self.prb_complete['value']+10
-        if(temp>100): self.prb_complete['value']=0
-        else: self.prb_complete['value'] = temp
-
-    def cb_draw_point(self,event):
-        # print(event)
-        if('canvas' not in str(event.widget)): return None
-        x,y = event.x,event.y
-        sz=2
-        self.cnv_draw.create_oval(x-sz,y-sz,x+sz,y+sz,fill='red',outline='green',width=2)
-
-    def _entryfocus(self):
-        ents = []
-        ents.append(str(self.ent))
-        if(str(self.R.focus_get()) in ents): return True
-        return False
+    def setSelectedEntry(self,val:str):
+        self.ent_selpath.config(state='normal')
+        self.ent_selpath.delete(0,tk.END)
+        self.ent_selpath.insert(0,val)
+        self.ent_selpath.config(state='readonly')
 
     def run(self):
         self.R.mainloop() # vital for each and every tkinter function
@@ -311,18 +328,38 @@ class GuiKmusic:
 
 
 if(__name__ == '__main__'):
-    #p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    #p.add_argument('--a',dest='int1',type=int,help='first int',default=0)
-    #args=p.parse_args()
+    p=argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+    p.add_argument('--gui',action='store_true',default=False,help='use GUI')
+    p.add_argument('--tui',action='store_true',default=False,help='use text interface')
+    p.add_argument('--song',default='',help='path to single song file, for use with tui')
+    args=p.parse_args()
 
-    ''' debug: look for carlos bollorque music '''
-    path = '/data/data/com.termux/files/home/storage/music/'
-    path = 'debugging'
-    print('exists:',os.path.exists(path))
-    #files = getsongs(path,filters={'artist':'Carlos Bollorque'})
-    files = getsongs(path)
-    print(f'{len(files)} files')
-    print(Audiofile(files[0]).props)
-    #for ifile in files: print('',ifile)
+    # ''' debug: look for carlos bollorque music '''
+    # path = '/data/data/com.termux/files/home/storage/music/'
+    # path = 'debugging'
+    # print('exists:',os.path.exists(path))
+    # #files = getsongs(path,filters={'artist':'Carlos Bollorque'})
+    # files = getsongs(path)
+    # print(f'{len(files)} files')
+    # print(Audiofile(files[0]).props)
+    # #for ifile in files: print('',ifile)
+
+
+    if(args.gui):
+        if(not HAVE_TKINTER):
+            print('tkinter not available, option "gui" invalid')
+            exit()
+        print('run gui')
+        GuiKmusic().run()
+
+    elif(args.tui):
+        print('run tui (not implemented yet)')
+
+    else:
+        print('no options given')
+
+
+
+
 #eof
 
