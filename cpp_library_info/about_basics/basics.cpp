@@ -321,7 +321,7 @@ w.push_back(4);
 w.push_back(12);
 std::cout << pyt(w) << nl;
 
-// 5.3 anonymous functions (lambda functions)
+// 5.3 anonymous functions (lambda functions) (note: c++11 and later)
 auto firstLambda = [](int a, int b) {return a+b;};
 std::cout << firstLambda(3,4) << "\n";
 

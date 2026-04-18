@@ -10,6 +10,17 @@ basic intro to monte carlo simulation
 
 note: comparing difference in average still seems to cause variation. perhaps difference in stdev? this squares the
     errors, and therefore could have higher variation. need clearer end criteria.
+
+a few example end criteria:
+* confidence interval half width (best practice)
+* relative error criterion (CIHW threshold unitless)
+* convergence monitoring (can lead to bad convergence)
+* simple fixed iteration count (no guarantee of convergence)
+
+regarding confidence intervals, recall how to interpret:
+For example, the correct interpretation of a 95% confidence interval, [L, U], is that "we are 95% confident
+    that the [population parameter] is between [L] and [U]."
+src: https://online.stat.psu.edu/stat200/lesson/4/4.2/4.2.1
 '''
 
 import numpy as np
@@ -58,8 +69,10 @@ print('std:',x.std())
 print('min:',x.min())
 print('max:',x.max())
 print('sample 10 values:',x[:10])
+
+
 # EXAMPLE 2 ==========================================================
-print("Example 2:","="*30)
+print("\n\nExample 2:","="*30)
 print("Chance of throwing a dart on bullseye (point2D(gauss,gauss))")
 ''' 
 Will assume that thrower has some experience and tends to have normal distribution of performance. distrib is 
@@ -69,18 +82,30 @@ Will assume that thrower has some experience and tends to have normal distributi
     gauss(avg=0,std=15). 
     a. if split board up into polar coordinates, 1cm radius and 5 deg slice, would want at least (20/1)*(360/5)*100 =
           144000 samples, maybe even x10 that
-2. will calculate xloc & yloc, get distance, n_bullseye, and r_bullseye. then, stop when distance is below envelope
-    2a. will then count number of times value was less than 2.0
-    
+2. will calculate xloc & yloc, get distance, n_bullseye, and r_bullseye. 
+3. stopping criteria will be 
 note: when set envelope to reference change in dist_from_center, r_bullseye still has high variation. will 
     instead set envelope to reference change in r_bullseye
 '''
 
-envelope = 1e-5
+def monteCarloStop_AvgConverge(avg0,avg1,env,iterationcount,miniter=1e9):
+    ''' return stop=True when change in average result is below threshold '''
+    if(iterationcount >= miniter): return True
+    elif(abs(avg1-avg0)<env): return True
+    else: return False
+
+def monteCarloStop_CIWidth(sample_std,sample_len,thresh,iterationcount,z=1.96,maxiter=1e9):
+    ''' return stop=True when confidence interval below threshold '''
+    if(iterationcount >= maxiter): return True
+    elif(z*sample_std/sample_len**0.5 <=thresh): return True
+    else: return False
+
+
+envelope = 0.25 # here, envelope means half-width of CI, with units (e.g. cm)
 maxit = 144000
 minit = 1440 # arbitrarily choosing 1% of max theoretical...?
 itercount = 0
-
+sqsum = 0
 xsigma,ysigma = 10,15
 xloc = lambda:random.gauss(0,xsigma)
 yloc = lambda:random.gauss(0,ysigma)
@@ -92,12 +117,15 @@ while(not done):
     res = np.linalg.norm((xloc(),yloc())) # dist from center
     x.append(res)
     tmp =np.array(x)
-    curr_avg = (tmp<=2.0).sum() / len(tmp)
-    if((abs(curr_avg-prev_avg)<envelope and itercount>minit) or itercount>maxit):
+
+    #curr_avg = (tmp<=2.0).sum() / len(tmp)
+    cihw = 1.96* np.std(x)/len(x)**0.5 # CI half width
+    if(len(tmp)>3 and cihw<envelope or itercount>maxit):
         done=True
     else:
         itercount+=1
-        prev_avg = curr_avg
+        #prev_avg = curr_avg
+    #if(itercount%1000==1):print(itercount, round(cihw,4))
 
 x = np.array(x)
 print(f'xloc=gauss(sigma={xsigma}), yloc=gauss(sigma={ysigma})')
@@ -110,7 +138,7 @@ print('max:',x.max())
 print('sample 10 values:',x[:10].round(2))
 n_bullseye = sum([i<2 for i in x])
 print(f'bullseye hit rate: {n_bullseye} / {len(x)} = {n_bullseye/len(x)*100:0.2f}%')
-
+print(f'CI half width:',1.96*x.std()/len(x)**0.5)
 print('done')
 
 # note: sample output:
