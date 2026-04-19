@@ -35,6 +35,33 @@ include(${wxWidgets_USE_FILE})
 add_executable(demo1 WIN32 "src/examples/demo1.cpp") # todo: explain how to make functional on linux
 target_link_libraries(demo1 PRIVATE ${wxWidgets_LIBRARIES})
 
+
+# executable =============
+add_executable(demo2 WIN32 "src/examples/demo2.cpp") # todo: explain how to make functional on linux
+target_link_libraries(demo2 PRIVATE ${wxWidgets_LIBRARIES})
+
+# executable =============
+add_executable(
+    demo3
+    WIN32
+    "src/App.cpp"
+    "src/MainFrame.cpp"
+#    "include/MainFrame.h"
+#    "include/App.h"
+    )
+#target_compile_definitions(
+#    mymath
+#    PRIVATE
+#    )
+target_include_directories(
+    demo3
+    PUBLIC
+    include/
+    )
+target_link_libraries(demo3 PRIVATE ${wxWidgets_LIBRARIES})
+
+
+
 #target_link_libraries(demo1 PRIVATE mymath)
 
 # post processing =========
