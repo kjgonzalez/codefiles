@@ -1,0 +1,4 @@
+.vs/
+build/
+blinux/
+CMakeSettings.json
