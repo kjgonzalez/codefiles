@@ -23,9 +23,6 @@ first line should always be @echo off
 "echo %~dp1" will print out abs path of 1st argument
 
 
-
-
-
 = PWS: if statements =======================================
 function cpprun{
     echo "building..."
@@ -57,6 +54,11 @@ it is indeed possible to call a batch script with arguments
     via a shortcut. for example, this is possible: 
     .\Compile_Stuff.lnk arg1 arg2
 
+= PWS custom function to get sha256 checksum ===============
+function checksum($n)
+{
+    (Get-FileHash $n -Algorithm SHA256).Hash.ToLower()
+}
 
 
 = SIMPLE ONE-LINE COMMANDS =================================
