@@ -32,6 +32,10 @@ nmap -sn 192.168.XXX.255/24 # replace "XXX" with relevant value, such as 178 or 
 
 
 ------------------------------------------------------------
+sha256 sum (and only output hash)
+ha256sum filename | cut -d' ' -f1
+
+------------------------------------------------------------
 what is difference between .bashrc, .profile, .bash_profile, etc?
 
 * bashrc and bash_profile both help customize command line environment

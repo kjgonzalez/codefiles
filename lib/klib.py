@@ -549,14 +549,14 @@ def root_bisection(function,yValue,lims,eps=1e-6,maxit=10000):
     xL=lims[0]
     xU=lims[1]
     gval=eps*2
-    iter=0
-    while(iter<maxit and abs(gval)>eps):
+    iterval=0
+    while(iterval<maxit and abs(gval)>eps):
         xC=(xL+xU)/2
         gval=g(xC)
         if(gval*g(xL)>0): xL=xC
         else: xU=xC
-        iter+=1
-    return xC,iter,gval+yValue
+        iterval+=1
+    return xC,iterval,gval+yValue
 
 def root_newton(function,yValue,start_point,eps=1e-6,maxit=10000):
     ''' find xValue where function is equal to yValue, using newton method
