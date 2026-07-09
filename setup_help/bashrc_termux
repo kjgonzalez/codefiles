@@ -1,0 +1,26 @@
+
+# KJG SECTION =============
+#
+LS_COLORS=$LS_COLORS:'di=0;36:' ; export LS_COLORS
+
+echo "KJG Shortcuts/Tips"
+echo "  cpprun"
+echo "  mkcd: mkdir + cd"
+
+alias ipython="ipython --nosep"
+
+cpprun(){
+  # show how to give input arguments with bash as well as variables
+  echo "building..."
+  g++ -std=c++11 $* # '*' accepts all args, '$1' accepts first
+  if [ $? -eq 0 ]
+    then
+      ./a.out
+  fi
+}
+mkcd(){
+    mypath=$1
+    mkdir $mypath
+    cd $mypath
+}
+

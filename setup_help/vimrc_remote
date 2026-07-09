@@ -15,8 +15,17 @@
 :set shiftwidth=4
 :set tabstop=4
 :syntax on
-:colorscheme darkblue
 :set autoindent
+
+" the colorscheme that looks best tends to change based on OS and available
+" vim version, which is crazy. so, based on experience, best schemes for diff
+" configs:
+
+" termux(android), vim 9.2, k260422
+:colorscheme sorbet
+
+
+:colorscheme darkblue
 " eof
 
 
