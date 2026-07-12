@@ -30,13 +30,13 @@ def on_message(client, userdata, msg):
 if(__name__ == '__main__'):
     # Create MQTT client
     client = pmq.Client(pmq.CallbackAPIVersion.VERSION2)
-    client.username_pw_set(_user, _pass)
     client.on_connect = on_connect
     client.on_message = on_message
+    client.username_pw_set(_user, _pass)
 
     # Connect to broker
     client.connect(_host, _port, keepalive=60)
-
+    
     client.subscribe(_topic)
     client.loop_start()
     time.sleep(10)
