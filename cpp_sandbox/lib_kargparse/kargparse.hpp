@@ -41,37 +41,37 @@ class KArgParser
         unsigned long valu;
         double vald;
         string vals;
-        int setval(char* val)
+        int setval(char* val,bool _ver=false)
         {
             switch (atype) {
             case atype_bool: {
-                printf("  parsing bool: %s\n", val);
+                if(_ver) printf("  parsing bool: %s\n", val);
                 valb = (bool)std::stoi(val);
                 return 0;
             }//case
             case atype_int: {
-                printf("  parsing int: %s\n", val);
+                if (_ver) printf("  parsing int: %s\n", val);
                 if (strchr(val, '.') != NULL) return -2;
                 vali = std::stoi(string(val));
                 return 0;
             }//case-uint
             case atype_uint: {
-                printf("  parsing uint: %s\n", val);
+                if (_ver) printf("  parsing uint: %s\n", val);
                 if (strchr(val, '.') != NULL) return -2;
                 valu = std::stoi(string(val));
                 return 0;
             }//case-uint
             case atype_double: {
-                printf("  parsing double: %s\n", val);
+                if (_ver) printf("  parsing double: %s\n", val);
                 vald = std::stod(val);
                 return 0;
             }//case-double
             case atype_str: {
-                printf("  parsing str: %s\n", val);
+                if (_ver) printf("  parsing str: %s\n", val);
                 vals = std::string(val);
                 return 0;
             }//case
-            default: { printf("  unkn\n"); return -1; }
+            default: { if (_ver) printf("  unkn\n"); return -1; }
             }//switch
         }//fn-setval
     };
@@ -79,7 +79,7 @@ class KArgParser
     string _desc = "";
     Argitem _args[100]; // todo: vector
     int _argslen;
-    std::map<std::string, int> _argloc; //
+    std::map<std::string, int> _argloc;
     int _nreq;
     bool _v;
     
@@ -98,10 +98,11 @@ class KArgParser
     }//fn-printhelp
 
 public:
-    KArgParser(bool verbose=false) :_argslen(0), _nreq(0),_v(verbose) {}
+    KArgParser(bool verbose = false) :_v(verbose) { reset(); }
     void add_desc(const char* description) { _desc = description; }
     void add_req(const char* name, const char* desc, Argtype atype)
     {
+        assert(_nreq==_argslen); // ensure that not adding req after an opt
         Argitem argi;
         argi.name = std::string(name);
         argi.desc = std::string(desc);
@@ -111,8 +112,37 @@ public:
         _argslen += 1;
         _nreq += 1;
     }
-    void add_opt() {}
-    void add_flag() {}
+
+    // add an optional argument. for bools, it's recommended to use "add_flag"
+    template<typename T>
+    void add_opt(const char* name, const char* desc, T defaultval)
+    {
+        Argitem argi;
+        argi.name = std::string(name);
+        argi.desc = std::string(desc);
+        if constexpr (std::is_same<T, bool>::value) { argi.atype = atype_bool; argi.valb = defaultval; }
+        else if constexpr (std::is_same<T, int64_t>::value) { argi.atype = atype_int; argi.vali = defaultval; }
+        else if constexpr (std::is_same<T, uint64_t>::value) { argi.atype = atype_uint; argi.valu = defaultval; }
+        else if constexpr (std::is_same<T, double>::value) { argi.atype = atype_double; argi.vald = defaultval; }
+        else if constexpr (std::is_same<T, string>::value) { argi.atype = atype_str; argi.vals = defaultval; }
+        else { assert(0 == 1); return -1; }
+        _args[_argslen] = argi;
+        _argloc[std::string(name)] = _argslen;
+        _argslen += 1;
+    }
+
+    // add optional argument for booleans
+    void add_flag(const char* name, const char* desc, bool defaultval)
+    {
+        Argitem argi;
+        argi.name = std::string(name);
+        argi.desc = std::string(desc);
+        argi.atype = atype_bool;
+        argi.valb = defaultval;
+        _args[_argslen] = argi;
+        _argloc[std::string(name)] = _argslen;
+        _argslen += 1;
+    }
     int parse(int ac, char** av)
     {
         if (_v) {
@@ -120,71 +150,84 @@ public:
             printf("given args: \n");
             for (int i = 0; i < ac; i++) { printf("  %d: %s\n", i, av[i]); }
         }
-        // perform parsing
-        if (strcmp(av[1], "--help") == 0) { printhelp(av[0]); exit(0); }
-
+        // check for easy errors
+        if (ac>1 && strcmp(av[1], "--help") == 0) { printhelp(av[0]); exit(0); }
         else if ((ac - 1) < _nreq) {
-            printf("ERR NOT ENOUGH REQUIRED ARGUMENTS\n");
-            printhelp(av[0]); exit(1);
+            printf("ERR NOT ENOUGH REQUIRED ARGUMENTS, EXITING\n");
+            printhelp(av[0]); exit(-1);
         }
-
-
+        // regular parsing attempt
         int argind = 0;
+        // required arguments
         for (argind = 0; argind < _nreq; argind++) {
             int err = _args[argind].setval(av[argind + 1]);
-            if (err) { 
-                printf("ERR PARSING ARG %d (%s), EXITING\n", 
-                    argind+1, av[argind+1]
-                ); 
-                exit(-1); 
-                return -1; }
+            if (err) {
+                printf("ERR PARSING REQ'D ARG %d (%s), EXITING\n", argind + 1, av[argind + 1]);
+                printhelp(av[0]); exit(-2);
+            }
+        }//for-loop
+        // optional / flag arguments
+        for (; argind < ac-1; argind++)
+        {
+            if (av[argind + 1][0] != '-' && av[argind + 1][1] != '-') {
+                printf("ERR PARSING OPTIONAL ARG %d (%s), EXITING\n", argind + 1, av[argind + 1]);
+                printhelp(av[0]); exit(-3);
+            }
+            string baseargname = std::string(av[argind + 1]).substr(2);
+            auto res = _argloc.find(baseargname);
+            if (res == _argloc.end()) {
+                printf("ERR PARSING OPTIONAL ARG %d (%s), EXITING\n", argind + 1, av[argind + 1]);
+                printhelp(av[0]); exit(-4);
+            }
+            int ind = res->second;
+
+            // is "optional" argument
+            if (_args[ind].atype != atype_bool) {
+                if (argind + 2 >= ac) {
+                    printf("ERR NOT ENOUGH OPTIONAL ARGUMENTS, EXITING\n");
+                    printhelp(av[0]); exit(-5);
+                }
+                if (_v) printf("argind = %d, a=%s, b=%s, ind=%d\n", argind, av[argind + 1], av[argind + 2], ind);
+                int err = _args[ind].setval(av[argind + 2]);
+                argind++; // move forward extra index, optional arg uses 2 indices
+                if (err) {
+                    printf("ERR PARSING OPTIONAL ARG %d (%s), EXITING\n", argind + 2, av[argind + 2]);
+                    printhelp(av[0]); exit(-6);
+                }
+            }//if-NOT-atypebool
+            // is "flag" argument
+            else {
+                if (_v) printf("argind = %d, a=%s, ind=%d\n", argind, av[argind + 1], ind);
+                _args[ind].valb = !_args[ind].valb;
+            }
+
         }
+
         return 0;
     }
-    void get(const char* name, bool& v)
-    {
-        if (_v) printf("get-bool\n");
-        int ind = _argloc.find(name)->second;
-        if (_v) printf("%s ind: %d\n", name, ind);
-        assert(_args[ind].atype == atype_bool);
-        v = _args[ind].valb;
-    }
-    void get(const char* name, long& v)
-    {
-        if (_v) printf("get-int\n");
-        int ind = _argloc.find(name)->second;
-        if (_v) printf("%s ind: %d\n", name, ind);
-        assert(_args[ind].atype == atype_int);
-        v = _args[ind].vali;
-    }
-    void get(const char* name, unsigned long& v)
-    {
-        if (_v) printf("get-uint\n");
-        int ind = _argloc.find(name)->second;
-        if (_v) printf("%s ind: %d\n", name, ind);
-        assert(_args[ind].atype == atype_uint);
-        v = _args[ind].valu;
-    }
-    void get(const char* name, double& v)
-    {
-        if (_v) printf("get-double\n");
-        int ind = _argloc.find(name)->second;
-        if (_v) printf("%s ind: %d\n", name, ind);
-        assert(_args[ind].atype == atype_double);
-        v = _args[ind].vald;
-    }
-    void get(const char* name, std::string& v)
-    {
-        if (_v) printf("get-str\n");
-        int ind = _argloc.find(name)->second;
-        if (_v) printf("%s ind: %d\n", name, ind);
-        assert(_args[ind].atype == atype_str);
-        v = _args[ind].vals;
-    }
 
+    template<typename T>
+    T get(const char* name)
+    {
+        auto res = _argloc.find(name);
+        if (res == _argloc.end()) {
+            printf("ERR KEY NOT FOUND (%s), EXITING\n", name);
+            exit(-7);
+        }
+        int ind = res->second;
+        if constexpr (std::is_same<T, bool>::value) { return _args[ind].valb; }
+        else if constexpr (std::is_same<T, int64_t>::value) { return _args[ind].vali; }
+        else if constexpr (std::is_same<T, uint64_t>::value) { return _args[ind].valu; }
+        else if constexpr (std::is_same<T, double>::value) { return _args[ind].vald; }
+        else if constexpr (std::is_same<T, string>::value) { return _args[ind].vals; }
+        else { assert(0 == 1); return -1; }
+    }//fn-get
 
-
-
+    void reset()
+    {
+        _argslen = 0;
+        _nreq = 0;
+    }
 
 
 
