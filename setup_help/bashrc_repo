@@ -40,32 +40,47 @@
 #export LANGUAGE=en_US:en
 #export LANG=en_US.UTF-8
 
-########################################################################
 
 
-# kjg aliases
-#alias shortbash='export PS1="\[\033[01;32m\]$ \[\033[00m\]"'
-#alias longbash="export PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$ '"
-alias ipython="ipython3 --nosep"
-alias python="python3"
-alias activate_ve=". ~/ve_main/bin/activate"
+# BOILERPLATE ##################################################################
 
-# special screen commands
-# manual detach: enter session & press CTRL+A,D
-# manual kill: enter session & type "exit". (delete is sr <ScrName>, exit)
+# "longbash", convenient command line appearance
+export PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$ '
+
+echo "=== KJG Custom Commands ==="
+echo "calc EXPR     input to python to perform math calc"
+echo "cpprun FILE   simple compile & run on file"
+echo "ipython       run ipython nosep"
+echo "longbash      make bash line longer (default)"
+echo "shortbash     make bash line shorter"
+echo "sl            screen: list active sockets"
+echo "sn NAME       screen: new socket"
+echo "sr NAME       screen: reattach to socket"
+
+# ---
+alias ipython="ipython --nosep"
 alias sn="screen -S $arg1"  # new socket
 alias sr="screen -r $arg1"  # reattach to socket
 alias sl="screen -ls"       # list active sockets
-sk(){ screen -X -S $1 quit; } # kill a socket
+alias shortbash='export PS1="\[\033[01;32m\]$ \[\033[00m\]"'
+alias longbash="export PS1='\[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;36m\]\w\[\033[00m\]\$ '"
 
-calc(){ python -c "print($1)"; }
+calc(){
+  # show how to give input arguments with bash as well as variables
+  python -c "print($1)"
+}
+
 cpprun(){
   # show how to give input arguments with bash as well as variables
-  echo "building..." 
-  g++ -std=c++11 $* # '*' accepts all args, '$1' accepts first
-  if [ $? -eq 0 ] 
-    then 
-      ./a.out 
+  echo "building..."
+  g++ -std=c++11 $*
+  if [ $? -eq 0 ]
+    then
+      ./a.out
   fi
 }
+
+# BOILERPLATE END ##############################################################
+
+
 

@@ -1,0 +1,41 @@
+--------------------------------
+ssh into termux
+note: https://wiki.termux.com/wiki/Remote_Access
+note: termux uses port 8022
+note: termux can't auto-start processes, so you have to start service via "sshd" (end: pkill sshd)
+
+setup: 
+1. Ensure that everything is up to date and package `openssh` is installed:
+  pkg upgrade
+  pkg install openssh
+2. Password authentication is enabled by default in configuration file. But you can still review it ($PREFIX/etc/ssh/sshd_config), it should be like this:
+  PrintMotd yes
+  PasswordAuthentication yes
+  Subsystem sftp /data/data/com.termux/files/usr/libexec/sftp-server
+3. Set new password. Execute command passwd. While program allows minimal password length is 1 character, the recommended password length is more than 8-10 characters. Passwords are not printed to console.
+  $ passwd
+  New password:
+  Retype new password:
+  New password was successfully set.
+
+you MAY need to manually type out your ssh key (id_ed26619 or rsa, etc) into termux authorized_keys file
+ssh in: ssh -p 8022 (ipaddr)
+
+--------------------------------
+use postgres on termux
+note: https://gist.github.com/oschannel/1b4eb34f18cc7e573ce57a8c1ed5dc22
+
+1. Install PostgreSQL:
+  apt update && apt install postgresql
+2. Create directory and initialize PostgreSQL Database Cluster:
+  mkdir ./postgres && initdb ./postgres
+3. Start the PostgreSQL Database Server:
+  pg_ctl -D ./postgres start
+4. Login/Quit to Postgres Shell:
+  # Login:
+  psql -d postgres
+  # Quit:
+  \q
+
+after that, you can use postgres like normal
+
